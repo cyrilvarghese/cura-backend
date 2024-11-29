@@ -4,7 +4,8 @@ from fastapi.staticfiles import StaticFiles
 import os
 from routers.api import api_router
 from routers.langchain_routes import router as langchain_router
-
+from routers.langchain_simple import router as translate_router
+from routers.patient_simulation import router as patient_router
 app = FastAPI()
 
 # Add CORS middleware
@@ -29,4 +30,6 @@ except RuntimeError as e:
 
 # Include routers
 app.include_router(api_router)
-app.include_router(langchain_router) 
+app.include_router(langchain_router)
+app.include_router(translate_router) 
+app.include_router(patient_router) 

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-from typing import Optional
+from typing import Dict, Any
 import os
 from dotenv import load_dotenv
 
@@ -16,7 +16,7 @@ router = APIRouter(
 # Initialize the model
 model = ChatOpenAI(
     model_name="gpt-3.5-turbo",
-    temperature=1,
+    temperature=0.7,
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
@@ -27,23 +27,20 @@ prompt_template = ChatPromptTemplate.from_messages([
     ("user", "{text}")
 ])
 
-@router.get("/")
-async def translate_text(text: str, language: str):
-    """
-    Translate text from English to specified language.
-    
-    Args:
-        text: The English text to translate
-        language: The target language for translation
-    
-    Returns:
-        dict: Contains the translated text and status
-    """
+@router.post("/")
+async def translate_text(request: Dict[str, Any]):
     try:
+        # Validate input
+        if "text" not in request or "language" not in request:
+            raise HTTPException(
+                status_code=400, 
+                detail="Both 'text' and 'language' are required"
+            )
+
         # Format the prompt with the input
         prompt = prompt_template.invoke({
-            "language": language,
-            "text": text
+            "language": request["language"],
+            "text": request["text"]
         })
 
         # Get the response from the model
@@ -51,9 +48,7 @@ async def translate_text(text: str, language: str):
 
         return {
             "translation": response.content,
-            "status": "success",
-            "original_text": text,
-            "target_language": language
+            "status": "success"
         }
 
     except Exception as e:

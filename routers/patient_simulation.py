@@ -85,16 +85,18 @@ async def ask_patient(student_query: str, thread_id: str = None):
             config={"configurable": {"thread_id": thread_id}}
         )
         
-        # Get state for debugging
-        state = app.get_state({"configurable": {"thread_id": thread_id}}).values
+        # Get content and clean only if it contains code block markers
+        content = response['messages'][-1].content
+        if content.startswith('```'):
+            content = content.replace('```json\n', '').replace('\n```', '')
         
         # Print in specified format
         print(f"Thread ID: {thread_id}")
-        print(f"Message: {response['messages'][-1].content}")
+        print(f"Message: {content}")
         print("="*50)
         
         return {
-            "response": response['messages'][-1].content,
+            "response": content,
             "thread_id": thread_id
         }
 

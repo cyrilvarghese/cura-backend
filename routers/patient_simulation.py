@@ -1,12 +1,16 @@
 from fastapi import APIRouter, HTTPException
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, SystemMessage
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import START, MessagesState, StateGraph
 from typing import Dict, Any
 import json
 from datetime import datetime
 import uuid
 import os
 from dotenv import load_dotenv
+import logging
 
 # Load environment variables
 load_dotenv()
@@ -15,11 +19,12 @@ router = APIRouter(
     prefix="/patient",
     tags=["patient-simulation"]
 )
+ 
 
 def load_prompt_template():
     """Load the prompt template from file"""
     try:
-        with open("prompts/patient_persona.txt", "r") as file:
+        with open("prompts/patient_persona2.txt", "r") as file:
             return file.read()
     except FileNotFoundError:
         raise Exception("Prompt template file not found")
@@ -31,59 +36,67 @@ model = ChatOpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
-# Create prompt template with variable
+# Create prompt template with system message and message history
 system_template = load_prompt_template()
-prompt_template = ChatPromptTemplate.from_messages([
+prompt = ChatPromptTemplate.from_messages([
     ("system", system_template),
-    ("human", "{student_query}")
+    MessagesPlaceholder(variable_name="messages")
 ])
 
-def parse_llm_response(response_content: str) -> Dict[str, Any]:
-    """Parse the LLM response and extract the JSON content"""
-    try:
-        # First try to parse the entire response
-        parsed_response = json.loads(response_content)
-        
-        # If the content field contains a JSON string, parse that too
-        if isinstance(parsed_response.get("content"), str):
-            try:
-                content_json = json.loads(parsed_response["content"])
-                return content_json
-            except json.JSONDecodeError:
-                return parsed_response
-        return parsed_response
-    except json.JSONDecodeError as e:
-        # If parsing fails, return a default formatted response
-        return {
-            "id": str(uuid.uuid4()),
-            "sender": "Patient",
-            "content": response_content,
-            "step": "patient-history",
-            "timestamp": datetime.now().isoformat(),
-            "type": "text"
-        }
+# Create the chain
+chain = prompt | model
+
+# Define the graph workflow
+workflow = StateGraph(MessagesState)
+
+def call_model(state: MessagesState):
+    """Process the message through the model and return response"""
+    response = chain.invoke(state)
+    
+    # Format response as a dict with metadata
+    formatted_response = {
+        "id": str(uuid.uuid4()),
+        "sender": "Patient",
+        "content": response.content,
+        "step": "patient-history",
+        "timestamp": datetime.now().isoformat(),
+        "type": "ai"
+    }
+    
+    return {"messages": formatted_response}
+
+# Add the model node to the graph
+workflow.add_edge(START, "model")
+workflow.add_node("model", call_model)
+
+# Initialize memory
+memory = MemorySaver()
+app = workflow.compile(checkpointer=memory)
 
 @router.get("/ask")
-async def ask_patient(student_query: str):
-    """
-    Ask a question to the simulated patient.
-    
-    Args:
-        student_query: The question to ask the patient
-    
-    Returns:
-        dict: Contains the patient's response in the specified format
-    """
+async def ask_patient(student_query: str, thread_id: str = None):
     try:
-        # Get response from the model
-        response = model.invoke(prompt_template.invoke({
-            "student_query": student_query
-        }))
-
-        # Parse and format the response
-        formatted_response = parse_llm_response(response.content)
+        if not thread_id:
+            thread_id = str(uuid.uuid4())
         
-        return formatted_response
+        input_message = HumanMessage(content=student_query)
+        response = app.invoke(
+            {"messages": [input_message]}, 
+            config={"configurable": {"thread_id": thread_id}}
+        )
+        
+        # Get state for debugging
+        state = app.get_state({"configurable": {"thread_id": thread_id}}).values
+        
+        # Print in specified format
+        print(f"Thread ID: {thread_id}")
+        print(f"Message: {response['messages'][-1].content}")
+        print("="*50)
+        
+        return {
+            "response": response['messages'][-1].content,
+            "thread_id": thread_id
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) 

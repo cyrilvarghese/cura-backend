@@ -77,7 +77,7 @@ app = workflow.compile(checkpointer=memory)
 async def ask_patient(student_query: str, thread_id: str = None):
     try:
         if not thread_id:
-            thread_id = str(uuid.uuid4())
+            thread_id = str(uuid.uuid4())   
         
         input_message = HumanMessage(content=student_query)
         response = app.invoke(

@@ -169,7 +169,7 @@ Respond to any questions directed toward your subjective feelings, symptoms, or 
 Your responses must be structured in the following JSON format to ensure consistency and machine readability:
 
 
-  "id": "string",                  // A unique identifier for the message (UUID).
+  "id": "UUID",                  // A unique identifier for the message (UUID).
 
   "sender": "Patient",             // Always "Patient" for your responses.
 

@@ -11,6 +11,7 @@ import uuid
 import os
 from dotenv import load_dotenv
 import logging
+from utils.text_cleaner import clean_code_block
 
 # Load environment variables
 load_dotenv()
@@ -85,10 +86,8 @@ async def ask_patient(student_query: str, thread_id: str = None):
             config={"configurable": {"thread_id": thread_id}}
         )
         
-        # Get content and clean only if it contains code block markers
-        content = response['messages'][-1].content
-        if content.startswith('```'):
-            content = content.replace('```json\n', '').replace('\n```', '')
+        # Get content and clean code block markers
+        content = clean_code_block(response['messages'][-1].content)
         
         # Print in specified format
         print(f"Thread ID: {thread_id}")

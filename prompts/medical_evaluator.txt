@@ -31,38 +31,40 @@ Using the annotations, generate feedback for each evaluation category:
 ### Output Format:
 Return the output as structured JSON:
 ```json
-{
+{{
   "annotations": [
-    {
+    {{
       "action": "How are you feeling today?",
       "step": "history_taking",
       "relevance": "neutral",
       "justification": "The question is conversational and does not address specific symptoms."
-    },
+    }},
     ...
   ],
-  "feedback": {
-    "history_taking": {
+  "feedback": {{
+    "history_taking": {{
       "score": [0-10],
       "comments": "Detailed feedback on history-taking."
-    },
-    "examinations_performed": {
+    }},
+    "examinations_performed": {{
       "score": [0-10],
       "comments": "Detailed feedback on examinations performed."
-    },
-    "tests_ordered": {
+    }},
+    "tests_ordered": {{
       "score": [0-10],
       "comments": "Detailed feedback on tests ordered."
-    },
-    "diagnostic_reasoning": {
+    }},
+    "diagnostic_reasoning": {{
       "score": [0-10],
       "comments": "Detailed feedback on diagnostic reasoning."
-    },
-    "synthesis_organization": {
+    }},
+    "synthesis_organization": {{
       "score": [0-10],
       "comments": "Detailed feedback on synthesis and organization."
-    }
-  },
+    }}
+  }},
   "total_score": [0-10],
   "suggestions": "Actionable suggestions for improvement."
-}
+}}
+
+```

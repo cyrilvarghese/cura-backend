@@ -25,7 +25,7 @@ router = APIRouter(
 def load_prompt_template():
     """Load the prompt template from file"""
     try:
-        with open("prompts/patient_persona2.txt", "r") as file:
+        with open("case-data/case1/patient_prompts/patient_persona.txt", "r") as file:
             return file.read()
     except FileNotFoundError:
         raise Exception("Prompt template file not found")

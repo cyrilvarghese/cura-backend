@@ -60,14 +60,19 @@ llm = ChatOpenAI(
     temperature=0
 )
 
-DEFAULT_CASE_SUMMARY = """A 30-year-old woman presents with a two-week history of itchy rash, joint pain, and fatigue. The rash persists >24 hours, resolves with bruising. Key diagnostic features include:
-- History-taking: Focus on symptom duration, rash characteristics, joint pain, fatigue, and family history.
-- Relevant examinations: Skin, vitals, and lymph nodes.
-- Relevant tests: CBC, ESR, ANA, Complement Levels, Skin Biopsy.
-- Expected diagnosis: Urticarial Vasculitis."""
-
 async def get_case_summary(case_id: str = None) -> str:
-    return DEFAULT_CASE_SUMMARY
+    try:
+        case_id = case_id or "case1"  # Default to case1 if no ID provided
+        file_path = f"case-data/{case_id}/summary/summary.txt"
+        
+        with open(file_path, 'r') as file:
+            return file.read().strip()
+            
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Case summary not found for case_id: {case_id}"
+        )
 
 def transform_student_actions(messages: List[StudentMessage]) -> str:
     # Use set to track unique content-step combinations

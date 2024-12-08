@@ -22,13 +22,14 @@ router = APIRouter(
 )
  
 
-def load_prompt_template():
+def load_prompt_template(case_id: str = "case1"):
     """Load the prompt template from file"""
     try:
-        with open("case-data/case1/patient_prompts/patient_persona.txt", "r") as file:
+        file_path = f"case-data/{case_id}/patient_prompts/patient_persona.txt"
+        with open(file_path, "r") as file:
             return file.read()
     except FileNotFoundError:
-        raise Exception("Prompt template file not found")
+        raise Exception(f"Prompt template file not found for case: {case_id}")
 
 # Initialize the model
 model = ChatOpenAI(
@@ -75,10 +76,18 @@ memory = MemorySaver()
 app = workflow.compile(checkpointer=memory)
 
 @router.get("/ask")
-async def ask_patient(student_query: str, thread_id: str = None):
+async def ask_patient(student_query: str, case_id: str = "case1", thread_id: str = None):
     try:
         if not thread_id:
             thread_id = str(uuid.uuid4())   
+        
+        # Reinitialize the chain with the correct case template
+        system_template = load_prompt_template(case_id)
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", system_template),
+            MessagesPlaceholder(variable_name="messages")
+        ])
+        chain = prompt | model
         
         input_message = HumanMessage(content=student_query)
         response = app.invoke(
@@ -91,12 +100,14 @@ async def ask_patient(student_query: str, thread_id: str = None):
         
         # Print in specified format
         print(f"Thread ID: {thread_id}")
+        print(f"Case ID: {case_id}")
         print(f"Message: {content}")
         print("="*50)
         
         return {
             "response": content,
-            "thread_id": thread_id
+            "thread_id": thread_id,
+            "case_id": case_id
         }
 
     except Exception as e:

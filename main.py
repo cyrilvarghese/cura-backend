@@ -6,6 +6,7 @@ from routers.api import api_router
 from routers.langchain_routes import router as langchain_router
 from routers.langchain_simple import router as translate_router
 from routers.patient_simulation import router as patient_router
+from routers.markdown import markdown_router
 app = FastAPI()
 
 # Add CORS middleware
@@ -33,3 +34,4 @@ app.include_router(api_router)
 app.include_router(langchain_router)
 app.include_router(translate_router) 
 app.include_router(patient_router) 
+app.include_router(markdown_router) 

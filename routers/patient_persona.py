@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, File, UploadFile
+from fastapi import APIRouter, Form, HTTPException, File, UploadFile
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from datetime import datetime
@@ -10,7 +10,7 @@ import io
 from .create_cases_routes import create_patient_persona as save_patient_persona
 from pydantic import BaseModel
 from pathlib import Path
-
+from typing import Optional
 # Load environment variables
 load_dotenv()
 
@@ -82,7 +82,7 @@ def get_next_case_id() -> str:
     return str(len(existing_cases) + 1)
 
 @router.post("/create")
-async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: str = None):
+async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Optional[int] = Form(None)):
     """Create a patient persona prompt and save it using the existing cases route."""
     try:
         # Load the meta prompt and example persona from their respective files
@@ -104,8 +104,11 @@ async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: str 
             "case_document": case_document
         }))  # Pass the variables to fill the placeholders
         
-        # Create request object for the existing endpoint
-        request = PatientPersonaRequest(persona_prompt=response.content)
+        # Escape curly braces in the response content
+        escaped_content = response.content.replace("{", "{{").replace("}", "}}")
+        
+        # Create request object and call the imported function
+        request = PatientPersonaRequest(persona_prompt=escaped_content)
         
         # If no case_id provided, get the next available one
         if case_id is None:
@@ -117,7 +120,7 @@ async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: str 
         # Combine the AI response with the save result
         formatted_response = {
             "id": str(uuid.uuid4()),
-            "content": response.content,
+            "content": escaped_content,
             "timestamp": datetime.now().isoformat(),
             "type": "ai",
             "file_path": save_result["file_path"]

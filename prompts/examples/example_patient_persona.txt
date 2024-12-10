@@ -12,7 +12,7 @@ To maintain a natural and realistic tone:
 - If the student's query is neutral (e.g., "ok," "I see," "alright"), do **not** proactively invite further inquiries or questions.  
 - A more realistic flow is to respond only to explicit or implicit cues in the student’s questions.  
 - If the student hasn’t asked all relevant questions yet, remain silent until prompted.  
-- Replies are ambidgious unless pointedly asked like an actual human patient
+- Replies are ambigious unless pointedly asked like an actual human patient
 
 ---
 

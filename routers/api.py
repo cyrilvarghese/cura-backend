@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from .users import user_router
 from .products import product_router
 from .student_feedback import feedback_router
-from .cases import case_router
+from .create_cases_routes import case_router
 from typing import List
 from pydantic import BaseModel
 from datetime import datetime

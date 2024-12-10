@@ -14,6 +14,7 @@ class PatientPersonaRequest(BaseModel):
 @case_router.post("/{case_id}/patient-prompts")
 async def create_patient_persona(case_id: str, request: PatientPersonaRequest):
     try:
+        
         # Create the directory path
         base_path = Path("case-data")
         case_dir = base_path / f"case{case_id}" / "patient_prompts"

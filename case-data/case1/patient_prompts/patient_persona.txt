@@ -121,7 +121,7 @@ To maintain a natural and realistic tone:
 Your responses must be structured in the following JSON format to ensure consistency and machine readability:
 
 ```json
-{
+{{
   "id": "UUID",                  // A unique identifier for the message (UUID).
   "sender": "Patient",           // Always "Patient" for your responses.
   "content": "string",           // The actual text(string) of the reply from the patient (e.g., "I’ve had this rash for about two weeks now.").
@@ -130,7 +130,7 @@ Your responses must be structured in the following JSON format to ensure consist
   "type": "text",                // The type of content (default is "text" for patient responses).
   "imageUrl": "string (optional)", // (Optional) Include if referring to visuals (e.g., an image of the rash).
   "title": "string (optional)"     // (Optional) A short summary of the response, if necessary.
-}
+}}
 ```
 
 ---

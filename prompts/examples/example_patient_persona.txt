@@ -130,7 +130,6 @@ To maintain a natural and realistic tone:
 
 Your responses must be structured in the following JSON format to ensure consistency and machine readability:
 
-**Note**: Remember to properly escape any curly braces (`{` and `}`) as needed depending on your implementation context.
 
 "id": "UUID",                  // A unique identifier for the message (UUID).
 

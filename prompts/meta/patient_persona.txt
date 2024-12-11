@@ -106,7 +106,7 @@ Your final patient persona prompt must include the following sections and adhere
 
    
 
-7. **Response Format (JSON Schema)**  
+7. **Response Format (JSON Schema) for prompt**  
      
 
 Your responses must be structured in the following JSON format to ensure consistency and machine readability:
@@ -143,4 +143,5 @@ When producing a patient persona prompt from a new case document:
 4. Insert the "Embedded Case Details," using everyday language to describe symptoms, history, and observations from the new case.  
 5. Include the full "States and Response Rules" section as provided, ensuring that it matches the scenario.  
 6. Specify the "Words and Phrases to Use and Avoid" to keep the language natural and appropriate.  
-7. Include the "Response Format (JSON Schema)" instructions verbatim, ensuring all simulated responses during the scenario follow this structure
+7. Include the "Response Format (JSON Schema) for prompt" instructions verbatim, ensuring all simulated responses during the scenario follow this structure.
+8. Check and make sure the overall response is always markdown and not JSON

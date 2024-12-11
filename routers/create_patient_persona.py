@@ -11,6 +11,7 @@ from .create_cases_routes import create_patient_persona as save_patient_persona
 from pydantic import BaseModel
 from pathlib import Path
 from typing import Optional
+from utils.case_utils import get_next_case_id
 # Load environment variables
 load_dotenv()
 
@@ -71,15 +72,6 @@ def extract_text_from_pdf(pdf_file: UploadFile) -> str:
 
 class PatientPersonaRequest(BaseModel):
     persona_prompt: str
-
-def get_next_case_id() -> str:
-    """Get the next available case ID by counting existing case directories."""
-    base_path = Path("case-data")
-    if not base_path.exists():
-        return "1"
-    
-    existing_cases = [d for d in base_path.iterdir() if d.is_dir() and d.name.startswith("case")]
-    return str(len(existing_cases) + 1)
 
 @router.post("/create")
 async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Optional[int] = Form(None)):

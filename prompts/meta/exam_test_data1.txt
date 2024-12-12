@@ -129,25 +129,32 @@ Your goal is to output a single JSON object containing the structured data for b
 }
 ```
 
-#### **Example Physical Examination JSON (Table Data)**:
+#### **sample strucutre Physical Examination JSON (Table Data)**:
 ```json
 {
   "Skin Examination": {
-    "purpose": "Assess skin characteristics",
-    "findings": {
-      "type": "table",
-      "content": {
-        "headers": ["Observation", "Details"],
-        "rows": [
-          ["Color", "Red and purple"],
-          ["Texture", "Slightly raised"],
-          ["Tenderness", "Mild"]
-        ]
-      }
+        "purpose": "Assess rash characteristics",
+        "findings": {
+            "type": "mixed",
+            "content": [
+                {
+                    "type": "text",
+                    "content": "Red, raised patches on the forearms and legs; some have bruising as they fade. Slight tenderness but no pain."
+                },
+                {
+                    "type": "image",
+                    "content": {
+                        "url": "https://www.pcds.org.uk/imager/gallery/clinical/urticarial-vasculitis/13305/urt_vascul_33_fee391183f15cb4d62773032fe0be92d.jpg",
+                        "altText": "Red, raised patches on the forearms and legs; some have bruising as they fade. Slight tenderness but no pain.",
+                        "caption": "Rash distribution on right forearm"
+                    }
+                }
+            ]
+        },
+        "status": "completed",
+        "interpretation": "Red, raised patches on the forearms and legs; some have bruising as they fade. Slight tenderness but no pain."
     },
-    "status": "completed",
-    "interpretation": "Findings suggestive of small-vessel vasculitis."
-  }
+    
 }
 ```
 

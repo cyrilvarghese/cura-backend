@@ -6,6 +6,7 @@ from datetime import datetime
 import uuid
 import os
 from dotenv import load_dotenv
+from routers.create_patient_persona import load_example_persona
 from utils.pdf_utils import extract_text_from_pdf  # Import the utility function
 import io
 import json  # Import json for saving data
@@ -52,13 +53,15 @@ async def create_exam_test_data(pdf_file: UploadFile = File(...), case_id: Optio
     """Create exam test data based on a meta prompt and a case document."""
     try:
         # Load the meta prompt from the specified file
-        meta_prompt = load_meta_prompt("prompts/meta/exam_test_data1.txt")
+        meta_prompt = load_meta_prompt("prompts/meta/exam_test_data2.txt")
 
         # Escape curly braces in the meta prompt
         meta_prompt = meta_prompt.replace("{", "{{").replace("}", "}}")
         
         # Extract text from the uploaded PDF file using the utility function
         case_document = extract_text_from_pdf(pdf_file)
+        example_physical_exam = load_example_persona("prompts/examples/example_physical_exam.txt")
+        example_lab_test = load_example_persona("prompts/examples/example_lab_test.txt")
         
         # If no case_id provided, get the next available one
         if case_id is None:
@@ -67,12 +70,12 @@ async def create_exam_test_data(pdf_file: UploadFile = File(...), case_id: Optio
         # Define the chat prompt template with placeholders
         prompt_template = ChatPromptTemplate.from_messages([
             ("system", meta_prompt),
-            ("human", f"Case Details:\n{case_document}")
+            ("human", "Case Details:\n{case_document}")
         ])
         
         # Call the model with the constructed prompt
         response = model.invoke(prompt_template.invoke({
-            "case_document": case_document
+            "case_document": case_document 
         }))  # Pass the variables to fill the placeholders
         
         # Parse the response content into structured JSON

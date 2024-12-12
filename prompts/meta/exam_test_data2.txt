@@ -15,7 +15,7 @@ You are a data generation assistant tasked with creating detailed, structured JS
 2. **Key Requirements**:  
      
    - Include **purpose**, **findings**, **status**, and **interpretation** for each item.  
-   - Findings can be in text, table, image, or mixed formats.  
+   - Findings can be in text, table , or mixed formats. If the test needs an image report used mixed type.  
    - Ensure that every item is marked as `"completed"` and includes realistic or appropriate findings.
 
    
@@ -187,21 +187,33 @@ You are a data generation assistant tasked with creating detailed, structured JS
 2. **Generate Data**:  
      
    - For each item, define its purpose, findings, status, and interpretation.  
-   - Use appropriate formats (text, table, image, mixed) for findings:  
-     - If the test name is "biopsy", "skin examination", "histopathology", "CT scan", "MRI", or any other test requiring imaging, ensure the `type` is set to `"mixed"`. Include both text descriptions and visual findings for these tests.  
-       **Examples of Appropriate Format Use Cases**:  
-   * **Skin Examinations**:  
-     * Include detailed descriptions and images where applicable, such as photographs of rashes or lesions.  
-     * Ensure images have captions and alt text to clarify their significance.  
-   * **Biopsies**:  
-     * Provide both textual descriptions (e.g., "Microscopic findings indicate leukocytoclastic vasculitis") and histological images with labeled annotations to illustrate key findings.  
-   * **Vital Signs**:  
-     * Present data in tabular format, showing measurements like temperature, pulse, and blood pressure alongside reference ranges.  
-   * **X-rays or Imaging Tests**:  
-     * Combine text summaries of radiographic findings with annotated images, highlighting abnormalities or key areas of interest.  
-   - 
-
-     
+   - Use appropriate formats (text, table, image, mixed) for findings, if the test produces an image report or output used mixed type. 
+        #### Formatting Guidelines for Findings
+        - **Text-only findings**: Use `"type": "text"`.
+        - **Table-based results**: Use `"type": "table"`.
+        - **Tests that produce or reference images (e.g., X-ray, CT, biopsy slides)**: Use `"type": "mixed"`. Include both a descriptive text component and at least one image component. For example:
+            ```json
+            {
+            "results": {
+                "type": "mixed",
+                "content": [
+                {
+                    "type": "text",
+                    "content": "Microscopic examination shows..."
+                },
+                {
+                    "type": "image",
+                    "content": {
+                    "url": "https://example.com/image.jpg",
+                    "altText": "Description of image",
+                    "caption": "Relevant caption"
+                    }
+                }
+                ]
+            }
+            }
+            ```
+      
 
    
 

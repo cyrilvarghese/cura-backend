@@ -1,137 +1,50 @@
 {
     "physical_exam": {
+        "Vital Signs": {
+            "purpose": "Assess overall health status",
+            "findings": {
+                "type": "text",
+                "content": "Height: 160 cm, Weight: 70 kg, BMI: 27.3 (Overweight). Temperature: 36.9\u00b0C (98.4\u00b0F), Pulse: 82/min, Blood Pressure: 135/85 mm Hg."
+            },
+            "status": "completed",
+            "interpretation": "Vital signs indicate stable overall condition, with BMI suggesting overweight status."
+        },
         "Skin Examination": {
-            "purpose": "Assess rash characteristics",
+            "purpose": "Evaluate skin lesions and surrounding tissue",
             "findings": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Red and purple, slightly raised spots on the lower legs and buttocks, non-blanching and mildly tender."
+                        "content": "Violaceous (purple-red) retiform patches with ulceration and black eschar. Surrounding induration and tenderness."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/skin_exam.jpg",
-                            "altText": "Rash on lower legs",
-                            "caption": "Rash distribution on the lower legs."
+                            "url": "https://example.com/skin-ulcers.jpg",
+                            "altText": "Violaceous patches with eschar",
+                            "caption": "Retiform patches on the lower leg."
                         }
                     }
                 ]
             },
             "status": "completed",
-            "interpretation": "Findings consistent with non-blanching purpura indicative of possible small-vessel vasculitis."
+            "interpretation": "Findings consistent with necrotic ulcers indicative of calciphylaxis."
         },
-        "Musculoskeletal Examination": {
-            "purpose": "Evaluate joint pain and swelling",
+        "Systemic Examination": {
+            "purpose": "Assess for systemic involvements or complications",
             "findings": {
                 "type": "text",
-                "content": "Mild tenderness in knees and ankles without swelling, redness, or warmth. Full range of motion is preserved."
+                "content": "No signs of systemic inflammation, such as fever or lymphadenopathy."
             },
             "status": "completed",
-            "interpretation": "Tenderness without swelling suggests an inflammatory process, potentially linked to underlying vasculitis."
-        },
-        "Abdominal Examination": {
-            "purpose": "Check for signs of abdominal pain",
-            "findings": {
-                "type": "text",
-                "content": "Mild tenderness in the lower abdomen with no guarding or rebound tenderness."
-            },
-            "status": "completed",
-            "interpretation": "Mild abdominal tenderness is noted; it could be associated with the systemic inflammatory condition."
-        },
-        "Vitals Check": {
-            "purpose": "Measure basic physiological parameters",
-            "findings": {
-                "type": "table",
-                "content": {
-                    "headers": [
-                        "Parameter",
-                        "Result",
-                        "Reference Range"
-                    ],
-                    "rows": [
-                        [
-                            "Height",
-                            "165 cm",
-                            "Growth Chart: 50th Percentile"
-                        ],
-                        [
-                            "Weight",
-                            "60 kg",
-                            "Growth Chart: 75th Percentile"
-                        ],
-                        [
-                            "Temperature",
-                            "37.0\u00b0C",
-                            "36.1-37.2\u00b0C"
-                        ],
-                        [
-                            "Pulse",
-                            "85/min",
-                            "60-100/min"
-                        ],
-                        [
-                            "Blood Pressure",
-                            "110/70 mm Hg",
-                            "Normal"
-                        ]
-                    ]
-                }
-            },
-            "status": "completed",
-            "interpretation": "Vital signs within normal limits, no signs of systemic distress."
-        },
-        "Respiratory Examination": {
-            "purpose": "Evaluate respiratory function and find any abnormalities",
-            "findings": {
-                "type": "text",
-                "content": "Clear lung fields, no wheezing or crackles."
-            },
-            "status": "completed",
-            "interpretation": "No respiratory distress; lung examination normal."
-        },
-        "Neurological Examination": {
-            "purpose": "Assess neurological status and function",
-            "findings": {
-                "type": "text",
-                "content": "Alert and oriented, cranial nerves intact, no focal deficits."
-            },
-            "status": "completed",
-            "interpretation": "Neurological status appears normal without any signs of central or peripheral nervous system involvement."
-        },
-        "Ophthalmologic Examination": {
-            "purpose": "Evaluate any ocular involvement",
-            "findings": {
-                "type": "text",
-                "content": "No conjunctival injection, pupils equal and reactive."
-            },
-            "status": "completed",
-            "interpretation": "No ocular signs to suggest systemic involvement or inflammatory changes."
-        },
-        "Lymph Node Examination": {
-            "purpose": "Assess for lymphadenopathy",
-            "findings": {
-                "type": "text",
-                "content": "No lymphadenopathy noted on examination."
-            },
-            "status": "completed",
-            "interpretation": "Lymphatic examination normal with no signs of systemic infection."
-        },
-        "Oral Examination": {
-            "purpose": "Check oral mucosa and throat for abnormalities",
-            "findings": {
-                "type": "text",
-                "content": "Oral mucosa moist, no lesions or signs of infection."
-            },
-            "status": "completed",
-            "interpretation": "Oral examination does not reveal any significant findings related to the current symptoms."
+            "interpretation": "Absence of systemic inflammatory signs reduces suspicion for systemic infection."
         }
     },
     "lab_test": {
-        "Complete Blood Count (CBC)": {
-            "testName": "Complete Blood Count (CBC)",
-            "purpose": "Evaluate blood cell counts and immune response",
+        "Serum Calcium and Phosphate Levels": {
+            "testName": "Serum Calcium and Phosphate Levels",
+            "purpose": "Determine calcium and phosphate levels to assess metabolic status",
             "results": {
                 "type": "table",
                 "content": {
@@ -143,136 +56,74 @@
                     ],
                     "rows": [
                         [
-                            "WBC",
-                            "10.5 x10^9/L",
-                            "4.0-11.0 x10^9/L",
-                            "MILDLY HIGH"
+                            "Calcium",
+                            "11.5 mg/dL",
+                            "8.5-10.2 mg/dL",
+                            "HIGH"
                         ],
                         [
-                            "Hemoglobin",
-                            "13.5 g/dL",
-                            "13.0-17.0 g/dL",
-                            "NORMAL"
-                        ],
-                        [
-                            "Hematocrit",
-                            "41%",
-                            "38-50%",
-                            "NORMAL"
-                        ],
-                        [
-                            "Platelets",
-                            "250 x10^9/L",
-                            "150-400 x10^9/L",
-                            "NORMAL"
+                            "Phosphate",
+                            "6.5 mg/dL",
+                            "2.5-4.5 mg/dL",
+                            "HIGH"
                         ]
                     ]
                 }
             },
-            "interpretation": "Mild increase in white blood cells; may indicate ongoing inflammatory process.",
+            "interpretation": "Elevated calcium and phosphate levels indicate likely calciphylaxis due to CKD.",
             "status": "completed"
         },
-        "Erythrocyte Sedimentation Rate (ESR)": {
-            "testName": "Erythrocyte Sedimentation Rate (ESR)",
-            "purpose": "Assess inflammation level in the body",
+        "Parathyroid Hormone (PTH)": {
+            "testName": "Parathyroid Hormone (PTH)",
+            "purpose": "Evaluate PTH levels in the context of chronic kidney disease",
             "results": {
                 "type": "text",
-                "content": "ESR is 25 mm/hr, elevated above normal range (0-20 mm/hr)."
+                "content": "PTH Level: 150 pg/mL (Reference Range: 10-65 pg/mL, HIGH)"
             },
-            "interpretation": "Elevated ESR indicates presence of inflammation, supporting a diagnosis of vasculitis.",
-            "status": "completed"
-        },
-        "Urinalysis": {
-            "testName": "Urinalysis",
-            "purpose": "Evaluate urinary tract and possible renal involvement",
-            "results": {
-                "type": "text",
-                "content": "Shows small amounts of blood and protein in the urine."
-            },
-            "interpretation": "Presence of blood and protein suggests possible renal involvement, common in vasculitis.",
+            "interpretation": "Elevated PTH levels due to secondary hyperparathyroidism in CKD.",
             "status": "completed"
         },
         "Skin Biopsy": {
             "testName": "Skin Biopsy",
-            "purpose": "Assess for immunological findings",
+            "purpose": "Assess tissue for ischemic changes and calcium deposits",
             "results": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Histopathological examination indicates presence of IgA deposits in the dermis."
+                        "content": "Microscopic examination shows ischemic vascular changes with necrosis and calcium deposition in small vessels."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/skin_biopsy.jpg",
-                            "altText": "Skin biopsy results",
-                            "caption": "Histological slide showing IgA deposits."
+                            "url": "https://example.com/biopsy-report.jpg",
+                            "altText": "Skin biopsy showing calcium deposits",
+                            "caption": "Evidence of ischemia and calcium deposits in microvasculature."
                         }
                     }
                 ]
             },
-            "interpretation": "Presence of IgA deposits confirms diagnosis of Henoch-Sch\u00f6nlein Purpura.",
+            "interpretation": "Biopsy findings are indicative of calciphylaxis.",
             "status": "completed"
         },
-        "Antinuclear Antibody (ANA) Test": {
-            "testName": "Antinuclear Antibody (ANA) Test",
-            "purpose": "Screen for systemic lupus erythematosus",
+        "Special Staining": {
+            "testName": "Special Staining (von Kossa/Alizarin Red)",
+            "purpose": "Identify calcium deposits in tissue",
             "results": {
                 "type": "text",
-                "content": "ANA test result negative."
+                "content": "Positive staining for calcium deposits in vascular tissue."
             },
-            "interpretation": "Negative result helps to rule out SLE as a differential diagnosis.",
+            "interpretation": "Confirms the presence of calcification in blood vessels, supporting diagnosis.",
             "status": "completed"
         },
-        "Allergy Panel Testing": {
-            "testName": "Allergy Panel Testing",
-            "purpose": "Identify potential allergic reactions",
+        "Imaging (Optional)": {
+            "testName": "X-ray Imaging",
+            "purpose": "Evaluate for subcutaneous calcifications",
             "results": {
                 "type": "text",
-                "content": "Allergy panel negative for common allergens."
+                "content": "X-rays show evidence of subcutaneous calcifications consistent with advanced calciphylaxis."
             },
-            "interpretation": "No allergic reactions noted, supporting lack of drug-induced vasculitis.",
-            "status": "completed"
-        },
-        "Liver Function Tests (LFTs)": {
-            "testName": "Liver Function Tests (LFTs)",
-            "purpose": "Evaluate liver function",
-            "results": {
-                "type": "text",
-                "content": "LFTs within normal ranges."
-            },
-            "interpretation": "Liver function normal; no hepatic involvement.",
-            "status": "completed"
-        },
-        "Imaging (e.g., X-ray, CT scan)": {
-            "testName": "Imaging (X-ray)",
-            "purpose": "Rule out complications in the abdomen",
-            "results": {
-                "type": "text",
-                "content": "Imaging shows no abnormalities."
-            },
-            "interpretation": "Imaging studies clear; suggests no acute abdominal pathology.",
-            "status": "completed"
-        },
-        "Electrocardiogram (ECG)": {
-            "testName": "Electrocardiogram (ECG)",
-            "purpose": "Assess cardiac function",
-            "results": {
-                "type": "text",
-                "content": "ECG shows normal sinus rhythm."
-            },
-            "interpretation": "Normal findings with no cardiac abnormalities detected.",
-            "status": "completed"
-        },
-        "Blood Culture": {
-            "testName": "Blood Culture",
-            "purpose": "Screen for blood infections",
-            "results": {
-                "type": "text",
-                "content": "Blood culture negative."
-            },
-            "interpretation": "No signs of bacteremia or active infection.",
+            "interpretation": "Imaging findings corroborate clinical diagnosis.",
             "status": "completed"
         }
     }

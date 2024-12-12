@@ -1,0 +1,225 @@
+{
+    "physical_exam": {
+        "Skin Examination": {
+            "purpose": "Assess skin characteristics",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Observation",
+                        "Details"
+                    ],
+                    "rows": [
+                        [
+                            "Color",
+                            "Red and purple"
+                        ],
+                        [
+                            "Texture",
+                            "Slightly raised"
+                        ],
+                        [
+                            "Tenderness",
+                            "Mildly tender"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Non-blanching rash consistent with small-vessel vasculitis."
+        },
+        "Musculoskeletal Examination": {
+            "purpose": "Assess joint condition",
+            "findings": {
+                "type": "text",
+                "content": "Mild tenderness noted in knees and ankles; full range of motion preserved."
+            },
+            "status": "completed",
+            "interpretation": "Joint pain likely associated with the current purpura."
+        },
+        "Abdominal Examination": {
+            "purpose": "Evaluate abdominal tenderness",
+            "findings": {
+                "type": "text",
+                "content": "Mild tenderness in the lower abdomen with no guarding or rebound tenderness."
+            },
+            "status": "completed",
+            "interpretation": "Findings suggest abdominal involvement in Henoch-Sch\u00f6nlein Purpura."
+        },
+        "Vitals Check": {
+            "purpose": "Monitor vital signs",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Vital Sign",
+                        "Value"
+                    ],
+                    "rows": [
+                        [
+                            "Height",
+                            "165 cm"
+                        ],
+                        [
+                            "Weight",
+                            "60 kg"
+                        ],
+                        [
+                            "Temperature",
+                            "37.0\u00b0C"
+                        ],
+                        [
+                            "Pulse",
+                            "85/min"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "110/70 mm Hg"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "All vitals within normal ranges."
+        },
+        "Respiratory Examination": {
+            "purpose": "Assess lung function",
+            "findings": {
+                "type": "text",
+                "content": "Breath sounds clear; no wheezing or crackles detected."
+            },
+            "status": "completed",
+            "interpretation": "Respiratory examination unremarkable."
+        },
+        "Neurological Examination": {
+            "purpose": "Evaluate neurological status",
+            "findings": {
+                "type": "text",
+                "content": "Cranial nerves intact; no focal deficits observed."
+            },
+            "status": "completed",
+            "interpretation": "Neurological assessment normal."
+        },
+        "Ophthalmologic Examination": {
+            "purpose": "Check for ocular involvement",
+            "findings": {
+                "type": "text",
+                "content": "No conjunctival injection or retinal hemorrhages seen."
+            },
+            "status": "completed",
+            "interpretation": "Ocular examination normal."
+        },
+        "Lymph Node Examination": {
+            "purpose": "Assess for lymphadenopathy",
+            "findings": {
+                "type": "text",
+                "content": "No palpable lymphadenopathy detected."
+            },
+            "status": "completed",
+            "interpretation": "Lymph nodes unremarkable."
+        },
+        "Oral Examination": {
+            "purpose": "Examine oral cavity",
+            "findings": {
+                "type": "text",
+                "content": "Oral mucosa normal; no lesions or abnormalities."
+            },
+            "status": "completed",
+            "interpretation": "Oral examination normal."
+        }
+    },
+    "lab_test": {
+        "Complete Blood Count": {
+            "testName": "Complete Blood Count",
+            "purpose": "Evaluate blood cell counts and assess for signs of infection or inflammation.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "WBC",
+                            "10.5 x10\u2079/L",
+                            "4.0-11.0 x10\u2079/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Hemoglobin",
+                            "14.0 g/dL",
+                            "13.0-17.0 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Platelets",
+                            "300 x10\u2079/L",
+                            "150-450 x10\u2079/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Results indicate mild leukocytosis, likely related to ongoing inflammation."
+        },
+        "Erythrocyte Sedimentation Rate": {
+            "testName": "Erythrocyte Sedimentation Rate",
+            "purpose": "To check for inflammation in the body.",
+            "results": {
+                "type": "text",
+                "content": "ESR is elevated at 25 mm/h (normal: 0-15 mm/h)."
+            },
+            "status": "completed",
+            "interpretation": "Elevated ESR indicates an inflammatory process."
+        },
+        "Urinalysis": {
+            "testName": "Urinalysis",
+            "purpose": "To screen for kidney involvement or hematuria.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Finding",
+                        "Result"
+                    ],
+                    "rows": [
+                        [
+                            "Blood",
+                            "Small amounts detected"
+                        ],
+                        [
+                            "Protein",
+                            "Small amounts detected"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Indicates possible mild kidney involvement."
+        },
+        "Skin Biopsy": {
+            "testName": "Skin Biopsy",
+            "purpose": "To confirm presence of IgA deposits.",
+            "results": {
+                "type": "text",
+                "content": "Biopsy shows IgA deposits in the small vessels."
+            },
+            "status": "completed",
+            "interpretation": "Biopsy results support diagnosis of Henoch-Sch\u00f6nlein Purpura."
+        },
+        "Antinuclear Antibody Test": {
+            "testName": "Antinuclear Antibody Test",
+            "purpose": "To rule out Systemic Lupus Erythematosus (SLE) in the differential diagnosis.",
+            "results": {
+                "type": "text",
+                "content": "ANA result negative."
+            },
+            "status": "completed",
+            "interpretation": "Negative result helps rule out SLE."
+        }
+    }
+}

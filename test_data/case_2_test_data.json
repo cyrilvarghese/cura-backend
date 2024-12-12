@@ -1,0 +1,246 @@
+{
+    "physical_exam": {
+        "Skin Examination": {
+            "purpose": "Assess characteristics of the rash present on the lower legs.",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Red and purple, slightly raised spots on the lower legs and buttocks, non-blanching and mildly tender."
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Finding consistent with small-vessel vasculitis."
+        },
+        "Musculoskeletal Examination": {
+            "purpose": "Evaluate any joint tenderness and range of motion.",
+            "findings": {
+                "type": "text",
+                "content": "Mild tenderness in knees and ankles without swelling, redness, or warmth; full range of motion is preserved."
+            },
+            "status": "completed",
+            "interpretation": "Joint tenderness may be associated with underlying vasculitis."
+        },
+        "Abdominal Examination": {
+            "purpose": "Assess for any signs of abdominal pain or tenderness.",
+            "findings": {
+                "type": "text",
+                "content": "Mild tenderness in the lower abdomen with no guarding or rebound tenderness."
+            },
+            "status": "completed",
+            "interpretation": "Tenderness may suggest possible gastrointestinal involvement."
+        },
+        "Vitals Check": {
+            "purpose": "Monitor the patient's basic physiological parameters.",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Vital Sign",
+                        "Measurement"
+                    ],
+                    "rows": [
+                        [
+                            "Height",
+                            "165 cm"
+                        ],
+                        [
+                            "Weight",
+                            "60 kg"
+                        ],
+                        [
+                            "Temperature",
+                            "37.0 \u00b0C"
+                        ],
+                        [
+                            "Pulse",
+                            "85/min"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "110/70 mm Hg"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Vitals are within normal ranges."
+        },
+        "Respiratory Examination": {
+            "purpose": "Assess respiratory function and presence of any abnormalities.",
+            "findings": {
+                "type": "text",
+                "content": "No abnormalities detected."
+            },
+            "status": "completed",
+            "interpretation": "No respiratory issues contributing to the current condition."
+        },
+        "Neurological Examination": {
+            "purpose": "Evaluate neurological function and symptoms.",
+            "findings": {
+                "type": "text",
+                "content": "No neurological deficits observed."
+            },
+            "status": "completed",
+            "interpretation": "Neurological assessment within normal limits."
+        },
+        "Ophthalmologic Examination": {
+            "purpose": "Examine the eyes for any signs of systemic disease.",
+            "findings": {
+                "type": "text",
+                "content": "No ocular abnormalities identified."
+            },
+            "status": "completed",
+            "interpretation": "Ophthalmologic status normal."
+        },
+        "Lymph Node Examination": {
+            "purpose": "Check for lymphadenopathy.",
+            "findings": {
+                "type": "text",
+                "content": "No lymphadenopathy appreciated."
+            },
+            "status": "completed",
+            "interpretation": "No signs of systemic infection or malignancy."
+        },
+        "Oral Examination": {
+            "purpose": "Inspect oral cavity for any lesions or abnormalities.",
+            "findings": {
+                "type": "text",
+                "content": "Oral cavity normal with no lesions."
+            },
+            "status": "completed",
+            "interpretation": "Oral examination does not reveal systemic issues."
+        }
+    },
+    "lab_test": {
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Evaluate blood cell counts and identify any anomalies.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "WBC",
+                            "11.2 x10\u2079/L",
+                            "4.0-11.0 x10\u2079/L",
+                            "HIGH"
+                        ],
+                        [
+                            "Hgb",
+                            "14 g/dL",
+                            "13.3-16.0 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Hct",
+                            "42%",
+                            "38.8-50.0%",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Shows mild elevation in WBC indicative of inflammation.",
+            "status": "completed"
+        },
+        "Erythrocyte Sedimentation Rate (ESR)": {
+            "testName": "Erythrocyte Sedimentation Rate (ESR)",
+            "purpose": "Evaluate inflammation levels in the body.",
+            "results": {
+                "type": "text",
+                "content": "ESR is elevated at 30 mm/hr (normal range: 0-20 mm/hr)."
+            },
+            "interpretation": "Elevation indicates inflammation, consistent with the presentation of vasculitis.",
+            "status": "completed"
+        },
+        "Urinalysis": {
+            "testName": "Urinalysis",
+            "purpose": "Assess kidney function and check for blood or protein in urine.",
+            "results": {
+                "type": "text",
+                "content": "Shows small amounts of blood and protein in the urine."
+            },
+            "interpretation": "Findings raise concern for renal involvement in HSP.",
+            "status": "completed"
+        },
+        "Skin Biopsy": {
+            "testName": "Skin Biopsy",
+            "purpose": "Identify histological features indicative of the underlying cause of rash.",
+            "results": {
+                "type": "text",
+                "content": "Biopsy demonstrates IgA deposits in the skin."
+            },
+            "interpretation": "Supportive of IgA vasculitis, consistent with Henoch-Sch\u00f6nlein Purpura.",
+            "status": "completed"
+        },
+        "Antinuclear Antibody (ANA) Test": {
+            "testName": "Antinuclear Antibody (ANA) Test",
+            "purpose": "To rule out Systemic Lupus Erythematosus (SLE) as differential diagnosis.",
+            "results": {
+                "type": "text",
+                "content": "ANA is negative."
+            },
+            "interpretation": "Negative result decreases concern for SLE.",
+            "status": "completed"
+        },
+        "Allergy Panel Testing": {
+            "testName": "Allergy Panel Testing",
+            "purpose": "Determine presence of any allergic reactions.",
+            "results": {
+                "type": "text",
+                "content": "Results pending."
+            },
+            "interpretation": "To be reviewed once results are available.",
+            "status": "pending"
+        },
+        "Liver Function Tests (LFTs)": {
+            "testName": "Liver Function Tests (LFTs)",
+            "purpose": "Evaluate liver function and detect any liver-related issues.",
+            "results": {
+                "type": "text",
+                "content": "Results pending."
+            },
+            "interpretation": "To be reviewed once results are available.",
+            "status": "pending"
+        },
+        "Imaging (e.g., X-ray, CT scan)": {
+            "testName": "Imaging (e.g., X-ray, CT scan)",
+            "purpose": "Assess for other potential causes of abdominal pain.",
+            "results": {
+                "type": "text",
+                "content": "Results pending."
+            },
+            "interpretation": "To be reviewed once results are available.",
+            "status": "pending"
+        },
+        "Electrocardiogram (ECG)": {
+            "testName": "Electrocardiogram (ECG)",
+            "purpose": "Evaluate heart activity.",
+            "results": {
+                "type": "text",
+                "content": "Results pending."
+            },
+            "interpretation": "To be reviewed once results are available.",
+            "status": "pending"
+        },
+        "Blood Culture": {
+            "testName": "Blood Culture",
+            "purpose": "Detect any infections in the bloodstream.",
+            "results": {
+                "type": "text",
+                "content": "Results pending."
+            },
+            "interpretation": "To be reviewed once results are available.",
+            "status": "pending"
+        }
+    }
+}

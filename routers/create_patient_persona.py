@@ -12,12 +12,13 @@ from pydantic import BaseModel
 from pathlib import Path
 from typing import Optional
 from utils.case_utils import get_next_case_id
+from utils.pdf_utils import extract_text_from_pdf  # Import the utility function
 # Load environment variables
 load_dotenv()
 
 router = APIRouter(
     prefix="/patient_persona",
-    tags=["patient-persona"]
+    tags=["create-data"]
 )
 
 # Initialize the model
@@ -43,33 +44,6 @@ def load_example_persona(file_path: str) -> str:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Example persona file not found.")
 
-def extract_text_from_pdf(pdf_file: UploadFile) -> str:
-    """Extract text from a PDF file using pdftotext."""
-    try:
-        # Read the UploadFile into bytes
-        pdf_bytes = pdf_file.file.read()
-        
-        # Load PDF using pdftotext
-        pdf = pdftotext.PDF(io.BytesIO(pdf_bytes))
-        
-        # Extract text from all pages and join with proper spacing
-        text = "\n".join(pdf)
-        
-        # Clean up the text
-        # Remove multiple newlines and whitespace
-        cleaned_text = " ".join(text.split())
-        
-        return cleaned_text.strip()
-        
-    except Exception as e:
-        raise HTTPException(
-            status_code=500, 
-            detail=f"Error reading PDF file: {str(e)}"
-        )
-    finally:
-        # Reset file pointer for potential future reads
-        pdf_file.file.seek(0)
-
 class PatientPersonaRequest(BaseModel):
     persona_prompt: str
 
@@ -81,7 +55,7 @@ async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Opti
         meta_prompt = load_meta_prompt("prompts/meta/patient_persona.txt")
         example_persona = load_example_persona("prompts/examples/example_patient_persona.txt")
         
-        # Extract text from the uploaded PDF file
+        # Extract text from the uploaded PDF file using the utility function
         case_document = extract_text_from_pdf(pdf_file)
         
         # Define the chat prompt template with placeholders

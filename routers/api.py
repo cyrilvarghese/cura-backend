@@ -3,6 +3,7 @@ from .users import user_router
 from .products import product_router
 from .student_feedback import feedback_router
 from .create_cases_routes import case_router
+from .case_routes import case_router
 from typing import List
 from pydantic import BaseModel
 from datetime import datetime
@@ -23,4 +24,4 @@ async def root():
 api_router.include_router(user_router)
 api_router.include_router(product_router)
 api_router.include_router(feedback_router)
-api_router.include_router(case_router) 
+api_router.include_router(case_router)

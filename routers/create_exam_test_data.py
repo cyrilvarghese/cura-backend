@@ -93,6 +93,7 @@ async def create_exam_test_data(pdf_file: UploadFile = File(...), case_id: Optio
         if isinstance(cleaned_response, dict):
             structured_response["physical_exam"] = cleaned_response.get("physical_exam", {})
             structured_response["lab_test"] = cleaned_response.get("lab_test", {})
+            structured_response["validation"] = cleaned_response.get("validation", {})
         
         # Save the structured response to a text file
         result = await save_examination_data(case_id, structured_response)

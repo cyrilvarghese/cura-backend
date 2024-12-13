@@ -1,0 +1,250 @@
+{
+    "physical_exam": {
+        "Skin Examination": {
+            "purpose": "Assess rash characteristics and extent.",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Red, raised patches on forearms and legs, some patches have fading bruising; slightly tender but not painful."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/skin_exam.jpg",
+                            "altText": "Skin examination showing raised patches",
+                            "caption": "Skin examination revealing red, raised patches consistent with urticarial vasculitis."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Rash characteristics consistent with urticarial vasculitis."
+        },
+        "Musculoskeletal Examination": {
+            "purpose": "Evaluate joint pain and stiffness.",
+            "findings": {
+                "type": "text",
+                "content": "Mild tenderness in wrists and knees with no noticeable swelling or warmth. Full range of motion preserved."
+            },
+            "status": "completed",
+            "interpretation": "Findings are suggestive of inflammatory joint involvement without significant swelling."
+        },
+        "Vitals Check": {
+            "purpose": "Assess vital signs and general health.",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Vital Sign",
+                        "Measurement",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Height",
+                            "165 cm",
+                            "N/A",
+                            "NORMAL"
+                        ],
+                        [
+                            "Weight",
+                            "60 kg",
+                            "N/A",
+                            "NORMAL"
+                        ],
+                        [
+                            "BMI",
+                            "22.0",
+                            "18.5-24.9",
+                            "NORMAL"
+                        ],
+                        [
+                            "Temperature",
+                            "37.2\u00b0C",
+                            "36.1-37.2\u00b0C",
+                            "NORMAL"
+                        ],
+                        [
+                            "Pulse",
+                            "80/min",
+                            "60-100/min",
+                            "NORMAL"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "118/76 mm Hg",
+                            "120/80 mm Hg",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Vital signs are within normal limits."
+        },
+        "Abdominal Examination": {
+            "purpose": "Rule out any abdominal pathologies.",
+            "findings": {
+                "type": "text",
+                "content": "Abdomen soft, non-tender with no palpable masses; bowel sounds normal."
+            },
+            "status": "completed",
+            "interpretation": "Abdominal examination is unremarkable; no signs of visceral involvement."
+        },
+        "Neurological Examination": {
+            "purpose": "Assess neurological status.",
+            "findings": {
+                "type": "text",
+                "content": "No abnormalities detected."
+            },
+            "status": "completed",
+            "interpretation": "Neurological function within normal limits."
+        },
+        "Respiratory Examination": {
+            "purpose": "Evaluate respiratory function.",
+            "findings": {
+                "type": "text",
+                "content": "Normal breath sounds; no wheezing or crackles."
+            },
+            "status": "completed",
+            "interpretation": "Respiratory examination is normal."
+        }
+    },
+    "lab_test": {
+        "Complete Blood Count and ESR": {
+            "testName": "Complete Blood Count and ESR",
+            "purpose": "Evaluate blood cell counts and inflammation.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "25 mm/hr",
+                            "0-20 mm/hr",
+                            "HIGH"
+                        ],
+                        [
+                            "WBC",
+                            "7.5 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Hemoglobin",
+                            "13.5 g/dL",
+                            "12.0-15.5 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Platelets",
+                            "250 x10^9/L",
+                            "150-400 x10^9/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Mildly elevated ESR indicates inflammation consistent with autoimmune conditions.",
+            "status": "completed"
+        },
+        "ANA Test": {
+            "testName": "Antinuclear Antibody Test",
+            "purpose": "Identify autoimmune activity.",
+            "results": {
+                "type": "text",
+                "content": "Positive result, specific pattern indicative of possible autoimmune disorder."
+            },
+            "interpretation": "Positive ANA suggests underlying autoimmune pathology.",
+            "status": "completed"
+        },
+        "Complement Levels (C3, C4)": {
+            "testName": "Complement Levels",
+            "purpose": "Evaluate complement system functionality.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "C3",
+                            "80 mg/dL",
+                            "90-180 mg/dL",
+                            "LOW"
+                        ],
+                        [
+                            "C4",
+                            "10 mg/dL",
+                            "15-45 mg/dL",
+                            "LOW"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Low complement levels support diagnosis of urticarial vasculitis.",
+            "status": "completed"
+        },
+        "Skin Biopsy": {
+            "testName": "Skin Biopsy",
+            "purpose": "Determine histological findings in skin tissue.",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Microscopic examination reveals leukocytoclastic vasculitis with immune deposits."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/biopsy_results.jpg",
+                            "altText": "Histological section from skin biopsy",
+                            "caption": "Histological examination revealing leukocytoclastic vasculitis."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Findings confirm diagnosis of urticarial vasculitis.",
+            "status": "completed"
+        },
+        "Allergy Panel Testing": {
+            "testName": "Allergy Panel",
+            "purpose": "Identify potential allergens.",
+            "results": {
+                "type": "text",
+                "content": "No new allergens detected; considered irrelevant in this case."
+            },
+            "interpretation": "Results are negative and not relevant to diagnosis.",
+            "status": "completed"
+        },
+        "Imaging": {
+            "testName": "Imaging Studies",
+            "purpose": "Assess internal structures through radiological imaging.",
+            "results": {
+                "type": "text",
+                "content": "No imaging performed as not relevant for the case."
+            },
+            "interpretation": "Imaging not required for this diagnosis.",
+            "status": "completed"
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 12,
+        "actual_count": 12
+    }
+}

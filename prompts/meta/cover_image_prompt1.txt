@@ -60,7 +60,7 @@ The output for the generated prompt should be structured as a JSON object with t
 ```json
 {{
   "image_prompt": "<Detailed prompt for DALL-E based on the input case>",
-  "title": "<A concise title of the case, e.g., 'Patient presenting with rashes and joint pain.'>",
+  "title": "<A one liner on the symptoms, e.g., 'Patient presenting with rashes and joint pain.'>",
   "quote": "<A direct patient dialogue summarizing a symptom in 15 words or fewer, e.g., 'I have rashes all over my hands and it itches a lot.'>"
 }}
 ```

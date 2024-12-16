@@ -1,6 +1,6 @@
 import json
 from typing import Optional
-from fastapi import APIRouter, Form, HTTPException, File, UploadFile
+from fastapi import APIRouter, Form, HTTPException, File, UploadFile, Request
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableSequence
@@ -10,9 +10,16 @@ import uuid
 import os
 from dotenv import load_dotenv
 from pydantic import BaseModel
+import urllib3
+from routers.case_creator.helpers.image_downloader import download_image
 from utils.pdf_utils import extract_text_from_pdf
 from utils.text_cleaner import extract_code_blocks  # Import the utility function
 # create a cover image prompt and save it using the existing cases route
+from fastapi import Request
+
+async def get_server_host_url(request: Request) -> str:
+    """Retrieve the current server host URL."""
+    return f"{request.scheme}://{request.headers['host']}"
 
 # Load environment variables
 load_dotenv()
@@ -65,7 +72,7 @@ def update_case_cover(case_id: str, title: str, quote: str, image_url: str) -> N
     with open(case_cover_path, 'w') as json_file:
         json.dump(case_cover_data, json_file, indent=4)
 
-def call_image_gen(case_id: str, image_prompt: str) -> str:
+async def call_image_gen(case_id: str, image_prompt: str, hasPrompt: bool = False) -> str:
     """Generate or retrieve the image URL for the case cover."""
     case_folder = f"case-data/case{case_id}"
     case_cover_path = os.path.join(case_folder, "case_cover.json")
@@ -74,39 +81,46 @@ def call_image_gen(case_id: str, image_prompt: str) -> str:
     with open(case_cover_path, 'r') as json_file:
         case_cover_data = json.load(json_file)
     
-    # Check if the image_url exists; if not, generate it
-    if "image_url" not in case_cover_data:
-        image_url = DallEAPIWrapper(model="dall-e-3").run(image_prompt)
+    # Check if we need to generate a new image or 
+    if "image_url" not in case_cover_data  or hasPrompt:
+        # Generate new image with DALL-E
+        dalle_image_url = DallEAPIWrapper(model="dall-e-3").run(image_prompt)
+        # Download the image
+        image_path = os.path.join(case_folder, "cover_image.png")
+        await download_image(dalle_image_url, image_path)
+        server_image_url = f"/case-images/case{case_id}/cover_image.png"
     else:
-        print("image_url already exists")
-        image_url = case_cover_data["image_url"]
+        server_image_url = case_cover_data["image_url"]
     
-    return image_url
+    return server_image_url
+
 class CoverImageRequest(BaseModel):
-    prompt: str | None = None
-    title: str | None = None
-    quote: str | None = None
+    prompt: Optional[str] = None
+    title: Optional[str] = None
+    quote: Optional[str] = None 
 
 @router.post("/create")
-async def create_cover_image(case_id: str, request: Optional[CoverImageRequest] = None):
-    """
-    Create a cover image based on either a direct prompt or by generating one from the case document.
+async def create_cover_image(
+    case_id: str,  # Required parameter
+    cover_data: Optional[CoverImageRequest] = None,
+    request: Request = None
+):
+    # Access optional fields with default values
+    prompt = cover_data.prompt if cover_data else None
+    title = cover_data.title if cover_data else None
+    quote = cover_data.quote if cover_data else None
     
-    Args:
-        case_id (str): The ID of the case
-        prompt (str, optional): Direct prompt for DALL-E. If provided, skips GPT prompt generation
-    """
     try:
         formatted_response = {}
-        
-        if request and request.prompt:
-            # If prompt is provided, directly use it for DALL-E
-            image_url = DallEAPIWrapper(model="dall-e-3").run(request.prompt)
+        server_host_url = str(request.base_url).rstrip('/')
+        if cover_data and cover_data.prompt:
+            # Generate image using provided prompt
+            image_url = await call_image_gen(case_id, cover_data.prompt, True)
             
-            title = request.title
-            quote = request.quote
+            title = cover_data.title
+            quote = cover_data.quote
             formatted_response = {
-                "prompt": request.prompt,
+                "prompt": cover_data.prompt,
                 "image_url": image_url,
                 "title": title,
                 "quote": quote
@@ -130,7 +144,7 @@ async def create_cover_image(case_id: str, request: Optional[CoverImageRequest] 
             title = responseJSON["title"]
             quote = responseJSON["quote"]
             
-            image_url = call_image_gen(case_id, image_prompt)
+            image_url = await call_image_gen(case_id, image_prompt,)
             
             formatted_response = {
                 "prompt": image_prompt,

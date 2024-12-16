@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from pathlib import Path
 import os
 from routers.api import api_router
 
@@ -20,11 +22,45 @@ static_dir = "static"
 if not os.path.exists(static_dir):
     os.makedirs(static_dir)
 
-# Mount the static files directory
+# Set up case-data directory
+CASE_DATA_DIR = Path("case-data").absolute()
+if not CASE_DATA_DIR.exists():
+    CASE_DATA_DIR.mkdir(parents=True)
+
+# Mount the static files directories
 try:
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    app.mount("/case-files", StaticFiles(directory=str(CASE_DATA_DIR)), name="case-data")
+    app.mount("/case-images", StaticFiles(directory="case-data"), name="case-images")
 except RuntimeError as e:
     print(f"Error mounting static files: {e}")
+
+# File server endpoints
+@app.get("/files")
+async def list_files():
+    """List all files in the case-data directory"""
+    try:
+        files = os.listdir(CASE_DATA_DIR)
+        return {"files": files}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/files/{filename}")
+async def download_file(filename: str):
+    """Download a specific file from case-data directory"""
+    file_path = CASE_DATA_DIR / filename
+    
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail=f"File {filename} not found")
+        
+    try:
+        return FileResponse(
+            path=file_path,
+            filename=filename,
+            media_type="application/octet-stream"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Include routers
 app.include_router(api_router)

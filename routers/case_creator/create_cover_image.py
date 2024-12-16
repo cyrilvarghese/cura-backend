@@ -1,4 +1,5 @@
 import json
+from typing import Optional
 from fastapi import APIRouter, Form, HTTPException, File, UploadFile
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -8,6 +9,7 @@ from datetime import datetime
 import uuid
 import os
 from dotenv import load_dotenv
+from pydantic import BaseModel
 from utils.pdf_utils import extract_text_from_pdf
 from utils.text_cleaner import extract_code_blocks  # Import the utility function
 # create a cover image prompt and save it using the existing cases route
@@ -44,8 +46,49 @@ def load_patient_persona(case_id: int) -> str:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail=f"Patient persona file for case {case_id} not found.")
 
+# update the case cover data in the JSON file       
+def update_case_cover(case_id: str, title: str, quote: str, image_url: str) -> None:
+    """Update the case cover data in the JSON file."""
+    case_folder = f"case-data/case{case_id}"
+    case_cover_path = os.path.join(case_folder, "case_cover.json")
+    
+    # Read the existing case cover data
+    with open(case_cover_path, 'r') as json_file:
+        case_cover_data = json.load(json_file)
+    
+    # Update the title, quote, and image URL
+    case_cover_data["title"] = title
+    case_cover_data["quote"] = quote
+    case_cover_data["image_url"] = image_url
+    
+    # Write the updated JSON data back to the file
+    with open(case_cover_path, 'w') as json_file:
+        json.dump(case_cover_data, json_file, indent=4)
+
+def call_image_gen(case_id: str, image_prompt: str) -> str:
+    """Generate or retrieve the image URL for the case cover."""
+    case_folder = f"case-data/case{case_id}"
+    case_cover_path = os.path.join(case_folder, "case_cover.json")
+    
+    # Load the case cover data
+    with open(case_cover_path, 'r') as json_file:
+        case_cover_data = json.load(json_file)
+    
+    # Check if the image_url exists; if not, generate it
+    if "image_url" not in case_cover_data:
+        image_url = DallEAPIWrapper(model="dall-e-3").run(image_prompt)
+    else:
+        print("image_url already exists")
+        image_url = case_cover_data["image_url"]
+    
+    return image_url
+class CoverImageRequest(BaseModel):
+    prompt: str | None = None
+    title: str | None = None
+    quote: str | None = None
+
 @router.post("/create")
-async def create_cover_image(case_id: str, prompt: str | None = None):
+async def create_cover_image(case_id: str, request: Optional[CoverImageRequest] = None):
     """
     Create a cover image based on either a direct prompt or by generating one from the case document.
     
@@ -56,14 +99,14 @@ async def create_cover_image(case_id: str, prompt: str | None = None):
     try:
         formatted_response = {}
         
-        if prompt:
+        if request and request.prompt:
             # If prompt is provided, directly use it for DALL-E
-            image_url = DallEAPIWrapper(model="dall-e-3").run(prompt)
+            image_url = DallEAPIWrapper(model="dall-e-3").run(request.prompt)
             formatted_response = {
-                "prompt": prompt,
+                "prompt": request.prompt,
                 "image_url": image_url,
-                "title": None,
-                "quote": None
+                "title": request.title,
+                "quote": request.quote
             }
         else:
             # Existing flow for generating prompt using GPT
@@ -84,7 +127,7 @@ async def create_cover_image(case_id: str, prompt: str | None = None):
             title = responseJSON["title"]
             quote = responseJSON["quote"]
             
-            image_url = DallEAPIWrapper(model="dall-e-3").run(image_prompt)
+            image_url = call_image_gen(case_id, image_prompt)
             
             formatted_response = {
                 "prompt": image_prompt,
@@ -92,6 +135,8 @@ async def create_cover_image(case_id: str, prompt: str | None = None):
                 "title": title,
                 "quote": quote
             }
+          
+            update_case_cover(case_id, title, quote, image_url)
 
         formatted_log = (
             f"Cover image prompt generated successfully.\n"

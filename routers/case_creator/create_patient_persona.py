@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Form, HTTPException, File, UploadFile
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -49,6 +50,38 @@ def load_example_persona(file_path: str) -> str:
 class PatientPersonaRequest(BaseModel):
     persona_prompt: str
 
+
+
+def save_case_document(case_id: Optional[int], case_document: str) -> str:
+    """Save the extracted case document to a text file and return the file path."""
+    case_folder = f"case-data/case{case_id}"
+    os.makedirs(case_folder, exist_ok=True)  # Create the folder if it doesn't exist
+    case_doc_path = os.path.join(case_folder, "case_doc.txt")
+
+    # Write the extracted case document to a text file
+    with open(case_doc_path, 'w') as case_doc_file:
+        case_doc_file.write(case_document)
+    
+    return case_doc_path  # Return the path of the saved document
+
+def save_case_cover(case_id: Optional[int], pdf_file: UploadFile) -> str:
+    """Save the case cover data to a JSON file and return the file path."""
+    case_name = create_case_name(pdf_file.filename)
+    case_folder = f"case-data/case{case_id}"
+    case_cover_data = {
+        "case_name": case_name,
+        "case_id": case_id
+    }
+    
+    # Define the path for the JSON file
+    case_cover_path = os.path.join(case_folder, "case_cover.json")
+
+    # Write the JSON data to a file
+    with open(case_cover_path, 'w') as json_file:
+        json.dump(case_cover_data, json_file, indent=4)
+    
+    return case_cover_path  # Return the path of the saved cover data
+
 @router.post("/create")
 async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Optional[int] = Form(None)):
     """Create a patient persona prompt and save it using the existing cases route."""
@@ -63,12 +96,11 @@ async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Opti
         # Define the path to save the case document
         case_folder = f"case-data/case{case_id}"
         os.makedirs(case_folder, exist_ok=True)  # Create the folder if it doesn't exist
-        case_doc_path = os.path.join(case_folder, "case_doc.txt")
+        save_case_document(case_id, case_document)
+ 
+        # Save the case cover JSON file
+        save_case_cover(case_id, pdf_file)
 
-        # Write the extracted case document to a text file
-        with open(case_doc_path, 'w') as case_doc_file:
-            case_doc_file.write(case_document)
-        
         # Define the chat prompt template with placeholders
         prompt_template = ChatPromptTemplate.from_messages([
             ("system", meta_prompt),
@@ -109,3 +141,9 @@ async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Opti
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{error_timestamp}] ❌ Error in create_patient_persona: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+def create_case_name(filename: str) -> str:
+    """Generate a case name from the uploaded filename, replacing spaces with underscores."""
+    # Extract the base name and replace spaces with underscores
+    base_name = os.path.splitext(os.path.basename(filename))[0]
+    return base_name.replace(" ", "_")

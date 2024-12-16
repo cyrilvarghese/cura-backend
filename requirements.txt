@@ -4,8 +4,9 @@ python-multipart
 python-dotenv
 langchain==0.1.9
 langchain-core==0.1.41
-langchain-community==0.0.13
+langchain-community==0.3.9
 langchain-openai==0.0.6
 langgraph==0.2.53   
 PyPDF2==2.11.1
 pdftotext>=2.3.0
+ 

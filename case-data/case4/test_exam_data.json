@@ -1,0 +1,420 @@
+{
+    "physical_exam": {
+        "Skin Examination": {
+            "purpose": "Assess characteristics of the painful ulcers",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Violaceous (purple-red) retiform patches with ulceration and black eschar. Surrounding induration and tenderness noted."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/skin_exam.jpg",
+                            "altText": "Skin Ulcers",
+                            "caption": "Violaceous patches with black eschar on the lower legs."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Findings consistent with calciphylaxis, likely due to chronic kidney disease."
+        },
+        "Vitals Check": {
+            "purpose": "Monitor patient's vital signs",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Vital Sign",
+                        "Value",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Temperature",
+                            "36.9\u00b0C (98.4\u00b0F)",
+                            "Normal"
+                        ],
+                        [
+                            "Pulse",
+                            "82/min",
+                            "Normal"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "135/85 mm Hg",
+                            "Normal"
+                        ],
+                        [
+                            "Height",
+                            "160 cm",
+                            "N/A"
+                        ],
+                        [
+                            "Weight",
+                            "70 kg",
+                            "N/A"
+                        ],
+                        [
+                            "BMI",
+                            "27.3 (Overweight)",
+                            "N/A"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Vital signs are within normal limits; the patient is slightly overweight."
+        },
+        "Systemic Examination": {
+            "purpose": "Evaluate for systemic signs of disease",
+            "findings": {
+                "type": "text",
+                "content": "No signs of systemic inflammation observed (e.g., no fever, no lymphadenopathy)."
+            },
+            "status": "completed",
+            "interpretation": "Absence of systemic disease indicators supports localized pathology."
+        },
+        "Respiratory Examination": {
+            "purpose": "Assess respiratory health",
+            "findings": {
+                "type": "text",
+                "content": "Normal lung sounds; no respiratory distress noted."
+            },
+            "status": "completed",
+            "interpretation": "Unremarkable respiratory findings, not relevant to the current diagnosis."
+        },
+        "Neurological Examination": {
+            "purpose": "Check neurological status",
+            "findings": {
+                "type": "text",
+                "content": "Patient is alert and oriented; normal reflexes."
+            },
+            "status": "completed",
+            "interpretation": "Neurological examination shows no abnormalities."
+        },
+        "Oral Examination": {
+            "purpose": "Evaluate oral health status",
+            "findings": {
+                "type": "text",
+                "content": "Oral cavity intact; no lesions or signs of infection."
+            },
+            "status": "completed",
+            "interpretation": "Oral examination is normal and does not contribute to the current diagnosis."
+        },
+        "Abdominal Examination": {
+            "purpose": "Assess abdominal health",
+            "findings": {
+                "type": "text",
+                "content": "Soft abdomen, non-tender, no palpable masses."
+            },
+            "status": "completed",
+            "interpretation": "Abdominal examination is normal, ruling out any acute abdominal pathology."
+        },
+        "Musculoskeletal Examination": {
+            "purpose": "Evaluate musculoskeletal health",
+            "findings": {
+                "type": "text",
+                "content": "No joint swelling or tenderness; full range of motion demonstrated."
+            },
+            "status": "completed",
+            "interpretation": "Musculoskeletal examination shows normal findings."
+        }
+    },
+    "lab_test": {
+        "Serum Calcium/Phosphate Levels": {
+            "testName": "Serum Calcium/Phosphate Levels",
+            "purpose": "Evaluate calcium and phosphate levels to assess for potential calciphylaxis",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Calcium",
+                            "10.8 mg/dL",
+                            "8.5-10.5 mg/dL",
+                            "HIGH"
+                        ],
+                        [
+                            "Phosphate",
+                            "6.2 mg/dL",
+                            "2.5-4.5 mg/dL",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Elevated calcium and phosphate levels indicate a risk of calciphylaxis.",
+            "status": "completed"
+        },
+        "Parathyroid Hormone (PTH)": {
+            "testName": "Parathyroid Hormone (PTH)",
+            "purpose": "Measure PTH levels to evaluate secondary hyperparathyroidism",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "PTH",
+                            "150 pg/mL",
+                            "10-65 pg/mL",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Elevated PTH supports the diagnosis of secondary hyperparathyroidism associated with CKD.",
+            "status": "completed"
+        },
+        "Skin Biopsy with Special Stains": {
+            "testName": "Skin Biopsy with Special Stains",
+            "purpose": "Examine skin tissue for ischemic damage and calcium deposits",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Microscopic examination shows ischemic vascular damage and deposits of calcium."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/biopsy.jpg",
+                            "altText": "Skin Biopsy",
+                            "caption": "Skin biopsy showing calcium deposits."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Findings are consistent with calciphylaxis.",
+            "status": "completed"
+        },
+        "Allergy Testing": {
+            "testName": "Allergy Testing",
+            "purpose": "Identify any potential allergies",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Allergen",
+                        "Result",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Latex",
+                            "Negative",
+                            "Normal"
+                        ],
+                        [
+                            "Dust Mites",
+                            "Negative",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "No significant allergies detected; irrelevant to current diagnosis.",
+            "status": "completed"
+        },
+        "Liver Function Tests": {
+            "testName": "Liver Function Tests",
+            "purpose": "Assess liver health",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "AST",
+                            "25 U/L",
+                            "10-40 U/L",
+                            "Normal"
+                        ],
+                        [
+                            "ALT",
+                            "20 U/L",
+                            "7-56 U/L",
+                            "Normal"
+                        ],
+                        [
+                            "Alkaline Phosphate",
+                            "70 U/L",
+                            "40-150 U/L",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Liver function tests are within normal limits.",
+            "status": "completed"
+        },
+        "Blood Culture": {
+            "testName": "Blood Culture",
+            "purpose": "Detect bacteremia or sepsis",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Culture",
+                        "Result",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Blood Culture",
+                            "Negative",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "No evidence of infection in the bloodstream.",
+            "status": "completed"
+        },
+        "Imaging": {
+            "testName": "Imaging (e.g., X-rays for calcifications)",
+            "purpose": "Assess for subcutaneous calcifications",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "X-rays show presence of subcutaneous calcification consistent with calciphylaxis."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/xray-calciphylaxis.jpg",
+                            "altText": "X-ray showing calcifications",
+                            "caption": "X-ray revealing subcutaneous calcifications."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Imaging corroborates the diagnosis of calciphylaxis.",
+            "status": "completed"
+        },
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Evaluate overall health and detect a variety of disorders",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Hemoglobin",
+                            "13.5 g/dL",
+                            "12.0-16.0 g/dL",
+                            "Normal"
+                        ],
+                        [
+                            "WBC",
+                            "7.0 x10^9/L",
+                            "4.0-10.0 x10^9/L",
+                            "Normal"
+                        ],
+                        [
+                            "Platelets",
+                            "250 x10^9/L",
+                            "150-400 x10^9/L",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "CBC results are normal and do not indicate any active infection or hematological disorder.",
+            "status": "completed"
+        },
+        "Erythrocyte Sedimentation Rate (ESR)": {
+            "testName": "Erythrocyte Sedimentation Rate (ESR)",
+            "purpose": "Assess for inflammation in the body",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "30 mm/hr",
+                            "0-20 mm/hr",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Elevated ESR indicates inflammation; could correlate with calciphylaxis.",
+            "status": "completed"
+        },
+        "Urinalysis": {
+            "testName": "Urinalysis",
+            "purpose": "Evaluate kidney function and detect urinary disorders",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Protein",
+                            "Negative",
+                            "Negative"
+                        ],
+                        [
+                            "Glucose",
+                            "Negative",
+                            "Negative"
+                        ],
+                        [
+                            "Blood",
+                            "Trace",
+                            "Negative"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Normal urinalysis findings with trace blood; no indications of acute kidney injury.",
+            "status": "completed"
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 16,
+        "actual_count": 16
+    }
+}

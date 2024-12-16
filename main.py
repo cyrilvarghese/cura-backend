@@ -9,7 +9,7 @@ from routers.patient_simulation import router as patient_router
 from routers.markdown import markdown_router
 from routers.create_patient_persona import router as create_data_router        
 from routers.create_exam_test_data import router as create_exam_test_data_router
-
+from routers.create_cover_image import router as create_cover_image_router
 app = FastAPI()
 
 # Add CORS middleware
@@ -40,3 +40,4 @@ app.include_router(patient_router)
 app.include_router(markdown_router) 
 app.include_router(create_data_router) 
 app.include_router(create_exam_test_data_router)
+app.include_router(create_cover_image_router)

@@ -11,12 +11,13 @@ You are a prompt designer tasked with creating highly detailed and empathetic pr
    "A 14-year-old Indian child diagnosed with Henoch-Schönlein Purpura (HSP), sitting nervously on the edge of a clinical examination bed. The child is wearing a simple school uniform, their shoulders slightly hunched, and their eyes showing both discomfort and confusion about their symptoms."
 
 2. **Medical Condition Depiction:**
-   - Focus on visible symptoms or signs of the medical condition with **medically accurate descriptions**, avoiding overly graphic depictions.
-   - Highlight the **progression or severity** of symptoms (e.g., rashes spreading, swelling).
-   - Connect the condition to the patient’s **experience** (e.g., pain, difficulty performing daily tasks).
+   - Focus primarily on the **patient’s emotional state and experience** rather than detailing the condition itself. Avoid graphic or exaggerated descriptions of visible symptoms such as ulcers, cuts, rashes, or pus. Overly graphic terms may trigger safety system rejections and should be replaced with neutral alternatives to ensure compliance with image generation policies.
+   - Depict the symptoms **subtly and minimally**, ensuring they support the narrative without shocking or overwhelming the viewer.
+   - Use **neutral and non-triggering language** to describe conditions to comply with OpenAI image generation policies. Avoid phrases like 'necrosis,' 'pus,' or 'severe ulcers,' as these may trigger generation errors or safety system rejections. Instead, soften the descriptions to focus on the patient’s emotional state and subtle, minimal depictions of symptoms. Avoid terms like "puss," "necrosis," or overly detailed depictions of severe skin conditions.
+   - Highlight the patient’s **discomfort or pain** through body language, facial expression, or subtle posture shifts rather than through vivid medical descriptions.
 
    **Example:**
-   "Their lower legs have faint purplish spots and small red rashes, some slightly swollen, indicative of HSP. The child winces as they attempt to shift their position, hinting at discomfort caused by the condition. A slight redness is also visible around their ankles, emphasizing the spread of symptoms."
+   "The child’s lower legs show mild discoloration and faint spots, barely noticeable at first glance. Their face reveals discomfort as they shift slightly, trying to ease the pain without drawing attention to themselves."
 
 3. **Environment:**
    - Set the scene in a **realistic location** such as a clinical examination room, hospital ward, or home environment, depending on the scenario.
@@ -51,7 +52,7 @@ You are a prompt designer tasked with creating highly detailed and empathetic pr
 ---
 
 **Input Case Details:**
-The prompts you generate should take the detailed **case details** provided as input into account. For instance, in a case involving calciphylaxis, details such as the patient’s chronic kidney disease, dialysis history, and the nature of painful, non-healing ulcers on the legs should be integrated into the generated prompt. Specific references to findings, such as skin examinations or lab test results, should enrich the realism and context of the image prompt.
+The prompts you generate should take the detailed **case details** provided as input into account. For instance, in a case involving calciphylaxis, details such as the patient’s chronic kidney disease, dialysis history, and the nature of painful, non-healing ulcers on the legs should be integrated into the generated prompt. However, **focus on the patient’s emotional state** (e.g., discomfort, pain, distress) rather than explicitly describing the medical details of ulcers, cuts, or rashes. Ensure all language complies with OpenAI's image generation policies by avoiding overly graphic or sensitive terms. Examples of terms to avoid include 'necrosis,' 'pus,' 'severe ulcers,' and 'gaping wounds,' as these may trigger safety system rejections. Instead, use softened and neutral alternatives that focus on the patient’s emotional state and overall experience.
 
 ---
 
@@ -59,12 +60,12 @@ The prompts you generate should take the detailed **case details** provided as i
 The output for the generated prompt should be structured as a JSON object with the following schema:
 
 ```json
-{
+{{
   "image_prompt": "<Detailed prompt for DALL-E based on the input case>",
   "title": "<A concise title of the case, e.g., 'Patient presenting with rashes and joint pain.'>",
-  "quote": "<A direct patient dialogue summarizing a symptom in 13 words or less e.g., 'I have rashes all over my hands and it itches a lot.'>"
-}
+  "quote": "<A direct patient dialogue summarizing a symptom in 15 words or fewer, e.g., 'I have rashes all over my hands and it itches a lot.'>"
+}}
 ```
 
-The input for this meta prompt will be a detailed case description (referred to as **case details**), and the generated response must encapsulate the essence of the case into these fields, ensuring the imagery aligns with the medical and emotional context provided.
+The input for this meta prompt will be a detailed case description (referred to as **case details**), and the generated response must encapsulate the essence of the case into these fields, ensuring the imagery aligns with the medical and emotional context provided while maintaining subtlety in symptom depiction and focusing on the patient’s emotional state. Additionally, ensure compliance with OpenAI image generation policies by avoiding overly graphic terms or descriptions.
 

@@ -59,6 +59,7 @@ async def create_exam_test_data(pdf_file: UploadFile = File(...), case_id: Optio
         meta_prompt = meta_prompt.replace("{", "{{").replace("}", "}}")
         
         # Extract text from the uploaded PDF file using the utility function
+        
         case_document = extract_text_from_pdf(pdf_file)
         example_physical_exam = load_example_persona("prompts/examples/example_physical_exam.txt")
         example_lab_test = load_example_persona("prompts/examples/example_lab_test.txt")

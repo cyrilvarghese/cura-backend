@@ -102,6 +102,7 @@ async def create_cover_image(case_id: str, request: Optional[CoverImageRequest] 
         if request and request.prompt:
             # If prompt is provided, directly use it for DALL-E
             image_url = DallEAPIWrapper(model="dall-e-3").run(request.prompt)
+            
             title = request.title
             quote = request.quote
             formatted_response = {

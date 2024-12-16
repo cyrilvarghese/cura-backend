@@ -59,6 +59,15 @@ async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Opti
         
         # Extract text from the uploaded PDF file using the utility function
         case_document = extract_text_from_pdf(pdf_file)
+
+        # Define the path to save the case document
+        case_folder = f"case-data/case{case_id}"
+        os.makedirs(case_folder, exist_ok=True)  # Create the folder if it doesn't exist
+        case_doc_path = os.path.join(case_folder, "case_doc.txt")
+
+        # Write the extracted case document to a text file
+        with open(case_doc_path, 'w') as case_doc_file:
+            case_doc_file.write(case_document)
         
         # Define the chat prompt template with placeholders
         prompt_template = ChatPromptTemplate.from_messages([

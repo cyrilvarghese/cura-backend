@@ -63,7 +63,7 @@ llm = ChatOpenAI(
 async def get_case_summary(case_id: str = None) -> str:
     try:
         case_id = case_id or "case1"  # Default to case1 if no ID provided
-        file_path = f"case-data/{case_id}/summary/summary.txt"
+        file_path = f"case-data/case{case_id}/case_doc.txt"
         
         with open(file_path, 'r') as file:
             return file.read().strip()
@@ -95,16 +95,7 @@ def load_prompt_template(file_path: str) -> str:
     with open(file_path, 'r') as file:
         return file.read()
 
-def create_medical_evaluation_prompt(messages: List[StudentMessage], case_summary: str) -> ChatPromptTemplate:
-    student_actions_str = transform_student_actions(messages)
-    template = load_prompt_template('prompts/medical_evaluator.txt')
-    
-    prompt_template = ChatPromptTemplate.from_messages([
-        ("system", template),
-        ("human", "Here are the student's actions:\n{student_actions}")
-    ])
-    
-    return prompt_template
+ 
 
 @feedback_router.post("/", response_model=FeedbackResponse)
 async def submit_feedback(messages: List[StudentMessage], case_id: str = None):
@@ -120,10 +111,12 @@ async def submit_feedback(messages: List[StudentMessage], case_id: str = None):
         case_summary = await get_case_summary(case_id)
         
         # Create the prompt template
-        prompt_template = create_medical_evaluation_prompt(
-            messages=messages,
-            case_summary=case_summary
-        )
+        template = load_prompt_template('prompts/medical_evaluator.txt')
+            
+        prompt_template = ChatPromptTemplate.from_messages([
+            ("system", template),
+            ("human", "Here are the student's actions:\n{student_actions}")
+        ])
         
         # Invoke the prompt template with variables
         formatted_prompt = prompt_template.invoke({

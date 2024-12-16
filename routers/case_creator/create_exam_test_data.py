@@ -6,16 +6,20 @@ from datetime import datetime
 import uuid
 import os
 from dotenv import load_dotenv
-from routers.create_patient_persona import load_example_persona
 from utils.pdf_utils import extract_text_from_pdf  # Import the utility function
 import io
 import json  # Import json for saving data
 from pathlib import Path
 from utils.case_utils import get_next_case_id
 from utils.text_cleaner import extract_code_blocks  # Import the get_next_case_id function
-from routers.create_cases_routes import create_examination_data as save_examination_data        
+from routers.case_creator.helpers.save_data_to_file import save_examination_data
 # Load environment variables
 load_dotenv()
+
+
+# create a exam test data prompt and save it using the existing cases route
+
+
 
 router = APIRouter(
     prefix="/exam_test_data",
@@ -61,9 +65,7 @@ async def create_exam_test_data(pdf_file: UploadFile = File(...), case_id: Optio
         # Extract text from the uploaded PDF file using the utility function
         
         case_document = extract_text_from_pdf(pdf_file)
-        example_physical_exam = load_example_persona("prompts/examples/example_physical_exam.txt")
-        example_lab_test = load_example_persona("prompts/examples/example_lab_test.txt")
-        
+       
         # If no case_id provided, get the next available one
         if case_id is None:
             case_id = get_next_case_id()

@@ -35,7 +35,7 @@ async def write_to_file(file_path: Path, content: str) -> None:
         )
 
  
-async def create_patient_persona(case_id: str, request: PatientPersonaRequest):
+async def save_patient_persona(case_id: str, request: PatientPersonaRequest):
     try:
         # Create the directory path
         base_path = Path("case-data")
@@ -64,7 +64,7 @@ async def create_patient_persona(case_id: str, request: PatientPersonaRequest):
             detail=f"Failed to create patient persona file: {str(e)}"
         )
  
-async def create_examination_data(case_id: str, data: dict) -> dict:
+async def save_examination_data(case_id: str, data: dict) -> dict:
     """Create examination data and save it to a specified file."""
     try:
         # Create the directory path

@@ -7,13 +7,15 @@ import os
 from dotenv import load_dotenv
 import pdftotext  # Replace PyPDF2 import with pdftotext
 import io
-from .create_cases_routes import create_patient_persona as save_patient_persona
+from routers.case_creator.helpers.save_data_to_file import save_patient_persona
 from pydantic import BaseModel
 from pathlib import Path
 from typing import Optional
 from utils.case_utils import get_next_case_id
 from utils.pdf_utils import extract_text_from_pdf  # Import the utility function
 # Load environment variables
+# create a patient persona prompt and save it using the existing cases route
+
 load_dotenv()
 
 router = APIRouter(

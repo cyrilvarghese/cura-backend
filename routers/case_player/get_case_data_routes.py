@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Dict, Any
 import json
 import os
+# get the case data from the case-data folder for the case player to use
 
 case_router = APIRouter()
 

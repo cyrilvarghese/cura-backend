@@ -1,7 +1,15 @@
 {
     "case_name": "case_doc_for_Urticarial_Vasculitis",
     "case_id": 1,
-    "title": "Patient presenting with an itchy rash and joint discomfort.",
-    "quote": "I've had this itchy rash for about two weeks now, and some days I just feel so tired.",
-    "image_url": "/case-images/case1/cover_image.png"
+    "title": "Patient presenting with an itchy rash and joint pain.",
+    "quote": "I\u2019ve had this itchy rash on my arms and legs for about two weeks now.",
+    "image_url": "/case-images/case1/cover_image.png?v=1734472769?v=1734472903?v=1734472947",
+    "differentials": [
+        "Urticarial Vasculitis",
+        "Systemic Lupus Erythematosus (SLE) with cutaneous manifestations",
+        "Hypersensitivity Vasculitis",
+        "Chronic Idiopathic Urticaria",
+        "Drug-Induced Urticarial Rash"
+    ],
+    "last_updated": "2024-12-17T22:02:20.980668"
 }

@@ -1,7 +1,15 @@
 {
     "case_name": "case_doc_for_HSP",
     "case_id": 2,
-    "title": "Ravi presents with rash and joint pain.",
-    "quote": "I've had this annoying rash on my legs for about two weeks and it hurts.",
-    "image_url": "/case-images/case2/cover_image.png"
+    "title": "Patient presenting with rash and joint pain.",
+    "quote": "I've have this annoying rash on my legs and it hurts.",
+    "image_url": "/case-images/case2/cover_image.png",
+    "differentials": [
+        "IgA Vasculitis",
+        "Systemic Lupus Erythematosus (SLE)",
+        "Juvenile Idiopathic Arthritis with Vasculitis Component",
+        "Drug-Induced Hypersensitivity Vasculitis",
+        "Contact Dermatitis"
+    ],
+    "last_updated": "2024-12-17T21:24:49.922106"
 }

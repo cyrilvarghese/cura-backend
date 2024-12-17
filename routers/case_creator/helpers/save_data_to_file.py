@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import os
 from pathlib import Path
 import json
+from datetime import datetime
 
 case_router = APIRouter(
     prefix="/cases",
@@ -90,4 +91,40 @@ async def save_examination_data(case_id: str, data: dict) -> dict:
         raise HTTPException(
             status_code=500,
             detail=f"Failed to create examination data file: {str(e)}"
+        )
+
+async def save_differential_diagnosis(case_id: int, data: dict) -> dict:
+    """Update the differentials in the case cover JSON file."""
+    try:
+        case_folder = f"case-data/case{case_id}"
+        case_cover_path = os.path.join(case_folder, "case_cover.json")
+        
+        # Read the existing case cover data
+        with open(case_cover_path, 'r') as json_file:
+            case_cover_data = json.load(json_file)
+        
+        # Update the differentials
+        case_cover_data["differentials"] = data
+        case_cover_data["last_updated"] = datetime.now().isoformat()
+        
+        # Write the updated JSON data back to the file
+        with open(case_cover_path, 'w') as json_file:
+            json.dump(case_cover_data, json_file, indent=4)
+            
+        return {
+            "status": "success",
+            "file_path": case_cover_path,
+            "message": "Differential diagnoses updated in case cover successfully",
+            "case_id": case_id
+        }
+        
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Case cover file not found for case {case_id}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error updating differential diagnoses in case cover: {str(e)}"
         )

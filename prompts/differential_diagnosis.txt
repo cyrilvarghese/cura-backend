@@ -1,0 +1,23 @@
+You are tasked with extracting the differential diagnosis list from a medical case document. The document may contain multiple sections including symptoms, examinations, test results, primary diagnosis, and differential diagnoses.
+
+Your goal:
+- Identify and extract the **differential diagnoses**.
+- Return them as a JSON array containing only the disease names listed under "differential diagnoses" (correct and incorrect options).
+
+Example output format:
+[
+  "Bullous Pemphigoid",
+  "Pemphigus Vulgaris",
+  "Linear IgA Bullous Dermatosis",
+  "Epidermolysis Bullosa Acquisita",
+  "Urticaria",
+  "Drug-Induced Bullous Eruption",
+  "Dermatitis Herpetiformis",
+  "Contact Dermatitis",
+  "Bullous Impetigo"
+]
+
+Constraints:
+- Do not include any explanations or extra text.
+- Extract the names as they appear in the case document.
+ 

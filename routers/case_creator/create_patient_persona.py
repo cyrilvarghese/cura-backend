@@ -87,7 +87,7 @@ async def create_patient_persona(file: UploadFile = File(...), case_id: Optional
     """Create a patient persona prompt and save it using the existing cases route."""
     try:
         # Load the meta prompt and example persona from their respective files
-        meta_prompt = load_meta_prompt("prompts/meta/patient_persona.txt")
+        meta_prompt = load_meta_prompt("prompts/meta_prompts/patient_persona.txt")
         example_persona = load_example_persona("prompts/examples/example_patient_persona.txt")
         
         # Extract text from the uploaded PDF file using the utility function

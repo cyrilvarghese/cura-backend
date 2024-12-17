@@ -33,7 +33,7 @@ model = ChatOpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
-def load_meta_prompt(file_path: str) -> str:
+def load_prompt(file_path: str) -> str:
     """Load the meta prompt from a specified file."""
     try:
         with open(file_path, 'r') as file:
@@ -57,10 +57,10 @@ async def create_exam_test_data(file: UploadFile = File(...), case_id: Optional[
     """Create exam test data based on a meta prompt and a case document."""
     try:
         # Load the meta prompt from the specified file
-        meta_prompt = load_meta_prompt("prompts/meta/exam_test_data2.txt")
+        prompt = load_prompt("prompts/exam_test_data2.txt")
 
         # Escape curly braces in the meta prompt
-        meta_prompt = meta_prompt.replace("{", "{{").replace("}", "}}")
+        prompt = prompt.replace("{", "{{").replace("}", "}}")
         
         # Extract text from the uploaded PDF file using the utility function
         
@@ -72,7 +72,7 @@ async def create_exam_test_data(file: UploadFile = File(...), case_id: Optional[
         
         # Define the chat prompt template with placeholders
         prompt_template = ChatPromptTemplate.from_messages([
-            ("system", meta_prompt),
+            ("system", prompt),
             ("human", "Case Details:\n{case_document}")
         ])
         

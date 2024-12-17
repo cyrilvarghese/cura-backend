@@ -7,7 +7,7 @@
                 "content": [
                     {
                         "type": "text",
-                        "content": "Red, raised patches on the forearms and legs, some have bruising as they fade. Slight tenderness but no pain."
+                        "content": "Red, raised patches on forearms and legs; some with fading bruising; slightly tender but not painful."
                     },
                     {
                         "type": "image",
@@ -20,43 +20,28 @@
                 ]
             },
             "status": "completed",
-            "interpretation": "Consistent with urticarial vasculitis."
+            "interpretation": "Characteristics consistent with urticarial vasculitis."
         },
         "Musculoskeletal Examination": {
             "purpose": "Evaluate joint tenderness and range of motion",
             "findings": {
                 "type": "text",
-                "content": "Mild tenderness in the wrists and knees noted, no noticeable swelling or warmth. Full range of motion preserved."
+                "content": "Mild tenderness in wrists and knees, full range of motion preserved; no swelling or warmth noted."
             },
             "status": "completed",
-            "interpretation": "Findings suggest mild joint involvement without significant inflammation."
+            "interpretation": "Joint findings suggest potential inflammatory cause."
         },
         "Vitals Check": {
-            "purpose": "Monitor key vital signs",
+            "purpose": "Assess overall health parameters",
             "findings": {
                 "type": "table",
                 "content": {
                     "headers": [
-                        "Vital Sign",
+                        "Parameter",
                         "Value",
-                        "Normal Range"
+                        "Reference Range"
                     ],
                     "rows": [
-                        [
-                            "Temperature",
-                            "37.2\u00b0C (98.9\u00b0F)",
-                            "36.1-37.2\u00b0C"
-                        ],
-                        [
-                            "Pulse",
-                            "80/min",
-                            "60-100/min"
-                        ],
-                        [
-                            "Blood Pressure",
-                            "118/76 mm Hg",
-                            "120/80 mm Hg"
-                        ],
                         [
                             "Height",
                             "165 cm",
@@ -71,30 +56,45 @@
                             "BMI",
                             "22.0",
                             "18.5-24.9"
+                        ],
+                        [
+                            "Temperature",
+                            "37.2\u00b0C (98.9\u00b0F)",
+                            "36.1-37.2\u00b0C"
+                        ],
+                        [
+                            "Pulse",
+                            "80/min",
+                            "60-100/min"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "118/76 mm Hg",
+                            "120/80 mm Hg"
                         ]
                     ]
                 }
             },
             "status": "completed",
-            "interpretation": "Vital signs are within normal limits."
+            "interpretation": "Vital parameters within normal limits, BMI indicates healthy weight."
         },
         "Neurological Examination": {
-            "purpose": "Rule out neurological issues",
+            "purpose": "Evaluate neurological status",
             "findings": {
                 "type": "text",
                 "content": "No abnormalities detected."
             },
             "status": "completed",
-            "interpretation": "Neurological function appears intact."
+            "interpretation": "Neurological exam within normal limits."
         },
         "Respiratory Examination": {
-            "purpose": "Assess respiratory status",
+            "purpose": "Assess respiratory function",
             "findings": {
                 "type": "text",
-                "content": "Normal breath sounds throughout the lung fields."
+                "content": "Normal breath sounds bilaterally."
             },
             "status": "completed",
-            "interpretation": "No respiratory issues detected."
+            "interpretation": "Respiratory examination normal."
         }
     },
     "lab_test": {
@@ -112,12 +112,6 @@
                     ],
                     "rows": [
                         [
-                            "ESR",
-                            "25 mm/hr",
-                            "0-20 mm/hr",
-                            "HIGH"
-                        ],
-                        [
                             "WBC",
                             "7.5 x10^9/L",
                             "4.0-11.0 x10^9/L",
@@ -126,39 +120,45 @@
                         [
                             "Hemoglobin",
                             "13.5 g/dL",
-                            "12.0-16.0 g/dL",
+                            "12.0-15.5 g/dL",
                             "NORMAL"
                         ],
                         [
-                            "Platelets",
-                            "250 x10^9/L",
-                            "150-450 x10^9/L",
+                            "Hematocrit",
+                            "40%",
+                            "36%-46%",
                             "NORMAL"
+                        ],
+                        [
+                            "ESR",
+                            "25 mm/hr",
+                            "0-20 mm/hr",
+                            "HIGH"
                         ]
                     ]
                 }
             },
-            "interpretation": "Indicates mild inflammation, consistent with autoimmune or vasculitic processes.",
+            "interpretation": "Mildly elevated ESR indicating inflammation, but CBC is normal.",
             "status": "completed"
         },
         "ANA Test": {
             "testName": "Antinuclear Antibody (ANA) Test",
-            "purpose": "Screen for autoimmune disorders",
+            "purpose": "Identify autoimmune activity",
             "results": {
                 "type": "text",
-                "content": "Positive, suggesting autoimmune activity."
+                "content": "Positive ANA at 1:160 dilution."
             },
-            "interpretation": "Positive result may indicate underlying autoimmune condition such as lupus or urticarial vasculitis.",
+            "interpretation": "Positive result suggests possible autoimmune condition.",
             "status": "completed"
         },
         "Complement Levels (C3, C4)": {
             "testName": "Complement Levels (C3, C4)",
-            "purpose": "Evaluate complement system activity",
+            "purpose": "Evaluate complement levels as indicators of autoimmune processes",
             "results": {
                 "type": "table",
                 "content": {
                     "headers": [
-                        "Complement",
+                        "Test",
                         "Result",
                         "Reference Range",
                         "Status"
@@ -166,63 +166,63 @@
                     "rows": [
                         [
                             "C3",
-                            "75 mg/dL",
-                            "90-180 mg/dL",
-                            "LOW"
+                            "90 mg/dL",
+                            "80-160 mg/dL",
+                            "NORMAL"
                         ],
                         [
                             "C4",
                             "10 mg/dL",
-                            "16-45 mg/dL",
+                            "10-40 mg/dL",
                             "LOW"
                         ]
                     ]
                 }
             },
-            "interpretation": "Low levels typical of urticarial vasculitis.",
+            "interpretation": "Low C4 level is indicative of potential urticarial vasculitis.",
             "status": "completed"
         },
         "Skin Biopsy": {
             "testName": "Skin Biopsy",
-            "purpose": "Identify specific skin pathology",
+            "purpose": "Investigate skin lesions for histological evidence",
             "results": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Histopathology shows leukocytoclastic vasculitis with immunoglobulin deposits in the small blood vessels."
+                        "content": "Leukocytoclastic vasculitis with immunoglobulin deposits observed."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/biopsy.jpg",
-                            "altText": "Skin biopsy histology",
-                            "caption": "Histology showing leukocytoclastic vasculitis."
+                            "url": "https://example.com/biopsy_image.jpg",
+                            "altText": "Skin biopsy image showing leukocytoclastic vasculitis",
+                            "caption": "Histological findings from skin biopsy."
                         }
                     }
                 ]
             },
-            "interpretation": "Confirms diagnosis of urticarial vasculitis.",
+            "interpretation": "Biopsy confirms diagnosis of urticarial vasculitis.",
             "status": "completed"
         },
         "Allergy Panel Testing": {
             "testName": "Allergy Panel Testing",
-            "purpose": "Evaluate for potential allergies",
+            "purpose": "Detect potential allergens",
             "results": {
                 "type": "text",
-                "content": "Not performed due to no new exposures."
+                "content": "Not performed, as no relevant exposure history."
             },
-            "interpretation": "Irrelevant for this case.",
+            "interpretation": "Allergy testing irrelevant to this clinical picture.",
             "status": "completed"
         },
         "Imaging": {
-            "testName": "Imaging (e.g., X-rays)",
-            "purpose": "Assess for any bone or joint abnormalities",
+            "testName": "Imaging (X-ray)",
+            "purpose": "Assess joint damage or abnormalities",
             "results": {
                 "type": "text",
-                "content": "Not performed as it is not relevant to the case."
+                "content": "Not performed, as joint examination was normal."
             },
-            "interpretation": "Not relevant for this case.",
+            "interpretation": "Imaging not necessary due to lack of observable joint swelling or abnormalities.",
             "status": "completed"
         }
     },

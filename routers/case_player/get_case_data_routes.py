@@ -16,6 +16,8 @@ class CaseInfo(BaseModel):
     title: str | None = None
     quote: str | None = None
     image_url: str | None = None
+    last_updated: str | None = None
+    differential_diagnosis: list[str] | None = None
 
 @case_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():
@@ -36,7 +38,9 @@ async def list_cases():
                         case_name=cover_data["case_name"],
                         title=cover_data.get("title"),
                         quote=cover_data.get("quote"),
-                        image_url=cover_data.get("image_url")
+                        image_url=cover_data.get("image_url"),
+                        last_updated=cover_data.get("last_updated"),
+                        differential_diagnosis=cover_data.get("differential_diagnosis")
                     )
                     cases.append(case_info)
             except (json.JSONDecodeError, KeyError) as e:

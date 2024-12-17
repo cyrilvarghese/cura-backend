@@ -1,19 +1,17 @@
 import json
 from typing import Optional
-from fastapi import APIRouter, Form, HTTPException, File, UploadFile, Request
+from fastapi import APIRouter, HTTPException, Request
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableSequence
 from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
 from datetime import datetime
-import uuid
 import os
 from dotenv import load_dotenv
 from pydantic import BaseModel
-import urllib3
 from routers.case_creator.helpers.image_downloader import download_image
-from utils.pdf_utils import extract_text_from_document
 from utils.text_cleaner import extract_code_blocks  # Import the utility function
+
+
 # create a cover image prompt and save it using the existing cases route
 from fastapi import Request
 
@@ -36,7 +34,7 @@ model = ChatOpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
-def load_meta_prompt(file_path: str) -> str:
+def load_prompt(file_path: str) -> str:
     """Load the meta prompt from a specified file."""
     try:
         with open(file_path, 'r') as file:
@@ -128,11 +126,11 @@ async def create_cover_image(
             }
         else:
             # Existing flow for generating prompt using GPT
-            meta_prompt = load_meta_prompt("prompts/meta/cover_image_prompt1.txt")
+            prompt = load_prompt("prompts/cover_image_prompt1.txt")
             patient_persona = load_patient_persona(case_id)
             
             prompt_template = ChatPromptTemplate.from_messages([
-                ("system", meta_prompt),
+                ("system", prompt),
                 ("human", "Create a cover image prompt based on the following patient persona:\n{patient_persona}")
             ])
             

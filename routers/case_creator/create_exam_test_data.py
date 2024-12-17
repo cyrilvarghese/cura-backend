@@ -6,7 +6,7 @@ from datetime import datetime
 import uuid
 import os
 from dotenv import load_dotenv
-from utils.pdf_utils import extract_text_from_pdf  # Import the utility function
+from utils.pdf_utils import extract_text_from_document  # Import the utility function
 import io
 import json  # Import json for saving data
 from pathlib import Path
@@ -53,7 +53,7 @@ def save_test_data(case_id: int, data: dict) -> str:
         raise HTTPException(status_code=500, detail=f"Error saving test data: {str(e)}")
 
 @router.post("/create")
-async def create_exam_test_data(pdf_file: UploadFile = File(...), case_id: Optional[int]= Form(None)):
+async def create_exam_test_data(file: UploadFile = File(...), case_id: Optional[int]= Form(None)):
     """Create exam test data based on a meta prompt and a case document."""
     try:
         # Load the meta prompt from the specified file
@@ -64,7 +64,7 @@ async def create_exam_test_data(pdf_file: UploadFile = File(...), case_id: Optio
         
         # Extract text from the uploaded PDF file using the utility function
         
-        case_document = extract_text_from_pdf(pdf_file)
+        case_document = extract_text_from_document(file)
        
         # If no case_id provided, get the next available one
         if case_id is None:

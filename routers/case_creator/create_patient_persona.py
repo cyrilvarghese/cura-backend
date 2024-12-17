@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from pathlib import Path
 from typing import Optional
 from utils.case_utils import get_next_case_id
-from utils.pdf_utils import extract_text_from_pdf  # Import the utility function
+from utils.pdf_utils import extract_text_from_document    # Import the utility function
 # Load environment variables
 # create a patient persona prompt and save it using the existing cases route
 
@@ -64,9 +64,9 @@ def save_case_document(case_id: Optional[int], case_document: str) -> str:
     
     return case_doc_path  # Return the path of the saved document
 
-def save_case_cover(case_id: Optional[int], pdf_file: UploadFile) -> str:
+def save_case_cover(case_id: Optional[int], file: UploadFile) -> str:
     """Save the case cover data to a JSON file and return the file path."""
-    case_name = create_case_name(pdf_file.filename)
+    case_name = create_case_name(file.filename)
     case_folder = f"case-data/case{case_id}"
     case_cover_data = {
         "case_name": case_name,
@@ -83,7 +83,7 @@ def save_case_cover(case_id: Optional[int], pdf_file: UploadFile) -> str:
     return case_cover_path  # Return the path of the saved cover data
 
 @router.post("/create")
-async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Optional[int] = Form(None)):
+async def create_patient_persona(file: UploadFile = File(...), case_id: Optional[int] = Form(None)):
     """Create a patient persona prompt and save it using the existing cases route."""
     try:
         # Load the meta prompt and example persona from their respective files
@@ -91,15 +91,15 @@ async def create_patient_persona(pdf_file: UploadFile = File(...), case_id: Opti
         example_persona = load_example_persona("prompts/examples/example_patient_persona.txt")
         
         # Extract text from the uploaded PDF file using the utility function
-        case_document = extract_text_from_pdf(pdf_file)
+        case_document = extract_text_from_document(file)
 
-        # Define the path to save the case document
+        #save the case document
         case_folder = f"case-data/case{case_id}"
         os.makedirs(case_folder, exist_ok=True)  # Create the folder if it doesn't exist
         save_case_document(case_id, case_document)
  
         # Save the case cover JSON file
-        save_case_cover(case_id, pdf_file)
+        save_case_cover(case_id, file)
 
         # Define the chat prompt template with placeholders
         prompt_template = ChatPromptTemplate.from_messages([

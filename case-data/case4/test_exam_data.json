@@ -1,0 +1,354 @@
+{
+    "physical_exam": {
+        "Skin Examination": {
+            "purpose": "Assess blister characteristics and skin condition",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Tense bullae with a fluid-filled appearance on an erythematous base, symmetrical on trunk and extremities. Crusted erosions present where blisters have ruptured."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/bullous_pemphigoid_examination.jpg",
+                            "altText": "Tense bullae on skin",
+                            "caption": "Skin examination shows tense bullae on an erythematous base."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Findings are consistent with bullous pemphigoid."
+        },
+        "Nikolsky Sign": {
+            "purpose": "Evaluate skin fragility",
+            "findings": {
+                "type": "text",
+                "content": "Negative Nikolsky sign observed; blisters do not extend with pressure."
+            },
+            "status": "completed",
+            "interpretation": "Negative result decreases the likelihood of pemphigus vulgaris."
+        },
+        "Bullae Morphology": {
+            "purpose": "Assess bullae size, base, and distribution",
+            "findings": {
+                "type": "text",
+                "content": "Bullae are tense, large, fluid-filled; primarily located on the trunk and extremities."
+            },
+            "status": "completed",
+            "interpretation": "Morphological findings support diagnosis of bullous pemphigoid."
+        },
+        "Mucosal Examination": {
+            "purpose": "Confirm absence of mucosal lesions",
+            "findings": {
+                "type": "text",
+                "content": "No mucosal lesions observed in oral, ocular, or genital areas."
+            },
+            "status": "completed",
+            "interpretation": "Absence of mucosal involvement is typical for bullous pemphigoid."
+        },
+        "Neurological Examination": {
+            "purpose": "Assess cognitive decline",
+            "findings": {
+                "type": "text",
+                "content": "Mild cognitive decline noted; patient shows signs of early dementia."
+            },
+            "status": "completed",
+            "interpretation": "Cognitive impairment is consistent with patient's history."
+        },
+        "Vitals": {
+            "purpose": "Monitor overall health",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Vital Sign",
+                        "Value"
+                    ],
+                    "rows": [
+                        [
+                            "Blood Pressure",
+                            "140/88 mmHg"
+                        ],
+                        [
+                            "Temperature",
+                            "37.1\u00b0C"
+                        ],
+                        [
+                            "Heart Rate",
+                            "84 bpm"
+                        ],
+                        [
+                            "Respiratory Rate",
+                            "18/min"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Vital signs within normal limits, no acute distress noted."
+        },
+        "Extremity Examination": {
+            "purpose": "Check for erythema and swelling",
+            "findings": {
+                "type": "text",
+                "content": "No swelling or significant erythema noted in extremities apart from blistering."
+            },
+            "status": "completed",
+            "interpretation": "Extremities show localized changes related to bullous pemphigoid."
+        },
+        "Abdominal Examination": {
+            "purpose": "Rule out tenderness or organomegaly",
+            "findings": {
+                "type": "text",
+                "content": "Abdomen soft, non-tender, no organomegaly palpated."
+            },
+            "status": "completed",
+            "interpretation": "Abdominal examination is unremarkable."
+        },
+        "Joint Examination": {
+            "purpose": "Check for signs of arthritis",
+            "findings": {
+                "type": "text",
+                "content": "No swelling or pain observed in joints; musculoskeletal system appears normal."
+            },
+            "status": "completed",
+            "interpretation": "Joint exam results are consistent with absence of inflammatory arthritis."
+        },
+        "Respiratory Examination": {
+            "purpose": "Assess for difficulty breathing",
+            "findings": {
+                "type": "text",
+                "content": "Clear lung sounds, no respiratory distress noted during examination."
+            },
+            "status": "completed",
+            "interpretation": "Respiratory system functioning normally."
+        }
+    },
+    "lab_test": {
+        "Direct Immunofluorescence (DIF)": {
+            "testName": "Direct Immunofluorescence",
+            "purpose": "Detect IgG and C3 along the basement membrane zone",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Positive results showing IgG and C3 deposition along the dermal-epidermal junction."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/if_result_image.jpg",
+                            "altText": "Immunofluorescence analysis",
+                            "caption": "Immunofluorescence microscopy showing IgG and C3."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Supports diagnosis of bullous pemphigoid.",
+            "status": "completed"
+        },
+        "Indirect Immunofluorescence (IIF)": {
+            "testName": "Indirect Immunofluorescence with Salt-Split Skin",
+            "purpose": "Assess epidermal binding",
+            "results": {
+                "type": "text",
+                "content": "Positive for epidermal binding; indicative of autoimmune blistering disorder."
+            },
+            "interpretation": "Findings consistent with bullous pemphigoid.",
+            "status": "completed"
+        },
+        "ELISA for BP180 and BP230 Antibodies": {
+            "testName": "ELISA for BP180 and BP230 Antibodies",
+            "purpose": "Quantify autoantibodies related to bullous pemphigoid",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Antibody",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "BP180",
+                            "Positive",
+                            "Negative",
+                            "POSITIVE"
+                        ],
+                        [
+                            "BP230",
+                            "Positive",
+                            "Negative",
+                            "POSITIVE"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "High titers indicate bullous pemphigoid.",
+            "status": "completed"
+        },
+        "Skin Biopsy for Histopathology": {
+            "testName": "Skin Biopsy for Histopathology",
+            "purpose": "Evaluate histological features of skin lesions",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Histopathology reveals subepithelial bullae with eosinophilic infiltrate."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/skin_biopsy_histopathology.jpg",
+                            "altText": "Histopathology slide",
+                            "caption": "Histopathology slide showing subepithelial bullae."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Findings confirm diagnosis of bullous pemphigoid.",
+            "status": "completed"
+        },
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Evaluate blood cell counts",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Hemoglobin",
+                            "14 g/dL",
+                            "13.5-17.5 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "White Blood Cells",
+                            "7.2 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Platelets",
+                            "250 x10^9/L",
+                            "150-450 x10^9/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "CBC normal, no signs of significant infection.",
+            "status": "completed"
+        },
+        "Erythrocyte Sedimentation Rate (ESR)": {
+            "testName": "Erythrocyte Sedimentation Rate (ESR)",
+            "purpose": "Assess inflammation",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "22 mm/hr",
+                            "0-20 mm/hr",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Elevated ESR indicates underlying inflammatory process.",
+            "status": "completed"
+        },
+        "Basic Metabolic Panel (BMP)": {
+            "testName": "Basic Metabolic Panel (BMP)",
+            "purpose": "Evaluate electrolytes, kidney function",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Sodium",
+                            "140 mEq/L",
+                            "135-145 mEq/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Potassium",
+                            "4.2 mEq/L",
+                            "3.5-5.0 mEq/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Creatinine",
+                            "1.0 mg/dL",
+                            "0.6-1.2 mg/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Glucose",
+                            "90 mg/dL",
+                            "70-99 mg/dL",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Electrolytes and kidney function within normal limits.",
+            "status": "completed"
+        },
+        "Serum Immunoglobulin E (IgE)": {
+            "testName": "Serum Immunoglobulin E (IgE)",
+            "purpose": "Evaluate for allergic conditions",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "IgE",
+                            "150 IU/mL",
+                            "0-100 IU/mL",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Elevated IgE, could indicate allergic response, but not specific to condition.",
+            "status": "completed"
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 19,
+        "actual_count": 19
+    }
+}

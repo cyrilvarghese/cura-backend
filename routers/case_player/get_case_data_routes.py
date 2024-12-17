@@ -55,7 +55,7 @@ async def get_case_data(case_id: str):
     
     # Check if the case data file exists
     if not os.path.exists(data_file_path):
-        raise HTTPException(status_code=404, detail="Case not found")
+        raise HTTPException(status_code=404, detail="Case exam data not found")
     
     # Load the case data
     with open(data_file_path, 'r') as file:
@@ -63,7 +63,7 @@ async def get_case_data(case_id: str):
     
     # Check if the case cover file exists
     if not os.path.exists(cover_file_path):
-        raise HTTPException(status_code=404, detail="Case cover not found")
+        raise HTTPException(status_code=404, detail="Case cover data not found")
     
     # Load the case cover data
     with open(cover_file_path, 'r') as cover_file:

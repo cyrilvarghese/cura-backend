@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 import urllib3
 from routers.case_creator.helpers.image_downloader import download_image
-from utils.pdf_utils import extract_text_from_pdf
+from utils.pdf_utils import extract_text_from_document
 from utils.text_cleaner import extract_code_blocks  # Import the utility function
 # create a cover image prompt and save it using the existing cases route
 from fastapi import Request

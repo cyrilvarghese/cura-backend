@@ -77,20 +77,21 @@ async def call_image_gen(case_id: str, image_prompt: str, hasPrompt: bool = Fals
     case_folder = f"case-data/case{case_id}"
     case_cover_path = os.path.join(case_folder, "case_cover.json")
     
+    # Add timestamp for cache busting
+    timestamp = int(datetime.now().timestamp())
+    
     # Load the case cover data
     with open(case_cover_path, 'r') as json_file:
         case_cover_data = json.load(json_file)
     
-    # Check if we need to generate a new image or 
-    if "image_url" not in case_cover_data  or hasPrompt:
-        # Generate new image with DALL-E
+    # Check if we need to generate a new image or if the image is not present
+    if "image_url" not in case_cover_data or hasPrompt:
         dalle_image_url = DallEAPIWrapper(model="dall-e-3").run(image_prompt)
-        # Download the image
         image_path = os.path.join(case_folder, "cover_image.png")
         await download_image(dalle_image_url, image_path)
-        server_image_url = f"/case-images/case{case_id}/cover_image.png"
+        server_image_url = f"/case-images/case{case_id}/cover_image.png?v={timestamp}"
     else:
-        server_image_url = case_cover_data["image_url"]
+        server_image_url = f"{case_cover_data['image_url']}?v={timestamp}"
     
     return server_image_url
 

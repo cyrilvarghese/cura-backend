@@ -1,0 +1,374 @@
+{
+    "physical_exam": {
+        "General Physical Examination": {
+            "purpose": "Comprehensive assessment of overall health status.",
+            "findings": {
+                "type": "text",
+                "content": "Patient appears well-nourished but in moderate distress due to oral pain."
+            },
+            "status": "completed",
+            "interpretation": "Patient exhibits signs of pain related to oral ulcers."
+        },
+        "Skin Examination": {
+            "purpose": "Assessment of skin lesions and blisters.",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Flaccid, easily ruptured blisters on the trunk, upper arms, and scalp."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/skin-lesions.jpg",
+                            "altText": "Skin lesions associated with Pemphigus Vulgaris",
+                            "caption": "Flaccid blisters and raw areas on the skin."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Findings consistent with Pemphigus Vulgaris; Nikolsky sign positive."
+        },
+        "Oral Mucosal Examination": {
+            "purpose": "Evaluation of oral cavity health.",
+            "findings": {
+                "type": "text",
+                "content": "Presence of multiple painful erosions on the buccal mucosa and palate; ulcers are shallow and erythematous."
+            },
+            "status": "completed",
+            "interpretation": "Oral ulcers characteristic of Pemphigus Vulgaris."
+        },
+        "Vitals Assessment": {
+            "purpose": "Monitor vital signs for any abnormalities.",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Parameter",
+                        "Value",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Height",
+                            "175 cm",
+                            "Normal"
+                        ],
+                        [
+                            "Weight",
+                            "78 kg",
+                            "Normal"
+                        ],
+                        [
+                            "BMI",
+                            "25.5",
+                            "Normal"
+                        ],
+                        [
+                            "Temperature",
+                            "37.5\u00b0C (99.5\u00b0F)",
+                            "Slightly elevated"
+                        ],
+                        [
+                            "Heart Rate",
+                            "84 bpm",
+                            "Normal"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "128/80 mmHg",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Vital signs are within normal limits except for slight fever."
+        },
+        "Lymph Node Examination": {
+            "purpose": "Assess regional lymphadenopathy.",
+            "findings": {
+                "type": "text",
+                "content": "No cervical or axillary lymphadenopathy detected."
+            },
+            "status": "completed",
+            "interpretation": "Lymphatic system appears normal; no signs of systemic infection."
+        },
+        "Neurological Examination": {
+            "purpose": "Evaluate neurological function.",
+            "findings": {
+                "type": "text",
+                "content": "Normal findings; cranial nerves intact."
+            },
+            "status": "completed",
+            "interpretation": "No neurological deficits noted; findings are irrelevant to current main symptoms."
+        },
+        "Musculoskeletal Examination": {
+            "purpose": "Assessment of joint and muscle involvement.",
+            "findings": {
+                "type": "text",
+                "content": "No swelling, tenderness, or deformities detected."
+            },
+            "status": "completed",
+            "interpretation": "Musculoskeletal assessment does not reveal any abnormalities."
+        },
+        "Respiratory Examination": {
+            "purpose": "Review respiratory function.",
+            "findings": {
+                "type": "text",
+                "content": "Normal breath sounds; no wheezing or crackles."
+            },
+            "status": "completed",
+            "interpretation": "Respiratory exam findings are normal; not relevant to skin condition."
+        },
+        "Abdominal Examination": {
+            "purpose": "Examine abdominal organs.",
+            "findings": {
+                "type": "text",
+                "content": "Soft, non-tender, no organomegaly."
+            },
+            "status": "completed",
+            "interpretation": "Abdominal examination normal; no relevant findings."
+        },
+        "Ophthalmologic Examination": {
+            "purpose": "Evaluate any ocular involvement.",
+            "findings": {
+                "type": "text",
+                "content": "No eye involvement noted; external examination normal."
+            },
+            "status": "completed",
+            "interpretation": "Ocular structures are intact; no relevant findings."
+        }
+    },
+    "lab_test": {
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count",
+            "purpose": "Evaluate blood cell counts",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "WBC",
+                            "6.8 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "Normal"
+                        ],
+                        [
+                            "Hemoglobin",
+                            "14.0 g/dL",
+                            "13.0-17.0 g/dL",
+                            "Normal"
+                        ],
+                        [
+                            "Platelets",
+                            "250 x10^9/L",
+                            "150-400 x10^9/L",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "CBC within normal limits; no signs of systemic infection.",
+            "status": "completed"
+        },
+        "Erythrocyte Sedimentation Rate (ESR)": {
+            "testName": "Erythrocyte Sedimentation Rate",
+            "purpose": "Evaluate inflammation",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "30 mm/hr",
+                            "0-20 mm/hr",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Elevated ESR indicates inflammation, consistent with autoimmune process.",
+            "status": "completed"
+        },
+        "Anti-Desmoglein 1 and 3 Antibody Tests": {
+            "testName": "Anti-Desmoglein 1 and 3 Antibody Tests (ELISA)",
+            "purpose": "Identify pemphigus vulgaris-specific antibodies",
+            "results": {
+                "type": "text",
+                "content": "Positive for anti-desmoglein 3 antibodies."
+            },
+            "interpretation": "Supports diagnosis of Pemphigus Vulgaris.",
+            "status": "completed"
+        },
+        "Direct Immunofluorescence (DIF)": {
+            "testName": "Direct Immunofluorescence",
+            "purpose": "Assess for IgG deposition in skin lesions",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Positive IgG deposition in a 'chicken-wire' pattern."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/immunofluorescence.jpg",
+                            "altText": "Direct Immunofluorescence Result",
+                            "caption": "Chicken-wire pattern observed in immunofluorescence imaging."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "DIF findings consistent with Pemphigus Vulgaris diagnosis.",
+            "status": "completed"
+        },
+        "Indirect Immunofluorescence (IIF)": {
+            "testName": "Indirect Immunofluorescence",
+            "purpose": "Detect circulating antibodies",
+            "results": {
+                "type": "text",
+                "content": "Positive cell surface IgG staining."
+            },
+            "interpretation": "Supports autoimmune etiology; indicative of Pemphigus Vulgaris.",
+            "status": "completed"
+        },
+        "Comprehensive Metabolic Panel (CMP)": {
+            "testName": "Comprehensive Metabolic Panel",
+            "purpose": "Assess metabolic function",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Glucose",
+                            "90 mg/dL",
+                            "70-100 mg/dL",
+                            "Normal"
+                        ],
+                        [
+                            "BUN",
+                            "15 mg/dL",
+                            "7-20 mg/dL",
+                            "Normal"
+                        ],
+                        [
+                            "Creatinine",
+                            "1.0 mg/dL",
+                            "0.6-1.3 mg/dL",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "All metabolic parameters are within normal ranges.",
+            "status": "completed"
+        },
+        "Skin Biopsy for Histopathology": {
+            "testName": "Skin Biopsy for Histopathology",
+            "purpose": "Evaluate cellular architecture and pathology",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Histological examination shows suprabasal acantholysis with tombstone appearance of basal cells."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/biopsy.jpg",
+                            "altText": "Histopathology of Skin Biopsy",
+                            "caption": "Histological section showing suprabasal acantholysis."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Confirmatory for Pemphigus Vulgaris.",
+            "status": "completed"
+        },
+        "C-Reactive Protein (CRP)": {
+            "testName": "C-Reactive Protein",
+            "purpose": "Detect inflammation",
+            "results": {
+                "type": "text",
+                "content": "CRP level is within normal limits."
+            },
+            "interpretation": "No significant acute inflammatory process detected.",
+            "status": "completed"
+        },
+        "Autoimmune Profile": {
+            "testName": "Autoimmune Profile (ANA, Rheumatoid Factor)",
+            "purpose": "Identify presence of systemic autoimmune conditions",
+            "results": {
+                "type": "text",
+                "content": "ANA negative; Rheumatoid Factor negative."
+            },
+            "interpretation": "Excludes other systemic autoimmune diseases.",
+            "status": "completed"
+        },
+        "Serum Immunoglobulin Levels": {
+            "testName": "Serum Immunoglobulin Levels (IgG subclass analysis)",
+            "purpose": "Evaluate immunoglobulin levels",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Immunoglobulin",
+                        "Level",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "IgG",
+                            "950 mg/dL",
+                            "700-1600 mg/dL",
+                            "Normal"
+                        ],
+                        [
+                            "IgA",
+                            "130 mg/dL",
+                            "70-400 mg/dL",
+                            "Normal"
+                        ],
+                        [
+                            "IgM",
+                            "80 mg/dL",
+                            "40-300 mg/dL",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "IgG subclass levels are normal.",
+            "status": "completed"
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 21,
+        "actual_count": 21
+    }
+}

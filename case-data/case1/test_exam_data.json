@@ -12,7 +12,7 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/rash.jpg",
+                            "url": "https://www.pcds.org.uk/imager/gallery/clinical/urticarial-vasculitis/13305/urt_vascul_33_fee391183f15cb4d62773032fe0be92d.jpg",
                             "altText": "Red, raised patches",
                             "caption": "Rash distribution on the forearm."
                         }
@@ -166,9 +166,9 @@
                     "rows": [
                         [
                             "C3",
-                            "90 mg/dL",
+                            "70 mg/dL",
                             "80-160 mg/dL",
-                            "NORMAL"
+                            "LOW"
                         ],
                         [
                             "C4",
@@ -179,7 +179,7 @@
                     ]
                 }
             },
-            "interpretation": "Low C4 level is indicative of potential urticarial vasculitis.",
+            "interpretation": "Low C3,C4 level is indicative of potential urticarial vasculitis.",
             "status": "completed"
         },
         "Skin Biopsy": {
@@ -195,7 +195,7 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/biopsy_image.jpg",
+                            "url": "https://www.dermatologyadvisor.com/wp-content/uploads/sites/20/2019/03/ch1147.fig2_.jpg",
                             "altText": "Skin biopsy image showing leukocytoclastic vasculitis",
                             "caption": "Histological findings from skin biopsy."
                         }
@@ -215,14 +215,27 @@
             "interpretation": "Allergy testing irrelevant to this clinical picture.",
             "status": "completed"
         },
-        "Imaging": {
-            "testName": "Imaging (X-ray)",
-            "purpose": "Assess joint damage or abnormalities",
+        "Chest X-ray": {
+            "testName": "Chest Imaging",
+            "purpose": "Assess lung and chest structures",
             "results": {
-                "type": "text",
-                "content": "Not performed, as joint examination was normal."
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Radiographic Findings:\n- Mild bilateral pleural thickening\n- No active consolidation or effusion\n- No pneumothorax detected\n- Normal heart size and mediastinal contours"
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://www.mesotheliomahub.com/app/uploads/2023/06/thickened.jpg",
+                            "caption": "Chest X-ray showing mild pleural thickening",
+                            "altText": "Chest X-ray with mild pleural thickening, no consolidation or effusion"
+                        }
+                    }
+                ]
             },
-            "interpretation": "Imaging not necessary due to lack of observable joint swelling or abnormalities.",
+            "interpretation": "Mild pleural thickening consistent with past inflammation; no acute abnormalities.",
             "status": "completed"
         }
     },

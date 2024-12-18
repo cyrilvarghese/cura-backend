@@ -42,7 +42,7 @@ ENV/
 # FastAPI specific
 static/
 media/
-case-data/
+
 
 # Database
 *.db

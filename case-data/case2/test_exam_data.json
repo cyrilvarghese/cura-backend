@@ -1,50 +1,68 @@
 {
     "physical_exam": {
-        "Vital Signs": {
-            "purpose": "Assess overall health status",
-            "findings": {
-                "type": "text",
-                "content": "Height: 160 cm, Weight: 70 kg, BMI: 27.3 (Overweight). Temperature: 36.9\u00b0C (98.4\u00b0F), Pulse: 82/min, Blood Pressure: 135/85 mm Hg."
-            },
-            "status": "completed",
-            "interpretation": "Vital signs indicate stable overall condition, with BMI suggesting overweight status."
-        },
-        "Skin Examination": {
-            "purpose": "Evaluate skin lesions and surrounding tissue",
+        "Vitals": {
+            "purpose": "Assess vital signs to establish baseline health parameters",
             "findings": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Violaceous (purple-red) retiform patches with ulceration and black eschar. Surrounding induration and tenderness."
+                        "content": "Height: 165 cm (50th percentile), Weight: 60 kg (75th percentile)."
+                    },
+                    {
+                        "type": "text",
+                        "content": "Temperature: 37.0\u00b0C (98.6\u00b0F), Pulse: 85/min, Blood Pressure: 110/70 mm Hg."
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Vital signs are within normal limits for age."
+        },
+        "Skin Examination": {
+            "purpose": "Evaluate rash characteristics",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Red and purple, slightly raised spots on the lower legs and buttocks, non-blanching and mildly tender."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/skin-ulcers.jpg",
-                            "altText": "Violaceous patches with eschar",
-                            "caption": "Retiform patches on the lower leg."
+                            "url": "https://cdn.medizzy.com/r0ocKZdfPsWP97HnxXsLQnAZeMs=/680x764/img/posts/58b890c9-9582-4b38-b890-c995827b3868",
+                            "altText": "Red and purple spots on legs",
+                            "caption": "Distribution of red and purple spots on the lower legs."
                         }
                     }
                 ]
             },
             "status": "completed",
-            "interpretation": "Findings consistent with necrotic ulcers indicative of calciphylaxis."
+            "interpretation": "Findings consistent with Henoch-Sch\u00f6nlein Purpura."
         },
-        "Systemic Examination": {
-            "purpose": "Assess for systemic involvements or complications",
+        "Abdominal Examination": {
+            "purpose": "Assess for abdominal tenderness and potential complications",
             "findings": {
                 "type": "text",
-                "content": "No signs of systemic inflammation, such as fever or lymphadenopathy."
+                "content": "Mild tenderness in the lower abdomen with no guarding or rebound tenderness."
             },
             "status": "completed",
-            "interpretation": "Absence of systemic inflammatory signs reduces suspicion for systemic infection."
+            "interpretation": "Mild abdominal tenderness may indicate involvement of the gastrointestinal tract."
+        },
+        "Musculoskeletal Examination": {
+            "purpose": "Evaluate joint pain and assess for swelling",
+            "findings": {
+                "type": "text",
+                "content": "Mild tenderness in knees and ankles without swelling, redness, or warmth. Full range of motion is preserved."
+            },
+            "status": "completed",
+            "interpretation": "Joint tenderness without swelling is consistent with vasculitis associated with HSP."
         }
     },
     "lab_test": {
-        "Serum Calcium and Phosphate Levels": {
-            "testName": "Serum Calcium and Phosphate Levels",
-            "purpose": "Determine calcium and phosphate levels to assess metabolic status",
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Evaluate blood cell counts",
             "results": {
                 "type": "table",
                 "content": {
@@ -56,75 +74,137 @@
                     ],
                     "rows": [
                         [
-                            "Calcium",
-                            "11.5 mg/dL",
-                            "8.5-10.2 mg/dL",
-                            "HIGH"
+                            "WBC",
+                            "11.5 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "MILDLY ELEVATED"
                         ],
                         [
-                            "Phosphate",
-                            "6.5 mg/dL",
-                            "2.5-4.5 mg/dL",
+                            "Hemoglobin",
+                            "14.5 g/dL",
+                            "13.0-17.0 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Platelets",
+                            "250 x10^9/L",
+                            "150-450 x10^9/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Mild leukocytosis indicates possible inflammatory response.",
+            "status": "completed"
+        },
+        "Erythrocyte Sedimentation Rate (ESR)": {
+            "testName": "Erythrocyte Sedimentation Rate (ESR)",
+            "purpose": "Assess inflammation level in the body",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "30 mm/hr",
+                            "0-20 mm/hr",
                             "HIGH"
                         ]
                     ]
                 }
             },
-            "interpretation": "Elevated calcium and phosphate levels indicate likely calciphylaxis due to CKD.",
+            "interpretation": "Elevated ESR indicates an inflammatory process consistent with vasculitis.",
             "status": "completed"
         },
-        "Parathyroid Hormone (PTH)": {
-            "testName": "Parathyroid Hormone (PTH)",
-            "purpose": "Evaluate PTH levels in the context of chronic kidney disease",
+        "Urinalysis": {
+            "testName": "Urinalysis",
+            "purpose": "Evaluate urinary components for signs of kidney involvement",
             "results": {
-                "type": "text",
-                "content": "PTH Level: 150 pg/mL (Reference Range: 10-65 pg/mL, HIGH)"
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Parameter",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Blood",
+                            "Small amounts",
+                            "Negative",
+                            "POSITIVE"
+                        ],
+                        [
+                            "Protein",
+                            "Small amounts",
+                            "Negative",
+                            "POSITIVE"
+                        ]
+                    ]
+                }
             },
-            "interpretation": "Elevated PTH levels due to secondary hyperparathyroidism in CKD.",
+            "interpretation": "Presence of blood and protein suggests renal involvement consistent with HSP.",
             "status": "completed"
         },
         "Skin Biopsy": {
             "testName": "Skin Biopsy",
-            "purpose": "Assess tissue for ischemic changes and calcium deposits",
+            "purpose": "Confirm diagnosis through histological examination",
             "results": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Microscopic examination shows ischemic vascular changes with necrosis and calcium deposition in small vessels."
+                        "content": "Histopathology shows IgA deposits in the dermal capillaries."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/biopsy-report.jpg",
-                            "altText": "Skin biopsy showing calcium deposits",
-                            "caption": "Evidence of ischemia and calcium deposits in microvasculature."
+                            "url": "https://www.dermatologyadvisor.com/wp-content/uploads/sites/20/2019/03/ch1063.fig2_.jpg",
+                            "altText": "Skin biopsy results",
+                            "caption": "IgA deposits confirmed in the biopsied skin."
                         }
                     }
                 ]
             },
-            "interpretation": "Biopsy findings are indicative of calciphylaxis.",
+            "interpretation": "Results are indicative of Henoch-Sch\u00f6nlein Purpura.",
             "status": "completed"
         },
-        "Special Staining": {
-            "testName": "Special Staining (von Kossa/Alizarin Red)",
-            "purpose": "Identify calcium deposits in tissue",
+        "Antinuclear Antibody (ANA)": {
+            "testName": "Antinuclear Antibody (ANA)",
+            "purpose": "Assess for autoimmune disease triggers if systemic signs emerge",
             "results": {
-                "type": "text",
-                "content": "Positive staining for calcium deposits in vascular tissue."
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ANA",
+                            "Negative",
+                            "Negative",
+                            "NORMAL"
+                        ]
+                    ]
+                }
             },
-            "interpretation": "Confirms the presence of calcification in blood vessels, supporting diagnosis.",
-            "status": "completed"
-        },
-        "Imaging (Optional)": {
-            "testName": "X-ray Imaging",
-            "purpose": "Evaluate for subcutaneous calcifications",
-            "results": {
-                "type": "text",
-                "content": "X-rays show evidence of subcutaneous calcifications consistent with advanced calciphylaxis."
-            },
-            "interpretation": "Imaging findings corroborate clinical diagnosis.",
+            "interpretation": "Negative ANA helps rule out Systemic Lupus Erythematosus.",
             "status": "completed"
         }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 7,
+        "actual_count": 7
     }
 }

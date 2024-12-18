@@ -38,7 +38,8 @@ Your final patient persona prompt must include the following sections and adhere
 4. **Embedded Case Details**  
      
    - Present the symptoms, their onset, and any other relevant history from the new case document.  
-   - Include family history or environmental factors if provided.  
+   - Include family history if provided.Look for names of diseases and capture specific info. If unable to provide specific info generalize and do not give out any incorrect names of diseases.
+   - Include environmental factors if provided
    - Summarize observations (e.g., "no fever, normal blood pressure") in non-technical language.  
    - Use relatable terms for symptoms. For example, if a rash is described, say "an itchy, red rash" rather than a clinical term. Focus on how the patient would naturally describe it.
 

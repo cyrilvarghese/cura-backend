@@ -1,7 +1,15 @@
 {
-    "case_name": "case_doc_for_Urticarial_Vasculitis",
+    "case_name": "Urticarial_Vasculitis_v3",
     "case_id": 1,
-    "title": "Patient presenting with an itchy rash and joint discomfort.",
-    "quote": "I've had this itchy rash on my arms and legs for soemtime now",
-    "image_url": "/case-images/case1/cover_image.png?v=1734523897?v=1734523995?v=1734523999"
+    "title": "Patient presenting with rash and joint discomfort.",
+    "quote": "I've had this itchy rash on my arms and legs for about two weeks now.",
+    "image_url": "/case-images/case1/cover_image.png?v=1734527545?v=1734527615?v=1734527635?v=1734527734",
+    "differentials": [
+        "Urticarial Vasculitis",
+        "Systemic Lupus Erythematosus (SLE) with cutaneous manifestations",
+        "Hypersensitivity Vasculitis",
+        "Chronic Idiopathic Urticaria",
+        "Drug-Induced Urticarial Rash"
+    ],
+    "last_updated": "2024-12-18T13:14:54.123488"
 }

@@ -1,350 +1,482 @@
 {
     "physical_exam": {
         "Skin Examination": {
-            "purpose": "Assess characteristics of bullae and erosions.",
+            "purpose": "Assess rash characteristics",
             "findings": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Tense bullae predominantly on the trunk and extremities, with remnants of crusted erosions. Skin is erythematous beneath the blisters."
+                        "content": "Red, raised patches resembling hives on the forearms, legs, and trunk; bruise-like discoloration in fading areas."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/bullae.jpg",
-                            "altText": "Tense bullae on skin",
-                            "caption": "Tense bullae on the patient's abdomen."
+                            "url": "https://www.pcds.org.uk/imager/gallery/clinical/urticarial-vasculitis/13305/urt_vascul_33_fee391183f15cb4d62773032fe0be92d.jpg",
+                            "altText": "Red, raised patches on the skin",
+                            "caption": "Rash distribution on the forearm."
                         }
                     }
                 ]
             },
             "status": "completed",
-            "interpretation": "Examination consistent with bullous pemphigoid. Blisters are tense and on an erythematous base."
+            "interpretation": "Consistent with urticarial vasculitis."
         },
-        "Nikolsky Sign": {
-            "purpose": "To determine the fragility of the skin and presence of underlying blistering disorders.",
+        "Musculoskeletal Examination": {
+            "purpose": "Evaluate joint symptoms",
             "findings": {
                 "type": "text",
-                "content": "Negative Nikolsky sign; no extension of blisters observed when pressure is applied."
+                "content": "Mild tenderness in the wrists and knees; no swelling or warmth; full range of motion preserved."
             },
             "status": "completed",
-            "interpretation": "Negative sign helps differentiate from pemphigus vulgaris."
+            "interpretation": "Joint symptoms suggest a possible inflammatory process."
         },
-        "Bullae Morphology": {
-            "purpose": "Assess size, base, and distribution of bullae.",
+        "Vitals Check": {
+            "purpose": "Monitor general health",
             "findings": {
-                "type": "text",
-                "content": "Bullae are large, fluid-filled, with a symmetrical distribution on trunk and extremities."
-            },
-            "status": "completed",
-            "interpretation": "Morphology consistent with bullous pemphigoid."
-        },
-        "Mucosal Examination": {
-            "purpose": "Confirm absence of mucosal lesions.",
-            "findings": {
-                "type": "text",
-                "content": "No oral, ocular, or genital lesions noted."
-            },
-            "status": "completed",
-            "interpretation": "Absence of mucosal involvement is consistent with bullous pemphigoid."
-        },
-        "Neurological Examination": {
-            "purpose": "Assess cognitive decline and neurological comorbidities.",
-            "findings": {
-                "type": "text",
-                "content": "Mild cognitive decline noted; otherwise normal neurologic exam."
-            },
-            "status": "completed",
-            "interpretation": "Cognitive decline may be contributing to patient's presentation."
-        },
-        "Vitals": {
-            "purpose": "Monitor patient\u2019s hemodynamic status.",
-            "findings": {
-                "type": "table",
-                "content": {
-                    "headers": [
-                        "Vital Sign",
-                        "Result",
-                        "Reference Range"
-                    ],
-                    "rows": [
-                        [
-                            "Blood Pressure",
-                            "140/88 mmHg",
-                            "Normal < 120/80 mmHg"
-                        ],
-                        [
-                            "Temperature",
-                            "37.1\u00b0C",
-                            "Normal 36.1-37.2\u00b0C"
-                        ],
-                        [
-                            "Heart Rate",
-                            "84 bpm",
-                            "Normal 60-100 bpm"
-                        ],
-                        [
-                            "Respiratory Rate",
-                            "18/min",
-                            "Normal 12-20/min"
-                        ]
-                    ]
-                }
-            },
-            "status": "completed",
-            "interpretation": "Vital signs are within normal limits, with a slightly elevated blood pressure."
-        },
-        "Extremity Examination": {
-            "purpose": "Check for erythema and swelling of the extremities.",
-            "findings": {
-                "type": "text",
-                "content": "No erythema or swelling noted in the extremities."
-            },
-            "status": "completed",
-            "interpretation": "Extremities clear of significant findings."
-        },
-        "Abdominal Examination": {
-            "purpose": "Rule out tenderness or organomegaly.",
-            "findings": {
-                "type": "text",
-                "content": "Abdomen soft, non-tender, with no organomegaly."
-            },
-            "status": "completed",
-            "interpretation": "Abdominal examination unremarkable."
-        },
-        "Joint Examination": {
-            "purpose": "Check for swelling or pain to rule out arthritis.",
-            "findings": {
-                "type": "text",
-                "content": "No swelling or pain noted in joints."
-            },
-            "status": "completed",
-            "interpretation": "Joint examination within normal limits."
-        },
-        "Respiratory Examination": {
-            "purpose": "Assess respiratory function.",
-            "findings": {
-                "type": "text",
-                "content": "No respiratory distress; lung fields clear to auscultation."
-            },
-            "status": "completed",
-            "interpretation": "Respiratory examination unremarkable."
-        }
-    },
-    "lab_test": {
-        "Direct Immunofluorescence (DIF)": {
-            "testName": "Direct Immunofluorescence (DIF)",
-            "purpose": "Determine presence of IgG and C3 along the basement membrane zone.",
-            "results": {
-                "type": "mixed",
-                "content": [
-                    {
-                        "type": "text",
-                        "content": "Positive for IgG and complement C3 along the dermal epidermal junction."
-                    },
-                    {
-                        "type": "image",
-                        "content": {
-                            "url": "https://example.com/dif_result.jpg",
-                            "altText": "DIF test result",
-                            "caption": "Direct immunofluorescence showing IgG along the basement membrane."
-                        }
-                    }
-                ]
-            },
-            "interpretation": "Supports diagnosis of bullous pemphigoid.",
-            "status": "completed"
-        },
-        "Indirect Immunofluorescence (IIF)": {
-            "testName": "Indirect Immunofluorescence (IIF)",
-            "purpose": "Evaluate for circulating autoantibodies with salt-split skin.",
-            "results": {
-                "type": "text",
-                "content": "Epidermal binding observed, indicating presence of circulating antibodies."
-            },
-            "interpretation": "Further supports the diagnosis of bullous pemphigoid.",
-            "status": "completed"
-        },
-        "ELISA for BP180 and BP230 Antibodies": {
-            "testName": "ELISA for BP180 and BP230 Antibodies",
-            "purpose": "Quantify specific autoantibodies associated with bullous pemphigoid.",
-            "results": {
-                "type": "table",
-                "content": {
-                    "headers": [
-                        "Antibody",
-                        "Result",
-                        "Reference Range"
-                    ],
-                    "rows": [
-                        [
-                            "BP180",
-                            "Elevated",
-                            "Normal: Negative"
-                        ],
-                        [
-                            "BP230",
-                            "Elevated",
-                            "Normal: Negative"
-                        ]
-                    ]
-                }
-            },
-            "interpretation": "Positive result indicates an autoimmune blistering process.",
-            "status": "completed"
-        },
-        "Skin Biopsy for Histopathology": {
-            "testName": "Skin Biopsy for Histopathology",
-            "purpose": "Examine skin tissue for histological features of bullous pemphigoid.",
-            "results": {
-                "type": "mixed",
-                "content": [
-                    {
-                        "type": "text",
-                        "content": "Biopsy shows subepithelial cleft formation with eosinophilic infiltrate."
-                    },
-                    {
-                        "type": "image",
-                        "content": {
-                            "url": "https://example.com/skin_biopsy.jpg",
-                            "altText": "Histopathology of skin",
-                            "caption": "Skin biopsy revealing characteristic findings."
-                        }
-                    }
-                ]
-            },
-            "interpretation": "Findings are consistent with bullous pemphigoid.",
-            "status": "completed"
-        },
-        "Complete Blood Count (CBC)": {
-            "testName": "Complete Blood Count (CBC)",
-            "purpose": "Evaluate overall health and detect a variety of disorders.",
-            "results": {
                 "type": "table",
                 "content": {
                     "headers": [
                         "Parameter",
-                        "Result",
-                        "Reference Range"
+                        "Value",
+                        "Status"
                     ],
                     "rows": [
                         [
-                            "WBC Count",
-                            "7.2 x10^9/L",
-                            "4.0-11.0 x10^9/L"
+                            "Height",
+                            "165 cm",
+                            "NORMAL"
                         ],
                         [
-                            "Hemoglobin",
-                            "14.0 g/dL",
-                            "13.0-17.0 g/dL"
+                            "Weight",
+                            "60 kg",
+                            "NORMAL"
                         ],
                         [
-                            "Hematocrit",
-                            "42%",
-                            "40-50%"
+                            "BMI",
+                            "22.0",
+                            "NORMAL"
                         ],
                         [
-                            "Platelets",
-                            "250 x10^9/L",
-                            "150-400 x10^9/L"
+                            "Temperature",
+                            "37.2\u00b0C (98.9\u00b0F)",
+                            "NORMAL"
+                        ],
+                        [
+                            "Pulse",
+                            "80/min",
+                            "NORMAL"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "118/76 mm Hg",
+                            "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "CBC within normal limits; no signs of infection or significant anemia.",
-            "status": "completed"
+            "status": "completed",
+            "interpretation": "Vitals within normal limits."
         },
-        "Erythrocyte Sedimentation Rate (ESR) / C-Reactive Protein (CRP)": {
-            "testName": "Erythrocyte Sedimentation Rate (ESR)",
-            "purpose": "Assess inflammation in the body.",
+        "Abdominal Examination": {
+            "purpose": "Evaluate organ status",
+            "findings": {
+                "type": "text",
+                "content": "Abdomen soft, non-tender, no organomegaly."
+            },
+            "status": "completed",
+            "interpretation": "Normal abdominal examination."
+        },
+        "Neurological Examination": {
+            "purpose": "Assess neurological function",
+            "findings": {
+                "type": "text",
+                "content": "Neurological examination normal."
+            },
+            "status": "completed",
+            "interpretation": "No neurological deficits noted."
+        },
+        "Respiratory Examination": {
+            "purpose": "Check lung function",
+            "findings": {
+                "type": "text",
+                "content": "Clear breath sounds bilaterally."
+            },
+            "status": "completed",
+            "interpretation": "No respiratory issues identified."
+        },
+        "Ophthalmologic Examination": {
+            "purpose": "Assess eye health",
+            "findings": {
+                "type": "text",
+                "content": "Ophthalmologic examination unremarkable."
+            },
+            "status": "completed",
+            "interpretation": "Eyes appear normal."
+        },
+        "Lymph Node Palpation": {
+            "purpose": "Check for lymphadenopathy",
+            "findings": {
+                "type": "text",
+                "content": "No lymphadenopathy observed."
+            },
+            "status": "completed",
+            "interpretation": "Lymph nodes non-tender and normal."
+        },
+        "Oral Examination": {
+            "purpose": "Assess oral health",
+            "findings": {
+                "type": "text",
+                "content": "Oral mucosa moist, no lesions."
+            },
+            "status": "completed",
+            "interpretation": "Oral cavity normal."
+        },
+        "Cardiovascular Examination": {
+            "purpose": "Evaluate heart health",
+            "findings": {
+                "type": "text",
+                "content": "Heart rate regular, no murmurs."
+            },
+            "status": "completed",
+            "interpretation": "Cardiovascular examination normal."
+        }
+    },
+    "lab_test": {
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Evaluate blood cell counts and signs of inflammation",
             "results": {
                 "type": "table",
                 "content": {
                     "headers": [
                         "Test",
                         "Result",
-                        "Reference Range"
+                        "Reference Range",
+                        "Status"
                     ],
                     "rows": [
                         [
-                            "ESR",
-                            "22 mm/hr",
-                            "0-20 mm/hr"
+                            "WBC",
+                            "11.5 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "HIGH"
                         ],
                         [
-                            "CRP",
-                            "Normal",
-                            "Normal < 5 mg/L"
+                            "Hemoglobin",
+                            "13.5 g/dL",
+                            "12.0-15.5 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Hematocrit",
+                            "40%",
+                            "37%-47%",
+                            "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "ESR slightly elevated, indicating mild inflammation.",
+            "interpretation": "Leukocytosis indicates inflammation.",
             "status": "completed"
         },
-        "Basic Metabolic Panel (BMP)": {
-            "testName": "Basic Metabolic Panel (BMP)",
-            "purpose": "Evaluate basic metabolic functions including glucose, electrolytes, and kidney function.",
+        "Erythrocyte Sedimentation Rate (ESR)": {
+            "testName": "Erythrocyte Sedimentation Rate (ESR)",
+            "purpose": "Assess inflammation in the body",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "30 mm/hr",
+                            "0-20 mm/hr",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Indicates significant inflammation.",
+            "status": "completed"
+        },
+        "C3 and C4 Complement Levels": {
+            "testName": "C3 and C4 Complement Levels",
+            "purpose": "Evaluate complement levels in relation to potential autoimmune disorders",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "C3 Level",
+                        "C4 Level",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "70 mg/dL",
+                            "12 mg/dL",
+                            "90-180 mg/dL (C3), 20-50 mg/dL (C4)",
+                            "LOW"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Decreased complement levels consistent with autoimmune involvement.",
+            "status": "completed"
+        },
+        "Antinuclear Antibody (ANA) test": {
+            "testName": "Antinuclear Antibody (ANA) test",
+            "purpose": "Screen for autoimmune disorders",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ANA",
+                            "Positive",
+                            "POSITIVE"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Positive result suggests possible autoimmune disease.",
+            "status": "completed"
+        },
+        "Skin Biopsy": {
+            "testName": "Skin Biopsy",
+            "purpose": "Confirm diagnosis histologically",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Microscopic examination shows leukocytoclastic vasculitis with immune complex deposits."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://www.dermatologyadvisor.com/wp-content/uploads/sites/20/2019/03/ch1147.fig2_.jpg",
+                            "altText": "Skin biopsy report",
+                            "caption": "Image showing histological findings of skin biopsy."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Findings confirm diagnosis of urticarial vasculitis.",
+            "status": "completed"
+        },
+        "Rheumatoid Factor (RF)": {
+            "testName": "Rheumatoid Factor (RF)",
+            "purpose": "Screen for rheumatoid arthritis and other autoimmune conditions",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "RF",
+                            "Negative",
+                            "0-14 IU/mL",
+                            "NEGATIVE"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Negative RF reduces likelihood of rheumatoid arthritis.",
+            "status": "completed"
+        },
+        "Anti-dsDNA antibodies": {
+            "testName": "Anti-dsDNA antibodies",
+            "purpose": "Detect systemic lupus erythematosus",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Anti-dsDNA",
+                            "Negative",
+                            "Negative",
+                            "NEGATIVE"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Negative result lessens suspicion of SLE.",
+            "status": "completed"
+        },
+        "Liver Function Tests (LFTs)": {
+            "testName": "Liver Function Tests (LFTs)",
+            "purpose": "Assess liver health",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ALT",
+                            "25 U/L",
+                            "7-56 U/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "AST",
+                            "30 U/L",
+                            "5-40 U/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "ALP",
+                            "70 U/L",
+                            "44-147 U/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Bilirubin",
+                            "0.8 mg/dL",
+                            "0.1-1.2 mg/dL",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Normal liver function tests.",
+            "status": "completed"
+        },
+        "Allergy Panel Testing": {
+            "testName": "Allergy Panel Testing",
+            "purpose": "Evaluate possible allergies",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Allergen",
+                        "Result",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Pollen",
+                            "Negative",
+                            "NEGATIVE"
+                        ],
+                        [
+                            "Dust Mites",
+                            "Negative",
+                            "NEGATIVE"
+                        ],
+                        [
+                            "Pet Dander",
+                            "Negative",
+                            "NEGATIVE"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "No significant allergic reactions noted.",
+            "status": "completed"
+        },
+        "Urinalysis": {
+            "testName": "Urinalysis",
+            "purpose": "Assess kidney function and detect urinary tract problems",
             "results": {
                 "type": "table",
                 "content": {
                     "headers": [
                         "Parameter",
                         "Result",
-                        "Reference Range"
+                        "Reference Range",
+                        "Status"
                     ],
                     "rows": [
                         [
+                            "pH",
+                            "6.0",
+                            "4.5-8.0",
+                            "NORMAL"
+                        ],
+                        [
                             "Glucose",
-                            "90 mg/dL",
-                            "70-100 mg/dL"
+                            "Negative",
+                            "Negative",
+                            "NORMAL"
                         ],
                         [
-                            "Sodium",
-                            "140 mEq/L",
-                            "135-145 mEq/L"
+                            "Protein",
+                            "Negative",
+                            "Negative",
+                            "NORMAL"
                         ],
                         [
-                            "Potassium",
-                            "4.2 mEq/L",
-                            "3.5-5.0 mEq/L"
+                            "Leukocyte Esterase",
+                            "Negative",
+                            "Negative",
+                            "NORMAL"
                         ],
                         [
-                            "Chloride",
-                            "100 mEq/L",
-                            "98-107 mEq/L"
-                        ],
-                        [
-                            "Bicarbonate",
-                            "24 mEq/L",
-                            "22-30 mEq/L"
-                        ],
-                        [
-                            "Creatinine",
-                            "0.9 mg/dL",
-                            "0.6-1.2 mg/dL"
+                            "Nitrite",
+                            "Negative",
+                            "Negative",
+                            "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "BMP within normal limits.",
+            "interpretation": "Normal urinalysis results.",
             "status": "completed"
         },
-        "Serum Immunoglobulin E (IgE)": {
-            "testName": "Serum Immunoglobulin E (IgE)",
-            "purpose": "Evaluate for elevated IgE levels in the context of autoimmune disease or possible allergies.",
+        "Chest Imaging": {
+            "testName": "Chest Imaging",
+            "purpose": "Assess lung and chest structures",
             "results": {
-                "type": "text",
-                "content": "Normal IgE levels observed; no evidence of allergic response."
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Radiographic Findings:\n- Mild bilateral pleural thickening\n- No active consolidation or effusion\n- No pneumothorax detected\n- Normal heart size and mediastinal contours"
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://www.mesotheliomahub.com/app/uploads/2023/06/thickened.jpg",
+                            "caption": "Chest X-ray showing mild pleural thickening",
+                            "altText": "Chest X-ray with mild pleural thickening, no consolidation or effusion"
+                        }
+                    }
+                ]
             },
-            "interpretation": "IgE levels within normal range, further indicating non-allergic etiology.",
+            "interpretation": "Mild pleural thickening consistent with past inflammation; no acute abnormalities.",
             "status": "completed"
         }
     },
     "validation": {
         "all_tests_generated": true,
-        "expected_count": 10,
-        "actual_count": 10
+        "expected_count": 19,
+        "actual_count": 19
     }
 }

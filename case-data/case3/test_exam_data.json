@@ -12,7 +12,7 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/skin_examination.jpg",
+                            "url": "https://www.the-rheumatologist.org/wp-content/uploads/2021/05/THR_0521_pg42a.png",
                             "altText": "Skin Examination showing retiform patches",
                             "caption": "Retiform patches with ulceration on lower leg."
                         }
@@ -179,7 +179,7 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/skin_biopsy.jpg",
+                            "url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/0237/4696752/ee2f412117db/nihms744949f2.jpg",
                             "altText": "Skin Biopsy with Ischemic Damage",
                             "caption": "Biopsy showing ischemic changes and calcium deposits."
                         }
@@ -225,7 +225,7 @@
             "results": {
                 "type": "image",
                 "content": {
-                    "url": "https://example.com/xray_calcifications.jpg",
+                    "url": "https://prod-images-static.radiopaedia.org/images/36512725/3e096e69b5a905f72f643291604d73_big_gallery.jpeg",
                     "altText": "X-ray showing calcifications",
                     "caption": "X-ray indicating subcutaneous calcifications in lower extremities."
                 }

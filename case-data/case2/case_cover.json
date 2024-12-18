@@ -2,7 +2,7 @@
     "case_name": "case_doc_for_HSP",
     "case_id": 2,
     "title": "Patient presenting with rash and joint pain.",
-    "quote": "I've have this annoying rash on my legs and it hurts.",
+    "quote": "I've have this annoying rash on my legs and it hurts",
     "image_url": "/case-images/case2/cover_image.png",
     "differentials": [
         "IgA Vasculitis",

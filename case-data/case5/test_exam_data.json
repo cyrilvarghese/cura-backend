@@ -298,9 +298,9 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/biopsy.jpg",
-                            "altText": "Histopathology of Skin Biopsy",
-                            "caption": "Histological section showing suprabasal acantholysis."
+                            "url": "/case-images/case5/assets/lab_test_skin_biopsy_for_histopathology.jpg",
+                            "altText": "Image for Skin Biopsy for Histopathology",
+                            "caption": "Laboratory test image for Skin Biopsy for Histopathology"
                         }
                     }
                 ]

@@ -12,9 +12,9 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/bullous_pemphigoid_examination.jpg",
-                            "altText": "Tense bullae on skin",
-                            "caption": "Skin examination shows tense bullae on an erythematous base."
+                            "url": "/case-images/case4/assets/physical_exam_skin_examination.jpg",
+                            "altText": "Image for Skin Examination",
+                            "caption": "Physical examination image for Skin Examination"
                         }
                     }
                 ]
@@ -205,9 +205,9 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/skin_biopsy_histopathology.jpg",
-                            "altText": "Histopathology slide",
-                            "caption": "Histopathology slide showing subepithelial bullae."
+                            "url": "/case-images/case4/assets/lab_test_skin_biopsy_for_histopathology.png",
+                            "altText": "Image for Skin Biopsy for Histopathology",
+                            "caption": "Laboratory test image for Skin Biopsy for Histopathology"
                         }
                     }
                 ]

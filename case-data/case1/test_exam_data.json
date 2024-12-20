@@ -12,9 +12,9 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://www.pcds.org.uk/imager/gallery/clinical/urticarial-vasculitis/13305/urt_vascul_33_fee391183f15cb4d62773032fe0be92d.jpg",
-                            "altText": "Red, raised patches on the skin",
-                            "caption": "Rash distribution on the forearm."
+                            "url": "/case-images/case1/assets/physical_exam_skin_examination.jpg",
+                            "altText": "Image for Skin Examination",
+                            "caption": "Physical examination image for Skin Examination"
                         }
                     }
                 ]
@@ -266,9 +266,9 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://www.dermatologyadvisor.com/wp-content/uploads/sites/20/2019/03/ch1147.fig2_.jpg",
-                            "altText": "Skin biopsy report",
-                            "caption": "Image showing histological findings of skin biopsy."
+                            "url": "/case-images/case1/assets/lab_test_skin_biopsy.jpg",
+                            "altText": "Image for Skin Biopsy",
+                            "caption": "Laboratory test image for Skin Biopsy"
                         }
                     }
                 ]

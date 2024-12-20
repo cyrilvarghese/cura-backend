@@ -10,6 +10,7 @@ from routers.case_creator.create_diff_diagnosis import router as create_diff_dia
 from routers.case_player.get_student_feedback import feedback_router
 from routers.case_player.patient_simulation import router as patient_simulation_router
 from routers.case_player.get_case_data_routes import case_router
+from routers.case_creator.upload_test_image import router as upload_test_image_router
 import os
 import json
 from pathlib import Path
@@ -42,6 +43,7 @@ api_router.include_router(create_patient_persona_router)
 api_router.include_router(create_exam_test_data_router)
 api_router.include_router(create_cover_image_router)
 api_router.include_router(create_diff_diagnosis_router)
+api_router.include_router(upload_test_image_router)     
 
 @api_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():

@@ -228,9 +228,9 @@
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/immunofluorescence.jpg",
-                            "altText": "Direct Immunofluorescence Result",
-                            "caption": "Chicken-wire pattern observed in immunofluorescence imaging."
+                            "url": "/case-images/case5/assets/lab_test_direct_immunofluorescence_(dif).jpg",
+                            "altText": "Image for Direct Immunofluorescence (DIF)",
+                            "caption": "Laboratory test image for Direct Immunofluorescence (DIF)"
                         }
                     }
                 ]

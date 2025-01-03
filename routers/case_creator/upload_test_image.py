@@ -7,6 +7,7 @@ import shutil
 from pydantic import BaseModel
 import json
 from enum import Enum
+from .helpers.image_downloader import download_image
 
 router = APIRouter(
     prefix="/test-image",
@@ -25,6 +26,13 @@ class UploadResponse(BaseModel):
     test_type: TestType
     file_path: str
     message: str
+
+class UploadFromUrlRequest(BaseModel):
+    """Request model for URL-based image upload"""
+    case_id: str
+    test_name: str
+    test_type: TestType
+    image_url: str
 
 def ensure_assets_directory(case_id: str) -> str:
     """
@@ -274,5 +282,66 @@ async def delete_test_image(
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         error_message = f"[{error_timestamp}] ❌ Error in delete_test_image: {str(e)}"
+        print(error_message)
+        raise HTTPException(status_code=500, detail=str(e)) 
+
+@router.post("/upload-from-url", response_model=UploadResponse)
+async def upload_test_image_from_url(request: UploadFromUrlRequest):
+    """
+    Upload a test image from a URL for a specific case and test name
+    
+    Args:
+        request: UploadFromUrlRequest containing case_id, test_name, test_type, and image_url
+    
+    Returns:
+        JSON response with upload details
+    """
+    try:
+        # Add detailed error logging at the start
+        print(f"""
+                [DEBUG] URL Upload attempt details:
+                - Case ID: {request.case_id}
+                - Test Name: {request.test_name}
+                - Test Type: {request.test_type}
+                - Image URL: {request.image_url}
+                """)
+
+        # Ensure assets directory exists
+        assets_dir = ensure_assets_directory(request.case_id)
+
+        # Create file path (we'll use .jpg as default since we're downloading)
+        sanitized_test_name = request.test_name.replace(" ", "_").lower()
+        file_name = f"{request.test_type.value}_{sanitized_test_name}.jpg"
+        file_path = os.path.join(assets_dir, file_name)
+
+        # Download the image
+        await download_image(request.image_url, file_path)
+
+        # Generate response
+        relative_path = f"/case-images/case{request.case_id}/assets/{file_name}"
+        
+        # Update test_exam_data.json
+        if not update_test_exam_data(request.case_id, request.test_name, request.test_type, relative_path):
+            print(f"Warning: Test '{request.test_name}' not found in {request.test_type.value} category in test_exam_data.json")
+        
+        return UploadResponse(
+            case_id=request.case_id,
+            test_name=request.test_name,
+            test_type=request.test_type,
+            file_path=relative_path,
+            message="Test image uploaded successfully from URL"
+        )
+
+    except Exception as e:
+        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        error_message = f"""
+                            [{error_timestamp}] ❌ Error in upload_test_image_from_url:
+                            - Error Type: {type(e).__name__}
+                            - Error Message: {str(e)}
+                            - Case ID: {request.case_id}
+                            - Test Name: {request.test_name}
+                            - Test Type: {request.test_type}
+                            - Image URL: {request.image_url}
+                            """
         print(error_message)
         raise HTTPException(status_code=500, detail=str(e)) 

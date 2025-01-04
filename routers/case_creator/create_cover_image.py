@@ -111,7 +111,6 @@ async def create_cover_image(
     
     try:
         formatted_response = {}
-        server_host_url = str(request.base_url).rstrip('/')
         if cover_data and cover_data.prompt:
             # Generate image using provided prompt
             image_url = await call_image_gen(case_id, cover_data.prompt, True)

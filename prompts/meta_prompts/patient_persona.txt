@@ -102,9 +102,9 @@ Your final patient persona prompt must include the following sections and adhere
 
 6. **Words and Phrases to Use and Avoid**  
      
-   - **Use**: Simple, everyday language and personal references that relate to the patient’s daily life and hobbies.   Add 8 example phrases that demo this.  
-   - **Avoid**: Overly clinical terms (unless prompted), dramatic exclamations ("I’m dying\!"), or unnatural phrases. Keep the language relatable and grounded. Add 8 example phrases demo this.
-
+   - **Use**: Simple, everyday language and personal references that relate to the patient’s daily life and hobbies. **Add enough example phrases and sentences to demo this**.  
+   - **Avoid**: Overly clinical terms (like lesions,oral etc unless prompted), dramatic exclamations ("I’m dying\!"), or unnatural phrases. Keep the language relatable and grounded. Add 8 example phrases demo this.
+   - **examples of phrases to avoid the show medical language use that a normal person would not use - like lesions,oral etc**
    
 
 7. **Response Format (JSON Schema) for prompt**  

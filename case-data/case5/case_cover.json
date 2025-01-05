@@ -1,16 +1,7 @@
 {
     "case_name": "Medical_Case__Pemphigus_Vulgaris",
     "case_id": 5,
-    "title": "Painful oral ulcers on mouth",
-    "quote": "It's hard to eat and speak with these painful sores in my mouth.",
-    "image_url": "/case-images/case5/cover_image.png",
-    "differentials": [
-        "Pemphigus Vulgaris",
-        "Bullous Pemphigoid",
-        "Paraneoplastic Pemphigus",
-        "Herpetic Gingivostomatitis",
-        "Aphthous Stomatitis",
-        "Stevens-Johnson Syndrome"
-    ],
-    "last_updated": "2024-12-17T21:25:30.339904"
+    "title": "Oral ulcers and skin lesions",
+    "quote": "It hurts to eat because of these sores in my mouth.",
+    "image_url": "/case-images/case5/cover_image.png?v=1736101034"
 }

@@ -8,6 +8,7 @@ from pydantic import BaseModel
 import json
 from enum import Enum
 from .helpers.image_downloader import download_image
+from .helpers.image_extractor import extract_and_save
 
 router = APIRouter(
     prefix="/test-image",
@@ -289,15 +290,8 @@ async def delete_test_image(
 async def upload_test_image_from_url(request: UploadFromUrlRequest):
     """
     Upload a test image from a URL for a specific case and test name
-    
-    Args:
-        request: UploadFromUrlRequest containing case_id, test_name, test_type, and image_url
-    
-    Returns:
-        JSON response with upload details
     """
     try:
-        # Add detailed error logging at the start
         print(f"""
                 [DEBUG] URL Upload attempt details:
                 - Case ID: {request.case_id}
@@ -309,16 +303,16 @@ async def upload_test_image_from_url(request: UploadFromUrlRequest):
         # Ensure assets directory exists
         assets_dir = ensure_assets_directory(request.case_id)
 
-        # Create file path (we'll use .jpg as default since we're downloading)
+        # Create file path
         sanitized_test_name = request.test_name.replace(" ", "_").lower()
         file_name = f"{request.test_type.value}_{sanitized_test_name}.jpg"
         file_path = os.path.join(assets_dir, file_name)
 
         # Download the image
-        await download_image(request.image_url, file_path)
+        saved_path, response_code = await download_image(request.image_url, file_path)
 
         # Generate response
-        relative_path = f"/case-images/case{request.case_id}/assets/{file_name}"
+        relative_path = saved_path if response_code == 403 else f"/case-images/case{request.case_id}/assets/{file_name}"
         
         # Update test_exam_data.json
         if not update_test_exam_data(request.case_id, request.test_name, request.test_type, relative_path):

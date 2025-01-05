@@ -14,6 +14,7 @@ from routers.case_creator.upload_test_image import router as upload_test_image_r
 import os
 import json
 from pathlib import Path
+from routers.image_search import router as image_search_router
 
 api_router = APIRouter()
 
@@ -44,6 +45,7 @@ api_router.include_router(create_exam_test_data_router)
 api_router.include_router(create_cover_image_router)
 api_router.include_router(create_diff_diagnosis_router)
 api_router.include_router(upload_test_image_router)     
+api_router.include_router(image_search_router)
 
 @api_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():

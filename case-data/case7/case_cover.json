@@ -1,0 +1,16 @@
+{
+    "case_name": "Medical_Case__Pemphigus_Vulgaris",
+    "case_id": 7,
+    "differentials": [
+        "Pemphigus Vulgaris",
+        "Bullous Pemphigoid",
+        "Paraneoplastic Pemphigus",
+        "Herpetic Gingivostomatitis",
+        "Aphthous Stomatitis",
+        "Stevens-Johnson Syndrome"
+    ],
+    "last_updated": "2025-01-05T09:03:13.410241",
+    "title": "Oral ulcers and painful skin lesions",
+    "quote": "Eating is really hard because of these sores.",
+    "image_url": "/case-images/case7/cover_image.png?v=1736067724"
+}

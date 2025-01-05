@@ -1,53 +1,53 @@
 {
     "physical_exam": {
         "General Physical Examination": {
-            "purpose": "Comprehensive assessment of overall health status.",
+            "purpose": "Comprehensive assessment of the patient's overall health.",
             "findings": {
                 "type": "text",
-                "content": "Patient appears well-nourished but in moderate distress due to oral pain."
+                "content": "The patient is a 45-year-old male in moderate distress due to oral pain and skin lesions."
             },
             "status": "completed",
-            "interpretation": "Patient exhibits signs of pain related to oral ulcers."
+            "interpretation": "Patient appears well-nourished but in discomfort from oral ulcers."
         },
         "Skin Examination": {
-            "purpose": "Assessment of skin lesions and blisters.",
+            "purpose": "Assess characteristics of skin lesions.",
             "findings": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Flaccid, easily ruptured blisters on the trunk, upper arms, and scalp."
+                        "content": "Flaccid, easily ruptured blisters are present on the trunk, upper arms, and scalp, with raw areas and crusting."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/skin-lesions.jpg",
-                            "altText": "Skin lesions associated with Pemphigus Vulgaris",
-                            "caption": "Flaccid blisters and raw areas on the skin."
+                            "url": "https://example.com/blisters.jpg",
+                            "altText": "Flaccid skin blister",
+                            "caption": "Photograph of flaccid blisters on the trunk."
                         }
                     }
                 ]
             },
             "status": "completed",
-            "interpretation": "Findings consistent with Pemphigus Vulgaris; Nikolsky sign positive."
+            "interpretation": "Findings indicate pemphigus vulgaris, characterized by flaccid blisters and Nikolsky's sign positive."
         },
         "Oral Mucosal Examination": {
-            "purpose": "Evaluation of oral cavity health.",
+            "purpose": "Evaluate presence and extent of oral lesions.",
             "findings": {
                 "type": "text",
-                "content": "Presence of multiple painful erosions on the buccal mucosa and palate; ulcers are shallow and erythematous."
+                "content": "Multiple painful erosions observed on the buccal mucosa; ulcers are shallow and erythematous."
             },
             "status": "completed",
-            "interpretation": "Oral ulcers characteristic of Pemphigus Vulgaris."
+            "interpretation": "Clinical findings are consistent with mucosal involvement in pemphigus vulgaris."
         },
         "Vitals Assessment": {
-            "purpose": "Monitor vital signs for any abnormalities.",
+            "purpose": "Monitor patient's vital signs to evaluate overall stability.",
             "findings": {
                 "type": "table",
                 "content": {
                     "headers": [
-                        "Parameter",
-                        "Value",
+                        "Vital Sign",
+                        "Measurement",
                         "Status"
                     ],
                     "rows": [
@@ -68,8 +68,8 @@
                         ],
                         [
                             "Temperature",
-                            "37.5\u00b0C (99.5\u00b0F)",
-                            "Slightly elevated"
+                            "37.5\u00b0C",
+                            "Normal"
                         ],
                         [
                             "Heart Rate",
@@ -85,67 +85,67 @@
                 }
             },
             "status": "completed",
-            "interpretation": "Vital signs are within normal limits except for slight fever."
+            "interpretation": "Vitals are within normal limits indicating no immediate life-threatening issues."
         },
         "Lymph Node Examination": {
-            "purpose": "Assess regional lymphadenopathy.",
+            "purpose": "Palpate lymph nodes to detect any enlargement.",
             "findings": {
                 "type": "text",
-                "content": "No cervical or axillary lymphadenopathy detected."
+                "content": "No lymphadenopathy noted."
             },
             "status": "completed",
-            "interpretation": "Lymphatic system appears normal; no signs of systemic infection."
+            "interpretation": "Lymph node examination does not indicate systemic involvement."
         },
         "Neurological Examination": {
-            "purpose": "Evaluate neurological function.",
+            "purpose": "Assess neurological status including reflexes and sensation.",
             "findings": {
                 "type": "text",
-                "content": "Normal findings; cranial nerves intact."
+                "content": "Cranial nerves intact, reflexes normal, no focal neurological deficits."
             },
             "status": "completed",
-            "interpretation": "No neurological deficits noted; findings are irrelevant to current main symptoms."
+            "interpretation": "Neurological examination is unremarkable, consistent with non-neurological primary condition."
         },
         "Musculoskeletal Examination": {
-            "purpose": "Assessment of joint and muscle involvement.",
+            "purpose": "Evaluate musculoskeletal integrity and functionality.",
             "findings": {
                 "type": "text",
-                "content": "No swelling, tenderness, or deformities detected."
+                "content": "Full range of motion in all extremities; no swelling or deformity noted."
             },
             "status": "completed",
-            "interpretation": "Musculoskeletal assessment does not reveal any abnormalities."
+            "interpretation": "Musculoskeletal examination is normal and not contributory."
         },
         "Respiratory Examination": {
-            "purpose": "Review respiratory function.",
+            "purpose": "Assess respiratory system for any abnormalities.",
             "findings": {
                 "type": "text",
-                "content": "Normal breath sounds; no wheezing or crackles."
+                "content": "Breath sounds clear bilaterally; no wheezes or crackles present."
             },
             "status": "completed",
-            "interpretation": "Respiratory exam findings are normal; not relevant to skin condition."
+            "interpretation": "Respiratory examination normal with no signs of respiratory distress."
         },
         "Abdominal Examination": {
-            "purpose": "Examine abdominal organs.",
+            "purpose": "Evaluate abdomen for organomegaly or tenderness.",
             "findings": {
                 "type": "text",
-                "content": "Soft, non-tender, no organomegaly."
+                "content": "Soft, non-tender abdomen; no organomegaly felt."
             },
             "status": "completed",
-            "interpretation": "Abdominal examination normal; no relevant findings."
+            "interpretation": "Abdominal examination unremarkable with no signs of acute issues."
         },
         "Ophthalmologic Examination": {
-            "purpose": "Evaluate any ocular involvement.",
+            "purpose": "Assess for ocular involvement.",
             "findings": {
                 "type": "text",
-                "content": "No eye involvement noted; external examination normal."
+                "content": "No conjunctival involvement; eyes appear normal."
             },
             "status": "completed",
-            "interpretation": "Ocular structures are intact; no relevant findings."
+            "interpretation": "Ophthalmologic examination reveals no complications or related issues at this time."
         }
     },
     "lab_test": {
         "Complete Blood Count (CBC)": {
-            "testName": "Complete Blood Count",
-            "purpose": "Evaluate blood cell counts",
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Evaluate overall blood health and detect signs of infection or anemia.",
             "results": {
                 "type": "table",
                 "content": {
@@ -157,32 +157,32 @@
                     ],
                     "rows": [
                         [
-                            "WBC",
-                            "6.8 x10^9/L",
-                            "4.0-11.0 x10^9/L",
-                            "Normal"
+                            "Hemoglobin",
+                            "14.5 g/dL",
+                            "13.5-17.5 g/dL",
+                            "NORMAL"
                         ],
                         [
-                            "Hemoglobin",
-                            "14.0 g/dL",
-                            "13.0-17.0 g/dL",
-                            "Normal"
+                            "WBC",
+                            "6.0 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "NORMAL"
                         ],
                         [
                             "Platelets",
-                            "250 x10^9/L",
-                            "150-400 x10^9/L",
-                            "Normal"
+                            "230 x10^9/L",
+                            "150-450 x10^9/L",
+                            "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "CBC within normal limits; no signs of systemic infection.",
+            "interpretation": "CBC findings are within normal limits with no evidence of anemia or acute infection.",
             "status": "completed"
         },
         "Erythrocyte Sedimentation Rate (ESR)": {
-            "testName": "Erythrocyte Sedimentation Rate",
-            "purpose": "Evaluate inflammation",
+            "testName": "Erythrocyte Sedimentation Rate (ESR)",
+            "purpose": "Evaluate for inflammation in the body.",
             "results": {
                 "type": "table",
                 "content": {
@@ -202,28 +202,46 @@
                     ]
                 }
             },
-            "interpretation": "Elevated ESR indicates inflammation, consistent with autoimmune process.",
+            "interpretation": "Elevated ESR indicates inflammatory process likely due to autoimmune disease.",
             "status": "completed"
         },
         "Anti-Desmoglein 1 and 3 Antibody Tests": {
             "testName": "Anti-Desmoglein 1 and 3 Antibody Tests (ELISA)",
-            "purpose": "Identify pemphigus vulgaris-specific antibodies",
+            "purpose": "Detect specific autoantibodies associated with pemphigus vulgaris.",
             "results": {
-                "type": "text",
-                "content": "Positive for anti-desmoglein 3 antibodies."
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Antibody",
+                        "Result",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Anti-Desmoglein 1",
+                            "Positive",
+                            "POSITIVE"
+                        ],
+                        [
+                            "Anti-Desmoglein 3",
+                            "Positive",
+                            "POSITIVE"
+                        ]
+                    ]
+                }
             },
-            "interpretation": "Supports diagnosis of Pemphigus Vulgaris.",
+            "interpretation": "Positive for both antibodies supports diagnosis of pemphigus vulgaris.",
             "status": "completed"
         },
         "Direct Immunofluorescence (DIF)": {
-            "testName": "Direct Immunofluorescence",
-            "purpose": "Assess for IgG deposition in skin lesions",
+            "testName": "Direct Immunofluorescence (DIF)",
+            "purpose": "Evaluate for autoantibody binding in skin biopsy.",
             "results": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Positive IgG deposition in a 'chicken-wire' pattern."
+                        "content": "IgG deposition observed in a 'chicken-wire' pattern in the stratum directly above basal layer."
                     },
                     {
                         "type": "image",
@@ -235,22 +253,35 @@
                     }
                 ]
             },
-            "interpretation": "DIF findings consistent with Pemphigus Vulgaris diagnosis.",
+            "interpretation": "Positive DIF finding confirms diagnosis of pemphigus vulgaris.",
             "status": "completed"
         },
         "Indirect Immunofluorescence (IIF)": {
-            "testName": "Indirect Immunofluorescence",
-            "purpose": "Detect circulating antibodies",
+            "testName": "Indirect Immunofluorescence (IIF)",
+            "purpose": "Assess for circulating autoantibodies in serum samples.",
             "results": {
-                "type": "text",
-                "content": "Positive cell surface IgG staining."
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "IIF Result",
+                            "Positive 1:80 dilution",
+                            "POSITIVE"
+                        ]
+                    ]
+                }
             },
-            "interpretation": "Supports autoimmune etiology; indicative of Pemphigus Vulgaris.",
+            "interpretation": "Positive IIF strengthens the autoimmune diagnosis.",
             "status": "completed"
         },
         "Comprehensive Metabolic Panel (CMP)": {
-            "testName": "Comprehensive Metabolic Panel",
-            "purpose": "Assess metabolic function",
+            "testName": "Comprehensive Metabolic Panel (CMP)",
+            "purpose": "Evaluate metabolic status including kidney and liver function.",
             "results": {
                 "type": "table",
                 "content": {
@@ -265,35 +296,47 @@
                             "Glucose",
                             "90 mg/dL",
                             "70-100 mg/dL",
-                            "Normal"
+                            "NORMAL"
                         ],
                         [
                             "BUN",
                             "15 mg/dL",
                             "7-20 mg/dL",
-                            "Normal"
+                            "NORMAL"
                         ],
                         [
                             "Creatinine",
-                            "1.0 mg/dL",
-                            "0.6-1.3 mg/dL",
-                            "Normal"
+                            "0.9 mg/dL",
+                            "0.6-1.2 mg/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Total Protein",
+                            "7.5 g/dL",
+                            "6.0-8.3 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Albumin",
+                            "4.0 g/dL",
+                            "3.5-5.0 g/dL",
+                            "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "All metabolic parameters are within normal ranges.",
+            "interpretation": "CMP within normal limits indicates no concurrent metabolic abnormalities.",
             "status": "completed"
         },
         "Skin Biopsy for Histopathology": {
             "testName": "Skin Biopsy for Histopathology",
-            "purpose": "Evaluate cellular architecture and pathology",
+            "purpose": "Histological analysis for diagnostic confirmation.",
             "results": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Histological examination shows suprabasal acantholysis with tombstone appearance of basal cells."
+                        "content": "Histopathology reveals suprabasal acantholysis with 'tombstone' appearance of basal cells."
                     },
                     {
                         "type": "image",
@@ -305,70 +348,103 @@
                     }
                 ]
             },
-            "interpretation": "Confirmatory for Pemphigus Vulgaris.",
+            "interpretation": "Histological findings confirm diagnosis of pemphigus vulgaris.",
             "status": "completed"
         },
         "C-Reactive Protein (CRP)": {
-            "testName": "C-Reactive Protein",
-            "purpose": "Detect inflammation",
+            "testName": "C-Reactive Protein (CRP)",
+            "purpose": "Assess for systemic inflammation.",
             "results": {
-                "type": "text",
-                "content": "CRP level is within normal limits."
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "CRP",
+                            "10 mg/L",
+                            "< 5 mg/L",
+                            "HIGH"
+                        ]
+                    ]
+                }
             },
-            "interpretation": "No significant acute inflammatory process detected.",
+            "interpretation": "Elevated CRP supports findings of an inflammatory autoimmune disorder.",
             "status": "completed"
         },
         "Autoimmune Profile": {
             "testName": "Autoimmune Profile (ANA, Rheumatoid Factor)",
-            "purpose": "Identify presence of systemic autoimmune conditions",
+            "purpose": "Check for other autoimmune diseases.",
             "results": {
-                "type": "text",
-                "content": "ANA negative; Rheumatoid Factor negative."
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ANA",
+                            "Negative",
+                            "NORMAL"
+                        ],
+                        [
+                            "Rheumatoid Factor",
+                            "Negative",
+                            "NORMAL"
+                        ]
+                    ]
+                }
             },
-            "interpretation": "Excludes other systemic autoimmune diseases.",
+            "interpretation": "Negative autoimmune profile helps to rule out other disorders.",
             "status": "completed"
         },
         "Serum Immunoglobulin Levels": {
-            "testName": "Serum Immunoglobulin Levels (IgG subclass analysis)",
-            "purpose": "Evaluate immunoglobulin levels",
+            "testName": "Serum Immunoglobulin Levels (IgG Subclass Analysis)",
+            "purpose": "Evaluate immune response and antibody production.",
             "results": {
                 "type": "table",
                 "content": {
                     "headers": [
                         "Immunoglobulin",
-                        "Level",
+                        "Result",
                         "Reference Range",
                         "Status"
                     ],
                     "rows": [
                         [
                             "IgG",
-                            "950 mg/dL",
+                            "1100 mg/dL",
                             "700-1600 mg/dL",
-                            "Normal"
+                            "NORMAL"
                         ],
                         [
                             "IgA",
-                            "130 mg/dL",
+                            "200 mg/dL",
                             "70-400 mg/dL",
-                            "Normal"
+                            "NORMAL"
                         ],
                         [
                             "IgM",
-                            "80 mg/dL",
-                            "40-300 mg/dL",
-                            "Normal"
+                            "100 mg/dL",
+                            "40-230 mg/dL",
+                            "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "IgG subclass levels are normal.",
+            "interpretation": "Immunoglobulin levels are normal, indicating no systemic immunodeficiency.",
             "status": "completed"
         }
     },
     "validation": {
         "all_tests_generated": true,
-        "expected_count": 21,
-        "actual_count": 21
+        "expected_count": 26,
+        "actual_count": 26
     }
 }

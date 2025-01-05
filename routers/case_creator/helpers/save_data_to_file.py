@@ -25,8 +25,13 @@ async def ensure_directory_exists(directory: Path) -> None:
             )
 
 async def write_to_file(file_path: Path, content: str) -> None:
-    """Write the specified content to a file."""
+    """Write the specified content to a file. If file exists, delete it first."""
     try:
+        # Check if file exists and remove it
+        if file_path.exists():
+            file_path.unlink()
+        
+        # Write new content to file
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
     except Exception as e:

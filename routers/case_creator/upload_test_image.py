@@ -48,7 +48,7 @@ def validate_image_file(file: UploadFile) -> bool:
     """
     Validate if the uploaded file is an image
     """
-    allowed_extensions = {'.jpg', '.jpeg', '.png'}
+    allowed_extensions = {'.jpg', '.jpeg', '.png','.webp','.avif'}
     file_ext = os.path.splitext(file.filename)[1].lower()
     return file_ext in allowed_extensions
 

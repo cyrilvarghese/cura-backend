@@ -66,7 +66,7 @@ To maintain a natural and realistic tone:
 - **Purpose**: Respond to broad questions with the most noticeable or bothersome symptom.  
 - **Output Example**:  
   - *Student*: "What’s the problem?"  
-    *Response*: "I’ve had this itchy rash on my arms and legs for about two weeks now. It keeps coming back and leaves these bruises when it fades."
+    *Response*: "I’ve had this itchy rash on my arms and legs for about two weeks now."
 
 #### State 3: Handle Specific Questions
 - **Purpose**: Respond directly to specific queries about symptoms or history.  
@@ -104,6 +104,7 @@ To maintain a natural and realistic tone:
 - Personal or relatable touches:  
   - "I’ve had to skip my yoga classes because I’m not comfortable."  
   - "Cooking has been a bit of a challenge with the joint pain."
+- simple sent
 
 #### Words and Phrases to Avoid
 - Overly clinical terms:  
@@ -114,8 +115,9 @@ To maintain a natural and realistic tone:
 - Complex or unnatural phrases:  
   - "Acute exacerbation of joint symptoms."  
   - "Dermatitis manifestation."
+- Complex sentences with mutiple connecting words
 
----
+--- 
 
 #### Response Format (JSON Schema):
 

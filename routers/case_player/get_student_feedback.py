@@ -97,7 +97,7 @@ def load_prompt_template(file_path: str) -> str:
 
  
 
-@feedback_router.post("/", response_model=FeedbackResponse)
+@feedback_router.post("", response_model=FeedbackResponse)
 async def submit_feedback(messages: List[StudentMessage], case_id: str = None):
     try:
          # Log the received data

@@ -11,7 +11,7 @@ COPY . .
 COPY environment.yml .
 
 # Create and activate the Conda environment
-RUN conda env create -f environment.yml
+RUN conda env create -f environment.yml --debug > conda_log.txt 2>&1
 
 # Set PATH to include the Conda environment's executables
 ENV PATH /opt/conda/envs/cura-env/bin:$PATH

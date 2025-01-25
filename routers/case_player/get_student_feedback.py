@@ -63,7 +63,7 @@ llm = ChatOpenAI(
 async def get_case_summary(case_id: str = None) -> str:
     try:
         case_id = case_id or "case1"  # Default to case1 if no ID provided
-        file_path = f"case-data/{case_id}/case_doc.txt"
+        file_path = f"case-data/case{case_id}/case_doc.txt"
         
         with open(file_path, 'r') as file:
             return file.read().strip()
@@ -100,6 +100,7 @@ def load_prompt_template(file_path: str) -> str:
 @feedback_router.post("", response_model=FeedbackResponse)
 async def submit_feedback(messages: List[StudentMessage], case_id: str = None):
     try:
+        print(f"\nCase ID: {case_id}")
          # Log the received data
         print("\nReceived Student Actions:")
         for action in messages:

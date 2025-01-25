@@ -1,0 +1,16 @@
+{
+    "case_name": "Medical_Case__Plasmodium_falciparum_Malaria_(Uncomplicated)",
+    "case_id": 7,
+    "differentials": [
+        "Plasmodium falciparum malaria (uncomplicated)",
+        "Dengue Fever",
+        "Typhoid Fever",
+        "Chikungunya Fever",
+        "Leptospirosis",
+        "Viral Hemorrhagic Fever"
+    ],
+    "last_updated": "2025-01-25T02:48:39.547115",
+    "title": "High fever and fatigue in patient",
+    "quote": "I've had this really high fever for days.",
+    "image_url": "/case-images/case7/cover_image.png?v=1737773263"
+}

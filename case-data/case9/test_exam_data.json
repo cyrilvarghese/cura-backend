@@ -1,0 +1,270 @@
+{
+    "physical_exam": {
+        "Skin Examination": {
+            "purpose": "Assess rash characteristics",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Red, dry, cracked patches with oozing noted on the hands, inner elbows, and behind the knees. Lichenification (thickened skin due to chronic scratching) on the inner elbows. Excoriation marks from scratching are evident."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "/case-images/case9/assets/physical_exam_skin_examination.jpg",
+                            "altText": "Image for Skin Examination",
+                            "caption": "Physical examination image for Skin Examination"
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Findings characteristic of atopic dermatitis with signs of chronic irritation."
+        },
+        "Vitals Check": {
+            "purpose": "Track patient\u2019s general health metrics",
+            "findings": {
+                "type": "text",
+                "content": "Height: 165 cm, Weight: 60 kg, BMI: 22.0 (Normal). Temperature: 36.8\u00b0C, Pulse: 72/min, Blood Pressure: 120/80 mm Hg."
+            },
+            "status": "completed",
+            "interpretation": "Vital signs within normal limits."
+        },
+        "Inspection of the hands, inner elbows, and knees": {
+            "purpose": "Visual assessment for eczema distribution",
+            "findings": {
+                "type": "image",
+                "content": {
+                    "url": "/case-images/case9/assets/physical_exam_inspection_of_the_hands,_inner_elbows,_and_knees.jpg",
+                    "altText": "Inspection of eczema affected areas",
+                    "caption": "Detailed visuals of specific body areas showing eczema distribution."
+                }
+            },
+            "status": "completed",
+            "interpretation": "Eczema distribution noted on the hands, inner elbows, and behind knees."
+        },
+        "Palpation of skin lesions for tenderness or exudate": {
+            "purpose": "Assess for tenderness or fluid in lesions",
+            "findings": {
+                "type": "text",
+                "content": "Skin lesions were tender to touch with occasional exudate present."
+            },
+            "status": "completed",
+            "interpretation": "Tender skin lesions consistent with inflammatory skin disease."
+        },
+        "Musculoskeletal Examination": {
+            "purpose": "Evaluate any musculoskeletal issues",
+            "findings": {
+                "type": "text",
+                "content": "No abnormalities detected."
+            },
+            "status": "completed",
+            "interpretation": "Musculoskeletal examination unremarkable."
+        },
+        "Respiratory Examination": {
+            "purpose": "Check lung health especially due to asthma history",
+            "findings": {
+                "type": "text",
+                "content": "Clear lung sounds with no wheezing."
+            },
+            "status": "completed",
+            "interpretation": "Respiratory system within normal limits."
+        },
+        "Lymph Node Examination": {
+            "purpose": "Detect lymphadenopathy",
+            "findings": {
+                "type": "text",
+                "content": "No lymphadenopathy detected."
+            },
+            "status": "completed",
+            "interpretation": "Lymphatic system within normal limits."
+        },
+        "Abdominal Examination": {
+            "purpose": "Evaluate abdominal health",
+            "findings": {
+                "type": "text",
+                "content": "Normal bowel sounds; no tenderness or abnormalities noted."
+            },
+            "status": "completed",
+            "interpretation": "Abdominal examination unremarkable."
+        },
+        "Cardiovascular Examination": {
+            "purpose": "Assess heart function",
+            "findings": {
+                "type": "text",
+                "content": "Normal heart sounds, no murmurs detected."
+            },
+            "status": "completed",
+            "interpretation": "Cardiovascular system remains normal."
+        },
+        "Neurological Examination": {
+            "purpose": "Check neurological responses",
+            "findings": {
+                "type": "text",
+                "content": "No abnormalities detected in neurological responses."
+            },
+            "status": "completed",
+            "interpretation": "Neurological examination findings are normal."
+        }
+    },
+    "lab_test": {
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Check blood cell counts and overall health",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "WBC",
+                            "6.5 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Hemoglobin",
+                            "14.2 g/dL",
+                            "12.0-16.0 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Hematocrit",
+                            "42%",
+                            "36-46%",
+                            "NORMAL"
+                        ],
+                        [
+                            "Eosinophils",
+                            "0.8 x10^9/L",
+                            "0.0-0.6 x10^9/L",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Mild eosinophilia, suggesting an allergic or atopic component.",
+            "status": "completed"
+        },
+        "Serum IgE Levels": {
+            "testName": "Serum IgE Levels",
+            "purpose": "Evaluate for atopic conditions",
+            "results": {
+                "type": "text",
+                "content": "Elevated IgE levels consistent with atopic dermatitis."
+            },
+            "interpretation": "Supports diagnosis of atopic condition.",
+            "status": "completed"
+        },
+        "Skin Prick Test": {
+            "testName": "Skin Prick Test",
+            "purpose": "Identify specific allergens",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Positive reactions to common allergens such as dust mites, pollen, and pet dander."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "/case-images/case9/assets/lab_test_skin_prick_test.jpg",
+                            "altText": "Image for Skin Prick Test",
+                            "caption": "Laboratory test image for Skin Prick Test"
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Identifies specific environmental triggers for the patient's atopy.",
+            "status": "completed"
+        },
+        "Patch Testing": {
+            "testName": "Patch Testing",
+            "purpose": "Rule out contact dermatitis",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Negative for reactions to tested contact allergens."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "/case-images/case9/assets/lab_test_patch_testing.jpg",
+                            "altText": "Image for Patch Testing",
+                            "caption": "Laboratory test image for Patch Testing"
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Rules out contact dermatitis, supporting the diagnosis of atopic dermatitis.",
+            "status": "completed"
+        },
+        "Erythrocyte Sedimentation Rate (ESR)": {
+            "testName": "Erythrocyte Sedimentation Rate (ESR)",
+            "purpose": "Assess inflammation in the body",
+            "results": {
+                "type": "text",
+                "content": "ESR at 15 mm/hr, which is within normal limits."
+            },
+            "interpretation": "No significant systemic inflammation detected.",
+            "status": "completed"
+        },
+        "Fungal Culture or KOH Test": {
+            "testName": "Fungal Culture or KOH Test",
+            "purpose": "Ruling out fungal infections",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "KOH test negative for fungal elements."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://www.researchgate.net/profile/Frederick-Kiechle/publication/232198182/figure/fig11/AS:668683227631618@1536437913079/A-KOH-preparation-of-fungal-elements-oval-yeast-and-hyphae-in-a-skin-scraping-bright.ppm",
+                            "altText": "Image for Fungal Culture or KOH Test",
+                            "caption": "Laboratory test image for Fungal Culture or KOH Test"
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Rules out tinea and supports diagnosis of atopic dermatitis.",
+            "status": "completed"
+        },
+        "ANA Test": {
+            "testName": "ANA Test",
+            "purpose": "Rule out autoimmune conditions",
+            "results": {
+                "type": "text",
+                "content": "ANA negative; not relevant for this case."
+            },
+            "interpretation": "Not needed unless systemic symptoms arise.",
+            "status": "completed"
+        },
+        "Stool Ova and Parasite Test": {
+            "testName": "Stool Ova and Parasite Test",
+            "purpose": "Evaluate for parasitic infections",
+            "results": {
+                "type": "text",
+                "content": "Not relevant; test shows no significance in this case."
+            },
+            "interpretation": "Not necessary given the localized dermatosis.",
+            "status": "completed"
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 10,
+        "actual_count": 10
+    }
+}

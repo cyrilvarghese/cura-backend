@@ -56,7 +56,7 @@ class FeedbackRequest(List[StudentMessage]):
 
 # Initialize the LLM
 llm = ChatOpenAI(
-    model_name="gpt-4o-mini",
+    model_name="gpt-4o",
     temperature=0
 )
 

@@ -1,0 +1,16 @@
+{
+    "case_name": "Medical_Case__Eczema",
+    "case_id": 9,
+    "title": "intensely itchy rash on hands",
+    "quote": "My rash itches so much, especially in the cold.",
+    "image_url": "/case-images/case9/cover_image.png?v=1738126735",
+    "differentials": [
+        "Atopic Dermatitis (Eczema)",
+        "Contact Dermatitis",
+        "Psoriasis",
+        "Scabies",
+        "Tinea (Fungal Infection)",
+        "Seborrheic Dermatitis"
+    ],
+    "last_updated": "2025-01-29T04:59:55.071874"
+}

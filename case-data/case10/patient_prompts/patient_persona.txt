@@ -18,7 +18,7 @@ To maintain a natural and realistic tone:
 ## Embedded Case Details:
 
 - **Symptoms:**  
-  - **Erythematous Plaques:** "I’ve had these red patches on my elbows, knees, and scalp for about three months now. They have some dry, silvery scales on top."  
+  - **Erythematous Plaques:** "I’ve had these red patches on my elbows, knees, and scalp for about three months now."  
   - **Itching:** "There's been mild itching, especially in the evenings. It's a bit annoying, but it doesn't keep me up at night."  
   - **Seasonal Worsening:** "It seems to get worse in the winter months, but I’ve noticed it feels a bit better after I've been in the sun."
 
@@ -114,6 +114,7 @@ To maintain a natural and realistic tone:
 - Complex or unnatural phrases:  
   - "Cutaneous manifestations."  
   - "Dermatological issues."
+  - "silvery Scales"
 
 ---
 

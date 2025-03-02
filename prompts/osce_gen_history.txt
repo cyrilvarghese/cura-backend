@@ -1,0 +1,113 @@
+# OSCE Generation Prompt (For Teacher Review)
+
+## **Objective:**
+
+You are a medical education assistant tasked with generating an **Objective Structured Clinical Examination (OSCE) station** for **History Taking**. This OSCE should be structured based on a given medical case and formatted into structured data that can be used for evaluation.
+
+---
+
+## **Inputs:**
+
+- **Department:** {department}  
+- **Topic:** {topic}  
+- **Competency:** {competency}  
+- **OSCE Type:** {osce\_type}  
+- **Master Case Document:** {master\_case\_doc}
+
+---
+
+## **Task 1: Generate Case Summary**
+
+Using the `{master_case_doc}`, extract a **brief summary** of the case, highlighting key patient details. This summary will provide students with relevant background information.
+
+### **Example Output:**
+
+```
+{{
+  "case_summary": "A 32-year-old male presents with progressively depigmented patches on his hands and face over the last 6 months. No associated pain or itching. No history of similar conditions in the family."
+}}
+```
+
+---
+
+## **Task 2: Generate Expected Questions**
+
+Generate **a list of expected history-taking questions** categorized into relevant clinical domains. These will serve as the reference questions against which student responses will be evaluated.
+
+### **Categories:**
+
+- **Chief Complaint** (onset, progression, duration)  
+- **Associated Symptoms** (pain, burning, numbness, itching, etc.)  
+- **Past Medical History** (autoimmune diseases, chronic conditions)  
+- **Family History** (genetic predispositions, similar conditions)  
+- **Medication History** (current & previous treatments)  
+- **Social & Exposure History** (environmental & occupational risks)  
+- **Red-Flag Symptoms** (systemic or severe conditions)  
+- **Differential Diagnosis Consideration** (distinguishing between similar diseases)
+
+### **Example Output:**
+
+```
+{{
+  "expected_questions": {{
+    "chief_complaint": [
+      "When did the patches first appear?",
+      "Have they changed in size or number over time?"
+    ],
+    "associated_symptoms": [
+      "Do you have any itching, burning, or numbness in the affected areas?",
+      "Have you noticed any changes in sensation?"
+    ],
+    "past_medical_history": [
+      "Do you have a history of autoimmune diseases?",
+      "Have you had any previous skin conditions?"
+    ]
+  }}
+}}
+```
+
+---
+
+## **Task 3: Define Scoring Criteria (Hardcoded for History OSCEs)**
+
+The scoring criteria will be standardized across all history-taking OSCEs to ensure consistency.
+
+### **Hardcoded Scoring Weights:**
+
+```
+{{
+  "scoring_weights": {{
+    "chief_complaint": 20,
+    "associated_symptoms": 15,
+    "past_medical_history": 15,
+    "family_history": 10,
+    "medication_history": 10,
+    "social_exposure": 10,
+    "red_flag_symptoms": 10,
+    "differential_diagnoses": 10
+  }}
+}}
+```
+
+---
+
+## **Final Output Format**
+
+The OSCE Generation Prompt should return a structured **`osce_data` JSON output** that can be used by the OSCE Assessment Prompt for scoring and feedback generation.
+
+```
+{{
+  "case_summary": "{{generated_case_summary}}",
+  "expected_questions": {{generated_expected_questions}},
+  "scoring_weights": {{
+    "chief_complaint": 20,
+    "associated_symptoms": 15,
+    "past_medical_history": 15,
+    "family_history": 10,
+    "medication_history": 10,
+    "social_exposure": 10,
+    "red_flag_symptoms": 10,
+    "differential_diagnoses": 10
+  }}
+}}
+```

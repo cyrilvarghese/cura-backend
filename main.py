@@ -27,11 +27,16 @@ CASE_DATA_DIR = Path("case-data").absolute()
 if not CASE_DATA_DIR.exists():
     CASE_DATA_DIR.mkdir(parents=True)
 
+# Create uploads directory if it doesn't exist
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
 # Mount the static files directories
 try:
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
     app.mount("/case-files", StaticFiles(directory=str(CASE_DATA_DIR)), name="case-data")
     app.mount("/case-images", StaticFiles(directory="case-data"), name="case-images")
+    app.mount("/files", StaticFiles(directory=UPLOAD_DIR), name="files")
 except RuntimeError as e:
     print(f"Error mounting static files: {e}")
 

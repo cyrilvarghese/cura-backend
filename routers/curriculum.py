@@ -201,6 +201,7 @@ async def get_topic_competencies(topic_name: str):
 async def get_topic_documents(topic_name: str):
     """
     Get all documents associated with a specific topic.
+    Case insensitive topic name matching.
     """
     try:
         conn = get_db_connection()
@@ -211,7 +212,7 @@ async def get_topic_documents(topic_name: str):
             FROM documents d
             JOIN topic_documents td ON d.id = td.document_id
             JOIN topics t ON td.topic_id = t.id
-            WHERE t.name = ?
+            WHERE LOWER(t.name) = LOWER(?)
             ORDER BY d.created_at DESC
         ''', (topic_name,))
         
@@ -229,7 +230,7 @@ async def get_topic_documents(topic_name: str):
             "url": doc['url'],
             "description": doc['description'],
             "created_at": doc['created_at'],
-            "topic_name": topic_name  # Add topic_name to response
+            "topic_name": topic_name
         } for doc in documents]
 
     except sqlite3.Error as e:

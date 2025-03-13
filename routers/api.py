@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from routers.upload_resource import router as upload_resource_router
 from datetime import datetime
 from routers.case_creator.create_patient_persona import router as create_patient_persona_router
+from routers.case_creator.create_patient_persona_from_url import router as create_patient_persona_from_url_router
 from routers.case_creator.create_exam_test_data import router as create_exam_test_data_router
 from routers.case_creator.create_cover_image import router as create_cover_image_router
 from routers.case_creator.create_diff_diagnosis import router as create_diff_diagnosis_router
@@ -43,6 +44,7 @@ api_router.include_router(feedback_router)
 api_router.include_router(case_router)
 api_router.include_router(patient_simulation_router) 
 api_router.include_router(create_patient_persona_router) 
+api_router.include_router(create_patient_persona_from_url_router)
 api_router.include_router(create_exam_test_data_router)
 api_router.include_router(create_cover_image_router)
 api_router.include_router(create_diff_diagnosis_router)

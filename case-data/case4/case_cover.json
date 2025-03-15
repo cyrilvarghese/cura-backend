@@ -15,5 +15,7 @@
         "Contact Dermatitis",
         "Bullous Impetigo"
     ],
-    "last_updated": "2024-12-17T21:25:14.479352"
+    "last_updated": "2024-12-17T21:25:14.479352",
+    "department": "Dermatology",
+    "published": true
 }

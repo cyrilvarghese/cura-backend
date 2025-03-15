@@ -11,5 +11,7 @@
         "Venous Stasis Ulcers",
         "Diabetic Foot Ulcers"
     ],
-    "last_updated": "2024-12-17T21:24:59.152946"
+    "last_updated": "2024-12-17T21:24:59.152946",
+    "department": "Dermatology",
+    "published": true
 }

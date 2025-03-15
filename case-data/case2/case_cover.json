@@ -5,12 +5,14 @@
     "quote": "I've have this annoying rash on my legs and it hurts",
     "image_url": "/case-images/case2/cover_image.png",
     "differentials": [
-        "Henoch-Sch\u00f6nlein Purpura (HSP)",
+        "Henoch-Schönlein Purpura (HSP)",
         "IgA Vasculitis",
         "Systemic Lupus Erythematosus (SLE)",
         "Juvenile Idiopathic Arthritis with Vasculitis Component",
         "Drug-Induced Hypersensitivity Vasculitis",
         "Contact Dermatitis"
     ],
-    "last_updated": "2025-01-04T14:53:39.265416"
+    "last_updated": "2025-01-04T14:53:39.265416",
+    "department": "Dermatology",
+    "published": true
 }

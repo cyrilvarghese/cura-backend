@@ -12,5 +12,7 @@
     "last_updated": "2025-01-25T02:48:39.547115",
     "title": "High fever and fatigue in patient",
     "quote": "I've had this really high fever for days.",
-    "image_url": "/case-images/case7/cover_image.png?v=1737773263"
+    "image_url": "/case-images/case7/cover_image.png?v=1737773263",
+    "department": "Internal Medicine",
+    "published": true
 }

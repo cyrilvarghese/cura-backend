@@ -3,5 +3,7 @@
     "case_id": 5,
     "title": "Oral ulcers and skin lesions",
     "quote": "It hurts to eat because of these sores in my mouth.",
-    "image_url": "/case-images/case5/cover_image.png?v=1736101034"
+    "image_url": "/case-images/case5/cover_image.png?v=1736101034",
+    "department": "Dermatology",
+    "published": true
 }

@@ -12,5 +12,7 @@
         "Tinea (Fungal Infection)",
         "Seborrheic Dermatitis"
     ],
-    "last_updated": "2025-01-29T04:59:55.071874"
+    "last_updated": "2025-01-29T04:59:55.071874",
+    "department": "Dermatology",
+    "published": true
 }

@@ -28,7 +28,7 @@ class CaseCoverUpdate(BaseModel):
 
 @case_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():
-    """List all available published cases by reading case_cover.json files"""
+    """List all available cases by reading case_cover.json files"""
     cases = []
     case_data_dir = Path("case-data")
     
@@ -39,20 +39,18 @@ async def list_cases():
             try:
                 with open(cover_file, "r") as f:
                     cover_data = json.load(f)
-                    # Only include published cases
-                    if cover_data.get("published", False):
-                        case_info = CaseInfo(
-                            case_id=cover_data.get("case_id", 0),  # Default to 0 if not specified
-                            case_name=cover_data["case_name"],
-                            title=cover_data.get("title"),
-                            quote=cover_data.get("quote"),
-                            image_url=cover_data.get("image_url"),
-                            last_updated=cover_data.get("last_updated"),
-                            differential_diagnosis=cover_data.get("differential_diagnosis"),
-                            department=cover_data.get("department"),
-                            published=cover_data.get("published")
-                        )
-                        cases.append(case_info)
+                    case_info = CaseInfo(
+                        case_id=cover_data.get("case_id", 0),  # Default to 0 if not specified
+                        case_name=cover_data["case_name"],
+                        title=cover_data.get("title"),
+                        quote=cover_data.get("quote"),
+                        image_url=cover_data.get("image_url"),
+                        last_updated=cover_data.get("last_updated"),
+                        differential_diagnosis=cover_data.get("differential_diagnosis"),
+                        department=cover_data.get("department"),
+                        published=cover_data.get("published")
+                    )
+                    cases.append(case_info)
             except (json.JSONDecodeError, KeyError) as e:
                 print(f"Error reading {cover_file}: {e}")
                 continue
@@ -91,7 +89,7 @@ async def get_case_data(case_id: str):
         }
     }
 
-@case_router.post("/cases/{case_id}/cover", response_model=dict)
+@case_router.post("/cases/{case_id}/publish", response_model=dict)
 async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):
     """Update published status and department in the case cover file"""
     try:
@@ -105,9 +103,8 @@ async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):
         with open(cover_file_path, 'r') as f:
             case_cover_data = json.load(f)
         
-        # Update only published and department fields
+        # Update only published 
         case_cover_data["published"] = update_data.published
-        case_cover_data["department"] = update_data.department
         
         # Update last_updated timestamp
         case_cover_data["last_updated"] = datetime.now().isoformat()

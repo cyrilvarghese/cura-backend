@@ -46,19 +46,24 @@ async def search_medical_images(
         results = retriever.get_relevant_documents(f"{query} medical images")
         
         # Process and format results
-        images = []
+        seen_urls = set()  # Track seen URLs
+        unique_images = []
+        
         for doc in results:
             metadata = doc.metadata
             if "images" in metadata and metadata["images"]:
                 for image in metadata["images"]:
-                    images.append({
-                        "url": image,
-                        "title": metadata.get("title", ""),
-                        "source": metadata.get("source", "")
-                    })
+                    # Only add image if URL hasn't been seen before
+                    if image not in seen_urls:
+                        seen_urls.add(image)
+                        unique_images.append({
+                            "url": image,
+                            "title": metadata.get("title", ""),
+                            "source": metadata.get("source", "")
+                        })
         
-        # Ensure we only return up to 10 images
-        return ImageSearchResponse(images=images[:50])
+        # Ensure we only return up to 50 unique images
+        return ImageSearchResponse(images=unique_images[:50])
         
     except Exception as e:
         print(f"❌ Error in search_medical_images: {str(e)}")

@@ -93,7 +93,7 @@ async def create_differential_diagnosis(
 
 class CreateDiffDiagnosisFromUrlRequest(BaseModel):
     file_url: str
-    case_id: Optional[int] = None
+    case_id: int
 
 def save_case_document(case_id: Optional[int], case_document: str) -> str:
     """Save the extracted case document to a text file and return the file path."""
@@ -135,8 +135,8 @@ async def create_differential_diagnosis_from_url(request: CreateDiffDiagnosisFro
         filename = Path(request.file_url).name
         file_path = uploads_dir / filename
 
-        if not file_path.exists():
-            raise HTTPException(status_code=404, detail=f"File not found in uploads directory: {filename}")
+        if not file_path.exists() or request.case_id is None:
+            raise HTTPException(status_code=404, detail=f"File not found in uploads directory or case_id is None: {filename}")
 
         # Load the meta prompt
         prompt = load_prompt("prompts/differential_diagnosis.txt")
@@ -157,13 +157,13 @@ async def create_differential_diagnosis_from_url(request: CreateDiffDiagnosisFro
             raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
 
         # Get case_id
-        case_id = request.case_id if request.case_id is not None else get_next_case_id()
+        case_id = request.case_id  
 
-        # Save the case document and cover
-        case_folder = f"case-data/case{case_id}"
-        os.makedirs(case_folder, exist_ok=True)
-        save_case_document(case_id, case_document)
-        save_case_cover(case_id, filename)
+        # # Save the case document and cover
+        # case_folder = f"case-data/case{case_id}"
+        # os.makedirs(case_folder, exist_ok=True)
+        # save_case_document(case_id, case_document)
+        # save_case_cover(case_id, filename)
         
         # Define the chat prompt template
         prompt_template = ChatPromptTemplate.from_messages([

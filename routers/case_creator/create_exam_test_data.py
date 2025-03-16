@@ -55,7 +55,7 @@ def save_test_data(case_id: int, data: dict) -> str:
 
 class CreateTestDataFromUrlRequest(BaseModel):
     file_url: str
-    case_id: Optional[int] = None
+    case_id: int = None
 
 @router.post("/create")
 async def create_exam_test_data(file: UploadFile = File(...), case_id: Optional[int]= Form(None)):
@@ -132,8 +132,8 @@ async def create_exam_test_data_from_url(request: CreateTestDataFromUrlRequest):
         filename = Path(request.file_url).name
         file_path = uploads_dir / filename
 
-        if not file_path.exists():
-            raise HTTPException(status_code=404, detail=f"File not found in uploads directory: {filename}")
+        if not file_path.exists() or request.case_id is None:
+            raise HTTPException(status_code=404, detail=f"File not found in uploads directory or case_id is None: {filename}")
 
         # Load the meta prompt
         prompt = load_prompt("prompts/exam_test_data2.txt")
@@ -154,7 +154,7 @@ async def create_exam_test_data_from_url(request: CreateTestDataFromUrlRequest):
             raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
 
         # Get case_id
-        case_id = request.case_id if request.case_id is not None else get_next_case_id()
+        case_id = request.case_id  
         
         # Define the chat prompt template with placeholders
         prompt_template = ChatPromptTemplate.from_messages([

@@ -1,0 +1,16 @@
+{
+    "case_name": "20250315_081824",
+    "case_id": "11",
+    "department": "Dermatology",
+    "published": true,
+    "differentials": [
+        "Vitiligo",
+        "Tinea Versicolor",
+        "Leprosy",
+        "Post-inflammatory hypopigmentation"
+    ],
+    "last_updated": "2025-03-16T05:47:22.076333",
+    "title": "pale patches on hands and face",
+    "quote": "I\u2019ve noticed these pale patches expanding; they really bother me.",
+    "image_url": "/case-images/case11/cover_image.png?v=1742103990"
+}

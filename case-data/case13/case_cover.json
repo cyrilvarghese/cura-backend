@@ -1,6 +1,6 @@
 {
     "case_name": "20250327_091432",
-    "case_id": "12",
+    "case_id": "13",
     "department": "Dermatology",
     "published": false,
     "differentials": [
@@ -10,8 +10,8 @@
         "Pityriasis Rosea",
         "Mycosis Fungoides"
     ],
-    "last_updated": "2025-03-27T12:16:22.341719",
-    "title": "Red, scaly plaques on skin",
-    "quote": "I've got these red, scaly patches that are itchy.",
-    "image_url": "/case-images/case12/cover_image.png?v=1743077733"
+    "last_updated": "2025-03-27T12:51:45.228864",
+    "title": "skin lesions on elbows and knees",
+    "quote": "I've got these red patches covered with silver scales.",
+    "image_url": "/case-images/case13/cover_image.png?v=1743079842"
 }

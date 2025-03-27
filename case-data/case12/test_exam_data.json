@@ -1,0 +1,425 @@
+{
+    "physical_exam": {
+        "General Physical Examination": {
+            "purpose": "Comprehensive assessment of patient's overall health.",
+            "findings": {
+                "type": "text",
+                "content": "Patient appears well-nourished and in no acute distress."
+            },
+            "status": "completed",
+            "interpretation": "No signs of acute illness; further focused examinations required."
+        },
+        "Detailed Skin Inspection": {
+            "purpose": "Assess characteristics of skin lesions.",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Erythematous plaques with well-defined borders and silvery scales on the elbows, knees, and scalp."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/plaques.jpg",
+                            "altText": "Erythematous plaques on elbows and knees",
+                            "caption": "Focused image showing plaques on elbows and knees."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Characteristics suggestive of psoriasis."
+        },
+        "Scalp Examination": {
+            "purpose": "Evaluate for psoriatic plaques and scaling.",
+            "findings": {
+                "type": "text",
+                "content": "Presence of plaques and scaling on the scalp."
+            },
+            "status": "completed",
+            "interpretation": "Consistent with psoriasis."
+        },
+        "Nail Examination": {
+            "purpose": "Check for psoriatic nail changes.",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Evidence of pitting and subungual hyperkeratosis."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/nail_pitting.jpg",
+                            "altText": "Nail pitting and subungual hyperkeratosis",
+                            "caption": "Illustration of nail findings indicative of psoriasis."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Nail findings confirm psoriasis."
+        },
+        "Joint Examination": {
+            "purpose": "Assess for psoriatic arthritis.",
+            "findings": {
+                "type": "text",
+                "content": "No visible joint deformities; no tenderness or swelling upon palpation."
+            },
+            "status": "completed",
+            "interpretation": "No evidence of arthritis at this time."
+        },
+        "Eye Examination": {
+            "purpose": "Inspect for eye involvement in psoriasis.",
+            "findings": {
+                "type": "text",
+                "content": "No conjunctivitis or uveitis observed."
+            },
+            "status": "completed",
+            "interpretation": "No ocular signs of psoriasis."
+        },
+        "Vitals Check": {
+            "purpose": "Monitor essential health parameters.",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Parameter",
+                        "Value",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Temperature",
+                            "37\u00b0C",
+                            "Normal"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "120/80 mmHg",
+                            "Normal"
+                        ],
+                        [
+                            "Heart Rate",
+                            "78 bpm",
+                            "Normal"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Vital signs within normal limits."
+        },
+        "Palpation for Lymphadenopathy": {
+            "purpose": "Check for swollen lymph nodes.",
+            "findings": {
+                "type": "text",
+                "content": "No lymphadenopathy noted."
+            },
+            "status": "completed",
+            "interpretation": "No systemic signs of infection."
+        },
+        "Respiratory Examination": {
+            "purpose": "Rule out related respiratory issues.",
+            "findings": {
+                "type": "text",
+                "content": "Normal breath sounds, no wheezes or crackles."
+            },
+            "status": "completed",
+            "interpretation": "Respiratory function normal."
+        },
+        "Cardiovascular Examination": {
+            "purpose": "Assess heart health.",
+            "findings": {
+                "type": "text",
+                "content": "Heart sounds regular, no murmurs."
+            },
+            "status": "completed",
+            "interpretation": "Cardiovascular status stable."
+        },
+        "Abdominal Examination": {
+            "purpose": "Evaluate for hepatosplenomegaly.",
+            "findings": {
+                "type": "text",
+                "content": "Abdomen soft, non-tender; no hepatosplenomegaly detected."
+            },
+            "status": "completed",
+            "interpretation": "Abdominal findings unremarkable."
+        },
+        "Neurological Examination": {
+            "purpose": "Rule out neurological issues.",
+            "findings": {
+                "type": "text",
+                "content": "No neurological deficits observed; cranial nerves intact."
+            },
+            "status": "completed",
+            "interpretation": "Neurological assessment normal."
+        }
+    },
+    "lab_test": {
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Assess signs of systemic inflammation.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Hemoglobin",
+                            "14.5 g/dL",
+                            "13.5-17.5 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "White Blood Cell Count",
+                            "6.2 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Platelet Count",
+                            "250 x10^9/L",
+                            "150-450 x10^9/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "CBC results are within normal limits; no signs of systemic infection.",
+            "status": "completed"
+        },
+        "Erythrocyte Sedimentation Rate (ESR)": {
+            "testName": "Erythrocyte Sedimentation Rate (ESR)",
+            "purpose": "Detect chronic inflammation.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "30 mm/hr",
+                            "0-20 mm/hr",
+                            "HIGH"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Elevated ESR indicates possible chronic inflammation.",
+            "status": "completed"
+        },
+        "C-Reactive Protein (CRP)": {
+            "testName": "C-Reactive Protein (CRP)",
+            "purpose": "Assess acute-phase inflammatory activity.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "CRP",
+                            "5 mg/L",
+                            "0-10 mg/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "CRP levels are within normal range.",
+            "status": "completed"
+        },
+        "Basic Metabolic Panel (BMP)": {
+            "testName": "Basic Metabolic Panel (BMP)",
+            "purpose": "Evaluate kidney function and electrolytes.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Sodium",
+                            "140 mEq/L",
+                            "135-145 mEq/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Potassium",
+                            "4.2 mEq/L",
+                            "3.5-5.0 mEq/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Electrolyte levels normal; kidney function appears stable.",
+            "status": "completed"
+        },
+        "Liver Function Tests (LFTs)": {
+            "testName": "Liver Function Tests (LFTs)",
+            "purpose": "Monitor liver function if systemic treatment is considered.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ALT",
+                            "30 U/L",
+                            "7-56 U/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "AST",
+                            "28 U/L",
+                            "10-40 U/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Liver enzymes within normal limits.",
+            "status": "completed"
+        },
+        "Serum Uric Acid Levels": {
+            "testName": "Serum Uric Acid Levels",
+            "purpose": "May be elevated in psoriasis.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Uric Acid",
+                            "5.5 mg/dL",
+                            "3.5-7.2 mg/dL",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Uric acid levels are normal; unlikely to suggest gout.",
+            "status": "completed"
+        },
+        "ANA Panel": {
+            "testName": "ANA Panel",
+            "purpose": "Rule out autoimmune disorders like lupus.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ANA",
+                            "Negative",
+                            "Negative",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Negative ANA panel, ruling out systemic lupus erythematosus.",
+            "status": "completed"
+        },
+        "Fungal Scraping": {
+            "testName": "Fungal Scraping",
+            "purpose": "Exclude dermatophyte infection.",
+            "results": {
+                "type": "text",
+                "content": "Negative for fungal elements."
+            },
+            "interpretation": "No evidence of fungal infection present.",
+            "status": "completed"
+        },
+        "Rheumatoid Factor (RF)": {
+            "testName": "Rheumatoid Factor (RF)",
+            "purpose": "Evaluate for psoriatic arthritis vs other arthritides.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "RF",
+                            "Negative",
+                            "Negative",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Negative result; not suggestive of rheumatoid arthritis.",
+            "status": "completed"
+        },
+        "Skin Biopsy": {
+            "testName": "Skin Biopsy",
+            "purpose": "Confirm histological findings.",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Epidermal hyperplasia, parakeratosis, and elongated rete ridges with Munro microabscesses."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/biopsy.jpg",
+                            "altText": "Histopathological slide of psoriasis",
+                            "caption": "Skin biopsy showing characteristic histological features of psoriasis."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Findings consistent with plaque psoriasis.",
+            "status": "completed"
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 13,
+        "actual_count": 13
+    }
+}

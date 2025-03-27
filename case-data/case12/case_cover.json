@@ -1,0 +1,23 @@
+{
+    "case_name": "20250327_091432",
+    "case_id": "12",
+    "department": "Dermatology",
+    "published": false,
+    "differentials": [
+        "Plaque Psoriasis",
+        "Seborrheic Dermatitis",
+        "Eczema",
+        "Pityriasis Rosea",
+        "Mycosis Fungoides"
+    ],
+    "last_updated": "2025-03-27T09:16:21.915425",
+    "title": "red patches with silvery scales on elbows",
+    "quote": "I've got these patches on my elbows and knees.",
+    "image_url": "/case-images/case12/cover_image.png?v=1743066913?v=1743067235?v=1743067839?v=1743067843?v=1743067955?v=1743068000?v=1743068027?v=1743068173?v=1743068208?v=1743068211?v=1743068216?v=1743068224?v=1743068227?v=1743068811?v=1743068815?v=1743068821",
+    "phrases_to_avoid": [
+        "silverty scales",
+        "dont use Silvery Scales",
+        "silvery scales",
+        "Avoid saying Silvery scales"
+    ]
+}

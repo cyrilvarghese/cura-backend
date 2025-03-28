@@ -77,7 +77,7 @@ dependencies:
   - libiconv=1.17=hd590300_2
   - libjpeg-turbo=3.0.0=hd590300_1
   - liblapack=3.9.0=25_linux64_openblas
-  - liblzma=5.6.3=hb9d3cd8_1
+  - liblzma=5.2.6=h166bdaf_0
   - libnghttp2=1.64.0=h161d5f1_0
   - libnsl=2.0.1=hd590300_0
   - libopenblas=0.3.28=pthreads_h94d23a6_1

@@ -44,7 +44,7 @@
                     "rows": [
                         [
                             "Height",
-                            "165 cm",
+                            "162 cm",
                             "NORMAL"
                         ],
                         [
@@ -70,6 +70,11 @@
                         [
                             "Blood Pressure",
                             "118/76 mm Hg",
+                            "NORMAL"
+                        ],
+                        [
+                            "Temp",
+                            "37.2\u00b0C (98.9\u00b0F)",
                             "NORMAL"
                         ]
                     ]

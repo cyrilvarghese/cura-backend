@@ -1,3 +1,14 @@
+"""
+API router for managing test tables in case data.
+
+This module provides endpoints to:
+- Update test table rows (PUT /test-table/update)
+- Remove specific rows from test tables (DELETE /test-table/remove-row)
+
+Test tables can be either physical exam findings or lab test results.
+Each row is identified by its first column value (e.g., test name or parameter).
+"""
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional, Union, Any

@@ -187,6 +187,5 @@ dependencies:
       - postgrest==0.13.0
       - gotrue==2.1.0
       - realtime==1.0.0
-      - storage3==0.11.3
       - supabase
 prefix: /root/conda/envs/cura-env

@@ -59,7 +59,7 @@ async def logout():
     """
     Sign out the current user.
     """
-    result = await auth_a   pi.logout()
+    result = await auth_api.logout()
     if not result.get("success"):
         raise HTTPException(status_code=400, detail=result.get("error", "Logout failed"))
     return result 

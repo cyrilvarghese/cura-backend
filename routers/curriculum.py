@@ -130,8 +130,12 @@ async def get_curriculum():
         return curriculum_data
 
     except sqlite3.Error as e:
+        import traceback
+        print(f"Exception in get_curriculum:\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     except Exception as e:
+        import traceback
+        print(f"Exception in get_curriculum:\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 @router.get("/topics", response_model=List[str])
@@ -193,8 +197,12 @@ async def get_topic_competencies(topic_name: str):
         } for comp in competencies]
 
     except sqlite3.Error as e:
+        import traceback
+        print(f"Exception in get_topic_competencies:\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     except Exception as e:
+        import traceback
+        print(f"Exception in get_topic_competencies:\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 @router.get("/topics/{topic_name}/documents", response_model=List[DocumentModel])
@@ -344,10 +352,10 @@ async def get_department_curriculum(department_name: str):
         return curriculum_data
 
     except sqlite3.Error as e:
-        print(f"Database error in get_department_curriculum: {str(e)}")
+        import traceback
+        print(f"Exception in get_department_curriculum:\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     except Exception as e:
-        print(f"Unexpected error in get_department_curriculum: {str(e)}")
         import traceback
-        print(traceback.format_exc())  # This prints the full stack trace
+        print(f"Exception in get_department_curriculum:\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")

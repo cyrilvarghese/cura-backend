@@ -11,13 +11,16 @@ COPY . .
 COPY environment.yml .
 
 # Create and activate the Conda environment with improved error logging
-RUN conda env create -f environment.yml --debug || (cat conda_log.txt && false)
+RUN conda env create -f environment.yml --debug > conda_log.txt 2>&1 || (cat conda_log.txt && false)
 
 # Set PATH to include the Conda environment's executables
 ENV PATH /opt/conda/envs/cura-env/bin:$PATH
 
+# Install SQLite CLI (not included by default in some base images)
+RUN apt-get update && apt-get install -y sqlite3 && apt-get clean
+
 # Expose the port your FastAPI app runs on
 EXPOSE 8000
 
-# Command to run the FastAPI app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Command to create DB from schema, seed it, then run the app
+CMD sh -c "sqlite3 medical_assessment.db < schema.sql && python insert_data.py && uvicorn main:app --host 0.0.0.0 --port 8000"

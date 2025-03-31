@@ -344,6 +344,10 @@ async def get_department_curriculum(department_name: str):
         return curriculum_data
 
     except sqlite3.Error as e:
+        print(f"Database error in get_department_curriculum: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     except Exception as e:
+        print(f"Unexpected error in get_department_curriculum: {str(e)}")
+        import traceback
+        print(traceback.format_exc())  # This prints the full stack trace
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")

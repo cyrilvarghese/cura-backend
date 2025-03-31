@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 from pathlib import Path
 import os
 from routers.api import api_router
+from auth.router import router as auth_router
 
 app = FastAPI()
 
@@ -69,3 +70,9 @@ async def download_file(filename: str):
 
 # Include routers
 app.include_router(api_router)
+app.include_router(auth_router)
+
+# Root endpoint
+@app.get("/")
+async def root():
+    return {"message": "API is running"}

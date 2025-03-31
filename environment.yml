@@ -182,4 +182,11 @@ dependencies:
       - tiktoken==0.8.0
       - tqdm==4.67.1
       - yarl==1.18.0
+      - supabase==2.3.1
+      - supafunc==0.3.1
+      - postgrest==0.13.0
+      - gotrue==2.1.0
+      - realtime==1.0.0
+      - storage3==0.11.3
+      - supabase
 prefix: /root/conda/envs/cura-env

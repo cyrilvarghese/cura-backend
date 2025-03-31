@@ -46,3 +46,11 @@ WITH CHECK (auth.uid() = id);
 CREATE POLICY "Allow users to view and update their own profile" 
 ON profiles 
 FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile"
+ON profiles FOR UPDATE
+USING (auth.uid() = id);
+
+CREATE POLICY "Users can read own profile" 
+ON profiles FOR SELECT
+USING (auth.uid() = id);

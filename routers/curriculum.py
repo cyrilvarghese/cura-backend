@@ -43,7 +43,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-@router.get("/", response_model=DepartmentModel)
+@router.get("", response_model=DepartmentModel)
 async def get_curriculum():
     """
     Get the complete medical curriculum structure including departments, topics, and competencies.

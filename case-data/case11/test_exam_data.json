@@ -1,0 +1,319 @@
+{
+    "physical_exam": {
+        "General Skin Examination": {
+            "purpose": "Assess lesion distribution and morphology.",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Multiple well-defined depigmented patches observed on the hands, face, and neck."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/skin_examination.jpg",
+                            "altText": "General skin examination showing vitiligo patches",
+                            "caption": "Depigmented patches on the patient's skin."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Findings consistent with vitiligo."
+        },
+        "Wood's Lamp Examination": {
+            "purpose": "Enhance lesion contrast under UV light.",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Demonstrates a stark contrast of depigmented areas fluorescing under UV light."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/woods_lamp.jpg",
+                            "altText": "Wood's lamp examination results",
+                            "caption": "Lesions highlighted under UV light."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Confirmatory for vitiligo due to the identifiable fluorescence of affected skin."
+        },
+        "Dermatological Examination of Mucosa": {
+            "purpose": "Check lips, oral cavity, and genitals.",
+            "findings": {
+                "type": "text",
+                "content": "No abnormalities detected in the mucosal examination. Mucosa appears healthy and intact."
+            },
+            "status": "completed",
+            "interpretation": "No signs of mucosal involvement in vitiligo observed."
+        },
+        "Examine Scalp and Hair": {
+            "purpose": "Check for associated leukotrichia.",
+            "findings": {
+                "type": "text",
+                "content": "Hair on the scalp appears normal with no signs of whitening or leukotrichia."
+            },
+            "status": "completed",
+            "interpretation": "No associated changes in hair pigment which indicates vitiligo."
+        },
+        "Nail Examination": {
+            "purpose": "Evaluate for nail dystrophy.",
+            "findings": {
+                "type": "text",
+                "content": "Nails are healthy with no dystrophic changes observed."
+            },
+            "status": "completed",
+            "interpretation": "Nails do not show signs of involvement typically seen in autoimmune conditions."
+        },
+        "Check for Signs of Koebner Phenomenon": {
+            "purpose": "Assess for new lesions appearing after skin trauma.",
+            "findings": {
+                "type": "text",
+                "content": "No new lesions observed around areas of previous trauma."
+            },
+            "status": "completed",
+            "interpretation": "No evidence of Koebner phenomenon present."
+        },
+        "Thyroid Palpation": {
+            "purpose": "Assess for goiter or tenderness.",
+            "findings": {
+                "type": "text",
+                "content": "Thyroid appears normal with no palpable nodules or tenderness."
+            },
+            "status": "completed",
+            "interpretation": "Normal thyroid examination ruling out significant thyroid disease."
+        },
+        "Ophthalmic Examination": {
+            "purpose": "Check for evidence of uveitis.",
+            "findings": {
+                "type": "text",
+                "content": "Ocular cranial nerve examination normal; no signs of uveitis detected."
+            },
+            "status": "completed",
+            "interpretation": "No ocular involvement suggestive of related complications."
+        },
+        "Neurological Exam": {
+            "purpose": "Assess for sensory loss.",
+            "findings": {
+                "type": "text",
+                "content": "Neurological examination shows intact sensation; no sensory loss noted."
+            },
+            "status": "completed",
+            "interpretation": "No neurological deficits observed, ruling out leprosy."
+        }
+    },
+    "lab_test": {
+        "Wood's Lamp Examination": {
+            "testName": "Wood's Lamp Examination",
+            "purpose": "Confirm lesion fluorescence.",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Fluorescent areas confirmed under UV light."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/woods_lamp_lab.jpg",
+                            "altText": "Results of Wood's Lamp Examination",
+                            "caption": "Wood's lamp highlights vitiligo patches."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "UVA light confirms presence and extent of vitiligo.",
+            "status": "completed"
+        },
+        "Thyroid Function Tests": {
+            "testName": "Thyroid Function Tests (TSH, T3, T4)",
+            "purpose": "Screen for autoimmune thyroid disease.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "TSH",
+                            "2.5 \u00b5IU/mL",
+                            "0.4-4.0 \u00b5IU/mL",
+                            "NORMAL"
+                        ],
+                        [
+                            "T3",
+                            "115 ng/dL",
+                            "80-200 ng/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "T4",
+                            "7.5 \u00b5g/dL",
+                            "4.5-12.0 \u00b5g/dL",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Normal thyroid function tests indicating no endocrine dysregulation.",
+            "status": "completed"
+        },
+        "Anti-thyroid Peroxidase (Anti-TPO) Antibodies": {
+            "testName": "Anti-thyroid Peroxidase (Anti-TPO) Antibodies",
+            "purpose": "Assess autoimmune association with thyroid disease.",
+            "results": {
+                "type": "text",
+                "content": "Anti-TPO antibodies are non-reactive."
+            },
+            "interpretation": "No autoimmune thyroid disease indicated.",
+            "status": "completed"
+        },
+        "ANA (Antinuclear Antibody) Test": {
+            "testName": "ANA (Antinuclear Antibody) Test",
+            "purpose": "Rule out other autoimmune diseases.",
+            "results": {
+                "type": "text",
+                "content": "ANA negative."
+            },
+            "interpretation": "No evidence of systemic autoimmune diseases.",
+            "status": "completed"
+        },
+        "Skin Biopsy": {
+            "testName": "Skin Biopsy",
+            "purpose": "Confirm diagnosis if uncertain.",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Histological analysis shows absence of melanocytes in the epidermis."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/skin_biopsy.jpg",
+                            "altText": "Skin biopsy showing loss of melanocytes",
+                            "caption": "Microscopic image of biopsy of affected skin."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Findings consistent with vitiligo diagnosis.",
+            "status": "completed"
+        },
+        "Serum Vitamin D Levels": {
+            "testName": "Serum Vitamin D Levels",
+            "purpose": "Assess for possible deficiencies in vitiligo patients.",
+            "results": {
+                "type": "text",
+                "content": "Vitamin D levels are within normal limits at 30 ng/mL."
+            },
+            "interpretation": "No deficiency detected.",
+            "status": "completed"
+        },
+        "Fasting Blood Glucose & HbA1c": {
+            "testName": "Fasting Blood Glucose & HbA1c",
+            "purpose": "Screen for type 1 diabetes.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Fasting Blood Glucose",
+                            "95 mg/dL",
+                            "70-100 mg/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "HbA1c",
+                            "5.4%",
+                            "4.0-5.6%",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "No evidence of diabetes detected.",
+            "status": "completed"
+        },
+        "Serum Cortisol & ACTH": {
+            "testName": "Serum Cortisol & ACTH",
+            "purpose": "Assess for adrenal insufficiency if Addison\u2019s disease is suspected.",
+            "results": {
+                "type": "text",
+                "content": "Cortisol level is normal."
+            },
+            "interpretation": "No adrenal insufficiency indicated.",
+            "status": "completed"
+        },
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Rule out anemia or systemic involvement.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Parameter",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Hemoglobin",
+                            "15 g/dL",
+                            "13-17 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Hematocrit",
+                            "45%",
+                            "38-50%",
+                            "NORMAL"
+                        ],
+                        [
+                            "White Blood Cell Count",
+                            "6.0 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Normal CBC indicating no signs of anemia.",
+            "status": "completed"
+        },
+        "Fungal Culture": {
+            "testName": "Fungal Culture",
+            "purpose": "Differentiates from infectious causes.",
+            "results": {
+                "type": "text",
+                "content": "No fungal growth observed."
+            },
+            "interpretation": "Ruling out tinea versicolor or other fungal infections.",
+            "status": "completed"
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 17,
+        "actual_count": 17
+    }
+}

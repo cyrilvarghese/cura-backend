@@ -88,9 +88,19 @@ CREATE INDEX idx_assessments_method ON assessments(assessment_method_id);
 CREATE TABLE documents (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
-    type TEXT NOT NULL,  -- e.g., 'PDF', 'VIDEO', 'LINK'
+    type TEXT NOT NULL,
     url TEXT NOT NULL,
     description TEXT,
+    google_doc_id TEXT,
+    google_doc_link TEXT,
+    status TEXT DEFAULT 'CASE_REVIEW_PENDING' 
+        CHECK (status IN (
+            'CASE_REVIEW_PENDING',
+            'CASE_REVIEW_IN_PROGRESS',
+            'CASE_REVIEW_COMPLETE',
+            'DATA_REVIEW_IN_PROGRESS',
+            'PUBLISHED'
+        )),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -102,5 +112,7 @@ CREATE TABLE topic_documents (
     FOREIGN KEY (document_id) REFERENCES documents(id)
 );
 
--- Add index for better performance
+-- Add indexes for better performance
 CREATE INDEX idx_topic_documents ON topic_documents(topic_id);
+CREATE INDEX idx_documents_google_id ON documents(google_doc_id);
+CREATE INDEX idx_document_department ON topic_documents(document_id);

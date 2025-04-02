@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from typing import List, Dict, Any, Optional
 import sqlite3
 from pydantic import BaseModel
+from enum import Enum
 
 router = APIRouter(
     prefix="/curriculum",
@@ -20,6 +21,13 @@ class CompetencyModel(BaseModel):
     assessments: List[AssessmentBriefModel] = []  # Made optional with default empty list
     assessment_methods: Optional[List[str]] = None  # Added to match incoming data
 
+class DocumentStatus(str, Enum):
+    CASE_REVIEW_PENDING = "CASE_REVIEW_PENDING"
+    CASE_REVIEW_IN_PROGRESS = "CASE_REVIEW_IN_PROGRESS"
+    CASE_REVIEW_COMPLETE = "CASE_REVIEW_COMPLETE"
+    DATA_REVIEW_IN_PROGRESS = "DATA_REVIEW_IN_PROGRESS"
+    PUBLISHED = "PUBLISHED"
+
 class DocumentModel(BaseModel):
     id: int
     title: str
@@ -28,6 +36,9 @@ class DocumentModel(BaseModel):
     description: Optional[str]
     created_at: str
     topic_name: str  # Added to match DocumentResponse
+    google_doc_id: Optional[str] = None  # Added field
+    google_doc_link: Optional[str] = None  # Added field
+    status: DocumentStatus = DocumentStatus.CASE_REVIEW_PENDING
 
 class TopicModel(BaseModel):
     topic: str
@@ -97,7 +108,15 @@ async def get_curriculum():
             
             # Get documents for this topic
             cursor.execute('''
-                SELECT d.id, d.title, d.type, d.url, d.description, d.created_at
+                SELECT 
+                    d.id, 
+                    d.title, 
+                    d.type, 
+                    d.url, 
+                    d.description, 
+                    d.created_at,
+                    d.google_doc_id,  -- Added field
+                    d.google_doc_link  -- Added field
                 FROM documents d
                 JOIN topic_documents td ON d.id = td.document_id
                 WHERE td.topic_id = ?
@@ -121,7 +140,9 @@ async def get_curriculum():
                     "url": doc['url'],
                     "description": doc['description'],
                     "created_at": doc['created_at'],
-                    "topic_name": topic['name']  # Add topic_name to response
+                    "topic_name": topic['name'],
+                    "google_doc_id": doc['google_doc_id'],  # Added field
+                    "google_doc_link": doc['google_doc_link']  # Added field
                 } for doc in documents]
             }
             curriculum_data["topics"].append(topic_data)
@@ -216,7 +237,15 @@ async def get_topic_documents(topic_name: str):
         cursor = conn.cursor()
         
         cursor.execute('''
-            SELECT d.id, d.title, d.type, d.url, d.description, d.created_at
+            SELECT 
+                d.id, 
+                d.title, 
+                d.type, 
+                d.url, 
+                d.description, 
+                d.created_at,
+                d.google_doc_id,  -- Added field
+                d.google_doc_link  -- Added field
             FROM documents d
             JOIN topic_documents td ON d.id = td.document_id
             JOIN topics t ON td.topic_id = t.id
@@ -238,7 +267,9 @@ async def get_topic_documents(topic_name: str):
             "url": doc['url'],
             "description": doc['description'],
             "created_at": doc['created_at'],
-            "topic_name": topic_name
+            "topic_name": topic_name,
+            "google_doc_id": doc['google_doc_id'],  # Added field
+            "google_doc_link": doc['google_doc_link']  # Added field
         } for doc in documents]
 
     except sqlite3.Error as e:
@@ -300,7 +331,7 @@ async def get_department_curriculum(department_name: str):
             
             # Get documents for this topic
             cursor.execute('''
-                SELECT d.id, d.title, d.type, d.url, d.description, d.created_at
+                SELECT d.id, d.title, d.type, d.url, d.description, d.created_at, d.google_doc_id, d.google_doc_link
                 FROM documents d
                 JOIN topic_documents td ON d.id = td.document_id
                 WHERE td.topic_id = ?
@@ -319,7 +350,9 @@ async def get_department_curriculum(department_name: str):
                     "url": doc['url'],
                     "description": doc['description'],
                     "created_at": doc['created_at'],
-                    "topic_name": topic['name']  # Add topic_name to response
+                    "topic_name": topic['name'],
+                    "google_doc_id": doc['google_doc_id'],
+                    "google_doc_link": doc['google_doc_link']
                 } for doc in documents]
             }
 

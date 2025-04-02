@@ -6,6 +6,7 @@ from pathlib import Path
 import os
 from routers.api import api_router
 from auth.router import router as auth_router
+from routers import google_docs_router
 
 app = FastAPI()
 
@@ -71,6 +72,7 @@ async def download_file(filename: str):
 # Include routers
 app.include_router(api_router)
 app.include_router(auth_router)
+app.include_router(google_docs_router.router, prefix="/api", tags=["Google Docs"])
 
 # Root endpoint
 @app.get("/")

@@ -3,6 +3,7 @@ from .users import user_router
 from typing import List
 from pydantic import BaseModel
 from routers.upload_resource import router as upload_resource_router
+from routers.google_docs_router import router as google_docs_router
 from datetime import datetime
 from routers.case_creator.create_patient_persona import router as create_patient_persona_router
 from routers.case_creator.create_exam_test_data import router as create_exam_test_data_router
@@ -52,6 +53,7 @@ api_router.include_router(image_search_router)
 api_router.include_router(curriculum_router)
 api_router.include_router(upload_resource_router)
 api_router.include_router(update_test_table_router)
+api_router.include_router(google_docs_router)
 
 @api_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():

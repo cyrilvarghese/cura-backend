@@ -2,6 +2,7 @@ name: cura-env
 channels:
   - conda-forge
 dependencies:
+
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
   - aiofiles=24.1.0=pyhd8ed1ab_1
@@ -162,6 +163,8 @@ dependencies:
   - yaml=0.2.5=h7f98852_2
   - zstandard=0.23.0=py310ha39cb0e_1
   - zstd=1.5.6=ha6fb4c9_0
+  - google-auth-oauthlib
+  - google-api-python-client
   - pip:
       - aiohappyeyeballs==2.4.3
       - aiohttp==3.11.8
@@ -188,4 +191,5 @@ dependencies:
       - gotrue==2.1.0
       - realtime==1.0.0
       - supabase
+      - markdown
 prefix: /root/conda/envs/cura-env

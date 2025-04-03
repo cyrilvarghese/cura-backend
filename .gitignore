@@ -100,4 +100,4 @@ var/
 wheels/
 *.egg-info/
 .installed.cfg
-*.egg 
+*.egg utils/service-account-key.json

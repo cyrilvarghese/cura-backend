@@ -1,3 +1,4 @@
+import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from fastapi import HTTPException
@@ -7,7 +8,9 @@ import sqlite3
 import requests
 
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
-SERVICE_ACCOUNT_FILE = 'utils/service-account-key.json'
+# SERVICE_ACCOUNT_FILE = 'utils/service-account-key.json'
+print("File exists:", os.path.exists('/etc/secrets/service-account-key'))
+SERVICE_ACCOUNT_FILE = '/etc/secrets/service-account-key'
 FOLDER_NAME = 'cases-for-review'
 
 class GoogleDocsManager:

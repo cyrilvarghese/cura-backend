@@ -91,8 +91,9 @@ CREATE TABLE documents (
     type TEXT NOT NULL,
     url TEXT NOT NULL,
     description TEXT,
-    google_doc_id TEXT,
+    google_doc_id TEXT UNIQUE,
     google_doc_link TEXT,
+    department_id INTEGER,
     status TEXT DEFAULT 'CASE_REVIEW_PENDING' 
         CHECK (status IN (
             'CASE_REVIEW_PENDING',
@@ -101,7 +102,8 @@ CREATE TABLE documents (
             'DATA_REVIEW_IN_PROGRESS',
             'PUBLISHED'
         )),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (department_id) REFERENCES departments(id)
 );
 
 CREATE TABLE topic_documents (
@@ -116,3 +118,6 @@ CREATE TABLE topic_documents (
 CREATE INDEX idx_topic_documents ON topic_documents(topic_id);
 CREATE INDEX idx_documents_google_id ON documents(google_doc_id);
 CREATE INDEX idx_document_department ON topic_documents(document_id);
+
+-- Add index for department lookups
+CREATE INDEX idx_documents_department ON documents(department_id);

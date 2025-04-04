@@ -24,7 +24,6 @@ class CaseInfo(BaseModel):
 
 class CaseCoverUpdate(BaseModel):
     published: bool
-    department: str
 
 @case_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():
@@ -115,7 +114,7 @@ async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):
             
         return {
             "status": "success",
-            "message": "Case cover updated successfully",
+            "message": "Case Published Successfully",
             "case_id": case_id
         }
 

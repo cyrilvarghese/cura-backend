@@ -6,6 +6,7 @@ from typing import Optional, List, Dict, Any, Tuple
 import re
 import sqlite3
 import requests
+import traceback
 
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 # SERVICE_ACCOUNT_FILE = 'utils/service-account-key.json'
@@ -417,24 +418,33 @@ class GoogleDocsManager:
             conn = sqlite3.connect('medical_assessment.db')
             cursor = conn.cursor()
             
-            # Delete from documents table
+            # Get the document id first
             cursor.execute('''
-                DELETE FROM documents 
+                SELECT id 
+                FROM documents 
                 WHERE google_doc_id = ?
             ''', (doc_id,))
             
-            # Delete from topic_documents table
-            cursor.execute('''
-                DELETE FROM topic_documents 
-                WHERE document_id IN (
-                    SELECT id FROM documents WHERE google_doc_id = ?
-                )
-            ''', (doc_id,))
+            doc_result = cursor.fetchone()
+            if doc_result:
+                doc_db_id = doc_result[0]
+                
+                # Delete from topic_documents table
+                cursor.execute('''
+                    DELETE FROM topic_documents 
+                    WHERE document_id = ?
+                ''', (doc_db_id,))
+                
+                # Delete from documents table
+                cursor.execute('''
+                    DELETE FROM documents 
+                    WHERE id = ?
+                ''', (doc_db_id,))
             
             conn.commit()
             conn.close()
             
-            print(f"Successfully deleted document {doc_id}")
+            print(f"Successfully deleted document {doc_id} from Drive and database")
             return True
             
         except Exception as e:
@@ -443,3 +453,101 @@ class GoogleDocsManager:
                 status_code=500,
                 detail=f"Failed to delete document: {str(e)}"
             )
+
+    def download_doc(self, doc_id: str) -> str:
+        """Download a Google Doc in its original format (markdown or PDF)"""
+        try:
+            print(f"Downloading document with ID: {doc_id}")
+            
+            # Create uploads directory if it doesn't exist
+            upload_dir = 'uploads'
+            os.makedirs(upload_dir, exist_ok=True)
+            
+            # Get the document metadata and check if it's a markdown file
+            conn = sqlite3.connect('medical_assessment.db')
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT type 
+                FROM documents 
+                WHERE google_doc_id = ?
+            ''', (doc_id,))
+            doc_type = cursor.fetchone()
+            conn.close()
+
+            # Get the document title
+            file = self.drive_service.files().get(
+                fileId=doc_id,
+                fields='name'
+            ).execute()
+            
+            # Remove .md extension if it exists in the original name
+            original_name = file['name'].replace('.md', '')
+            # Create a safe filename
+            safe_filename = re.sub(r'[^a-zA-Z0-9-_]', '_', original_name)
+            
+            if doc_type and doc_type[0] == 'MARKDOWN':
+                # Export as plain text for markdown
+                file_path = os.path.join(upload_dir, f"{safe_filename}.md")
+                response = self.drive_service.files().export(
+                    fileId=doc_id,
+                    mimeType='text/plain'
+                ).execute()
+            else:
+                # Export as PDF for other types
+                file_path = os.path.join(upload_dir, f"{safe_filename}.pdf")
+                response = self.drive_service.files().export(
+                    fileId=doc_id,
+                    mimeType='application/pdf'
+                ).execute()
+            
+            # Write the file
+            with open(file_path, 'wb') as f:
+                f.write(response)
+            
+            print(f"Successfully downloaded document to {file_path}")
+            return file_path
+            
+        except Exception as e:
+            print(f"Error downloading document: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to download document: {str(e)}"
+            )
+
+    def get_doc_details(self, doc_id: str) -> Optional[Dict[str, Any]]:
+        """Get details for a single Google Doc file"""
+        try:
+            print(f"Getting details for document ID: {doc_id}")
+            file = self.drive_service.files().get(
+                fileId=doc_id,
+                fields="id, name, webViewLink, createdTime, modifiedTime"
+            ).execute()
+
+            # Get status from database
+            conn = sqlite3.connect('medical_assessment.db')
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT status FROM documents WHERE google_doc_id = ?
+            ''', (doc_id,))
+            status_result = cursor.fetchone()
+            conn.close()
+
+            status = status_result[0] if status_result else 'CASE_REVIEW_PENDING'
+
+            # Combine details
+            doc_details = {
+                "id": file['id'],
+                "name": file['name'],
+                "webViewLink": file['webViewLink'],
+                "createdTime": file['createdTime'],
+                "modifiedTime": file['modifiedTime'],
+                "commentCount": 0,  # Default to 0 as per previous implementation
+                "status": status
+            }
+            print(f"Retrieved document details: {doc_details}")
+            return doc_details
+
+        except Exception as e:
+            print(f"Error getting document details: {str(e)}")
+            print(f"Full traceback: {traceback.format_exc()}")
+            return None

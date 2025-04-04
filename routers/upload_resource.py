@@ -20,7 +20,7 @@ class DocumentResponse(BaseModel):
     url: str
     description: Optional[str]
     created_at: str
-    topic_name: str
+    department_name: str
     google_doc_id: Optional[str] = None
     google_doc_link: Optional[str] = None
 
@@ -50,241 +50,118 @@ def validate_file_type(file: UploadFile) -> str:
 @router.post("/upload", response_model=DocumentResponse)
 async def upload_document(
     file: UploadFile = File(...),
-    topic_name: str = Form(...),
+    department_name: str = Form(...),
     title: str = Form(...),
     description: Optional[str] = Form(None)
 ):
     """
-    Upload a document file (PDF or Markdown) and associate it with a topic.
+    Upload a document file (PDF or Markdown) and associate it with a department.
     """
     conn = None
-    google_doc_id = None
-    google_doc_link = None
     try:
-        print(f"Starting upload process for file: {file.filename}, topic: {topic_name}, title: {title}")
+        # First validate file type
+        file_type = validate_file_type(file)
         
-        # Validate file type
-        try:
-            file_type = validate_file_type(file)
-            print(f"File type validated: {file_type}")
-        except Exception as e:
-            print(f"File type validation error: {str(e)}")
-            raise
+        # Check for duplicates immediately
+        conn = get_db_connection()
+        cursor = conn.cursor()
         
-        # Validate file extension
-        try:
-            allowed_extensions = {'.pdf', '.md', '.markdown'}
-            file_extension = Path(file.filename).suffix.lower()
-            if file_extension not in allowed_extensions:
-                error_msg = f"Invalid file extension. Allowed extensions are: {', '.join(allowed_extensions)}"
-                print(error_msg)
-                raise HTTPException(status_code=400, detail=error_msg)
-            print(f"File extension validated: {file_extension}")
-        except Exception as e:
-            if not isinstance(e, HTTPException):
-                print(f"File extension validation error: {str(e)}")
-                raise HTTPException(status_code=400, detail=str(e))
-            else:
-                raise
+        # Get department ID (case-insensitive)
+        cursor.execute('SELECT id FROM departments WHERE LOWER(name) = LOWER(?)', (department_name,))
+        department = cursor.fetchone()
+        if not department:
+            raise HTTPException(status_code=404, detail=f"Department '{department_name}' not found")
         
-        # Create upload directory if it doesn't exist
-        try:
-            upload_dir = Path("uploads")
-            upload_dir.mkdir(exist_ok=True)
-            print(f"Upload directory ensured: {upload_dir}")
-        except Exception as e:
-            print(f"Error creating upload directory: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Error creating upload directory: {str(e)}")
-        
-        # Generate unique filename while preserving extension
-        try:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            safe_filename = f"{timestamp}{file_extension}"
-            file_path = upload_dir / safe_filename
-            print(f"Generated safe filename: {safe_filename}")
-        except Exception as e:
-            print(f"Error generating filename: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Error generating filename: {str(e)}")
-        
-        # Save the file
-        try:
-            with file_path.open("wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
-            print(f"File saved to: {file_path}")
-        except Exception as e:
-            print(f"Error saving file: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Error saving file: {str(e)}")
-        
-        # For markdown files, validate and create Google Doc
+        # Check for duplicate title in the same department
+        cursor.execute('''
+            SELECT COUNT(*) as count 
+            FROM documents 
+            WHERE title = ? AND department_id = ?
+        ''', (title, department['id']))
+        if cursor.fetchone()['count'] > 0:
+            raise HTTPException(
+                status_code=400,
+                detail=f"A document with title '{title}' already exists in this department"
+            )
+            
+        # Now proceed with file processing
+        google_doc_id = None
+        google_doc_link = None
         if file_type == 'MARKDOWN':
             try:
-                print("Processing markdown file...")
-                with open(file_path, 'r', encoding='utf-8') as md_file:
-                    content = md_file.read()
-                    if not content.strip():
-                        print("Markdown file is empty")
-                        raise ValueError("Markdown file is empty")
-                    print(f"Read markdown content, length: {len(content)} characters")
-                    
-                    # Create Google Doc
-                    print("Initializing GoogleDocsManager...")
-                    docs_manager = GoogleDocsManager()
-                    print("Calling create_doc method...")
-                    google_doc_id, google_doc_link = docs_manager.create_doc(title, content)
-                    print(f"Created Google Doc with ID: {google_doc_id} and link: {google_doc_link}")
+                content = await file.read()
+                content_str = content.decode('utf-8')
+                if not content_str.strip():
+                    raise ValueError("Markdown file is empty")
+                
+                # Create Google Doc
+                docs_manager = GoogleDocsManager()
+                google_doc_id, google_doc_link = docs_manager.create_doc(title, content_str)
+                print(f"Created Google Doc with ID: {google_doc_id} and link: {google_doc_link}")
             except UnicodeDecodeError as e:
-                print(f"Unicode decode error: {str(e)}")
                 raise HTTPException(
                     status_code=400,
                     detail="Invalid markdown file encoding. Please use UTF-8."
                 )
-            except Exception as e:
-                print(f"Error processing markdown file: {str(e)}")
-                raise HTTPException(
-                    status_code=500,
-                    detail=f"Error processing markdown file: {str(e)}"
-                )
         
-        # Connect to database
-        try:
-            print("Connecting to database...")
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            print("Database connection established")
-        except Exception as e:
-            print(f"Database connection error: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Database connection error: {str(e)}")
+        # Insert into documents table
+        cursor.execute('''
+            INSERT INTO documents (title, type, url, description, google_doc_id, google_doc_link, department_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            title,
+            file_type,
+            google_doc_link if google_doc_link else f"/files/{file.filename}",
+            description,
+            google_doc_id,
+            google_doc_link,
+            department['id']
+        ))
         
-        # Get topic ID
-        try:
-            print(f"Looking up topic: {topic_name}")
-            cursor.execute('SELECT id FROM topics WHERE name = ?', (topic_name,))
-            topic = cursor.fetchone()
-            
-            if not topic:
-                print(f"Topic not found: {topic_name}")
-                raise HTTPException(status_code=404, detail=f"Topic '{topic_name}' not found")
-            print(f"Found topic with ID: {topic['id']}")
-        except Exception as e:
-            if not isinstance(e, HTTPException):
-                print(f"Topic lookup error: {str(e)}")
-                raise HTTPException(status_code=500, detail=f"Topic lookup error: {str(e)}")
-            else:
-                raise
-        
-        # Insert into documents table with proper URL format
-        try:
-            print("Inserting document into database...")
-            cursor.execute('''
-                INSERT INTO documents (title, type, url, description, google_doc_id, google_doc_link)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (
-                title,
-                file_type,
-                f"/files/{safe_filename}",
-                description,
-                google_doc_id,
-                google_doc_link
-            ))
-            
-            document_id = cursor.lastrowid
-            print(f"Document inserted with ID: {document_id}")
-        except Exception as e:
-            print(f"Document insertion error: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Document insertion error: {str(e)}")
-        
-        # Create topic-document association
-        try:
-            print(f"Creating topic-document association: topic_id={topic['id']}, document_id={document_id}")
-            cursor.execute('''
-                INSERT INTO topic_documents (topic_id, document_id)
-                VALUES (?, ?)
-            ''', (topic['id'], document_id))
-            print("Topic-document association created")
-        except Exception as e:
-            print(f"Topic-document association error: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Topic-document association error: {str(e)}")
+        document_id = cursor.lastrowid
         
         # Get the complete document data
-        try:
-            print(f"Retrieving complete document data for ID: {document_id}")
-            cursor.execute('''
-                SELECT 
-                    d.id,
-                    d.title,
-                    d.type,
-                    d.url,
-                    d.description,
-                    d.created_at,
-                    d.google_doc_id,
-                    d.google_doc_link,
-                    t.name as topic_name
-                FROM documents d
-                JOIN topic_documents td ON d.id = td.document_id
-                JOIN topics t ON td.topic_id = t.id
-                WHERE d.id = ?
-            ''', (document_id,))
-            
-            document = cursor.fetchone()
-            print("Document data retrieved")
-        except Exception as e:
-            print(f"Document retrieval error: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Document retrieval error: {str(e)}")
+        cursor.execute('''
+            SELECT 
+                d.id,
+                d.title,
+                d.type,
+                d.url,
+                d.description,
+                d.created_at,
+                d.google_doc_id,
+                d.google_doc_link,
+                dep.name as department_name
+            FROM documents d
+            JOIN departments dep ON d.department_id = dep.id
+            WHERE d.id = ?
+        ''', (document_id,))
         
-        try:
-            print("Committing database transaction...")
-            conn.commit()
-            print("Database transaction committed")
-        except Exception as e:
-            print(f"Database commit error: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Database commit error: {str(e)}")
+        document = cursor.fetchone()
+        conn.commit()
         
-        try:
-            print("Closing database connection...")
-            conn.close()
-            print("Database connection closed")
-        except Exception as e:
-            print(f"Database close error: {str(e)}")
-            # Don't raise an exception here, as we've already committed
-        
-        print("Preparing response...")
-        response = DocumentResponse(
+        return DocumentResponse(
             id=document['id'],
             title=document['title'],
             type=document['type'],
             url=document['url'],
             description=document['description'],
             created_at=document['created_at'],
-            topic_name=document['topic_name'],
+            department_name=document['department_name'],
             google_doc_id=document['google_doc_id'],
             google_doc_link=document['google_doc_link']
         )
-        print("Response prepared, returning to client")
-        return response
 
     except Exception as e:
-        print(f"CRITICAL ERROR in upload_document: {str(e)}")
         if conn:
-            try:
-                conn.close()
-                print("Database connection closed after error")
-            except Exception as close_error:
-                print(f"Error closing database connection: {str(close_error)}")
-        
-        # Clean up file if database operation failed
-        if 'file_path' in locals() and file_path.exists():
-            try:
-                file_path.unlink()
-                print(f"Cleaned up file: {file_path}")
-            except Exception as cleanup_error:
-                print(f"Error cleaning up file: {str(cleanup_error)}")
-        
+            conn.rollback()
+            conn.close()
         if isinstance(e, HTTPException):
-            print(f"Raising HTTPException: {e.detail}")
             raise
-        else:
-            print(f"Converting exception to HTTPException: {str(e)}")
-            raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if conn:
+            conn.close()
 
 @router.get("/topic/{topic_name}", response_model=List[DocumentResponse])
 async def get_topic_documents(topic_name: str):
@@ -309,7 +186,7 @@ async def get_topic_documents(topic_name: str):
             FROM documents d
             JOIN topic_documents td ON d.id = td.document_id
             JOIN topics t ON td.topic_id = t.id
-            WHERE t.name = ?
+            WHERE LOWER(t.name) = LOWER(?)
             ORDER BY d.created_at DESC
         ''', (topic_name,))
         

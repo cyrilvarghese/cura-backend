@@ -13,6 +13,7 @@ from routers.case_creator.helpers.save_data_to_file import save_differential_dia
 from pathlib import Path
 from pydantic import BaseModel
 import uuid
+import re
 
 # Load environment variables
 load_dotenv()
@@ -37,25 +38,53 @@ def load_prompt(file_path: str) -> str:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Meta prompt file not found.")
 
+class CreateDiffDiagnosisRequest(BaseModel):
+    file_name: str
+    case_id: Optional[int] = None
+
 @router.post("/create")
-async def create_differential_diagnosis(
-    file: UploadFile = File(...), 
-    case_id: Optional[int] = Form(None)
-):
+async def create_differential_diagnosis(request: CreateDiffDiagnosisRequest):
     """Create differential diagnosis based on a case document."""
     try:
+        # Get the uploads directory path
+        uploads_dir = Path("uploads")
+        
+        # Convert the incoming filename to a safe version by:
+        # - Keeping only alphanumeric characters, hyphens, underscores, and dots
+        # - Replacing all other characters with underscores
+        # This matches the same safe filename convention used when files are uploaded
+        filename = re.sub(r'[^a-zA-Z0-9-_.]', '_', request.file_name)
+        
+        # Construct the full file path in the uploads directory
+        file_path = uploads_dir / filename
+
+        # Check if the file exists, if not return a 404 error
+        if not file_path.exists():
+            raise HTTPException(status_code=404, detail=f"File not found in uploads directory: {filename}")
+
+        class FileWrapper:
+            def __init__(self, filepath):
+                self.filename = Path(filepath).name
+                self.file = open(filepath, 'rb')
+
+        try:
+            file_wrapper = FileWrapper(file_path)
+            case_document = extract_text_from_document(file_wrapper)
+            file_wrapper.file.close()
+        except IOError as e:
+            raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
+
         # Load the meta prompt
         prompt = load_prompt("prompts/differential_diagnosis.txt")
         
         # Escape curly braces in the meta prompt
         prompt = prompt.replace("{", "{{").replace("}", "}}")
         
-        # Extract text from the uploaded file
-        case_document = extract_text_from_document(file)
-        
         # If no case_id provided, get the next available one
-        if case_id is None:
+        if request.case_id is None:
             case_id = get_next_case_id()
+        else:
+            case_id = request.case_id
         
         # Define the chat prompt template
         prompt_template = ChatPromptTemplate.from_messages([

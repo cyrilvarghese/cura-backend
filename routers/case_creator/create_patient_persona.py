@@ -12,6 +12,7 @@ from utils.case_utils import get_next_case_id
 from utils.pdf_utils import extract_text_from_document
 from pydantic import BaseModel
 from routers.case_creator.helpers.save_data_to_file import save_patient_persona
+import re
 
 # Load environment variables
 load_dotenv()
@@ -31,10 +32,11 @@ model = ChatOpenAI(
 class PatientPersonaRequest(BaseModel):
     persona_prompt: str
 
-class CreatePersonaFromUrlRequest(BaseModel):
-    file_url: str
-    case_id: Any
+class CreatePersonaRequest(BaseModel):
+    file_name: str
     department: str
+    case_id: Any
+   
 
 def load_meta_prompt(file_path: str) -> str:
     """Load the meta prompt from a specified file."""
@@ -81,7 +83,7 @@ def save_case_cover(case_id: Any, filename: str, department: str) -> str:
     return case_cover_path
 
 def create_case_name(filename: str) -> str:
-    """Generate a case name from the filename, replacing spaces with underscores."""
+    """Generate a cause name from the filename, replacing spaces with underscores."""
     base_name = os.path.splitext(os.path.basename(filename))[0]
     return base_name.replace(" ", "_")
 
@@ -129,32 +131,25 @@ async def process_patient_persona(case_document: str, case_id: Any, filename: st
         print(f"[{error_timestamp}] ❌ Error in process_patient_persona: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+ 
+
 @router.post("/create")
-async def create_patient_persona(
-    file: UploadFile = File(...), 
-    case_id: Optional[Any] = Form(None)
-):
-    """Create a patient persona from an uploaded file."""
+async def create_patient_persona(request: CreatePersonaRequest):
+    """Create a patient persona from a file name."""
     try:
-        case_document = extract_text_from_document(file)
-        if case_id is None:
-            case_id = get_next_case_id()
-        
-        return await process_patient_persona(case_document, case_id, file.filename)
-
-    except Exception as e:
-        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[{error_timestamp}] ❌ Error in create_patient_persona: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.post("/create-from-url")
-async def create_patient_persona_from_url(request: CreatePersonaFromUrlRequest):
-    """Create a patient persona from a file URL."""
-    try:
+        # Get the uploads directory path
         uploads_dir = Path("uploads")
-        filename = Path(request.file_url).name
+        
+        # Convert the incoming filename to a safe version by:
+        # - Keeping only alphanumeric characters, hyphens, underscores, and dots
+        # - Replacing all other characters with underscores
+        # This matches the same safe filename convention used when files are uploaded
+        filename = re.sub(r'[^a-zA-Z0-9-_.]', '_', request.file_name)
+        
+        # Construct the full file path in the uploads directory
         file_path = uploads_dir / filename
 
+        # Check if the file exists, if not return a 404 error
         if not file_path.exists():
             raise HTTPException(status_code=404, detail=f"File not found in uploads directory: {filename}")
 

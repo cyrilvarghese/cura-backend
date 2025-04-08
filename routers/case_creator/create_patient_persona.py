@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Optional, Any
 from utils.case_utils import get_next_case_id
 from utils.pdf_utils import extract_text_from_document
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 from routers.case_creator.helpers.save_data_to_file import save_patient_persona
 import re
 
@@ -33,10 +33,9 @@ class PatientPersonaRequest(BaseModel):
     persona_prompt: str
 
 class CreatePersonaRequest(BaseModel):
-    file_name: str
-    department: str
-    case_id: Any
-   
+    file_name: Optional[str] = None
+    department: Optional[str] = None
+    case_id: Optional[Any] = None
 
 def load_meta_prompt(file_path: str) -> str:
     """Load the meta prompt from a specified file."""

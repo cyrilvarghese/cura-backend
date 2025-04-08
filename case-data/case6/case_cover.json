@@ -14,6 +14,7 @@
     "title": "High fever and persistent cough",
     "quote": "My child has had a high fever for days.",
     "image_url": "/case-images/case6/cover_image.png?v=1737771765",
+    "cover_image_prompt": "A clinical photo of a child with a widespread red, maculopapular rash starting from the face and spreading downward. Koplik's spots visible in the mouth, and the patient appears ill with fever.",
     "department": "Internal Medicine",
     "published": true
 }

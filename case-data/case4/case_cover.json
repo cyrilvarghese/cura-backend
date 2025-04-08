@@ -4,6 +4,7 @@
     "title": "Patient presenting with a persistent itchy rash and blisters.",
     "quote": "I've had this intensely itchy rash for a long time.",
     "image_url": "/case-images/case4/cover_image.png",
+    "cover_image_prompt": "A close-up clinical image of tense fluid-filled blisters and erythematous plaques on the skin. The blisters vary in size and some areas show crusting and excoriation from scratching.",
     "differentials": [
         "Bullous Pemphigoid",
         "Pemphigus Vulgaris",

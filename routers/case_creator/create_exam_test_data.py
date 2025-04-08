@@ -62,7 +62,8 @@ class CreateExamTestDataRequest(BaseModel):
 async def create_exam_test_data(request: CreateExamTestDataRequest):
     """Create exam test data based on a meta prompt and a case document."""
     try:
-        # Get the uploads directory path
+        print(f"[{datetime.now()}] Starting exam test data creation for file: {request.file_name}, case_id: {request.case_id}")
+        
         uploads_dir = Path("uploads")
         
         # Convert the incoming filename to a safe version by:
@@ -74,8 +75,10 @@ async def create_exam_test_data(request: CreateExamTestDataRequest):
         # Construct the full file path in the uploads directory
         file_path = uploads_dir / filename
 
-        # Check if the file exists, if not return a 404 error
+        print(f"[{datetime.now()}] Attempting to read file from: {file_path}")
+
         if not file_path.exists():
+            print(f"[{datetime.now()}] ❌ File not found: {file_path}")
             raise HTTPException(status_code=404, detail=f"File not found in uploads directory: {filename}")
 
         class FileWrapper:
@@ -87,12 +90,14 @@ async def create_exam_test_data(request: CreateExamTestDataRequest):
             file_wrapper = FileWrapper(file_path)
             case_document = extract_text_from_document(file_wrapper)
             file_wrapper.file.close()
+            print(f"[{datetime.now()}] ✅ Successfully extracted text from document")
         except IOError as e:
+            print(f"[{datetime.now()}] ❌ Failed to read file: {str(e)}")
             raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
 
-        # Load the meta prompt from the specified file
+        print(f"[{datetime.now()}] Loading meta prompt...")
         prompt = load_prompt("prompts/exam_test_data2.txt")
-
+        
         # Escape curly braces in the meta prompt
         prompt = prompt.replace("{", "{{").replace("}", "}}")
         
@@ -102,21 +107,22 @@ async def create_exam_test_data(request: CreateExamTestDataRequest):
             ("human", "Case Details:\n{case_document}")
         ])
         
-        # Call the model with the constructed prompt
+        print(f"[{datetime.now()}] Calling AI model...")
         response = model.invoke(prompt_template.invoke({
             "case_document": case_document 
-        }))  # Pass the variables to fill the placeholders
+        }))
+        print(f"[{datetime.now()}] ✅ Received response from AI model")
+        
+        print(f"[{datetime.now()}] Processing AI response...")
+        response_data = response.content
+        cleaned_response = json.loads(extract_code_blocks(response_data)[0])
+        print(f"[{datetime.now()}] ✅ Successfully processed AI response")
         
         # Parse the response content into structured JSON
         structured_response = {
             "physical_exam": {},  # Placeholder for physical examination data
             "lab_test": {}        # Placeholder for lab test data
         }
-        
-        # Assuming the response content is in JSON format
-        response_data = response.content
-
-        cleaned_response = json.loads(extract_code_blocks(response_data)[0])
         
         # Populate the structured response
         if isinstance(cleaned_response, dict):
@@ -129,7 +135,6 @@ async def create_exam_test_data(request: CreateExamTestDataRequest):
         
         # Format response as a dict
         formatted_response = {
-         
             "case_id": request.case_id,
             "content": structured_response,
             "file_path": result["file_path"],
@@ -137,9 +142,12 @@ async def create_exam_test_data(request: CreateExamTestDataRequest):
             "type": "ai"
         }
         
+        print(f"[{datetime.now()}] ✅ Successfully completed exam test data creation")
         return formatted_response
 
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{error_timestamp}] ❌ Error in create_exam_test_data: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+        print(f"[{error_timestamp}] ❌ Error type: {type(e).__name__}")
+        print(f"[{error_timestamp}] ❌ Error details: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

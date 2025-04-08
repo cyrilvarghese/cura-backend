@@ -4,6 +4,7 @@
     "title": "Oral ulcers and skin lesions",
     "quote": "It hurts to eat because of these sores in my mouth.",
     "image_url": "/case-images/case5/cover_image.png?v=1736101034",
+    "cover_image_prompt": "A clinical photo showing painful erosions and ulcers in the oral mucosa, along with flaccid blisters and erosions on the skin. The lesions appear raw and some show crusting.",
     "department": "Dermatology",
     "published": true
 }

@@ -13,6 +13,7 @@
     "title": "High fever and fatigue in patient",
     "quote": "I've had this really high fever for days.",
     "image_url": "/case-images/case7/cover_image.png?v=1737773263",
+    "cover_image_prompt": "A clinical photo of a patient with high fever showing signs of malaria including pallor, mild jaundice, and general fatigue. The patient appears acutely ill on a hospital bed.",
     "department": "Internal Medicine",
     "published": true
 }

@@ -1,83 +1,83 @@
 {
     "physical_exam": {
         "Skin Examination": {
-            "purpose": "Assess inflamed plaques or patches",
+            "purpose": "Assess erythema and edema of existing skin lesions",
             "findings": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Erythematous, swollen skin lesions over the arms, tenderness present."
+                        "content": "Erythematous, swollen skin lesions over the arms; tenderness noted."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/inflamed_skin.jpg",
+                            "url": "https://example.com/skin_exam_image.jpg",
                             "altText": "Inflamed skin lesions",
-                            "caption": "Visible erythematous patches on forearm."
+                            "caption": "Inflamed patches due to leprosy reaction."
                         }
                     }
                 ]
             },
             "status": "completed",
-            "interpretation": "Consistent with Type 1 leprosy reaction."
+            "interpretation": "Consistent with Type 1 Lepra Reaction."
         },
-        "Nerve Palpation": {
-            "purpose": "Assess peripheral nerve involvement",
+        "Palpation of Peripheral Nerves": {
+            "purpose": "Assess ulnar and radial cutaneous nerve tenderness",
             "findings": {
                 "type": "text",
-                "content": "Ulnar nerve found to be thickened and tender on the right arm."
+                "content": "Right ulnar nerve thickened and tender, significant tenderness upon palpation."
             },
             "status": "completed",
-            "interpretation": "Indicates acute neuritis affecting the ulnar nerve."
+            "interpretation": "Indicative of acute neuritis."
         },
         "Muscle Strength Testing": {
-            "purpose": "Evaluate grip strength and hand function",
+            "purpose": "Evaluate muscle strength in the hand",
             "findings": {
                 "type": "text",
-                "content": "Weak grip strength noted on right hand, difficulty in opposing thumb."
+                "content": "Weak grip strength on the right hand; decreased strength in thumb and finger abduction."
             },
             "status": "completed",
-            "interpretation": "Suggests motor weakness due to ulnar nerve involvement."
+            "interpretation": "Suggests motor involvement due to ulnar nerve affected."
         },
-        "Reflexes Examination": {
-            "purpose": "Assess reflexes in ulnar nerve distribution",
+        "Reflexes": {
+            "purpose": "Evaluate reflexes in ulnar nerve distribution",
             "findings": {
                 "type": "text",
-                "content": "Ulnar reflexes are diminished on the right side."
+                "content": "Reduced reflexes in the right hand; no hyperreflexia noted."
             },
             "status": "completed",
-            "interpretation": "Indicates potential nerve damage."
+            "interpretation": "Consistent with ulnar nerve involvement."
         },
         "Sensory Examination": {
-            "purpose": "Evaluate sensory loss over affected area",
+            "purpose": "Assess sensory function using pinprick and temperature",
             "findings": {
                 "type": "text",
-                "content": "Reduced pinprick and temperature sensation over ulnar distribution on the right."
+                "content": "Loss of pinprick and temperature sensation over right ulnar distribution."
             },
             "status": "completed",
-            "interpretation": "Consistent with sensory loss due to ulnar neuropathy."
+            "interpretation": "Indicates sensory nerve damage due to leprosy."
         },
-        "Eye and Facial Examination": {
+        "Eye and Facial Exam": {
             "purpose": "Check for early cranial nerve involvement",
             "findings": {
                 "type": "text",
-                "content": "No visual impairments or facial nerve involvement observed."
+                "content": "No signs of eye involvement or facial nerve impairment; normal eye exam."
             },
             "status": "completed",
-            "interpretation": "Normal ocular and facial examination results."
+            "interpretation": "No evidence of cranial nerve involvement at this time."
         }
     },
     "lab_test": {
-        "Slit-Skin Smear": {
-            "testName": "Slit-Skin Smear",
-            "purpose": "Assess bacterial index (BI) for leprosy",
+        "Slit-skin Smear": {
+            "testName": "Slit-skin Smear",
+            "purpose": "Assess bacterial index (BI) in leprosy",
             "results": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Bacterial index results show low BI consistent with borderline tuberculoid leprosy."
+                        "content": "Low bacterial index consistent with borderline tuberculoid case."
                     },
                     {
                         "type": "image",
@@ -89,35 +89,35 @@
                     }
                 ]
             },
-            "interpretation": "Supports diagnosis of borderline leprosy.",
+            "interpretation": "Supports diagnosis of borderline tuberculoid leprosy.",
             "status": "completed"
         },
         "Skin Biopsy": {
             "testName": "Skin Biopsy",
-            "purpose": "Confirm granulomatous inflammation typical of Type 1 reactions",
+            "purpose": "Confirm granulomatous inflammation and perivascular lymphocytic infiltration",
             "results": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Biopsy shows granulomatous inflammation, dermal edema, and perivascular lymphocytic infiltrate."
+                        "content": "Histological examination shows granulomatous inflammation, dermal edema, and perivascular lymphocytic infiltration."
                     },
                     {
                         "type": "image",
                         "content": {
                             "url": "https://example.com/skin_biopsy.jpg",
                             "altText": "Skin biopsy result",
-                            "caption": "Histological examination showing typical findings in Type 1 reactions."
+                            "caption": "Biopsy result indicating Type 1 Reaction."
                         }
                     }
                 ]
             },
-            "interpretation": "Findings confirm Type 1 leprosy reaction.",
+            "interpretation": "Confirms the diagnosis of Type 1 Lepra Reaction.",
             "status": "completed"
         },
         "CBC": {
-            "testName": "Complete Blood Count",
-            "purpose": "Establish baseline for infection or leukocytosis before steroid treatment",
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "Baseline assessment for infection and leukocytosis",
             "results": {
                 "type": "table",
                 "content": {
@@ -130,8 +130,8 @@
                     "rows": [
                         [
                             "WBC",
-                            "8.0 x10^9/L",
-                            "4.0-11.0 x10^9/L",
+                            "9.0 x10^9/L",
+                            "4.0-10.0 x10^9/L",
                             "NORMAL"
                         ],
                         [
@@ -142,19 +142,19 @@
                         ],
                         [
                             "Platelets",
-                            "300 x10^9/L",
+                            "250 x10^9/L",
                             "150-450 x10^9/L",
                             "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "Normal findings indicating no acute infection.",
+            "interpretation": "No significant deviations, baseline values are normal.",
             "status": "completed"
         },
-        "Liver Function Tests": {
+        "Liver Function Tests (LFT)": {
             "testName": "Liver Function Tests",
-            "purpose": "Assess baseline liver function before initiating steroid therapy",
+            "purpose": "Evaluate hepatic safety prior to steroids",
             "results": {
                 "type": "table",
                 "content": {
@@ -167,31 +167,37 @@
                     "rows": [
                         [
                             "ALT",
-                            "20 U/L",
-                            "0-40 U/L",
+                            "25 U/L",
+                            "10-40 U/L",
                             "NORMAL"
                         ],
                         [
                             "AST",
-                            "25 U/L",
-                            "0-40 U/L",
+                            "28 U/L",
+                            "15-40 U/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Alkaline Phosphatase",
+                            "70 U/L",
+                            "30-115 U/L",
                             "NORMAL"
                         ],
                         [
                             "Bilirubin",
-                            "0.5 mg/dL",
+                            "0.8 mg/dL",
                             "0.1-1.2 mg/dL",
                             "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "Liver function is normal, safe to proceed with steroids.",
+            "interpretation": "All values within normal limits, safe for steroid initiation.",
             "status": "completed"
         },
-        "Renal Function Tests": {
+        "Renal Function Tests (RFT)": {
             "testName": "Renal Function Tests",
-            "purpose": "Evaluate baseline renal function before steroid therapy",
+            "purpose": "Rule out renal compromise before steroid administration",
             "results": {
                 "type": "table",
                 "content": {
@@ -204,60 +210,51 @@
                     "rows": [
                         [
                             "Creatinine",
-                            "0.8 mg/dL",
+                            "0.9 mg/dL",
                             "0.6-1.2 mg/dL",
                             "NORMAL"
                         ],
                         [
-                            "Urea",
+                            "BUN",
                             "15 mg/dL",
                             "7-20 mg/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "Uric Acid",
+                            "5.5 mg/dL",
+                            "3.5-7.2 mg/dL",
                             "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "Renal function is within normal limits.",
+            "interpretation": "Renal function is normal, appropriate for steroid therapy.",
             "status": "completed"
         },
         "Fasting Glucose": {
             "testName": "Fasting Glucose",
-            "purpose": "Assess risk of steroid-induced hyperglycemia",
+            "purpose": "Screen for potential steroid-induced hyperglycemia",
             "results": {
-                "type": "table",
-                "content": {
-                    "headers": [
-                        "Test",
-                        "Result",
-                        "Reference Range",
-                        "Status"
-                    ],
-                    "rows": [
-                        [
-                            "Glucose",
-                            "85 mg/dL",
-                            "70-100 mg/dL",
-                            "NORMAL"
-                        ]
-                    ]
-                }
+                "type": "text",
+                "content": "Fasting glucose level is 85 mg/dL (normal range)."
             },
-            "interpretation": "Glucose levels are normal; no immediate risk identified.",
+            "interpretation": "No risk for hyperglycemia with steroid initiation.",
             "status": "completed"
         },
         "Nerve Conduction Study": {
             "testName": "Nerve Conduction Study",
-            "purpose": "Evaluate nerve function and severity of neuritis",
+            "purpose": "Document nerve involvement in the case of neuritis",
             "results": {
                 "type": "text",
-                "content": "Nerve conduction velocity reduced on the right side indicating acute neuritis."
+                "content": "Reduced conduction velocity noted in the right ulnar nerve, indicative of acute neuritis."
             },
-            "interpretation": "Results consistent with conduction block due to ulnar neuritis.",
+            "interpretation": "Suggestive of significant ulnar nerve impairment.",
             "status": "completed"
         },
         "ESR and CRP": {
             "testName": "ESR and CRP",
-            "purpose": "Evaluate inflammation levels",
+            "purpose": "Confirm inflammatory response",
             "results": {
                 "type": "table",
                 "content": {
@@ -270,36 +267,36 @@
                     "rows": [
                         [
                             "ESR",
-                            "25 mm/hr",
+                            "30 mm/hr",
                             "0-20 mm/hr",
                             "HIGH"
                         ],
                         [
                             "CRP",
-                            "12 mg/L",
-                            "<5 mg/L",
+                            "16 mg/L",
+                            "0-3 mg/L",
                             "HIGH"
                         ]
                     ]
                 }
             },
-            "interpretation": "Elevated levels indicate ongoing inflammation.",
+            "interpretation": "Elevated levels indicating an ongoing inflammatory process.",
             "status": "completed"
         },
         "HIV Test": {
             "testName": "HIV Test",
-            "purpose": "Baseline screening in all leprosy cases",
+            "purpose": "Baseline assessment in all leprosy cases",
             "results": {
                 "type": "text",
-                "content": "HIV test result is negative."
+                "content": "HIV Test: Negative."
             },
-            "interpretation": "No evidence of HIV infection.",
+            "interpretation": "Baseline HIV testing completed, negative result.",
             "status": "completed"
         }
     },
     "validation": {
         "all_tests_generated": true,
-        "expected_count": 7,
-        "actual_count": 7
+        "expected_count": 12,
+        "actual_count": 12
     }
 }

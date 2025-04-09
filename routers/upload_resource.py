@@ -7,6 +7,7 @@ from datetime import datetime
 import shutil
 from pathlib import Path
 from utils.google_docs import GoogleDocsManager
+import re
 
 router = APIRouter(
     prefix="/documents",
@@ -61,7 +62,8 @@ async def upload_document(
     try:
         # First validate file type
         file_type = validate_file_type(file)
-        
+        safe_title = re.sub(r'[^a-zA-Z0-9-_]', '_', title).replace('_md', '.md')
+            
         # Check for duplicates immediately
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -77,7 +79,7 @@ async def upload_document(
             SELECT COUNT(*) as count 
             FROM documents 
             WHERE title = ? AND department_id = ?
-        ''', (title, department['id']))
+        ''', (safe_title, department['id']))
         if cursor.fetchone()['count'] > 0:
             raise HTTPException(
                 status_code=400,
@@ -85,6 +87,8 @@ async def upload_document(
             )
             
         # Now proceed with file processing
+          
+
         google_doc_id = None
         google_doc_link = None
         if file_type == 'MARKDOWN':
@@ -94,9 +98,12 @@ async def upload_document(
                 if not content_str.strip():
                     raise ValueError("Markdown file is empty")
                 
+                # Remove .md extension and create safe title
+                safe_title = re.sub(r'[^a-zA-Z0-9-_]', '_', title).replace('_md', '.md')
+                
                 # Create Google Doc
                 docs_manager = GoogleDocsManager()
-                google_doc_id, google_doc_link = docs_manager.create_doc(title, content_str)
+                google_doc_id, google_doc_link = docs_manager.create_doc(safe_title, content_str)
                 print(f"Created Google Doc with ID: {google_doc_id} and link: {google_doc_link}")
             except UnicodeDecodeError as e:
                 raise HTTPException(
@@ -109,7 +116,7 @@ async def upload_document(
             INSERT INTO documents (title, type, url, description, google_doc_id, google_doc_link, department_id)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         ''', (
-            title,
+            safe_title,
             file_type,
             google_doc_link if google_doc_link else f"/files/{file.filename}",
             description,

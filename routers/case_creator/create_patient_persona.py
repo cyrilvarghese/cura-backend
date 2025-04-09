@@ -34,7 +34,7 @@ class PatientPersonaRequest(BaseModel):
 
 class CreatePersonaRequest(BaseModel):
     file_name: Optional[str] = None
-    department: Optional[str] = None
+    department: Optional[str] = None #to fix make this dept ID instead of name
     case_id: Optional[Any] = None
 
 def load_meta_prompt(file_path: str) -> str:
@@ -84,7 +84,7 @@ def save_case_cover(case_id: Any, filename: str, department: str) -> str:
 def create_case_name(filename: str) -> str:
     """Generate a cause name from the filename, replacing spaces with underscores."""
     base_name = os.path.splitext(os.path.basename(filename))[0]
-    return base_name.replace(" ", "_")
+    return base_name.replace(" ", "_") + ".md" #.md is used to locate the physical file
 
 async def process_patient_persona(case_document: str, case_id: Any, filename: str, department: str):
     """Common processing logic for both routes"""

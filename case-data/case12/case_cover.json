@@ -1,0 +1,17 @@
+{
+    "case_name": "Master_Clinical_Case__Leprosy_Type_1_Reaction.md",
+    "case_id": "12",
+    "department": "Dermatology",
+    "published": false,
+    "differentials": [
+        "Type 1 Lepra Reaction",
+        "Nerve abscess",
+        "ENL (Type 2 Reaction \u2013 associated with systemic symptoms and new nodules)",
+        "Cellulitis (usually has systemic signs, no nerve involvement)",
+        "Contact dermatitis (itchy, no nerve symptoms)"
+    ],
+    "last_updated": "2025-04-09T09:38:28.147172",
+    "title": "skin lesions and nerve pain on hand",
+    "quote": "My right hand has this burning pain, especially around my wrist.",
+    "image_url": "/case-images/case12/cover_image.png?v=1744193708"
+}

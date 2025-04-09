@@ -89,7 +89,9 @@ async def call_image_gen(case_id: str, image_prompt: str, hasPrompt: bool = Fals
         await download_image(dalle_image_url, image_path)
         server_image_url = f"/case-images/case{case_id}/cover_image.png?v={timestamp}"
     else:
-        server_image_url = f"{case_cover_data['image_url']}?v={timestamp}"
+        # Replace existing timestamp instead of appending
+        base_url = case_cover_data['image_url'].split('?')[0]
+        server_image_url = f"{base_url}?v={timestamp}"
     
     return server_image_url
 

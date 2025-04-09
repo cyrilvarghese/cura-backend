@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 import json
 import os
+
+from routers.curriculum import get_db_connection
 
 case_details_router = APIRouter()
 
@@ -53,6 +55,21 @@ async def get_case_details(case_id: str):
                 print(f"Persona content length: {len(persona_text)} characters")
         else:
             print(f"WARNING: Patient persona not found at: {persona_file_path}")
+
+        # Get Google Doc link from database
+        db = get_db_connection()  # You'll need to implement this
+        cursor = db.cursor()
+        cursor.execute("""
+            SELECT google_doc_link 
+            FROM documents 
+            WHERE title = ? 
+        """, (case_cover_data['case_name'],))
+        result = cursor.fetchone()
+        
+        if result:
+            case_cover_data['google_doc_link'] = result[0]
+        else:
+            case_cover_data['google_doc_link'] = None
 
         return {
             "content": {

@@ -6,5 +6,13 @@
     "title": "skin lesions and nerve pain on right hand",
     "quote": "It's hard to grip things; my hand feels weak.",
     "image_url": "/case-images/case15/cover_image.png?v=1744250381",
-    "image_prompt": "A 31-year-old male agricultural worker named Ravi Kumar, sitting in a well-lit clinical examination room. Ravi has medium brown skin and short, slightly disheveled black hair. He wears a simple cotton shirt and traditional lungi, typical of rural South India. His expression is a mix of worry and concern, with slight furrows on his brow. Ravi is leaning forward on the examination bed, staring down at his right hand, which he gently grips with his left. The hand shows signs of swelling but without direct emphasis on lesions. His posture suggests tension, reflecting his discomfort. The room features a clean examination bed, a bulletin board with health posters in Tamil, a chart with agricultural notes visible in the background, and a cricket bat leaning against the wall, hinting at his hobbies and daily life context. The lighting is soft and warm, creating a calm atmosphere while a nurse stands off to the side, preparing for Ravi's consultation."
+    "image_prompt": "A 31-year-old male agricultural worker named Ravi Kumar, sitting in a well-lit clinical examination room. Ravi has medium brown skin and short, slightly disheveled black hair. He wears a simple cotton shirt and traditional lungi, typical of rural South India. His expression is a mix of worry and concern, with slight furrows on his brow. Ravi is leaning forward on the examination bed, staring down at his right hand, which he gently grips with his left. The hand shows signs of swelling but without direct emphasis on lesions. His posture suggests tension, reflecting his discomfort. The room features a clean examination bed, a bulletin board with health posters in Tamil, a chart with agricultural notes visible in the background, and a cricket bat leaning against the wall, hinting at his hobbies and daily life context. The lighting is soft and warm, creating a calm atmosphere while a nurse stands off to the side, preparing for Ravi's consultation.",
+    "differentials": [
+        "Type 1 Lepra Reaction",
+        "Nerve abscess",
+        "ENL (Type 2 Reaction)",
+        "Cellulitis",
+        "Contact dermatitis"
+    ],
+    "last_updated": "2025-04-10T02:44:12.265232"
 }

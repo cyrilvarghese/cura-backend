@@ -8,6 +8,8 @@ import shutil
 from pathlib import Path
 from utils.google_docs import GoogleDocsManager
 import re
+from auth.auth_api import get_supabase_client  # Import the function we created earlier
+from utils.supabase_document_ops import SupabaseDocumentOps
 
 router = APIRouter(
     prefix="/documents",
@@ -57,18 +59,6 @@ def validate_file_type(file: UploadFile) -> str:
         detail="Invalid file type. Only PDF (.pdf) and Markdown (.md, .markdown) files are allowed."
     )
 
-
-
-class CaseFileRequest(BaseModel):
-    file: UploadFile
-    title: str
-    description: Optional[str] = None
-
-class UploadDocumentRequest(BaseModel):
-    case_files: list[CaseFileRequest]
-    department_name: str
-
-
 @router.post("/upload", response_model=List[DocumentResponse])
 async def upload_document(
     files: List[UploadFile] = File(...),
@@ -76,128 +66,95 @@ async def upload_document(
     descriptions: List[str] = Form(None),
     department_name: str = Form(...)
 ):
-    """
-    Upload multiple documents and associate them with a department.
-    """
-    conn = None
-    results = []
+    """Upload multiple documents and optionally convert to Google Docs"""
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        # Get department ID from name
+        department_id = await SupabaseDocumentOps.get_department_id(department_name)
         
-        # Get department ID (case-insensitive)
-        cursor.execute('SELECT id FROM departments WHERE LOWER(name) = LOWER(?)', (department_name,))
-        department = cursor.fetchone()
-        if not department:
-            raise HTTPException(status_code=404, detail=f"Department '{department_name}' not found")
+        # Create uploads directory if it doesn't exist
+        upload_dir = Path("uploads")
+        upload_dir.mkdir(exist_ok=True)
         
-        for file, title, description in zip(files, titles, descriptions):
+        responses = []
+        uploaded_files = []
+        
+        # Process each file
+        for file, title, description in zip(files, titles, descriptions or [None] * len(files)):
             try:
-                content = await file.read()
-                content_str = content.decode('utf-8')
-                if not content_str.strip():
-                    raise ValueError("File content is empty")
-                
-                # Validate file type
-                file_type = validate_file_type(file)
-                safe_title = re.sub(r'[^a-zA-Z0-9-_]', '_', title).replace('_md', '.md')
-                
-                # Check for duplicates immediately
-                cursor.execute('''
-                    SELECT COUNT(*) as count 
-                    FROM documents 
-                    WHERE title = ? AND department_id = ?
-                ''', (safe_title, department['id']))
-                if cursor.fetchone()['count'] > 0:
+                # Check for duplicates
+                is_duplicate = await SupabaseDocumentOps.check_duplicate(title, department_id)
+                if is_duplicate:
                     raise HTTPException(
                         status_code=400,
                         detail=f"A document with title '{title}' already exists in this department"
                     )
                 
+                # Save the file
+                file_path = upload_dir / file.filename
+                with file_path.open("wb") as buffer:
+                    shutil.copyfileobj(file.file, buffer)
+                uploaded_files.append(file_path)
+                
+                # Determine file type and handle accordingly
+                file_type = "MARKDOWN" if file.filename.endswith('.md') else "PDF"
                 google_doc_id = None
                 google_doc_link = None
-                if file_type == 'MARKDOWN':
-                    try:
-                        if not content_str.strip():
-                            raise ValueError("Markdown file is empty")
-                        
-                        # Create Google Doc
-                        docs_manager = GoogleDocsManager()
-                        google_doc_id, google_doc_link = docs_manager.create_doc(safe_title, content_str)
-                        print(f"Created Google Doc with ID: {google_doc_id} and link: {google_doc_link}")
-                    except UnicodeDecodeError as e:
-                        raise HTTPException(
-                            status_code=400,
-                            detail="Invalid markdown file encoding. Please use UTF-8."
-                        )
                 
-                # Insert into documents table
-                cursor.execute('''
-                    INSERT INTO documents (title, type, url, description, google_doc_id, google_doc_link, department_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
-                ''', (
-                    safe_title,
-                    file_type,
-                    google_doc_link if google_doc_link else f"/files/{file.filename}",
-                    description,
-                    google_doc_id,
-                    google_doc_link,
-                    department['id']
-                ))
+                if file_type == "MARKDOWN":
+                    # Convert to Google Doc
+                    docs_manager = GoogleDocsManager()
+                    with open(file_path, 'r') as f:
+                        content = f.read()
+                    google_doc_id, google_doc_link = docs_manager.create_doc(title, content)
                 
-                document_id = cursor.lastrowid
+                # Insert document into Supabase
+                doc_data = await SupabaseDocumentOps.insert_document(
+                    title=title,
+                    file_type=file_type,
+                    url=str(file_path),
+                    description=description,
+                    google_doc_id=google_doc_id,
+                    google_doc_link=google_doc_link,
+                    department_id=department_id
+                )
                 
-                # Get the complete document data
-                cursor.execute('''
-                    SELECT 
-                        d.id,
-                        d.title,
-                        d.type,
-                        d.url,
-                        d.description,
-                        d.created_at,
-                        d.google_doc_id,
-                        d.google_doc_link,
-                        dep.name as department_name
-                    FROM documents d
-                    JOIN departments dep ON d.department_id = dep.id
-                    WHERE d.id = ?
-                ''', (document_id,))
+                # Format response
+                response = {
+                    "id": doc_data["id"],
+                    "title": doc_data["title"],
+                    "type": doc_data["type"],
+                    "url": doc_data["url"],
+                    "description": doc_data["description"],
+                    "created_at": doc_data["created_at"],
+                    "department_name": department_name,
+                    "google_doc_id": doc_data.get("google_doc_id"),
+                    "google_doc_link": doc_data.get("google_doc_link")
+                }
                 
-                document = cursor.fetchone()
+                responses.append(DocumentResponse(**response))
                 
-                results.append(DocumentResponse(
-                    id=document['id'],
-                    title=document['title'],
-                    type=document['type'],
-                    url=document['url'],
-                    description=document['description'],
-                    created_at=document['created_at'],
-                    department_name=document['department_name'],
-                    google_doc_id=document['google_doc_id'],
-                    google_doc_link=document['google_doc_link']
-                ))
             except Exception as e:
-                if conn:
-                    conn.rollback()
-                if isinstance(e, HTTPException):
-                    raise
-                raise HTTPException(status_code=500, detail=str(e))
+                # Clean up this file if there was an error
+                if file_path.exists():
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+                raise
         
-        conn.commit()
+        return responses
         
-        return results
-
     except Exception as e:
-        if conn:
-            conn.rollback()
-            conn.close()
+        # Clean up any uploaded files
+        for file_path in uploaded_files:
+            try:
+                os.remove(file_path)
+            except:
+                pass
+        
         if isinstance(e, HTTPException):
             raise
         raise HTTPException(status_code=500, detail=str(e))
-    finally:
-        if conn:
-            conn.close()
 
 @router.get("/topic/{topic_name}", response_model=List[DocumentResponse])
 async def get_topic_documents(topic_name: str):

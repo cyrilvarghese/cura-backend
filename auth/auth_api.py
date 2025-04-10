@@ -6,10 +6,26 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Initialize Supabase client
-supabase_url = os.environ.get("SUPABASE_URL")
-supabase_key = os.environ.get("SUPABASE_KEY")
-supabase: Client = create_client(supabase_url, supabase_key)
+def get_supabase_client(use_service_role: bool = False) -> Client:
+    """Initialize and validate Supabase client connection."""
+    url = os.environ.get("SUPABASE_URL")
+    
+    if use_service_role:
+        key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        if not key:
+            raise EnvironmentError("SUPABASE_SERVICE_ROLE_KEY not configured")
+    else:
+        key = os.environ.get("SUPABASE_KEY")
+        if not key:
+            raise EnvironmentError("SUPABASE_KEY not configured")
+    
+    if not url:
+        raise EnvironmentError("SUPABASE_URL not configured")
+        
+    return create_client(url, key)
+
+# Initialize default client
+supabase: Client = get_supabase_client()
 
 async def signup(email: str, password: str, username: str, role: str = "user") -> Dict[str, Any]:
     """

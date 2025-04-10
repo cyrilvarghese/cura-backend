@@ -4,9 +4,8 @@ from googleapiclient.discovery import build
 from fastapi import HTTPException
 from typing import Optional, List, Dict, Any, Tuple
 import re
-import sqlite3
-import requests
 import traceback
+from utils.supabase_document_ops import SupabaseDocumentOps
 
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 # SERVICE_ACCOUNT_FILE = 'utils/service-account-key.json'
@@ -274,56 +273,106 @@ class GoogleDocsManager:
         
         return requests 
 
-    def list_folder_files(self) -> list:
-        """List all files in the designated folder with their status"""
+    def delete_doc(self, doc_id: str) -> bool:
+        """Delete a Google Doc and its database record"""
         try:
-            print(f"Listing files in folder ID: {self.folder_id}")
+            print(f"Deleting document with ID: {doc_id}")
             
-            # Use Drive API service to list files
-            results = self.drive_service.files().list(
-                q=f"'{self.folder_id}' in parents and trashed=false",
-                pageSize=100,
-                orderBy="modifiedTime desc",
-                fields="files(id, name, webViewLink, createdTime, modifiedTime)"
-            ).execute()
+            # First delete from Google Drive
+            self.drive_service.files().delete(fileId=doc_id).execute()
             
-            files = results.get('files', [])
+            # Delete from Supabase
+            supabase = SupabaseDocumentOps.get_client(use_service_role=True)
+            result = supabase.table("documents")\
+                .delete()\
+                .eq("google_doc_id", doc_id)\
+                .execute()
             
-            if not files:
-                print("No files found in the folder.")
-                return []
-            
-            # Get database connection to fetch status
-            conn = sqlite3.connect('medical_assessment.db')
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
-            
-            # Process files and add status
-            for file in files:
-                try:
-                    # Get status from documents table
-                    cursor.execute('''
-                        SELECT status 
-                        FROM documents 
-                        WHERE google_doc_id = ?
-                    ''', (file['id'],))
-                    
-                    doc_status = cursor.fetchone()
-                    file['status'] = doc_status['status'] if doc_status else 'CASE_REVIEW_PENDING'
-                    file['commentCount'] = 0  # Default to 0 since we're not counting anymore
-                    
-                except Exception as error:
-                    print(f"Error processing file {file['id']}: {str(error)}")
-                    file['status'] = 'CASE_REVIEW_PENDING'
-                    file['commentCount'] = 0
-            
-            conn.close()
-            print(f"Found {len(files)} files in the folder")
-            return files
+            print(f"Successfully deleted document {doc_id} from Drive and database")
+            return True
             
         except Exception as e:
-            print(f"Error listing files in folder: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"Failed to list files in folder: {str(e)}")
+            print(f"Error deleting document: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to delete document: {str(e)}"
+            )
+
+    def get_doc_details(self, doc_id: str) -> Optional[Dict[str, Any]]:
+        """Get details for a single Google Doc file"""
+        try:
+            print(f"Getting details for document ID: {doc_id}")
+            
+            # Get file details from Google Drive
+            file = self.drive_service.files().get(
+                fileId=doc_id,
+                fields="id, name, webViewLink, createdTime, modifiedTime"
+            ).execute()
+
+            # Get status from Supabase
+            supabase = SupabaseDocumentOps.get_client()
+            supabase_result = supabase.table("documents")\
+                .select("status")\
+                .eq("google_doc_id", doc_id)\
+                .execute()
+            
+            # Use Supabase status or default
+            status = (
+                supabase_result.data[0]['status'] if supabase_result.data
+                else 'CASE_REVIEW_PENDING'
+            )
+
+            doc_details = {
+                "id": file['id'],
+                "name": file['name'],
+                "webViewLink": file['webViewLink'],
+                "createdTime": file['createdTime'],
+                "modifiedTime": file['modifiedTime'],
+                "commentCount": 0,
+                "status": status
+            }
+            print(f"Retrieved document details: {doc_details}")
+            return doc_details
+
+        except Exception as e:
+            print(f"Error getting document details: {str(e)}")
+            print(f"Full traceback: {traceback.format_exc()}")
+            return None
+
+    def list_folder_files(self) -> list:
+        """List all files in the designated folder with their statuses"""
+        try:
+            # Get files from Google Drive
+            results = self.drive_service.files().list(
+                q=f"'{self.folder_id}' in parents",
+                pageSize=100,
+                fields="files(id, name, webViewLink, createdTime, modifiedTime)"
+            ).execute()
+            files = results.get('files', [])
+
+            # Get statuses from Supabase
+            supabase = SupabaseDocumentOps.get_client()
+            supabase_result = supabase.table("documents")\
+                .select("google_doc_id, status")\
+                .execute()
+            
+            supabase_statuses = {
+                doc['google_doc_id']: doc['status'] 
+                for doc in supabase_result.data
+            } if supabase_result.data else {}
+
+            # Combine Drive and Supabase data
+            for file in files:
+                file['status'] = supabase_statuses.get(file['id'], 'CASE_REVIEW_PENDING')
+
+            return files
+
+        except Exception as e:
+            print(f"Error listing files: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to list files: {str(e)}"
+            )
 
     def get_unresolved_comment_count(self, doc_id: str) -> int:
         """Get the count of unresolved comments for a specific document"""
@@ -406,54 +455,6 @@ class GoogleDocsManager:
                 detail=f"Failed to get comments: {str(e)}"
             )
 
-    def delete_doc(self, doc_id: str) -> bool:
-        """Delete a Google Doc and its database record"""
-        try:
-            print(f"Deleting document with ID: {doc_id}")
-            
-            # First delete from Google Drive
-            self.drive_service.files().delete(fileId=doc_id).execute()
-            
-            # Then delete from our database
-            conn = sqlite3.connect('medical_assessment.db')
-            cursor = conn.cursor()
-            
-            # Get the document id first
-            cursor.execute('''
-                SELECT id 
-                FROM documents 
-                WHERE google_doc_id = ?
-            ''', (doc_id,))
-            
-            doc_result = cursor.fetchone()
-            if doc_result:
-                doc_db_id = doc_result[0]
-                
-                # Delete from topic_documents table
-                cursor.execute('''
-                    DELETE FROM topic_documents 
-                    WHERE document_id = ?
-                ''', (doc_db_id,))
-                
-                # Delete from documents table
-                cursor.execute('''
-                    DELETE FROM documents 
-                    WHERE id = ?
-                ''', (doc_db_id,))
-            
-            conn.commit()
-            conn.close()
-            
-            print(f"Successfully deleted document {doc_id} from Drive and database")
-            return True
-            
-        except Exception as e:
-            print(f"Error deleting document: {str(e)}")
-            raise HTTPException(
-                status_code=500,
-                detail=f"Failed to delete document: {str(e)}"
-            )
-
     def download_doc(self, doc_id: str) -> str:
         """Download a Google Doc in its original format (markdown or PDF)"""
         try:
@@ -463,16 +464,14 @@ class GoogleDocsManager:
             upload_dir = 'uploads'
             os.makedirs(upload_dir, exist_ok=True)
             
-            # Get the document metadata and check if it's a markdown file
-            conn = sqlite3.connect('medical_assessment.db')
-            cursor = conn.cursor()
-            cursor.execute('''
-                SELECT type 
-                FROM documents 
-                WHERE google_doc_id = ?
-            ''', (doc_id,))
-            doc_type = cursor.fetchone()
-            conn.close()
+            # Get document type from Supabase
+            supabase = SupabaseDocumentOps.get_client()
+            doc_result = supabase.table("documents")\
+                .select("type")\
+                .eq("google_doc_id", doc_id)\
+                .single()\
+                .execute()
+            doc_type = doc_result.data.get('type') if doc_result.data else None
 
             # Get the document title
             file = self.drive_service.files().get(
@@ -485,7 +484,7 @@ class GoogleDocsManager:
             # Create a safe filename
             safe_filename = re.sub(r'[^a-zA-Z0-9-_]', '_', original_name)
             
-            if doc_type and doc_type[0] == 'MARKDOWN':
+            if doc_type == 'MARKDOWN':
                 # Export as plain text for markdown
                 file_path = os.path.join(upload_dir, f"{safe_filename}.md")
                 response = self.drive_service.files().export(
@@ -513,41 +512,3 @@ class GoogleDocsManager:
                 status_code=500,
                 detail=f"Failed to download document: {str(e)}"
             )
-
-    def get_doc_details(self, doc_id: str) -> Optional[Dict[str, Any]]:
-        """Get details for a single Google Doc file"""
-        try:
-            print(f"Getting details for document ID: {doc_id}")
-            file = self.drive_service.files().get(
-                fileId=doc_id,
-                fields="id, name, webViewLink, createdTime, modifiedTime"
-            ).execute()
-
-            # Get status from database
-            conn = sqlite3.connect('medical_assessment.db')
-            cursor = conn.cursor()
-            cursor.execute('''
-                SELECT status FROM documents WHERE google_doc_id = ?
-            ''', (doc_id,))
-            status_result = cursor.fetchone()
-            conn.close()
-
-            status = status_result[0] if status_result else 'CASE_REVIEW_PENDING'
-
-            # Combine details
-            doc_details = {
-                "id": file['id'],
-                "name": file['name'],
-                "webViewLink": file['webViewLink'],
-                "createdTime": file['createdTime'],
-                "modifiedTime": file['modifiedTime'],
-                "commentCount": 0,  # Default to 0 as per previous implementation
-                "status": status
-            }
-            print(f"Retrieved document details: {doc_details}")
-            return doc_details
-
-        except Exception as e:
-            print(f"Error getting document details: {str(e)}")
-            print(f"Full traceback: {traceback.format_exc()}")
-            return None

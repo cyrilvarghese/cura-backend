@@ -9,6 +9,7 @@ import sqlite3
 import json
 from fastapi.responses import Response
 import traceback
+from utils.supabase_document_ops import SupabaseDocumentOps
 
 router = APIRouter()
 
@@ -97,54 +98,34 @@ async def approve_and_download_doc(doc_id: str):
     try:
         print(f"Starting approval process for doc_id: {doc_id}")
         
-        # First update the status
-        conn = sqlite3.connect('medical_assessment.db')
-        cursor = conn.cursor()
+        # Update status using Supabase
+        doc_details = await SupabaseDocumentOps.approve_document(doc_id)
         
-        try:
-            cursor.execute('''
-                UPDATE documents 
-                SET status = ? 
-                WHERE google_doc_id = ?
-            ''', (DocumentStatus.CASE_REVIEW_COMPLETE.value, doc_id))
-            
-            if cursor.rowcount == 0:
-                print(f"No document found in database with google_doc_id: {doc_id}")
-                conn.close()
-                raise HTTPException(status_code=404, detail=f"Document {doc_id} not found")
-            
-            conn.commit()
-            print(f"Successfully updated status for doc_id: {doc_id}")
-            
-        except sqlite3.Error as db_error:
-            print(f"Database error: {str(db_error)}")
-            print(f"SQL Traceback: {traceback.format_exc()}")
-            raise HTTPException(status_code=500, detail=f"Database error: {str(db_error)}")
-        finally:
-            conn.close()
-
-        # Get updated document details
-        print(f"Fetching document details for doc_id: {doc_id}")
+        # Get updated document details and download
         docs_manager = GoogleDocsManager()
-        doc_details = docs_manager.get_doc_details(doc_id)
-        
-        if not doc_details:
-            print(f"No document details found for doc_id: {doc_id}")
-            raise HTTPException(status_code=404, detail=f"Document details not found")
-            
-        print(f"Retrieved document details: {doc_details}")
-        
-        # Ensure status is updated in response
-        doc_details['status'] = DocumentStatus.CASE_REVIEW_COMPLETE.value
-
-        # Download the file
-        print(f"Downloading document for doc_id: {doc_id}")
         file_path = docs_manager.download_doc(doc_id)
         print(f"File downloaded to: {file_path}")
         
+        # Get Google Drive details for response
+        drive_details = docs_manager.drive_service.files().get(
+            fileId=doc_id,
+            fields="id, name, webViewLink, createdTime, modifiedTime"
+        ).execute()
+        
+        # Format response
+        response_doc = {
+            "id": doc_id,
+            "name": drive_details["name"],
+            "webViewLink": drive_details["webViewLink"],
+            "createdTime": drive_details["createdTime"],
+            "modifiedTime": drive_details["modifiedTime"],
+            "status": "CASE_REVIEW_COMPLETE",
+            "commentCount": 0  # Required by GoogleDocFile model
+        }
+        
         # Return both the file and document details
         return {
-            "document": GoogleDocFile(**doc_details),
+            "document": GoogleDocFile(**response_doc),
             "message": "Document approved and downloaded successfully"
         }
         

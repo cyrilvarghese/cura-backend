@@ -1,0 +1,374 @@
+{
+    "physical_exam": {
+        "Skin Examination": {
+            "purpose": "Assess rash characteristics and signs of vasculitis.",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Multiple erythematous, raised plaques on forearms and legs. Some lesions exhibit central clearing and residual hyperpigmentation."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": [
+                                "/case-images/case16/assets/Skin_Examination_1744304721259_urticarial-vasculitis-affecting-skin.webp"
+                            ],
+                            "altText": "Images for Skin Examination",
+                            "caption": "Test images for Skin Examination"
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Lesions are consistent with urticarial vasculitis based on appearance and duration."
+        },
+        "Musculoskeletal Examination": {
+            "purpose": "Evaluate joint tenderness and range of motion.",
+            "findings": {
+                "type": "text",
+                "content": "Mild tenderness in wrists and knees without visible swelling or erythema. Full range of motion preserved."
+            },
+            "status": "completed",
+            "interpretation": "Joint findings are consistent with mild synovitis related to possible autoimmune process."
+        },
+        "Vital Signs": {
+            "purpose": "Monitor patient's basic physiological status.",
+            "findings": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Parameter",
+                        "Measurement"
+                    ],
+                    "rows": [
+                        [
+                            "Temperature",
+                            "37.2\u00b0C (98.9\u00b0F)"
+                        ],
+                        [
+                            "Pulse",
+                            "80/min"
+                        ],
+                        [
+                            "Blood Pressure",
+                            "118/76 mm Hg"
+                        ],
+                        [
+                            "Respiratory Rate",
+                            "16/min"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Vital signs are within normal limits without any signs of acute distress."
+        },
+        "Abdominal Examination": {
+            "purpose": "Assess for organomegaly.",
+            "findings": {
+                "type": "text",
+                "content": "No hepatosplenomegaly on examination."
+            },
+            "status": "completed",
+            "interpretation": "Abdomen is soft and non-tender with no abnormalities detected."
+        },
+        "Neurological Examination": {
+            "purpose": "Assess sensory and motor function.",
+            "findings": {
+                "type": "text",
+                "content": "Normal neurological findings, with intact sensation and motor strength."
+            },
+            "status": "completed",
+            "interpretation": "Neurological assessment shows no signs of deficits."
+        },
+        "Respiratory Examination": {
+            "purpose": "Auscultation for abnormal breath sounds.",
+            "findings": {
+                "type": "text",
+                "content": "Clear breath sounds bilaterally without wheezes or rales."
+            },
+            "status": "completed",
+            "interpretation": "Respiratory examination is unremarkable with no acute findings."
+        },
+        "Ophthalmologic Examination": {
+            "purpose": "Inspect for signs of uveitis or scleritis.",
+            "findings": {
+                "type": "text",
+                "content": "No conjunctival redness or signs of uveitis; lenses and retina within normal limits."
+            },
+            "status": "completed",
+            "interpretation": "Ophthalmologic examination reveals no significant findings."
+        },
+        "Lymph Node Examination": {
+            "purpose": "Palpate for lymphadenopathy.",
+            "findings": {
+                "type": "text",
+                "content": "No lymphadenopathy detected in cervical, axillary, or inguinal regions."
+            },
+            "status": "completed",
+            "interpretation": "Lymphatic system examination is within normal limits."
+        },
+        "Oral Examination": {
+            "purpose": "Inspect for mucosal ulcers or lesions.",
+            "findings": {
+                "type": "text",
+                "content": "Oral cavity is clear without lesions or ulcers."
+            },
+            "status": "completed",
+            "interpretation": "Oral examination shows no abnormalities."
+        }
+    },
+    "lab_test": {
+        "Complete Blood Count (CBC) with Differential": {
+            "testName": "Complete Blood Count (CBC)",
+            "purpose": "To assess for anemia, leukocytosis, or thrombocytopenia.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range"
+                    ],
+                    "rows": [
+                        [
+                            "Hemoglobin",
+                            "13.5 g/dL",
+                            "12.0-15.5 g/dL"
+                        ],
+                        [
+                            "Leukocyte Count",
+                            "10.2 x10^9/L",
+                            "4.0-11.0 x10^9/L"
+                        ],
+                        [
+                            "Platelets",
+                            "250 x10^9/L",
+                            "150-450 x10^9/L"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "CBC within normal limits, suggests no significant hematological abnormalities."
+        },
+        "Erythrocyte Sedimentation Rate (ESR) and C-Reactive Protein (CRP)": {
+            "testName": "ESR and CRP",
+            "purpose": "Markers of systemic inflammation.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "30 mm/hr",
+                            "0-20 mm/hr"
+                        ],
+                        [
+                            "CRP",
+                            "5 mg/L",
+                            "<10 mg/L"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "ESR elevated indicating possible inflammation."
+        },
+        "Antinuclear Antibody (ANA) Test": {
+            "testName": "ANA Test",
+            "purpose": "Screening for autoimmune conditions.",
+            "results": {
+                "type": "text",
+                "content": "Positive with a homogeneous pattern."
+            },
+            "status": "completed",
+            "interpretation": "Positive ANA suggests potential autoimmune process; further investigation required."
+        },
+        "Complement Levels (C3, C4)": {
+            "testName": "Complement Levels",
+            "purpose": "To assess for hypocomplementemic urticarial vasculitis.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Component",
+                        "Result",
+                        "Reference Range"
+                    ],
+                    "rows": [
+                        [
+                            "C3",
+                            "80 mg/dL",
+                            "90-180 mg/dL"
+                        ],
+                        [
+                            "C4",
+                            "10 mg/dL",
+                            "15-45 mg/dL"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Decreased complement levels indicate a possible autoimmune process."
+        },
+        "Rheumatoid Factor (RF) and Anti-Cyclic Citrullinated Peptide (anti-CCP) Antibodies": {
+            "testName": "RF and anti-CCP",
+            "purpose": "To evaluate for rheumatoid arthritis.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range"
+                    ],
+                    "rows": [
+                        [
+                            "RF",
+                            "<14 IU/mL",
+                            "<20 IU/mL"
+                        ],
+                        [
+                            "anti-CCP",
+                            "Negative",
+                            "Negative"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Negative RF and anti-CCP, unlikely to have rheumatoid arthritis."
+        },
+        "Skin Biopsy": {
+            "testName": "Skin Biopsy",
+            "purpose": "Histopathological examination to confirm leukocytoclastic vasculitis.",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Histopathological examination shows leukocytoclastic vasculitis with perivascular neutrophilic infiltrates and immune complex deposition."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/skin_biopsy.jpeg",
+                            "altText": "Skin biopsy image",
+                            "caption": "Histopathological findings of leukocytoclastic vasculitis."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Biopsy findings confirm the diagnosis of leukocytoclastic vasculitis."
+        },
+        "Urinalysis": {
+            "testName": "Urinalysis",
+            "purpose": "To detect renal involvement.",
+            "results": {
+                "type": "text",
+                "content": "No proteinuria, hematuria, or casts detected."
+            },
+            "status": "completed",
+            "interpretation": "Urinalysis within normal limits indicates no renal involvement."
+        },
+        "Liver Function Tests": {
+            "testName": "Liver Function Tests (LFT)",
+            "purpose": "To assess hepatic involvement or medication safety.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range"
+                    ],
+                    "rows": [
+                        [
+                            "ALT",
+                            "22 U/L",
+                            "7-56 U/L"
+                        ],
+                        [
+                            "AST",
+                            "20 U/L",
+                            "5-40 U/L"
+                        ],
+                        [
+                            "Bilirubin Total",
+                            "0.5 mg/dL",
+                            "0.1-1.2 mg/dL"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Liver function tests are normal, indicating no hepatic involvement."
+        },
+        "Renal Function Tests": {
+            "testName": "Renal Function Tests (RFT)",
+            "purpose": "To evaluate kidney function.",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range"
+                    ],
+                    "rows": [
+                        [
+                            "Creatinine",
+                            "0.8 mg/dL",
+                            "0.6-1.2 mg/dL"
+                        ],
+                        [
+                            "BUN",
+                            "12 mg/dL",
+                            "7-20 mg/dL"
+                        ]
+                    ]
+                }
+            },
+            "status": "completed",
+            "interpretation": "Renal function tests are within normal range."
+        },
+        "Chest X-Ray": {
+            "testName": "Chest X-Ray",
+            "purpose": "To rule out pulmonary involvement.",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Chest X-ray shows clear lung fields without infiltrates or effusions."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/chest_xray.jpeg",
+                            "altText": "Chest X-ray image",
+                            "caption": "Normal chest X-ray findings."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Chest X-ray results are normal with no signs of pulmonary pathology."
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 16,
+        "actual_count": 16
+    }
+}

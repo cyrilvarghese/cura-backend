@@ -1,6 +1,12 @@
 from typing import Dict, Any, List, Optional
-from auth.auth_api import get_supabase_client
+from auth.auth_api import get_supabase_client, get_user
 from fastapi import HTTPException
+import os
+import re
+
+from utils.file_ops import export_file
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
 
 class SupabaseDocumentOps:
     """Handles all Supabase document operations"""
@@ -22,17 +28,28 @@ class SupabaseDocumentOps:
     ) -> Dict[str, Any]:
         """Insert a new document into Supabase"""
         try:
-            supabase = SupabaseDocumentOps.get_client(use_service_role=True)
+            # Create safe filename from title
+            safe_filename = title.replace('.md', '')  # Remove .md extension if it exists
+            safe_filename = re.sub(r'[^a-zA-Z0-9-_]', '_', safe_filename)
+            
+            # Add appropriate extension based on file type
+            if file_type == 'MARKDOWN':
+                file_name = f"{safe_filename}.md"
+            else:
+                file_name = f"{safe_filename}.pdf"
+            
+            supabase = SupabaseDocumentOps.get_client()
             
             result = supabase.table("documents").insert({
-                "title": title,
+                "title": safe_filename,  # Use safe filename as title
                 "type": file_type,
                 "url": url,
                 "description": description,
                 "google_doc_id": google_doc_id,
                 "google_doc_link": google_doc_link,
                 "department_id": department_id,
-                "status": "CASE_REVIEW_PENDING"
+                "status": "CASE_REVIEW_PENDING",
+         
             }).execute()
             
             return result.data[0] if result.data else None
@@ -103,7 +120,7 @@ class SupabaseDocumentOps:
     ) -> Dict[str, Any]:
         """Update document status"""
         try:
-            supabase = SupabaseDocumentOps.get_client(use_service_role=True)
+            supabase = SupabaseDocumentOps.get_client()
             
             result = supabase.table("documents")\
                 .update({"status": status})\
@@ -152,18 +169,39 @@ class SupabaseDocumentOps:
             )
 
     @staticmethod
+    def _get_drive_service():
+        """Get Google Drive service instance"""
+        credentials = service_account.Credentials.from_service_account_file(
+            '/etc/secrets/service-account-key', 
+            scopes=['https://www.googleapis.com/auth/drive.file']
+        )
+        return build('drive', 'v3', credentials=credentials)
+
+    @staticmethod
     async def approve_document(google_doc_id: str) -> Dict[str, Any]:
         """
         Approve a document by:
         1. Setting status to CASE_REVIEW_COMPLETE
-        2. Returning updated document details
+        2. Adding approval metadata (approver info and timestamp)
+        3. Exporting the file to uploads directory
+        4. Returning updated document details
         """
         try:
-            supabase = SupabaseDocumentOps.get_client(use_service_role=True)
+            supabase = SupabaseDocumentOps.get_client()
             
-            # Update the document status
+            # Get current user info for approval metadata
+            user_info = await SupabaseDocumentOps.check_user_permission()
+            print("Updating doc with ID:", repr(google_doc_id))
+            
+            # Update the document with approval info
             result = supabase.table("documents")\
-                .update({"status": "CASE_REVIEW_COMPLETE"})\
+                .update({
+                    "status": "CASE_REVIEW_COMPLETE",
+                    "approved_by": user_info["id"],
+                    "approved_by_email": user_info["email"],
+                    "approved_by_username": user_info.get("username"),
+                    "approved_at": "now()"  # Supabase will set server timestamp
+                })\
                 .eq("google_doc_id", google_doc_id)\
                 .execute()
                 
@@ -181,9 +219,38 @@ class SupabaseDocumentOps:
                 .eq("google_doc_id", google_doc_id)\
                 .single()\
                 .execute()
-                
+
+            if doc_details.data:
+                try:
+                    # Create uploads directory if it doesn't exist
+                    upload_dir = os.path.join(os.getcwd(), 'uploads')
+                    os.makedirs(upload_dir, exist_ok=True)
+                    
+                    # Get drive service
+                    drive_service = SupabaseDocumentOps._get_drive_service()
+                    
+                    # Export the file
+                    doc_type = doc_details.data.get('type', 'PDF')
+                    file_path, response = export_file(drive_service, google_doc_id, doc_type)
+                    full_path = os.path.join(upload_dir, os.path.basename(file_path))
+                    
+                    # Write the file
+                    with open(full_path, 'wb') as f:
+                        f.write(response)
+                    
+                    print(f"Document exported successfully to: {full_path}")
+                    
+                    # Update document with file path
+                    supabase.table("documents")\
+                        .update({"exported_file_path": full_path})\
+                        .eq("google_doc_id", google_doc_id)\
+                        .execute()
+                        
+                except Exception as export_error:
+                    print(f"Warning: Failed to export document: {str(export_error)}")
+                    
             return doc_details.data
-            
+                
         except HTTPException:
             raise
         except Exception as e:
@@ -191,4 +258,45 @@ class SupabaseDocumentOps:
             raise HTTPException(
                 status_code=500,
                 detail=f"Failed to approve document: {str(e)}"
+            )
+
+    @staticmethod
+    async def check_user_permission() -> Dict[str, Any]:
+        """Check if user has admin or teacher role"""
+        user_info = await get_user()
+        if not user_info.get("success"):
+            raise HTTPException(
+                status_code=401,
+                detail="Unable to get user information"
+            )
+        
+        user_role = user_info["user"].get("role")
+        if user_role not in ["admin", "teacher"]:
+            raise HTTPException(
+                status_code=403,
+                detail="Only admin and teacher roles can perform this action"
+            )
+            
+        return user_info["user"]
+
+    @staticmethod
+    async def get_department_documents(department_name: str) -> List[Dict[str, Any]]:
+        """Get all documents for a specific department"""
+        try:
+            supabase = SupabaseDocumentOps.get_client()
+            
+            result = supabase.table("documents")\
+                .select("*")\
+                .eq("department_id", department_name)\
+                .order("created_at", desc=True)\
+                .execute()
+            
+            print(f"Department documents query result: {result.data}")
+            return result.data if result.data else []
+            
+        except Exception as e:
+            print(f"Supabase department documents lookup error: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to fetch department documents: {str(e)}"
             ) 

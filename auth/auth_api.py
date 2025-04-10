@@ -6,6 +6,15 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Global variables to store session info
+current_session = None
+current_user = None
+
+# Initialize Supabase client once
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 def get_supabase_client(use_service_role: bool = False) -> Client:
     """Initialize and validate Supabase client connection."""
     url = os.environ.get("SUPABASE_URL")
@@ -111,17 +120,10 @@ async def signup(email: str, password: str, username: str, role: str = "user") -
         }
 
 async def login(email: str, password: str) -> Dict[str, Any]:
-    """
-    Sign in a user with email and password.
-    
-    Args:
-        email: User's email
-        password: User's password
-        
-    Returns:
-        Dict containing user data and session
-    """
+    """Sign in a user with email and password."""
     try:
+        global current_session, current_user
+        
         # Sign in the user
         auth_response = supabase.auth.sign_in_with_password({
             "email": email,
@@ -135,15 +137,27 @@ async def login(email: str, password: str) -> Dict[str, Any]:
             if profile_response.data and len(profile_response.data) > 0:
                 profile = profile_response.data[0]
                 
+                # Set global session and user info
+                current_session = auth_response.session
+                current_user = {
+                    "id": auth_response.user.id,
+                    "email": email,
+                    "username": profile.get("username"),
+                    "role": profile.get("role")
+                }
+                
+                print("Login successful. Current user:", {
+                    "id": current_user["id"],
+                    "email": current_user["email"],
+                    "role": current_user["role"],
+                    "session_expires_at": current_session.expires_at if current_session else None,
+                    "has_access_token": bool(current_session.access_token) if current_session else False
+                })
+                
                 return {
                     "success": True,
                     "token": auth_response.session.access_token if auth_response.session else None,
-                    "user": {
-                        "id": auth_response.user.id,
-                        "email": email,
-                        "username": profile.get("username"),
-                        "role": profile.get("role")
-                    }
+                    "user": current_user
                 }
             
         return {
@@ -165,7 +179,16 @@ async def get_user() -> Dict[str, Any]:
         Dict containing user data
     """
     try:
-        # Get the current session
+        global current_session, current_user
+        
+        # If we have cached user info, return it
+        if current_user and current_session:
+            return {
+                "success": True,
+                "user": current_user
+            }
+            
+        # Otherwise get the current session
         session = supabase.auth.get_session()
         
         if not session or not session.user:
@@ -176,28 +199,33 @@ async def get_user() -> Dict[str, Any]:
         
         user_id = session.user.id
         
-        # Get the user's profile data from the profiles table
+        # Get the user's profile data
         profile_response = supabase.table("profiles").select("*").eq("id", user_id).execute()
         
         if profile_response.data and len(profile_response.data) > 0:
             profile = profile_response.data[0]
             
+            # Store session info globally
+            current_session = session
+            current_user = {
+                "id": user_id,
+                "email": session.user.email,
+                "username": profile.get("username"),
+                "role": profile.get("role")
+            }
+            
             return {
                 "success": True,
-                "user": {
-                    "id": user_id,
-                    "email": session.user.email,
-                    "username": profile.get("username"),
-                    "role": profile.get("role")
-                }
+                "user": current_user
             }
         else:
+            current_user = {
+                "id": user_id,
+                "email": session.user.email
+            }
             return {
                 "success": True,
-                "user": {
-                    "id": user_id,
-                    "email": session.user.email
-                }
+                "user": current_user
             }
     except Exception as e:
         return {
@@ -207,18 +235,78 @@ async def get_user() -> Dict[str, Any]:
 
 async def logout() -> Dict[str, Any]:
     """
-    Sign out the current user.
+    Sign out the current user and clear session data.
     
     Returns:
         Dict indicating success or failure
     """
     try:
+        global current_session, current_user
+        
+        # Log current state before clearing
+        print("Logging out user:", {
+            "email": current_user.get("email") if current_user else None,
+            "role": current_user.get("role") if current_user else None
+        })
+        
+        # Sign out from Supabase
         supabase.auth.sign_out()
+        
+        # Clear session info
+        current_session = None
+        current_user = None
+        
+        print("Session cleared - current_session and current_user set to None")
+        
         return {
             "success": True
         }
     except Exception as e:
+        print(f"Logout error: {str(e)}")
         return {
             "success": False,
             "error": str(e)
-        } 
+        }
+
+# Add this helper function to get authenticated client
+def get_authenticated_client() -> Client:
+    """Get a Supabase client with the current user's session"""
+    global current_session, current_user, supabase
+
+    try:
+        if not current_session or not current_user:
+            print("No active session found, attempting to refresh...")
+            # Try to get session from Supabase
+            session_response = supabase.auth.get_session()
+
+            if session_response and session_response.session:
+                current_session = session_response.session
+                user = session_response.user
+                if user:
+                    current_user = {
+                        "id": user.id,
+                        "email": user.email,
+                        "role": user.user_metadata.get("role") if user.user_metadata else None
+                    }
+                    print(f"Session refreshed for user: {current_user['email']}")
+                else:
+                    raise Exception("No user data in session")
+            else:
+                raise Exception("No valid session found")
+
+        # Set the session explicitly on the existing client
+        supabase.auth.set_session(
+            current_session.access_token,
+            current_session.refresh_token
+        )
+
+        print(f"Using authenticated session for user: {current_user['email']}")
+        return supabase
+    except Exception as e:
+        print(f"Authentication error: {str(e)}")
+        raise Exception("Authentication required. Please log in.")
+
+# Simple function to get the client
+def get_client() -> Client:
+    """Get the Supabase client"""
+    return supabase 

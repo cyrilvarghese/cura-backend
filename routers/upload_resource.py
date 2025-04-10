@@ -94,7 +94,7 @@ async def upload_document(
                 with file_path.open("wb") as buffer:
                     shutil.copyfileobj(file.file, buffer)
                 uploaded_files.append(file_path)
-                
+                                
                 # Determine file type and handle accordingly
                 file_type = "MARKDOWN" if file.filename.endswith('.md') else "PDF"
                 google_doc_id = None
@@ -108,6 +108,7 @@ async def upload_document(
                     google_doc_id, google_doc_link = docs_manager.create_doc(title, content)
                 
                 # Insert document into Supabase
+                
                 doc_data = await SupabaseDocumentOps.insert_document(
                     title=title,
                     file_type=file_type,

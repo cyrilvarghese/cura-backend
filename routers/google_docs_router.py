@@ -28,6 +28,10 @@ class GoogleDocFile(BaseModel):
     modifiedTime: str
     commentCount: int = 0
     status: DocumentStatus = DocumentStatus.CASE_REVIEW_PENDING
+    approved_by: Optional[str] = None
+    approved_at: Optional[str] = None
+    approved_by_email: Optional[str] = None
+    approved_by_username: Optional[str] = None
 
 class CommentAuthor(BaseModel):
     displayName: str

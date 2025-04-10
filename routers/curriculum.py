@@ -3,6 +3,7 @@ from typing import List, Dict, Any, Optional
 import sqlite3
 from pydantic import BaseModel
 from enum import Enum
+from utils.supabase_document_ops import SupabaseDocumentOps
 
 router = APIRouter(
     prefix="/curriculum",
@@ -401,52 +402,34 @@ async def get_department_documents(department_name: str):
     Case insensitive department name matching.
     """
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        # First get the department ID
+        department_id = await SupabaseDocumentOps.get_department_id(department_name)
         
-        cursor.execute('''
-            SELECT DISTINCT
-                d.id, 
-                d.title, 
-                d.type, 
-                d.url, 
-                d.description, 
-                d.created_at,
-                d.google_doc_id,
-                d.google_doc_link,
-                d.status,
-                t.name as topic_name,
-                dept.name as department_name
-            FROM documents d
-            LEFT JOIN topic_documents td ON d.id = td.document_id
-            LEFT JOIN topics t ON td.topic_id = t.id
-            JOIN departments dept ON (t.department_id = dept.id OR d.department_id = dept.id)
-            WHERE LOWER(dept.name) LIKE LOWER(?)
-            ORDER BY d.created_at DESC
-        ''', (f"%{department_name}%",))
-        
-        documents = cursor.fetchall()
+        # Then get all documents for that department
+        documents = await SupabaseDocumentOps.get_department_documents(department_id)
         
         if not documents:
             return []
-        
-        conn.close()
-        
+            
+        # Format the response to match the expected structure
         return [{
-            "id": doc['id'],
-            "title": doc['title'],
-            "type": doc['type'],
-            "url": doc['url'],
-            "description": doc['description'],
-            "created_at": doc['created_at'],
-            "topic_name": doc['topic_name'],
-            "department_name": doc['department_name'],
-            "google_doc_id": doc['google_doc_id'],
-            "google_doc_link": doc['google_doc_link'],
-            "status": doc['status']
+            "id": doc.get('id'),
+            "title": doc.get('title'),
+            "type": doc.get('type'),
+            "url": doc.get('url'),
+            "description": doc.get('description'),
+            "created_at": doc.get('created_at'),
+            "google_doc_id": doc.get('google_doc_id'),
+            "google_doc_link": doc.get('google_doc_link'),
+            "status": doc.get('status'),
+            "department_name": department_name
         } for doc in documents]
 
-    except sqlite3.Error as e:
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    except HTTPException as e:
+        raise e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+        print(f"Error fetching department documents: {str(e)}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Failed to fetch department documents: {str(e)}"
+        )

@@ -5,6 +5,13 @@ from fastapi import HTTPException
 from typing import Optional, List, Dict, Any, Tuple
 import re
 import traceback
+from utils.file_ops import export_file
+from auth.auth_api import get_client
+from datetime import datetime
+from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
+from googleapiclient.errors import HttpError
+import socket
+
 from utils.supabase_document_ops import SupabaseDocumentOps
 
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
@@ -16,9 +23,12 @@ FOLDER_NAME = 'cases-for-review'
 class GoogleDocsManager:
     def __init__(self):
         try:
+            # Set timeout first
+            self.timeout = 20  # Set default timeout
+            
             print(f"Initializing Google Docs Manager with service account file: {SERVICE_ACCOUNT_FILE}")
             self.credentials = service_account.Credentials.from_service_account_file(
-                SERVICE_ACCOUNT_FILE, scopes=SCOPES
+                SERVICE_ACCOUNT_FILE, scopes=SCOPES 
             )
             print("Successfully loaded credentials")
             
@@ -39,16 +49,37 @@ class GoogleDocsManager:
                 detail=f"Failed to initialize Google services: {str(e)}"
             )
 
+    def _execute_with_timeout(self, request):
+        """Execute a Google API request with timeout"""
+        try:
+            socket.setdefaulttimeout(self.timeout)
+            return request.execute()
+        except socket.timeout:
+            print("API request timed out")
+            raise HTTPException(
+                status_code=504,
+                detail="Google API request timed out"
+            )
+        except HttpError as e:
+            print(f"Google API error: {str(e)}")
+            raise HTTPException(
+                status_code=e.resp.status,
+                detail=f"Google API error: {str(e)}"
+            )
+        finally:
+            socket.setdefaulttimeout(None)  # Reset timeout
+
     def _get_or_create_folder(self) -> str:
         """Get the folder ID if it exists, or create it if it doesn't"""
         try:
             print(f"Searching for folder: {FOLDER_NAME}")
             # Search for the folder
-            results = self.drive_service.files().list(
+            request = self.drive_service.files().list(
                 q=f"name='{FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false",
                 spaces='drive',
                 fields='files(id, name)'
-            ).execute()
+            )
+            results = self._execute_with_timeout(request)
             
             files = results.get('files', [])
             
@@ -64,10 +95,11 @@ class GoogleDocsManager:
                 'mimeType': 'application/vnd.google-apps.folder'
             }
             
-            folder = self.drive_service.files().create(
+            request = self.drive_service.files().create(
                 body=folder_metadata,
                 fields='id'
-            ).execute()
+            )
+            folder = self._execute_with_timeout(request)
             
             print(f"Created new folder with ID: {folder['id']}")
             return folder['id']
@@ -82,10 +114,14 @@ class GoogleDocsManager:
     def create_doc(self, title: str, content: str) -> tuple[str, str]:
         """Create a Google Doc with formatted Markdown content and return its ID and web link"""
         try:
-            print(f"Creating new Google Doc with title: {title}")
+            # Create safe filename
+            safe_title = re.sub(r'[^a-zA-Z0-9-_]', '_', title).replace('_md', '.md')
+            
+            print(f"Creating new Google Doc with title: {safe_title}")
+            
             # Create an empty doc in the folder
             doc_body = {
-                'name': title,
+                'name': safe_title,
                 'mimeType': 'application/vnd.google-apps.document',
                 'parents': [self.folder_id]
             }
@@ -136,10 +172,10 @@ class GoogleDocsManager:
 
             return doc_id, doc_link
         except Exception as e:
-            print(f"Error creating Google Doc: {str(e)}")
+            print(f"Error creating document: {str(e)}")
             raise HTTPException(
                 status_code=500,
-                detail=f"Failed to create Google Doc: {str(e)}"
+                detail=f"Failed to create document: {str(e)}"
             )
 
     def _convert_markdown_to_requests(self, markdown_content: str) -> List[Dict[str, Any]]:
@@ -350,20 +386,44 @@ class GoogleDocsManager:
             ).execute()
             files = results.get('files', [])
 
-            # Get statuses from Supabase
-            supabase = SupabaseDocumentOps.get_client()
+            # Get Supabase client and log auth info
+            supabase = get_client()
+            session = supabase.auth.get_session()
+            
+            
+            
+            # Query will automatically include auth headers
             supabase_result = supabase.table("documents")\
-                .select("google_doc_id, status")\
+                .select("google_doc_id, status, approved_by, approved_at, approved_by_email, approved_by_username")\
                 .execute()
             
-            supabase_statuses = {
-                doc['google_doc_id']: doc['status'] 
+             # Create a dictionary of document data from Supabase
+            supabase_docs = {
+                doc['google_doc_id']: {
+                    'status': doc['status'],
+                    'approved_by': doc['approved_by'],
+                    'approved_at': doc['approved_at'],
+                    'approved_by_email': doc['approved_by_email'],
+                    'approved_by_username': doc['approved_by_username']
+                } 
                 for doc in supabase_result.data
             } if supabase_result.data else {}
 
             # Combine Drive and Supabase data
             for file in files:
-                file['status'] = supabase_statuses.get(file['id'], 'CASE_REVIEW_PENDING')
+                doc_data = supabase_docs.get(file['id'], {
+                    'status': 'CASE_REVIEW_PENDING',
+                    'approved_by': None,
+                    'approved_at': None,
+                    'approved_by_email': None,
+                    'approved_by_username': None
+                })
+                
+                file['status'] = doc_data['status']
+                file['approved_by'] = doc_data['approved_by']
+                file['approved_at'] = doc_data['approved_at']
+                file['approved_by_email'] = doc_data['approved_by_email']
+                file['approved_by_username'] = doc_data['approved_by_username']
 
             return files
 
@@ -455,23 +515,57 @@ class GoogleDocsManager:
                 detail=f"Failed to get comments: {str(e)}"
             )
 
-    def download_doc(self, doc_id: str) -> str:
+    async def download_doc(self, doc_id: str) -> str:
         """Download a Google Doc in its original format (markdown or PDF)"""
         try:
             print(f"Downloading document with ID: {doc_id}")
+            
+            # Get current user info and check role
+            user_info = await get_client()
+            if not user_info.get("success"):
+                raise HTTPException(
+                    status_code=401,
+                    detail="Unable to get user information"
+                )
+            
+            # Check if user has admin or teacher role
+            user_role = user_info["user"].get("role")
+            if user_role not in ["admin", "teacher"]:
+                raise HTTPException(
+                    status_code=403,
+                    detail="Only admin and teacher roles can download documents"
+                )
             
             # Create uploads directory if it doesn't exist
             upload_dir = 'uploads'
             os.makedirs(upload_dir, exist_ok=True)
             
-            # Get document type from Supabase
+            # Get document type from Supabase - no need for service role
             supabase = SupabaseDocumentOps.get_client()
             doc_result = supabase.table("documents")\
                 .select("type")\
                 .eq("google_doc_id", doc_id)\
                 .single()\
                 .execute()
-            doc_type = doc_result.data.get('type') if doc_result.data else None
+                
+            if not doc_result.data:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Document with ID '{doc_id}' not found"
+                )
+            
+            # Update document with approver information
+            supabase.table("documents")\
+                .update({
+                    "approved_by": user_info["user"]["id"],
+                    "approved_by_email": user_info["user"]["email"],
+                    "approved_by_username": user_info["user"]["username"],
+                    "approved_at": datetime.utcnow().isoformat()
+                })\
+                .eq("google_doc_id", doc_id)\
+                .execute()
+
+            doc_type = doc_result.data['type']
 
             # Get the document title
             file = self.drive_service.files().get(
@@ -512,3 +606,14 @@ class GoogleDocsManager:
                 status_code=500,
                 detail=f"Failed to download document: {str(e)}"
             )
+
+    def export_document(self, doc_id: str, doc_type: str, upload_dir: str) -> str:
+        """Export a document to the specified directory"""
+        os.makedirs(upload_dir, exist_ok=True)
+        file_path, response = export_file(self.drive_service, doc_id, doc_type)
+        full_path = os.path.join(upload_dir, os.path.basename(file_path))
+        
+        with open(full_path, 'wb') as f:
+            f.write(response)
+            
+        return full_path

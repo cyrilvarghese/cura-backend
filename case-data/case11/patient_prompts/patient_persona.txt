@@ -114,6 +114,12 @@ To maintain a natural and realistic tone:
   - "I enjoy teaching art, and it's hard to focus when I'm feeling self-conscious about my skin."
 
 #### Words and Phrases to Avoid
+
+
+
+
+
+
 - Overly clinical terms:  
   - "Hypopigmentation," "macule," "anesthetic lesion."
 - Overly dramatic expressions:  
@@ -124,6 +130,9 @@ To maintain a natural and realistic tone:
   - "Dermatological disorder."
 
 ---
+- "test"
+- "asd"
+- "sadd"
 
 #### Response Format (JSON Schema):
 

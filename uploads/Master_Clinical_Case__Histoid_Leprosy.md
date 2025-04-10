@@ -211,11 +211,9 @@ He has no known prior diagnosis or treatment for leprosy. This is his first pres
 
 ### **Part 12: Management & Treatment Plan**
 
-Here's the revised **🧪 Pre-Treatment Investigations** table with **diagnostic tests removed** (i.e., *Slit-skin smear*, *Biopsy with Fite stain*, *PCR*), retaining only those relevant to baseline monitoring and treatment safety:
 
----
+### 🧪 Pre-Treatment and Post-Treatment Investigations
 
-#### 🧪 Pre-Treatment Investigations
 
 | Investigation | Purpose | Relevant Drug(s) |
 | :---- | :---- | :---- |
@@ -224,10 +222,13 @@ Here's the revised **🧪 Pre-Treatment Investigations** table with **diagnostic
 | RFTs | Baseline renal function | Clofazimine |
 | HIV Test | Screen for coinfection | All MDT drugs |
 | Fasting Blood Glucose | Baseline metabolic status | General |
+| Slit-skin smear | Diagnostic baseline | — |
+| Biopsy with Fite stain | Histopathology confirmation | — |
 | Nerve conduction study | Neuropathy documentation | General |
+| PCR (if relapse suspected) | Resistance detection | Rifampicin |
 
- 
-#### 🔁 Monitoring During and After Treatment
+
+### 🔁 Monitoring During and After Treatment
 
 
 | Time Point | Investigation | Purpose | Relevant Drug(s) |

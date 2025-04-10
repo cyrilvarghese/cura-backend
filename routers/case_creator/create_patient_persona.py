@@ -25,7 +25,7 @@ router = APIRouter(
 # Initialize the model
 model = ChatOpenAI(
     model_name="gpt-4o-mini",
-    temperature=1,
+    temperature=0.7,
     api_key=os.getenv("OPENAI_API_KEY")
 )
 

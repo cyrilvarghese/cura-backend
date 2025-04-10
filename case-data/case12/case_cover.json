@@ -1,17 +1,18 @@
 {
-    "case_name": "Master_Clinical_Case__Leprosy_Type_1_Reaction.md",
+    "case_name": "Master_Clinical_Case__Histoid_Leprosy.md",
     "case_id": "12",
     "department": "Dermatology",
     "published": false,
+    "title": "skin nodules on thighs and back",
+    "quote": "I've had these shiny nodules for five months now.",
+    "image_url": "/case-images/case12/cover_image.png?v=1744251346",
     "differentials": [
-        "Type 1 Lepra Reaction",
-        "Nerve abscess",
-        "ENL (Type 2 Reaction \u2013 associated with systemic symptoms and new nodules)",
-        "Cellulitis (usually has systemic signs, no nerve involvement)",
-        "Contact dermatitis (itchy, no nerve symptoms)"
+        "Histoid Leprosy (Multibacillary - Variant of Lepromatous Type)",
+        "Lepromatous Leprosy (without typical nodules)",
+        "Dermatofibroma (solitary, not anesthetic)",
+        "Neurofibromatosis (soft lesions, family history)",
+        "Cutaneous sarcoidosis (different histology)"
     ],
-    "last_updated": "2025-04-09T09:38:28.147172",
-    "title": "skin lesions and nerve pain on hand",
-    "quote": "My right hand has this burning pain, especially around my wrist.",
-    "image_url": "/case-images/case12/cover_image.png?v=1744193708"
+    "last_updated": "2025-04-09T16:00:08.189342",
+    "image_prompt": "A 42-year-old Indian male named Ravi Kumar, sitting on a simple wooden stool in a small, modest room that reflects his life as a tailor in an urban slum. He is wearing a faded blue kurta and loose cotton pants, his attire modest yet practical for his work. Ravi has a concerned expression, furrowing his brow as he glances down at his thighs, where some shiny yet non-painful nodules are subtly visible. His body language shows a slight slouch, indicating his anxiety and discomfort about the recent changes in his health. The room is filled with bright fabrics, sewing threads, and tools scattered around, highlighting his occupation. A common concern can be seen written on his face, manifesting as a furrowed brow and pursed lips, as he reflects on how this condition might impact his ability to work and support his family. Soft, natural light filters through an open window, casting a warm glow across the room to create a safe and empathetic atmosphere."
 }

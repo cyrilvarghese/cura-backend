@@ -52,7 +52,7 @@ def load_patient_persona(case_id: int) -> str:
         raise HTTPException(status_code=404, detail=f"Patient persona file for case {case_id} not found.")
 
 # update the case cover data in the JSON file       
-def update_case_cover(case_id: str, title: str, quote: str, image_url: str) -> None:
+def update_case_cover(case_id: str, title: str, quote: str, image_url: str, image_prompt: str) -> None:
     """Update the case cover data in the JSON file."""
     case_folder = f"case-data/case{case_id}"
     case_cover_path = os.path.join(case_folder, "case_cover.json")
@@ -65,7 +65,7 @@ def update_case_cover(case_id: str, title: str, quote: str, image_url: str) -> N
     case_cover_data["title"] = title
     case_cover_data["quote"] = quote
     case_cover_data["image_url"] = image_url
-    
+    case_cover_data["image_prompt"] = image_prompt
     # Write the updated JSON data back to the file
     with open(case_cover_path, 'w') as json_file:
         json.dump(case_cover_data, json_file, indent=4)
@@ -157,7 +157,7 @@ async def create_cover_image(
             }
           
         
-        update_case_cover(case_id, title, quote, image_url)
+        update_case_cover(case_id, title, quote, image_url,image_prompt)
 
         formatted_log = (
             f"Cover image prompt generated successfully.\n"

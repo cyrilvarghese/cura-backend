@@ -52,7 +52,7 @@ def load_patient_persona(case_id: int) -> str:
         raise HTTPException(status_code=404, detail=f"Patient persona file for case {case_id} not found.")
 
 # update the case cover data in the JSON file       
-def update_case_cover(case_id: str, title: str, quote: str, image_url: str) -> None:
+def update_case_cover(case_id: str, title: str, quote: str, image_url: str, image_prompt: str) -> None:
     """Update the case cover data in the JSON file."""
     case_folder = f"case-data/case{case_id}"
     case_cover_path = os.path.join(case_folder, "case_cover.json")
@@ -65,7 +65,7 @@ def update_case_cover(case_id: str, title: str, quote: str, image_url: str) -> N
     case_cover_data["title"] = title
     case_cover_data["quote"] = quote
     case_cover_data["image_url"] = image_url
-    
+    case_cover_data["image_prompt"] = image_prompt
     # Write the updated JSON data back to the file
     with open(case_cover_path, 'w') as json_file:
         json.dump(case_cover_data, json_file, indent=4)
@@ -89,7 +89,9 @@ async def call_image_gen(case_id: str, image_prompt: str, hasPrompt: bool = Fals
         await download_image(dalle_image_url, image_path)
         server_image_url = f"/case-images/case{case_id}/cover_image.png?v={timestamp}"
     else:
-        server_image_url = f"{case_cover_data['image_url']}?v={timestamp}"
+        # Replace existing timestamp instead of appending
+        base_url = case_cover_data['image_url'].split('?')[0]
+        server_image_url = f"{base_url}?v={timestamp}"
     
     return server_image_url
 
@@ -97,6 +99,9 @@ class CoverImageRequest(BaseModel):
     prompt: Optional[str] = None
     title: Optional[str] = None
     quote: Optional[str] = None 
+
+class PhraseRequest(BaseModel):
+    phrase: str
 
 @router.post("/create")
 async def create_cover_image(
@@ -152,7 +157,7 @@ async def create_cover_image(
             }
           
         
-        update_case_cover(case_id, title, quote, image_url)
+        update_case_cover(case_id, title, quote, image_url,image_prompt)
 
         formatted_log = (
             f"Cover image prompt generated successfully.\n"
@@ -167,3 +172,131 @@ async def create_cover_image(
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{error_timestamp}] ❌ Error in create_cover_image: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e)) 
+
+def update_case_cover_phrases(case_folder: str, phrase: str) -> list:
+    """
+    Update the phrases to avoid in case_cover.json
+    
+    Args:
+        case_folder (str): Path to the case folder
+        phrase (str): New phrase to add to avoid list
+    
+    Returns:
+        list: Updated list of phrases to avoid
+    
+    Raises:
+        HTTPException: If case_cover.json is not found or other errors occur
+    """
+    case_cover_path = os.path.join(case_folder, "case_cover.json")
+    if not os.path.exists(case_cover_path):
+        raise HTTPException(
+            status_code=404, 
+            detail=f"Case cover data not found at {case_cover_path}"
+        )
+    
+    with open(case_cover_path, 'r') as json_file:
+        case_cover_data = json.load(json_file)
+    
+    if "phrases_to_avoid" not in case_cover_data:
+        case_cover_data["phrases_to_avoid"] = []
+    
+    if phrase not in case_cover_data["phrases_to_avoid"]:
+        case_cover_data["phrases_to_avoid"].append(phrase)
+    
+    with open(case_cover_path, 'w') as json_file:
+        json.dump(case_cover_data, json_file, indent=4)
+    
+    return case_cover_data["phrases_to_avoid"]
+
+def update_patient_persona_phrases(case_folder: str, phrase: str) -> None:
+    """
+    Update or create the "Words and Phrases to Avoid" section in patient_persona.txt
+    just above the Response Format section.
+    
+    Args:
+        case_folder (str): Path to the case folder
+        phrase (str): New phrase to add to avoid list
+    
+    Raises:
+        HTTPException: If patient_persona.txt is not found or other errors occur
+    """
+    persona_path = os.path.join(case_folder, "patient_prompts", "patient_persona.txt")
+    if not os.path.exists(persona_path):
+        raise HTTPException(
+            status_code=404,
+            detail=f"Patient persona file not found at {persona_path}"
+        )
+
+    with open(persona_path, 'r') as file:
+        content = file.read()
+
+    # Format new phrase as bullet point
+    new_phrase_bullet = f"- \"{phrase}\"\n"
+
+    if "#### Words and Phrases to Avoid" in content:
+        # Section exists, add new phrase if it's not already there
+        sections = content.split("#### Words and Phrases to Avoid")
+        before_section = sections[0]
+        after_section = sections[1].split("#### Response Format")
+        
+        if new_phrase_bullet not in after_section[0]:
+            # Add the new phrase to the existing section
+            updated_content = (
+                before_section +
+                "#### Words and Phrases to Avoid\n\n" +
+                after_section[0].rstrip() + "\n" +
+                new_phrase_bullet + "\n" +
+                "#### Response Format" +
+                after_section[1]
+            )
+            
+            with open(persona_path, 'w') as file:
+                file.write(updated_content)
+    else:
+        # Create new section just above Response Format
+        sections = content.split("#### Response Format")
+        if len(sections) != 2:
+            raise HTTPException(
+                status_code=400,
+                detail="Could not find Response Format section"
+            )
+        
+        updated_content = (
+            sections[0].rstrip() +
+            "\n\n#### Words and Phrases to Avoid\n\n" +
+            new_phrase_bullet + "\n\n" +
+            "#### Response Format" +
+            sections[1]
+        )
+        
+        with open(persona_path, 'w') as file:
+            file.write(updated_content)
+
+@router.post("/{case_id}/add-phrase-to-avoid")
+async def add_phrase_to_avoid(case_id: str, phrase_data: PhraseRequest):
+    """Add a phrase to avoid to both case cover data and patient persona."""
+    try:
+        case_folder = f"case-data/case{case_id}"
+        
+        # Check if the case folder exists
+        if not os.path.exists(case_folder):
+            raise HTTPException(
+                status_code=404, 
+                detail=f"Case {case_id} not found. Please ensure the case exists."
+            )
+        
+        # Update both files
+        updated_phrases = update_case_cover_phrases(case_folder, phrase_data.phrase)
+        update_patient_persona_phrases(case_folder, phrase_data.phrase)
+
+        return {
+            "message": "Phrase added successfully to both case cover and patient persona",
+            "phrases_to_avoid": updated_phrases
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{error_timestamp}] ❌ Error in add_phrase_to_avoid: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

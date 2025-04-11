@@ -1,16 +1,19 @@
 {
-    "case_name": "case_doc_for_HSP",
+    "case_name": "case_doc_for_HSP.md",
     "case_id": 2,
     "title": "Rash on legs and joint pain",
     "quote": "I've have this annoying rash on my legs and it hurts",
     "image_url": "/case-images/case2/cover_image.png",
+    "cover_image_prompt": "A close-up photo of a rash on the arms and legs of a woman in her 30s. The rash is red and raised, and there are small blisters filled with clear fluid.",
     "differentials": [
-        "Henoch-Sch\u00f6nlein Purpura (HSP)",
+        "Henoch-Schönlein Purpura (HSP)",
         "IgA Vasculitis",
         "Systemic Lupus Erythematosus (SLE)",
         "Juvenile Idiopathic Arthritis with Vasculitis Component",
         "Drug-Induced Hypersensitivity Vasculitis",
         "Contact Dermatitis"
     ],
-    "last_updated": "2025-01-04T14:53:39.265416"
+    "last_updated": "2025-01-04T14:53:39.265416",
+    "department": "Dermatology",
+    "published": true
 }

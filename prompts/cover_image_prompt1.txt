@@ -42,7 +42,7 @@ You are a prompt designer tasked with creating highly detailed and empathetic pr
    "On the wall, a whiteboard shows a list of common symptoms of vasculitis in children, annotated with simple diagrams. A diagnostic chart subtly overlays part of the image, guiding viewers to focus on the child’s attentive posture while providing additional context about the clinical setting."
 
 6. **Additional Context:**
-   - Add an accessory such as a school bag, handbag, or similar items typically brought to a clinic.
+   - Add an accessory such as a school bag, handbag, or similar items typically brought to a clinic.It should not be things you would not expect to take to a clinic or hospital.
 
    **Example:**
    "A simple handbag is placed beside the patient, hinting at their professional background and daily routine."

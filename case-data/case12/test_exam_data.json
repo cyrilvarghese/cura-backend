@@ -1,0 +1,259 @@
+{
+    "physical_exam": {
+        "Skin Examination": {
+            "purpose": "Evaluate skin nodules and lesions consistent with histoid leprosy",
+            "findings": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Multiple dome-shaped, shiny nodules over back and thighs; firm, well-defined, painless lesions measuring approximately 2-4 cm."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/nodules.jpg",
+                            "altText": "Dermatological examination showing shiny nodules",
+                            "caption": "Multiple shiny nodules on the patient's back."
+                        }
+                    }
+                ]
+            },
+            "status": "completed",
+            "interpretation": "Findings are consistent with histoid leprosy."
+        },
+        "Sensory Testing": {
+            "purpose": "Assess sensory loss in limbs and lesions",
+            "findings": {
+                "type": "text",
+                "content": "Reduced sensation to light touch and pinprick in gloves-and-stocking distribution in hands and feet."
+            },
+            "status": "completed",
+            "interpretation": "Sensory loss indicates peripheral nerve involvement typical in leprosy."
+        },
+        "Peripheral Nerve Palpation": {
+            "purpose": "Identify nerve thickening",
+            "findings": {
+                "type": "text",
+                "content": "Thickening of ulnar and lateral popliteal nerves noted on palpation."
+            },
+            "status": "completed",
+            "interpretation": "Indicates peripheral neuropathy associated with leprosy."
+        },
+        "Motor Function Testing": {
+            "purpose": "Evaluate motor function in hands and feet",
+            "findings": {
+                "type": "text",
+                "content": "Motor function appears intact with normal muscle strength in upper and lower limbs."
+            },
+            "status": "completed",
+            "interpretation": "Motor function is preserved despite sensory loss."
+        },
+        "Nasal Mucosa Examination": {
+            "purpose": "Assess for nasal involvement with leprosy",
+            "findings": {
+                "type": "text",
+                "content": "Normal nasal mucosa; no signs of nasal congestion or discharge."
+            },
+            "status": "completed",
+            "interpretation": "No signs of nasal complications, ruling out advanced lepromatous involvement."
+        },
+        "Eye Examination": {
+            "purpose": "Rule out ocular complications due to leprosy",
+            "findings": {
+                "type": "text",
+                "content": "Normal findings; no conjunctival injection or keratitis."
+            },
+            "status": "completed",
+            "interpretation": "No complications detected in the eye examination."
+        }
+    },
+    "lab_test": {
+        "Slit-skin Smear": {
+            "testName": "Slit-skin smear for AFB",
+            "purpose": "To confirm diagnosis of leprosy by identifying acid-fast bacilli",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Strongly positive for AFB (Bacterial Index 5+)."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/slit_skin_smear.jpg",
+                            "altText": "Slit-skin smear showing AFB",
+                            "caption": "Microscopic view showing AFB in slit-skin smear."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Diagnosis of histoid leprosy is confirmed based on the smear results.",
+            "status": "completed"
+        },
+        "Skin Biopsy with Fite-Faraco Stain": {
+            "testName": "Skin biopsy with Fite-Faraco stain",
+            "purpose": "Histopathological confirmation of leprosy",
+            "results": {
+                "type": "mixed",
+                "content": [
+                    {
+                        "type": "text",
+                        "content": "Histopathology shows spindle-shaped histiocytes with abundant AFB."
+                    },
+                    {
+                        "type": "image",
+                        "content": {
+                            "url": "https://example.com/skin_biopsy.jpg",
+                            "altText": "Skin biopsy displaying spindle-shaped histiocytes",
+                            "caption": "Biopsy results indicating presence of AFB."
+                        }
+                    }
+                ]
+            },
+            "interpretation": "Confirms diagnosis of histoid leprosy.",
+            "status": "completed"
+        },
+        "PCR for M. leprae": {
+            "testName": "PCR for M. leprae",
+            "purpose": "To detect M. leprae, particularly if drug resistance is suspected",
+            "results": {
+                "type": "text",
+                "content": "PCR results pending, meant to detect rifampicin resistance if present."
+            },
+            "interpretation": "Continued monitoring necessary for drug resistance.",
+            "status": "completed"
+        },
+        "Complete Blood Count (CBC)": {
+            "testName": "Complete Blood Count",
+            "purpose": "Baseline data for monitoring treatment safety",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Hemoglobin",
+                            "14 g/dL",
+                            "13.5-17.5 g/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "WBC",
+                            "6.2 x10^9/L",
+                            "4.0-11.0 x10^9/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Platelets",
+                            "200 x10^9/L",
+                            "150-450 x10^9/L",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "CBC is within normal limits; no anemia or leukopenia.",
+            "status": "completed"
+        },
+        "Liver Function Test (LFT)": {
+            "testName": "Liver Function Test",
+            "purpose": "Baseline liver function evaluation for treatment safety",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ALT",
+                            "25 U/L",
+                            "7-56 U/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "AST",
+                            "30 U/L",
+                            "10-40 U/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Bilirubin",
+                            "0.5 mg/dL",
+                            "0.1-1.2 mg/dL",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Liver function tests are normal; safe to proceed with treatment.",
+            "status": "completed"
+        },
+        "Renal Function Test (RFT)": {
+            "testName": "Renal Function Test",
+            "purpose": "Baseline renal function evaluation prior to treatment",
+            "results": {
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "Creatinine",
+                            "0.8 mg/dL",
+                            "0.6-1.2 mg/dL",
+                            "NORMAL"
+                        ],
+                        [
+                            "BUN",
+                            "12 mg/dL",
+                            "7-20 mg/dL",
+                            "NORMAL"
+                        ]
+                    ]
+                }
+            },
+            "interpretation": "Normal renal function; no contraindications for safety of prescribed drugs.",
+            "status": "completed"
+        },
+        "HIV Test": {
+            "testName": "HIV Test",
+            "purpose": "To screen for HIV co-infection",
+            "results": {
+                "type": "text",
+                "content": "HIV test is negative."
+            },
+            "interpretation": "No co-infection detected; standard treatment can proceed.",
+            "status": "completed"
+        },
+        "Nerve Conduction Studies": {
+            "testName": "Nerve Conduction Studies",
+            "purpose": "Assessment of peripheral neuropathy",
+            "results": {
+                "type": "text",
+                "content": "Results indicate reduced amplitude and slowed conduction velocity in both ulnar and peroneal nerves."
+            },
+            "interpretation": "Findings are consistent with peripheral nerve damage due to leprosy.",
+            "status": "completed"
+        }
+    },
+    "validation": {
+        "all_tests_generated": true,
+        "expected_count": 15,
+        "actual_count": 15
+    }
+}

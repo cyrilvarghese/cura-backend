@@ -1,9 +1,10 @@
 {
-    "case_name": "case_doc_for_Calciphylaxis",
+    "case_name": "case_doc_for_Calciphylaxis.md",
     "case_id": 3,
     "title": "Painful ulcers on legs",
     "quote": "I\u2019ve got these painful red patches on my legs, and they just won\u2019t heal",
     "image_url": "/case-images/case3/cover_image.png?v=1734457343",
+    "cover_image_prompt": "A clinical photo showing painful, red-purple ulcerated lesions on the legs of a patient with chronic kidney disease. The ulcers have irregular borders and surrounding tissue appears indurated.",
     "differentials": [
         "Calciphylaxis",
         "Vasculitis with CKD",
@@ -11,5 +12,7 @@
         "Venous Stasis Ulcers",
         "Diabetic Foot Ulcers"
     ],
-    "last_updated": "2024-12-17T21:24:59.152946"
+    "last_updated": "2024-12-17T21:24:59.152946",
+    "department": "Dermatology",
+    "published": true
 }

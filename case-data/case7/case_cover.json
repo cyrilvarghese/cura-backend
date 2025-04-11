@@ -1,5 +1,5 @@
 {
-    "case_name": "Medical_Case__Plasmodium_falciparum_Malaria_(Uncomplicated)",
+    "case_name": "Medical_Case__Plasmodium_falciparum_Malaria_(Uncomplicated).md",
     "case_id": 7,
     "differentials": [
         "Plasmodium falciparum malaria (uncomplicated)",
@@ -12,5 +12,8 @@
     "last_updated": "2025-01-25T02:48:39.547115",
     "title": "High fever and fatigue in patient",
     "quote": "I've had this really high fever for days.",
-    "image_url": "/case-images/case7/cover_image.png?v=1737773263"
+    "image_url": "/case-images/case7/cover_image.png?v=1737773263",
+    "cover_image_prompt": "A clinical photo of a patient with high fever showing signs of malaria including pallor, mild jaundice, and general fatigue. The patient appears acutely ill on a hospital bed.",
+    "department": "Internal Medicine",
+    "published": true
 }

@@ -2,13 +2,15 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 import os
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 import shutil
 from pydantic import BaseModel
 import json
 from enum import Enum
 from .helpers.image_downloader import download_image
 from .helpers.image_extractor import extract_and_save
+import time
+import traceback
 
 router = APIRouter(
     prefix="/test-image",
@@ -35,6 +37,14 @@ class UploadFromUrlRequest(BaseModel):
     test_type: TestType
     image_url: str
 
+class TestImageUploadResponse(BaseModel):
+    message: str
+    image_urls: List[str]
+    case_id: str
+    test_name: str
+    test_type: str
+    file_path: str  # This will contain the directory path
+
 def ensure_assets_directory(case_id: str) -> str:
     """
     Ensure the assets directory exists for the given case ID
@@ -52,192 +62,199 @@ def validate_image_file(file: UploadFile) -> bool:
     file_ext = os.path.splitext(file.filename)[1].lower()
     return file_ext in allowed_extensions
 
-def update_test_exam_data(case_id: str, test_name: str, test_type: TestType, image_url: str) -> bool:
+def update_test_exam_data(case_id: str, test_name: str, test_type: TestType, image_urls: List[str]) -> bool:
     """
-    Update the img_url property in test_exam_data.json for the specified test
+    Update the test_exam_data.json file to add image URLs to the appropriate structure
     
     Args:
-        case_id: The ID of the case
-        test_name: Name of the test/examination
-        test_type: Type of test (physical_exam or lab_test)
-        image_url: URL of the uploaded image
+        case_id: The case ID
+        test_name: The name of the test
+        test_type: The type of test (physical_exam or lab_test)
+        image_urls: List of image URLs to store
     
     Returns:
-        bool: True if update successful, False if test not found
+        True if successful, False otherwise
     """
-    json_path = f"case-data/case{case_id}/test_exam_data.json"
-    
     try:
-        with open(json_path, 'r') as file:
-            data = json.load(file)
+        json_path = f"case-data/case{case_id}/test_exam_data.json"
         
-        # Get the correct category (physical_exam or lab_test)
+        # Create the file if it doesn't exist
+        if not os.path.exists(json_path):
+            with open(json_path, 'w') as f:
+                json.dump({
+                    "physical_exam": {},
+                    "lab_test": {}
+                }, f, indent=4)
+        
+        # Read the existing data
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        
+        # Get the test category
         test_category = data.get(test_type.value, {})
-        if not test_category:
-            return False
-            
-        # Find the test by name
-        test_data = test_category.get(test_name)
-        if not test_data:
-            return False
-            
-        # Update the image URL in the correct field based on test type
-        if test_type == TestType.PHYSICAL_EXAM:
-            # Update findings if it exists
-            if "findings" in test_data:
-                if test_data["findings"].get("type") == "mixed":
-                    # If findings is already mixed type, append to content
-                    image_content = {
-                        "type": "image",
-                        "content": {
-                            "url": image_url,
-                            "altText": f"Image for {test_name}",
-                            "caption": f"Physical examination image for {test_name}"
-                        }
-                    }
-                    # Check if content is a list and contains no existing image
-                    if isinstance(test_data["findings"]["content"], list):
-                        # Remove any existing image entries
-                        test_data["findings"]["content"] = [
-                            item for item in test_data["findings"]["content"] 
-                            if item.get("type") != "image"
-                        ]
-                        test_data["findings"]["content"].append(image_content)
-                    else:
-                        test_data["findings"]["content"] = [
-                            {"type": "text", "content": test_data["findings"]["content"]},
-                            image_content
-                        ]
-                elif test_data["findings"].get("type") == "image":
-                    # If type is image, just update the URL
-                    test_data["findings"]["content"]["url"] = image_url
-                # If not mixed or image type, do nothing
-        else:  # LAB_TEST
-            # Update results if it exists
-            if "results" in test_data:
-                if test_data["results"].get("type") == "mixed":
-                    # If results is already mixed type, append to content
-                    image_content = {
-                        "type": "image",
-                        "content": {
-                            "url": image_url,
-                            "altText": f"Image for {test_name}",
-                            "caption": f"Laboratory test image for {test_name}"
-                        }
-                    }
-                    # Check if content is a list and contains no existing image
-                    if isinstance(test_data["results"]["content"], list):
-                        # Remove any existing image entries
-                        test_data["results"]["content"] = [
-                            item for item in test_data["results"]["content"] 
-                            if item.get("type") != "image"
-                        ]
-                        test_data["results"]["content"].append(image_content)
-                    else:
-                        test_data["results"]["content"] = [
-                            {"type": "text", "content": test_data["results"]["content"]},
-                            image_content
-                        ]
-                elif test_data["results"].get("type") == "image":
-                    # If type is image, just update the URL
-                    test_data["results"]["content"]["url"] = image_url
-                # If not mixed or image type, do nothing
         
-        # Save the updated JSON
-        with open(json_path, 'w') as file:
-            json.dump(data, file, indent=4)
-        return True
+        # Get or create the test entry
+        test_entry = test_category.get(test_name, {})
+        
+        # Make sure we have a results or findings key based on test type
+        results_key = "findings" if test_type.value == "physical_exam" else "results"
+        if results_key not in test_entry:
+            test_entry[results_key] = {}
+        
+        # Get the results/findings object
+        results = test_entry[results_key]
+        
+        # Check the type of results
+        if "type" not in results:
+            # If no type is specified, set it to "image"
+            results["type"] = "image"
+            results["content"] = {
+                "url": image_urls,
+                "altText": f"Images for {test_name}",
+                "caption": f"Test images for {test_name}"
+            }
+        elif results["type"] == "image":
+            # If type is already "image", replace the content
+            results["content"] = {
+                "url": image_urls,
+                "altText": f"Images for {test_name}",
+                "caption": f"Test images for {test_name}"
+            }
+        elif results["type"] == "mixed":
+            # For mixed type, find or add an image content item
+            if "content" not in results:
+                results["content"] = []
             
-    except FileNotFoundError:
-        raise HTTPException(
-            status_code=404,
-            detail=f"test_exam_data.json not found for case {case_id}"
-        )
-    except json.JSONDecodeError:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Invalid JSON format in test_exam_data.json for case {case_id}"
-        )
+            # If content is not a list, convert it
+            if not isinstance(results["content"], list):
+                results["content"] = [results["content"]]
+            
+            # Look for an existing image item
+            image_item_found = False
+            for i, item in enumerate(results["content"]):
+                if isinstance(item, dict) and item.get("type") == "image":
+                    image_item_found = True
+                    # Replace the existing image item
+                    item["content"] = {
+                        "url": image_urls,
+                        "altText": f"Images for {test_name}",
+                        "caption": f"Test images for {test_name}"
+                    }
+                    
+                    # Update the item in the content list
+                    results["content"][i] = item
+                    break
+            
+            # If no image item was found, add a new one
+            if not image_item_found:
+                results["content"].append({
+                    "type": "image",
+                    "content": {
+                        "url": image_urls,
+                        "altText": f"Images for {test_name}",
+                        "caption": f"Test images for {test_name}"
+                    }
+                })
+        else:
+            # For other types (text, table), convert to mixed type
+            old_content = results.get("content", "")
+            old_type = results.get("type", "text")
+            
+            # Create a mixed type with the old content and new image
+            results["type"] = "mixed"
+            results["content"] = [
+                {
+                    "type": old_type,
+                    "content": old_content
+                },
+                {
+                    "type": "image",
+                    "content": {
+                        "url": image_urls,
+                        "altText": f"Images for {test_name}",
+                        "caption": f"Test images for {test_name}"
+                    }
+                }
+            ]
+        
+        # Update the test entry in the test category
+        test_category[test_name] = test_entry
+        
+        # Update the test category in the data
+        data[test_type.value] = test_category
+        
+        # Write the updated data back to the file
+        with open(json_path, 'w') as f:
+            json.dump(data, f, indent=4)
+        
+        print(f"Successfully updated test_exam_data.json with URLs: {image_urls}")
+        return True
+    except Exception as e:
+        print(f"Error updating test_exam_data.json: {str(e)}")
+        traceback.print_exc()  # Print the full traceback for debugging
+        return False
 
-@router.post("/upload", response_model=UploadResponse)
+@router.post("/upload", response_model=TestImageUploadResponse)
 async def upload_test_image(
     case_id: str = Form(...),
     test_name: str = Form(...),
     test_type: TestType = Form(...),
-    file: UploadFile = File(...),
+    files: List[UploadFile] = File(...),
 ):
     """
-    Upload a test image for a specific case and test name using form data
+    Upload one or more images for a test and update the test_exam_data.json file
     
     Args:
-        case_id: The ID of the case (from form)
-        test_name: Name of the test/examination (from form)
-        test_type: Type of test (physical_exam or lab_test) (from form)
-        file: The image file to upload
+        case_id: The case ID
+        test_name: The name of the test
+        test_type: The type of test (physical_exam or lab_test)
+        files: One or more image files to upload
     
     Returns:
-        JSON response with upload details
+        A dictionary with the uploaded image URLs and metadata
     """
     try:
-        # Add detailed error logging at the start
-        print(f"""
-                [DEBUG] Upload attempt details:
-                - Case ID: {case_id}
-                - Test Name: {test_name}
-                - Test Type: {test_type}
-                - File Name: {file.filename}
-                - File Content Type: {file.content_type}
-                """)
-
-        # Validate image file
-        if not validate_image_file(file):
-            print(f"[ERROR] Invalid file type: {file.filename} ({file.content_type})")
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid file type. Only JPG and PNG files are allowed."
-            )
-
-        # Ensure assets directory exists
+        # Create directory if it doesn't exist
+        case_dir = f"case-data/case{case_id}"
+        os.makedirs(case_dir, exist_ok=True)
+        
+        # Use assets directory instead of images
         assets_dir = ensure_assets_directory(case_id)
-
-        # Create file path with original extension
-        file_ext = os.path.splitext(file.filename)[1].lower()
-        sanitized_test_name = test_name.replace(" ", "_").lower()
-        file_name = f"{test_type.value}_{sanitized_test_name}{file_ext}"
-        file_path = os.path.join(assets_dir, file_name)
-
-        # Save the uploaded file
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-
-        # Generate response
-        relative_path = f"/case-images/case{case_id}/assets/{file_name}"
         
-        # Update test_exam_data.json
-        if not update_test_exam_data(case_id, test_name, test_type, relative_path):
-            print(f"Warning: Test '{test_name}' not found in {test_type.value} category in test_exam_data.json")
+        image_urls = []
         
-        return UploadResponse(
-            case_id=case_id,
-            test_name=test_name,
-            test_type=test_type,
-            file_path=relative_path,
-            message="Test image uploaded successfully"
-        )
-
+        for file in files:
+            # Generate a unique filename
+            timestamp = int(time.time() * 1000)
+            filename = f"{test_name.replace(' ', '_')}_{timestamp}_{file.filename}"
+            
+            # Save the file to assets directory
+            file_path = f"{assets_dir}/{filename}"
+            
+            with open(file_path, "wb") as f:
+                content = await file.read()
+                f.write(content)
+            
+            # Create the relative URL for the image (using assets path)
+            image_url = f"/case-images/case{case_id}/assets/{filename}"
+            image_urls.append(image_url)
+        
+        # Update the test_exam_data.json file with all image URLs
+        update_test_exam_data(case_id, test_name, test_type, image_urls)
+        
+        return {
+            "message": f"Successfully uploaded {len(image_urls)} image(s) for {test_name}",
+            "image_urls": image_urls,
+            "case_id": case_id,
+            "test_name": test_name,
+            "test_type": test_type.value,
+            "file_path": assets_dir
+        }
     except Exception as e:
-        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        error_message = f"""
-                            [{error_timestamp}] ❌ Error in upload_test_image:
-                            - Error Type: {type(e).__name__}
-                            - Error Message: {str(e)}
-                            - Case ID: {case_id}
-                            - Test Name: {test_name}
-                            - Test Type: {test_type}
-                            - File Details: {file.filename if file else 'No file'}
-                            """
-        print(error_message)
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"An error occurred while uploading the image: {str(e)}"
+        )
 
 @router.delete("/delete/{case_id}/{test_type}/{test_name}")
 async def delete_test_image(
@@ -315,7 +332,7 @@ async def upload_test_image_from_url(request: UploadFromUrlRequest):
         relative_path = saved_path if response_code == 403 else f"/case-images/case{request.case_id}/assets/{file_name}"
         
         # Update test_exam_data.json
-        if not update_test_exam_data(request.case_id, request.test_name, request.test_type, relative_path):
+        if not update_test_exam_data(request.case_id, request.test_name, request.test_type, [relative_path]):
             print(f"Warning: Test '{request.test_name}' not found in {request.test_type.value} category in test_exam_data.json")
         
         return UploadResponse(

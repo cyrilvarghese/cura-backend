@@ -1,9 +1,10 @@
 {
-    "case_name": "Medical_Case__Eczema",
+    "case_name": "Medical_Case__Eczema.md",
     "case_id": 9,
     "title": "intensely itchy rash on hands",
     "quote": "My rash itches so much, especially in the cold.",
     "image_url": "/case-images/case9/cover_image.png?v=1738126735",
+    "cover_image_prompt": "A close-up photo of hands showing dry, red, and scaly patches with visible scratching marks. The skin appears thickened and shows typical eczematous changes, particularly on the palms and fingers.",
     "differentials": [
         "Atopic Dermatitis (Eczema)",
         "Contact Dermatitis",
@@ -12,5 +13,7 @@
         "Tinea (Fungal Infection)",
         "Seborrheic Dermatitis"
     ],
-    "last_updated": "2025-01-29T04:59:55.071874"
+    "last_updated": "2025-01-29T04:59:55.071874",
+    "department": "Dermatology",
+    "published": true
 }

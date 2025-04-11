@@ -4,7 +4,6 @@ Your goal:
 - Identify and extract the **differential diagnoses**.
 - Identify and extract the **Primary diagnosis**.
 - Return them as a JSON array containing only the disease names listed under "differential diagnoses" (correct,primary diagnosis and incorrect options).Include the primary diagnosis in the array as well.
-
 Example output format:
 [
   "Bullous Pemphigoid",

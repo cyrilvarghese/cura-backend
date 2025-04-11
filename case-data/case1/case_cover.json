@@ -1,9 +1,9 @@
 {
     "case_name": "Urticarial_Vasculitis_v3.md",
     "case_id": 1,
-    "title": "Rash on arms and legs",
-    "quote": "I've had this itchy rash on my arms and legs for about two weeks now.",
-    "image_url": "/case-images/case1/cover_image.png?v=1734527545?v=1734527615?v=1734527635?v=1734527734",
+    "title": "itchy rash on arms and legs",
+    "quote": "I\u2019ve had this itchy rash for about two weeks.",
+    "image_url": "/case-images/case1/cover_image.png?v=1744390064",
     "cover_image_prompt": "A close-up photo of a rash on the arms and legs of a woman in her 30s. The rash is red and raised, and there are small blisters filled with clear fluid.",
     "differentials": [
         "Urticarial Vasculitis",
@@ -14,5 +14,6 @@
     ],
     "last_updated": "2024-12-18T13:14:54.123488",
     "department": "Dermatology",
-    "published": true
+    "published": true,
+    "image_prompt": "Maya Singh, a 30-year-old Indian woman and project manager, sitting in a modern clinical examination room in Pune, India. She has long black hair tied back in a loose ponytail, wearing a comfortable white t-shirt and linen trousers, which are slightly rolled up to reveal red, raised patches that resemble hives on her arms and legs. Her expression is one of mild distress, with her brows furrowed and her posture slightly hunched as she glances down at her arms, seemingly reflecting on the discomfort. The room has soft, natural light coming through a window, with a clean examination bed, medical charts on the wall, and a small plant in the corner, creating a warm yet clinical atmosphere. A nurse is seen in the background, adjusting supplies, emphasizing care and support in the environment."
 }

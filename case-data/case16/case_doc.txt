@@ -253,21 +253,21 @@ She has not taken any new medications recently otherwise. No history of NSAID or
 ### **Part 6: Initial Case Presentation and Information Gathering**
 
 
-**Key History Questions:**
+**Important Questions:**
+1. When did the rash first appear, and how does it behave with cold exposure?
+2. Have you experienced lip swelling, throat tightness, or any trouble breathing during these episodes?
+3. Do the lesions resolve completely, or do they leave any discoloration or scarring?
 
-
-1. Have you taken any medications recently, even occasionally, like for anxiety, headaches, or sleep — including medications like propranolol (Inderal)?
-2. When did the rash first appear, and how does it behave with cold exposure?
-3. Have you experienced lip swelling, throat tightness, or any trouble breathing during these episodes?
-4. Do the lesions resolve completely, or do they leave any discoloration or scarring?
-5. Have you ever had a bad reaction to any medications — like painkillers such as ibuprofen (Advil), or even medicines you’ve taken for anxiety or sleep? This includes anything that caused rash, fatigue, upset stomach, or odd symptoms.
+**Additional Questions:**
+4. Have you taken any medications recently, even occasionally, like for anxiety, headaches, or sleep — including medications like propranolol (Inderal)?
+5. Have you ever had a bad reaction to any medications — like painkillers such as ibuprofen (Advil), or even medicines you've taken for anxiety or sleep? This includes anything that caused rash, fatigue, upset stomach, or odd symptoms.
 6. Have you noticed any symptoms after exercise, hot showers, or stress?
- Have you taken any medications recently, even occasionally, like for anxiety, headaches, or sleep — including medications like propranolol (Inderal)?
-2. When did the rash first appear, and how has it evolved over time?
-2. Do the lesions resolve completely, or do they leave any discoloration or scarring?
-3. Have you experienced any joint pain or stiffness? If so, which joints are affected, and when are the symptoms most severe?
-4.  Have you ever had a bad reaction to any medications — like painkillers such as ibuprofen (Advil), or even medicines you’ve taken for anxiety or sleep? This includes anything that caused rash, fatigue, upset stomach, or odd symptoms.
-5. Have you noticed any other symptoms, such as fever, weight loss, or malaise?
+7. Have you taken any medications recently, even occasionally, like for anxiety, headaches, or sleep — including medications like propranolol (Inderal)?
+8. When did the rash first appear, and how has it evolved over time?
+9. Do the lesions resolve completely, or do they leave any discoloration or scarring?
+10. Have you experienced any joint pain or stiffness? If so, which joints are affected, and when are the symptoms most severe?
+11. Have you ever had a bad reaction to any medications — like painkillers such as ibuprofen (Advil), or even medicines you've taken for anxiety or sleep? This includes anything that caused rash, fatigue, upset stomach, or odd symptoms.
+12. Have you noticed any other symptoms, such as fever, weight loss, or malaise?
 
 
 **Vital Signs:**
@@ -455,7 +455,7 @@ She has not taken any new medications recently otherwise. No history of NSAID or
 ### ⚠️ Complication Consideration:
 
 
-The patient’s use of propranolol for performance anxiety is important to note. Beta-blockers may interfere with the emergency treatment of anaphylaxis by reducing the efficacy of epinephrine and increasing the severity of allergic responses.
+The patient's use of propranolol for performance anxiety is important to note. Beta-blockers may interfere with the emergency treatment of anaphylaxis by reducing the efficacy of epinephrine and increasing the severity of allergic responses.
 
 
 **Management must include reviewing this medication and potentially switching to an alternative anxiolytic if needed.**

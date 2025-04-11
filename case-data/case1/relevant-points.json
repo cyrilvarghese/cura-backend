@@ -1,0 +1,24 @@
+{
+    "critical_findings": [
+        {
+            "id": 1,
+            "finding": "Rash lasting >24 hours"
+        },
+        {
+            "id": 2,
+            "finding": "Bruise-like discoloration after rash fades"
+        },
+        {
+            "id": 3,
+            "finding": "Morning joint stiffness and pain"
+        },
+        {
+            "id": 4,
+            "finding": "General fatigue"
+        },
+        {
+            "id": 5,
+            "finding": "Family history of rheumatoid arthritis in mother"
+        }
+    ]
+}

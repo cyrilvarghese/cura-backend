@@ -76,7 +76,8 @@
                 }
             },
             "status": "completed",
-            "interpretation": "Vitals within normal limits."
+            "interpretation": "Vitals within normal limits.",
+            "comments": []
         },
         "Abdominal Examination": {
             "purpose": "Evaluate organ status",
@@ -178,7 +179,8 @@
                 }
             },
             "interpretation": "Leukocytosis indicates inflammation.",
-            "status": "completed"
+            "status": "completed",
+            "comments": []
         },
         "Erythrocyte Sedimentation Rate (ESR)": {
             "testName": "Erythrocyte Sedimentation Rate (ESR)",

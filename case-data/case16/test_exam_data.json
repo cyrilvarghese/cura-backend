@@ -1,7 +1,7 @@
 {
     "physical_exam": {
         "Skin Examination": {
-            "purpose": "Assess rash characteristics and signs of vasculitis.",
+            "purpose": "Assess rash characteristics.",
             "findings": {
                 "type": "mixed",
                 "content": [

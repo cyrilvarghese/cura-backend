@@ -165,6 +165,7 @@ dependencies:
   - zstd=1.5.6=ha6fb4c9_0
   - google-auth-oauthlib
   - google-api-python-client
+  - rapidfuzz>=3.0.0  
   - pip:
       - aiohappyeyeballs==2.4.3
       - aiohttp==3.11.8
@@ -192,4 +193,5 @@ dependencies:
       - realtime==1.0.0
       - supabase
       - markdown
+
 prefix: /root/conda/envs/cura-env

@@ -23,6 +23,7 @@ from routers.case_player.get_case_details_route import case_details_router
 from routers.case_creator.evaluate_student_questions import router as evaluate_student_questions_router
 from routers.findings_routes import findings_router
 from routers.case_creator.update_test_comment import router as update_test_comment_router
+from routers.case_player.create_pre_treatment_feedback import router as pre_treatment_feedback_router
 
 api_router = APIRouter()
 
@@ -62,6 +63,7 @@ api_router.include_router(google_docs_router)
 api_router.include_router(case_details_router)
 api_router.include_router(evaluate_student_questions_router)
 api_router.include_router(findings_router)
+api_router.include_router(pre_treatment_feedback_router)
 
 @api_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():

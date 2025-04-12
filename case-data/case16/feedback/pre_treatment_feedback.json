@@ -1,0 +1,17 @@
+{
+    "case_id": "16",
+    "timestamp": "2025-04-12T18:33:01.400439",
+    "feedback": {
+        "quarterly (CBC)": {
+            "match": false,
+            "specific": "The selected test, 'quarterly CBC', is not aligned with the monitoring plan which specifies 'CBC' to be done every 2 weeks during treatment. This frequency is crucial to monitor the patient's response to steroid therapy effectively.",
+            "general": "A CBC is essential in tracking blood cell counts and can indicate systemic inflammation or eosinophilia, which is important in the context of urticarial vasculitis treatment.",
+            "lateral": "CBC monitoring is also commonly used in other autoimmune conditions and during treatments involving immunosuppressive medications to ensure patient safety and response to therapy."
+        }
+    },
+    "metadata": {
+        "total_tests_evaluated": 1,
+        "processing_time_seconds": 2.124769,
+        "model_version": "gpt-4o-mini"
+    }
+}

@@ -1,0 +1,208 @@
+from typing import List
+from fastapi import APIRouter, HTTPException
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from datetime import datetime
+import os
+from dotenv import load_dotenv
+import json
+from pathlib import Path
+from pydantic import BaseModel, validator
+from utils.text_cleaner import extract_code_blocks, clean_code_block
+
+# Load environment variables
+load_dotenv()
+
+router = APIRouter(
+    prefix="/feedback",
+    tags=["create-feedback"]
+)
+
+class PreTreatmentFeedbackRequest(BaseModel):
+    case_id: str
+    student_inputs_pre_treatment: List[str]
+    student_inputs_monitoring: List[str]
+ 
+
+# Initialize the model
+model = ChatOpenAI(
+    model_name="gpt-4o-mini",
+    temperature=0.7,
+    api_key=os.getenv("OPENAI_API_KEY")
+)
+
+def load_prompt(file_path: str) -> str:
+    """Load the prompt from a specified file."""
+    try:
+        with open(file_path, 'r') as file:
+            return file.read()
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail=f"Prompt file not found: {file_path}")
+
+# Load the prompt from file
+PRE_TREATMENT_FEEDBACK_PROMPT = load_prompt("prompts/pre_treatment_feedback.txt")
+MONITORING_FEEDBACK_PROMPT = load_prompt("prompts/monitoring_feedback.txt")
+async def load_case_context(case_id: int) -> str:
+    """Load the pre-treatment context from the case file."""
+    try:
+        file_path = Path(f"case-data/case{case_id}/treatment_context.md")
+        if not file_path.exists():
+            raise FileNotFoundError(f"Context file not found for case {case_id}")
+        
+        with open(file_path, 'r') as file:
+            return file.read()
+    except Exception as e:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"Failed to load context for case {case_id}: {str(e)}"
+        )
+
+async def save_feedback_response(case_id: int, response_data: dict) -> dict:
+    """Save the feedback response to a JSON file."""
+    try:
+        feedback_dir = Path(f"case-data/case{case_id}/feedback")
+        feedback_dir.mkdir(parents=True, exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_path = feedback_dir / f"pre_treatment_feedback.json"
+        
+        with open(file_path, 'w') as f:
+            json.dump(response_data, f, indent=4)
+            
+        return {
+            "file_path": str(file_path),
+            "timestamp": datetime.now().isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to save feedback: {str(e)}"
+        )
+
+@router.post("/pre_treatment")
+async def get_pre_treatment_feedback(request: PreTreatmentFeedbackRequest):
+    """Generate feedback for pre-treatment test selections."""
+    try:
+        print(f"[{datetime.now()}] Starting feedback generation for case: {request.case_id}")
+        
+        case_context = await load_case_context(request.case_id)
+        prompt_template = ChatPromptTemplate.from_template(PRE_TREATMENT_FEEDBACK_PROMPT)
+        
+        feedback_results = {}
+        start_time = datetime.now()
+        
+        for test in request.student_inputs_pre_treatment:
+            print(f"[{datetime.now()}] Generating feedback for test: {test}")
+            response = model.invoke(prompt_template.invoke({
+                "student_input_pre_treatment": test,
+                "case_context": case_context
+            }))
+            
+            # Process the response content
+            response_content = response.content
+            
+            # Clean the response and parse as JSON
+            try:
+                cleaned_content = clean_code_block(response_content)
+                feedback_results[test] = json.loads(cleaned_content)
+            except json.JSONDecodeError:
+                # If parsing fails, return a default response
+                feedback_results[test] = {
+                    "match": "NA",
+                    "specific": "Error parsing response",
+                    "general": "",
+                    "lateral": ""
+                }
+        
+        end_time = datetime.now()
+        processing_time = (end_time - start_time).total_seconds()
+        
+        response_data = {
+            "case_id": request.case_id,
+            "timestamp": datetime.now().isoformat(),
+            "feedback": feedback_results,
+            "metadata": {
+                "total_tests_evaluated_pre_treatment": len(request.student_inputs_pre_treatment),
+                "total_tests_evaluated_monitoring": len(request.student_inputs_monitoring),
+                "processing_time_seconds": processing_time,
+                "model_version": model.model_name
+            }
+        }
+        
+        save_result = await save_feedback_response(request.case_id, response_data)
+        response_data["file_path"] = save_result["file_path"]
+        
+        print(f"[{datetime.now()}] ✅ Successfully generated feedback")
+        return response_data
+
+    except json.JSONDecodeError as e:
+        print(f"[{datetime.now()}] ❌ JSON parsing error: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Invalid response format: {str(e)}")
+    except Exception as e:
+        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{error_timestamp}] ❌ Error in get_pre_treatment_feedback: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.post("/monitoring")
+async def get_monitoring_feedback(request: PreTreatmentFeedbackRequest):
+    """Generate feedback for monitoring test selections."""
+    try:
+        print(f"[{datetime.now()}] Starting feedback generation for case: {request.case_id}")
+
+        case_context = await load_case_context(request.case_id)
+        prompt_template = ChatPromptTemplate.from_template(MONITORING_FEEDBACK_PROMPT)
+
+        feedback_results = {}
+        start_time = datetime.now()
+        
+        for test in request.student_inputs_monitoring:
+            print(f"[{datetime.now()}] Generating feedback for test: {test}")
+            response = model.invoke(prompt_template.invoke({
+                "student_input_monitoring": test,
+                "monitoring_context": case_context
+            }))
+            
+            # Process the response content  
+            response_content = response.content
+            
+            # Clean the response and parse as JSON
+            try:
+                cleaned_content = clean_code_block(response_content)
+                feedback_results[test] = json.loads(cleaned_content)
+            except json.JSONDecodeError:
+                # If parsing fails, return a default response
+                feedback_results[test] = {
+                    "match": "NA",
+                    "specific": "Error parsing response",
+                    "general": "",
+                    "lateral": ""
+                }
+        
+        end_time = datetime.now()
+        processing_time = (end_time - start_time).total_seconds()
+        
+        response_data = {
+            "case_id": request.case_id,
+            "timestamp": datetime.now().isoformat(),
+            "feedback": feedback_results,
+            "metadata": {
+                "total_tests_evaluated": len(request.student_inputs_monitoring),
+                "processing_time_seconds": processing_time,
+                "model_version": model.model_name
+            }
+        }
+        
+        save_result = await save_feedback_response(request.case_id, response_data)
+        response_data["file_path"] = save_result["file_path"]
+        
+        print(f"[{datetime.now()}] ✅ Successfully generated monitoring feedback")
+        return response_data
+
+    except json.JSONDecodeError as e:
+        print(f"[{datetime.now()}] ❌ JSON parsing error: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Invalid response format: {str(e)}")
+    except Exception as e:
+        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{error_timestamp}] ❌ Error in get_monitoring_feedback: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

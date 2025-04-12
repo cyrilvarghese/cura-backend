@@ -20,7 +20,8 @@
                 ]
             },
             "status": "completed",
-            "interpretation": "Findings are consistent with a single lesion typical of tuberculoid leprosy."
+            "interpretation": "Findings are consistent with a single lesion typical of tuberculoid leprosy.",
+            "comments": []
         },
         "Sensory Testing": {
             "purpose": "Evaluate the loss of sensation over the lesion.",

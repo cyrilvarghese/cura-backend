@@ -470,11 +470,10 @@ The patient's use of propranolol for performance anxiety is important to note. B
 | LFT, RFT              | Baseline organ function (if steroids are used)       | Prednisone              |
 | Cold Stimulation Test | Confirm diagnosis of cold-induced urticaria         | Diagnostic              |
 | Review Medication List| Detect high-risk agents (e.g., beta-blockers)        | Epinephrine (in emergencies) | Relevant Drug(s)             |
-| ------------- | ------------------------------- | ---------------------------- |
-| CBC, ESR      | Establish baseline inflammation | Steroids                     |
-| LFT, RFT      | Assess liver/kidney function    | Steroids, Hydroxychloroquine |
-| ANA, C3, C4   | Confirm autoimmune activity     | General                      |
-| Skin Biopsy   | Diagnostic confirmation         | None                         |
+| CBC, ESR              | Establish baseline inflammation | Steroids                     |
+| LFT, RFT              | Assess liver/kidney function    | Steroids, Hydroxychloroquine |
+| ANA, C3, C4           | Confirm autoimmune activity     | General                      |
+| Skin Biopsy           | Diagnostic confirmation         | None                         |
 
 
 #### 🔁 **Monitoring During Treatment**
@@ -485,7 +484,6 @@ The patient's use of propranolol for performance anxiety is important to note. B
 | Monthly       | Skin reaction diary     | Monitor frequency/severity of flares   | All                |
 | PRN           | Medication reconciliation | Assess for beta-blocker interference   | Epinephrine safety |
 | If severe     | Emergency readiness check| Patient education, EpiPen instruction  | All                | Test                | Purpose                       | Relevant Drug(s)   |
-| ------------- | ------------------- | ----------------------------- | ------------------ |
 | Every 2 weeks | CBC, ESR            | Monitor response to treatment | Steroids           |
 | Monthly       | LFT, RFT            | Monitor drug safety           | Hydroxychloroquine |
 | PRN           | Skin and joint exam | Assess flare-ups              | All                |

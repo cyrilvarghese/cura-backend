@@ -108,23 +108,30 @@ async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):
         # Update last_updated timestamp
         case_cover_data["last_updated"] = datetime.now().isoformat()
         
-        # Write the updated data back to the file
-        with open(cover_file_path, 'w') as f:
-            json.dump(case_cover_data, f, indent=4)
+        # Reset the last_modified_time in Supabase to null
+        try:
+            from auth.auth_api import get_client
+            supabase = get_client()
             
-        return {
-            "status": "success",
-            "message": "Case Published Successfully",
-            "case_id": case_id
-        }
-
-    except json.JSONDecodeError as e:
-        raise HTTPException(
-            status_code=500, 
-            detail=f"Error decoding JSON from case cover file: {str(e)}"
-        )
+            # Find the document by case name
+            case_name = case_cover_data.get("case_name")
+            if case_name:
+                print(f"Resetting last_modified_time for case: {case_name}")
+                
+                # Update the document to set last_modified_time to null
+                result = supabase.table("documents")\
+                    .update({"last_modified_time": None})\
+                    .eq("title", case_name)\
+                    .execute()
+                
+                print(f"Reset result: {result.data}")
+        except Exception as e:
+            print(f"WARNING: Could not reset last_modified_time in Supabase: {str(e)}")
+        
+        # Write updated data back to the file
+        with open(cover_file_path, 'w') as f:
+            json.dump(case_cover_data, f, indent=2)
+        
+        return {"message": "Case cover updated successfully"}
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error updating case cover: {str(e)}"
-        ) 
+        raise HTTPException(status_code=500, detail=f"Error updating case cover: {str(e)}")

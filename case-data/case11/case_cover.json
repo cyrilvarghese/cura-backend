@@ -1,19 +1,19 @@
 {
-    "case_name": "Master_Clinical_Case__Tuberculoid_Leprosy.md",
-    "case_id": "11",
-    "department": "Dermatology",
-    "published": false,
-    "title": "hypopigmented patch on left arm",
-    "quote": "It's kind of lighter than the rest of my skin.",
-    "image_url": "/case-images/case11/cover_image.png?v=1744251767",
-    "differentials": [
-        "Paucibacillary Leprosy \u2013 Tuberculoid Type",
-        "Indeterminate leprosy",
-        "Vitiligo",
-        "Pityriasis alba",
-        "Tinea versicolor",
-        "Psoriasis"
-    ],
-    "last_updated": "2025-04-09T15:36:50.412087",
-    "image_prompt": "Anita Joshi, a 28-year-old Indian woman, sits in a bright and welcoming clinic examination room. She is dressed in casual, comfortable attire, featuring a flowy cotton top with short sleeves that subtly shows a hypopigmented patch on her left upper arm. Her warm, expressive eyes convey a mix of concern and resilience, while her body language reflects anxiety, with one hand resting on her arm and her posture slightly leaning forward. The room is adorned with educational materials related to creative arts, including children's drawings on the wall, which connects to her profession as a school teacher. There is soft, natural light entering through a window, casting a calming glow, while a medical chart on the wall outlines skin conditions in an easy-to-understand format. A simple handbag is placed beside her, hinting at her daily life outside the clinic."
+  "case_name": "Master_Clinical_Case__Tuberculoid_Leprosy.md",
+  "case_id": "11",
+  "department": "Dermatology",
+  "published": true,
+  "title": "hypopigmented patch on left arm",
+  "quote": "It's kind of lighter than the rest of my skin.",
+  "image_url": "/case-images/case11/cover_image.png?v=1744251767",
+  "differentials": [
+    "Paucibacillary Leprosy \u2013 Tuberculoid Type",
+    "Indeterminate leprosy",
+    "Vitiligo",
+    "Pityriasis alba",
+    "Tinea versicolor",
+    "Psoriasis"
+  ],
+  "last_updated": "2025-04-13T05:53:58.460702",
+  "image_prompt": "Anita Joshi, a 28-year-old Indian woman, sits in a bright and welcoming clinic examination room. She is dressed in casual, comfortable attire, featuring a flowy cotton top with short sleeves that subtly shows a hypopigmented patch on her left upper arm. Her warm, expressive eyes convey a mix of concern and resilience, while her body language reflects anxiety, with one hand resting on her arm and her posture slightly leaning forward. The room is adorned with educational materials related to creative arts, including children's drawings on the wall, which connects to her profession as a school teacher. There is soft, natural light entering through a window, casting a calming glow, while a medical chart on the wall outlines skin conditions in an easy-to-understand format. A simple handbag is placed beside her, hinting at her daily life outside the clinic."
 }

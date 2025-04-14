@@ -1,0 +1,50 @@
+//only protocol has been added - need to add the rest of the sections like pre-treatment investigations, monitoring, contraindicated drugs, additional instructions and format the output in structured Markdown so that each section is clearly labeled and machine-readable.          
+// this will be used to generate the treatment context for the treatment context for each case in the case data creator (as a tab with patient persona aand exam data and dd)
+
+
+
+
+#### 💊 Treatment Protocol (Enhanced for Clinical Reasoning & Teaching Context)
+
+Write a structured treatment plan for this condition, designed to help medical students understand not only **what to use**, but **why**.
+
+Please include:
+
+---
+
+### ✅ 1. First-Line Treatment
+- List recommended first-line drugs.
+- Include common drug examples (generic name preferred).
+- Include typical dosing or usage instructions.
+- Add **brief rationale**: what symptom or mechanism does this address?
+
+---
+
+### ⚖️ 2. Escalation / Second-Line
+- What is used in moderate-to-severe cases?
+- When should this be added or substituted?
+- Include dose ranges if applicable.
+- Include a rationale for escalation (e.g., non-response, systemic features).
+
+---
+
+### 💡 3. Steroid-Sparing or Refractory Options
+- What drugs are used for chronic or difficult-to-control cases?
+- What considerations (e.g., monitoring, slow onset) are needed for these drugs?
+
+---
+
+### ❌ 4. Contraindicated or Cautionary Drugs
+- Mention drugs that should be stopped or avoided in this case.
+- Explain why (e.g., interaction risk, blunted emergency response).
+- Include what happens if they are continued.
+
+---
+
+### 💬 Additional Instructions (Optional)
+- Include any non-drug guidance (e.g., patient education, environmental changes).
+- Summarize in a way that allows learners to **build decision pathways**.
+
+---
+
+Format the output in structured Markdown so that each section is clearly labeled and machine-readable.

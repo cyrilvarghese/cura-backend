@@ -1,0 +1,22 @@
+{
+  "case_id": "16",
+  "timestamp": "2025-04-14T16:50:21.807697",
+  "feedback": {
+    "CBC (two weeks)": {
+      "match": true,
+      "specific": "CBC is performed every two weeks to monitor for changes in white blood cell counts and other blood cell parameters, which can be affected by steroid therapy used in the treatment of urticarial vasculitis.",
+      "general": "CBC is a fundamental test used to assess overall health and detect various blood disorders, including those caused by inflammation or medication side effects.",
+      "lateral": "CBC is also frequently monitored in patients on other immunosuppressants or with autoimmune diseases to assess for cytopenias or signs of inflammation."
+    }
+  },
+  "metadata": {
+    "total_tests_evaluated": 1,
+    "processing_time_seconds": 1.50748,
+    "model_version": "gemini-2.0-flash-lite",
+    "generation_config": {
+      "temperature": 0.9,
+      "top_p": 0.8,
+      "top_k": 40
+    }
+  }
+}

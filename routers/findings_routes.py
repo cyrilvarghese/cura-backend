@@ -8,19 +8,24 @@ import os
 from dotenv import load_dotenv
 import json
 from utils.text_cleaner import clean_code_block
+import google.generativeai as genai
+import asyncio
 
 # Load environment variables
 load_dotenv()
 
 findings_router = APIRouter()
 
-# Initialize the model
+# Initialize the OpenAI model
 model = ChatOpenAI(
     model_name="gpt-4o",
     temperature=0.3,
     api_key=os.getenv("OPENAI_API_KEY"),
     timeout=100
 )
+
+# Initialize the Gemini model
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 class StudentFindings(BaseModel):
     case_id: str
@@ -30,6 +35,7 @@ class EvaluationResponse(BaseModel):
     feedback: dict
     timestamp: str
     case_id: str
+    metadata: dict = None
 
 def get_critical_findings(case_id: str) -> str:
     """Get the critical findings from the relevant points markdown file"""
@@ -118,4 +124,81 @@ Only output the JSON. No extra explanations."""
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{error_timestamp}] ❌ Error in evaluate_findings: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+def load_prompt(file_path: str) -> str:
+    """Load the prompt from a specified file."""
+    try:
+        with open(file_path, 'r') as file:
+            return file.read()
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail=f"Prompt file not found: {file_path}")
+
+# Load the prompt from file
+FINDINGS_EVALUATION_PROMPT = load_prompt("prompts/findings_evaluation_prompt.txt")
+
+@findings_router.post("/evaluate-findings-gemini", response_model=EvaluationResponse)
+async def evaluate_findings_gemini(request: StudentFindings):
+    try:
+        critical_findings = get_critical_findings(request.case_id)
+        formatted_findings = "\n".join(f"- {item}" for item in request.findings)
+        if(len(request.findings) == 0):
+            formatted_findings = "No findings submitted by the student"
+        
+        # Format the prompt with the specific inputs
+        formatted_prompt = FINDINGS_EVALUATION_PROMPT.format(
+            critical_findings=critical_findings,
+            student_findings=formatted_findings
+        )
+        
+        # Configure the model
+        model = genai.GenerativeModel('gemini-2.0-flash')
+        generation_config = {
+            "temperature": 0.3,
+            "top_p": 0.95,
+            "top_k": 40
+        }
+        
+        # Prepare the content for generation
+        content = {
+            "contents": [{"parts": [{"text": formatted_prompt}]}],
+            "generation_config": generation_config
+        }
+        
+        print(f"[{datetime.now()}] 🔍 Generating findings feedback with Gemini for case {request.case_id}")
+        start_time = datetime.now()
+        
+        # Generate the response
+        response = await asyncio.to_thread(model.generate_content, **content)
+        response_content = response.text
+        
+        end_time = datetime.now()
+        processing_time = (end_time - start_time).total_seconds()
+        
+        # Clean and parse the response
+        cleaned = clean_code_block(response_content)
+        parsed = json.loads(cleaned)
+        
+        response_data = {
+            "feedback": parsed,
+            "timestamp": datetime.now().isoformat(),
+            "case_id": request.case_id,
+            "metadata": {
+                "processing_time_seconds": processing_time,
+                "model_version": model.model_name,
+                "generation_config": generation_config
+            }
+        }
+        
+        return response_data
+
+    except json.JSONDecodeError as e:
+        print(f"[{datetime.now()}] ❌ JSON parsing error: {str(e)}")
+        print(f"[DEBUG] Failed JSON content: {response_content}")
+        raise HTTPException(status_code=400, detail=f"Invalid response format: {str(e)}")
+    except Exception as e:
+        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{error_timestamp}] ❌ Error in evaluate_findings_gemini: {str(e)}")
+        print(f"[DEBUG] Error type: {type(e).__name__}")
+        print(f"[DEBUG] Full error details: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

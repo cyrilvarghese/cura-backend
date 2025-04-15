@@ -61,7 +61,7 @@ async def signup(email: str, password: str, username: str, role: str = "user") -
             print("❌ Error: SUPABASE_SERVICE_ROLE_KEY not found in environment variables")
             raise Exception("Service role key not configured")
             
-        service_client = create_client(supabase_url, service_role_key)
+        service_client = create_client(SUPABASE_URL, service_role_key)
         print("✓ Service client created successfully")
         
         # Create the user in Supabase Auth

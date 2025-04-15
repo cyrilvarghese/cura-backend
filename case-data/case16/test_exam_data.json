@@ -22,7 +22,10 @@
                 ]
             },
             "status": "completed",
-            "interpretation": "Lesions are consistent with urticarial vasculitis based on appearance and duration."
+            "interpretation": "Lesions are consistent with urticarial vasculitis based on appearance and duration.",
+            "comments": [
+                "awe"
+            ]
         },
         "Musculoskeletal Examination": {
             "purpose": "Evaluate joint tenderness and range of motion.",

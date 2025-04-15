@@ -166,6 +166,7 @@ dependencies:
   - google-auth-oauthlib
   - google-api-python-client
   - rapidfuzz>=3.0.0  
+  - google-generativeai
   - pip:
       - aiohappyeyeballs==2.4.3
       - aiohttp==3.11.8

@@ -8,6 +8,7 @@ from pathlib import Path
 from pydantic import BaseModel
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
+import asyncio
 
 # Load environment variables
 load_dotenv()
@@ -159,7 +160,7 @@ async def get_pre_treatment_feedback(request: PreTreatmentFeedbackRequest):
             # Generate the response
             print("[DEBUG] Sending prompt to Gemini model...")
             print(f"[DEBUG] Content structure: {json.dumps(content, indent=2)}")
-            response = model.generate_content(**content)
+            response = await asyncio.to_thread(model.generate_content, **content)
             print("[DEBUG] Received response from Gemini model")
             
             # Process the response content
@@ -195,8 +196,8 @@ async def get_pre_treatment_feedback(request: PreTreatmentFeedbackRequest):
             }
         }
         
-        save_result = await save_feedback_response(request.case_id, response_data)
-        response_data["file_path"] = save_result["file_path"]
+        # save_result = await save_feedback_response(request.case_id, response_data)
+        # response_data["file_path"] = save_result["file_path"]
         
         print(f"[{datetime.now()}] ✅ Successfully generated pre-treatment feedback")
         return response_data
@@ -261,7 +262,7 @@ async def get_monitoring_feedback(request: PreTreatmentFeedbackRequest):
             # Generate the response
             print("[DEBUG] Sending prompt to Gemini model...")
             print(f"[DEBUG] Content structure: {json.dumps(content, indent=2)}")
-            response = model.generate_content(**content)
+            response = await asyncio.to_thread(model.generate_content, **content)
             print("[DEBUG] Received response from Gemini model")
             
             # Process the response content
@@ -297,8 +298,8 @@ async def get_monitoring_feedback(request: PreTreatmentFeedbackRequest):
             }
         }
         
-        save_result = await save_feedback_response(request.case_id, response_data)
-        response_data["file_path"] = save_result["file_path"]
+        # save_result = await save_feedback_response(request.case_id, response_data)
+        # response_data["file_path"] = save_result["file_path"]
         
         print(f"[{datetime.now()}] ✅ Successfully generated monitoring feedback")
         return response_data
@@ -356,7 +357,7 @@ async def get_treatment_protocol_feedback(request: TreatmentProtocolRequest):
         
         # Generate the response
         print("[DEBUG] Sending prompt to Gemini model...")
-        response = model.generate_content(**content)
+        response = await asyncio.to_thread(model.generate_content, **content)
         print("[DEBUG] Received response from Gemini model")
         
         # Process the response content
@@ -391,8 +392,8 @@ async def get_treatment_protocol_feedback(request: TreatmentProtocolRequest):
             }
         }
         
-        save_result = await save_feedback_response(request.case_id, response_data)
-        response_data["file_path"] = save_result["file_path"]
+        # save_result = await save_feedback_response(request.case_id, response_data)
+        # response_data["file_path"] = save_result["file_path"]
         
         print(f"[{datetime.now()}] ✅ Successfully generated treatment protocol feedback")
         print(f"[DEBUG] Final response data: {json.dumps(response_data, indent=2)}")

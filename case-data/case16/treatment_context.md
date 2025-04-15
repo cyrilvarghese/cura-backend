@@ -30,9 +30,36 @@ A 26-year-old woman presents with urticarial lesions triggered by cold exposure,
 
 ---
 
-### 💊 Treatment Plan
+### 💊 Expected Treatment Plan (With Dosing)
 
-- **Antihistamines:** For symptom control (pruritus, flares).  
-- **Low-dose Corticosteroids:** Prednisone 10–20 mg/day for moderate to severe cases.  
-- **Hydroxychloroquine:** Considered if disease is persistent or steroid-sparing approach needed.  
-- **Propranolol Discontinuation:** Recommended due to interaction risk with emergency epinephrine during anaphylaxis.
+#### ✅ First-Line:
+- **Antihistamines**
+  - **Cetirizine**: 10 mg PO once daily  
+  - **Loratadine**: 10 mg PO once daily  
+  - **Fexofenadine**: 180 mg PO once daily  
+  Used for controlling pruritus and reducing flare frequency. Preferred due to low sedation and minimal monitoring needs.
+
+---
+
+#### ⚖️ Escalation or Moderate-Severity Management:
+- **Low-dose corticosteroids**
+  - **Prednisone**: 10–20 mg PO once daily × 5–7 days (taper based on response)  
+  Indicated for moderate to severe urticarial vasculitis, particularly when symptoms are persistent or impact quality of life despite antihistamines.
+
+---
+
+#### 💡 Steroid-Sparing or Refractory Cases:
+- **Hydroxychloroquine**: 200–400 mg PO once daily  
+  Considered for chronic, recurrent, or steroid-dependent cases. Requires baseline and periodic monitoring (e.g., LFTs, ophthalmologic exams). Slow onset — not used for acute symptom control.
+
+---
+
+#### ❌ Contraindicated / To Be Discontinued:
+- **Propranolol**: (typically 10–40 mg PO BID)  
+  Should be discontinued in patients at risk of anaphylaxis, as it can blunt the effect of emergency epinephrine and mask adrenergic warning signs. Avoid in urticarial vasculitis where epinephrine may be needed.
+
+---
+
+### 📚 Additional Notes:
+- Patient education: Cold avoidance, flare tracking  
+- Epinephrine auto-injector: Consider if history of angioedema or risk of anaphylaxis  

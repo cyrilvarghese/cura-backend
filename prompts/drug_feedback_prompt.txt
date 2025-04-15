@@ -58,7 +58,7 @@ Be honest, but always keep a respectful, thoughtful tone — like a clinician me
     "label": "<Mechanism class>",
     "what_it_means": "<Student-friendly clinical summary>",
     "how_it_works": "<One-liner on pharmacologic action>",
-    "memory_tip": "<Clever mnemonic or analogy>"
+    "memory_tip": "<Clever mnemonic or analogy with emojis but not substituting words>"
   }},
   "alternative_options": [
     {{

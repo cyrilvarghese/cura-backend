@@ -35,7 +35,7 @@ class PreTreatmentFeedbackRequest(BaseModel):
 
     class Config:
         # Add schema extra to show example
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "case_id": "16",
                 "student_inputs_pre_treatment": ["test1", "test2"],
@@ -50,7 +50,7 @@ class TreatmentProtocolRequest(BaseModel):
     first_line: bool = False
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "case_id": "16",
                 "drug_line": "amoxicillin 500mg PO TID",

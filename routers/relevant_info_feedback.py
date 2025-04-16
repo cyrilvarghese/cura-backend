@@ -134,8 +134,9 @@ def load_prompt(file_path: str) -> str:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail=f"Prompt file not found: {file_path}")
 
-# Load the prompt from file
-FINDINGS_EVALUATION_PROMPT = load_prompt("prompts/findings_evaluation_prompt.txt")
+# Load the prompts from files
+FINDINGS_EVALUATION_PROMPT = load_prompt("prompts/relevant_info_feedback.txt")
+SINGLE_FINDING_EVALUATION_PROMPT = load_prompt("prompts/relevant_info_single_feedback.txt")
 
 @findings_router.post("/evaluate-findings-gemini", response_model=EvaluationResponse)
 async def evaluate_findings_gemini(request: StudentFindings):
@@ -199,6 +200,92 @@ async def evaluate_findings_gemini(request: StudentFindings):
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{error_timestamp}] ❌ Error in evaluate_findings_gemini: {str(e)}")
+        print(f"[DEBUG] Error type: {type(e).__name__}")
+        print(f"[DEBUG] Full error details: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@findings_router.post("/evaluate-single-finding")
+async def evaluate_single_finding(request: dict):
+    """
+    Evaluate a single finding against the critical findings for a case.
+    Returns an encouraging message and whether the finding matches any critical findings.
+    
+    Request format:
+    {
+        "case_id": "1",
+        "finding": "Patient has fever"
+    }
+    """
+    try:
+        print(f"[{datetime.now()}] 🔍 Evaluating single finding for case {request.get('case_id')}")
+        print(f"[DEBUG] Finding to evaluate: {request.get('finding')}")
+        
+        if not request.get('case_id') or not request.get('finding'):
+            print(f"[{datetime.now()}] ❌ Missing required fields in request")
+            raise HTTPException(status_code=400, detail="Missing required fields: case_id and finding")
+        
+        start_time = datetime.now()
+        
+        # Get critical findings for the case
+        critical_findings = get_critical_findings(request.get('case_id'))
+        print(f"[DEBUG] Retrieved critical findings, length: {len(critical_findings)}")
+        
+        # Configure the model
+        model = genai.GenerativeModel('gemini-2.0-flash')
+        generation_config = {
+            "temperature": 0.3,
+            "top_p": 0.95,
+            "top_k": 40
+        }
+        
+        # Format the prompt with the specific inputs
+        formatted_prompt = SINGLE_FINDING_EVALUATION_PROMPT.format(
+            critical_findings=critical_findings,
+            student_finding=request.get('finding')
+        )
+        
+        # Prepare the content for generation
+        content = {
+            "contents": [{"parts": [{"text": formatted_prompt}]}],
+            "generation_config": generation_config
+        }
+        
+        # Generate the response
+        print(f"[DEBUG] Sending prompt to Gemini model")
+        response = await asyncio.to_thread(model.generate_content, **content)
+        response_content = response.text
+        print(f"[DEBUG] Received response from Gemini model")
+        
+        # Clean and parse the response
+        cleaned = clean_code_block(response_content)
+        parsed = json.loads(cleaned)
+        print(f"[DEBUG] Parsed response: {json.dumps(parsed, indent=2)}")
+        
+        end_time = datetime.now()
+        processing_time = (end_time - start_time).total_seconds()
+        
+        response_data = {
+            "finding": request.get('finding'),
+            "evaluation": parsed,
+            "timestamp": datetime.now().isoformat(),
+            "case_id": request.get('case_id'),
+            "metadata": {
+                "processing_time_seconds": processing_time,
+                "model_version": model.model_name,
+                "generation_config": generation_config
+            }
+        }
+        
+        print(f"[{datetime.now()}] ✅ Successfully evaluated single finding in {processing_time:.2f} seconds")
+        return response_data
+
+    except json.JSONDecodeError as e:
+        print(f"[{datetime.now()}] ❌ JSON parsing error: {str(e)}")
+        print(f"[DEBUG] Failed JSON content: {response_content}")
+        raise HTTPException(status_code=400, detail=f"Invalid response format: {str(e)}")
+    except Exception as e:
+        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{error_timestamp}] ❌ Error in evaluate_single_finding: {str(e)}")
         print(f"[DEBUG] Error type: {type(e).__name__}")
         print(f"[DEBUG] Full error details: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

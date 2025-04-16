@@ -21,7 +21,7 @@ from routers.image_search import router as image_search_router
 from routers.case_creator.update_test_table import router as update_test_table_router
 from routers.case_player.get_case_details_route import case_details_router
 from routers.case_creator.evaluate_student_questions import router as evaluate_student_questions_router
-from routers.findings_routes import findings_router
+from routers.relevant_info_feedback import findings_router
 from routers.case_creator.update_test_comment import router as update_test_comment_router
 from routers.case_player.create_pre_treatment_feedback import router as pre_treatment_feedback_router
 from routers.case_player.treatment_feedback_gemini import router as treatment_feedback_gemini_router

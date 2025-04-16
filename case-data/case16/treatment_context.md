@@ -1,6 +1,6 @@
 ### 👩‍⚕️ Patient Summary
 
-A 26-year-old woman presents with urticarial lesions triggered by cold exposure, lasting over 24 hours and resolving with bruising. She reports fatigue, joint stiffness, and two episodes of angioedema. She uses propranolol for anxiety, which could complicate emergency treatment. Autoimmune markers (ANA, low C3/C4) and skin biopsy confirm urticarial vasculitis.
+A 26-year-old woman presents with urticarial lesions triggered by cold exposure, lasting over 24 hours and resolving with bruising. She reports fatigue,no joint stiffness, and two episodes of angioedema. She uses propranolol for anxiety, which could complicate emergency treatment. Autoimmune markers (ANA, low C3/C4) and skin biopsy confirm urticarial vasculitis.
 
 ---
 

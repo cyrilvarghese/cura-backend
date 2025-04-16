@@ -28,7 +28,7 @@ Student submitted:
 
 Return a JSON object in this format:
 {{
-  "message": "<encouraging overall message>",
+  "message": < Funny message asking whether the student got everything right or missed anything ? (15 words max)>",
   "missing_findings": [
     {{
       "finding": "<exact expected finding>",

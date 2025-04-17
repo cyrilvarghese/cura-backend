@@ -54,7 +54,7 @@ Your task is to evaluate this selection against the **expected pre-treatment inv
 
 ### ✅ Response Format (JSON):
 
-Always return your response in this exact JSON structure:
+Always return your response in this exact JSON structure :
 
 {{
   "match": true | false | "NA",

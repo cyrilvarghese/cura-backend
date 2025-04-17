@@ -194,5 +194,6 @@ dependencies:
       - realtime==1.0.0
       - supabase
       - markdown
+      - langchain-google-genai
 
 prefix: /root/conda/envs/cura-env

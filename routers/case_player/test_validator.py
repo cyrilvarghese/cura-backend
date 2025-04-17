@@ -9,11 +9,15 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from typing import Dict, Any, List, Literal
 from enum import Enum
-
 from utils.text_cleaner import clean_code_block
+from utils.session_manager import SessionManager
+from auth.auth_api import get_user
 
 # Load environment variables
 load_dotenv()
+
+# Initialize session manager
+session_manager = SessionManager()
 
 # Define TestType enum
 class TestType(str, Enum):
@@ -98,6 +102,13 @@ async def validate_test(request: TestValidationRequest):
     try:
         print(f"[{datetime.now()}] 🔍 Validating {request.test_type} test '{request.test_name}' for case {request.case_id}")
         
+        # Get authenticated user
+        user_response = await get_user()
+        if not user_response["success"]:
+            raise HTTPException(status_code=401, detail="Authentication required")
+        
+        student_id = user_response["user"]["id"]
+        
         # Load the test exam data
         print("[DEBUG] Attempting to load test exam data...")
         test_exam_data = await load_test_exam_data(request.case_id)
@@ -112,6 +123,13 @@ async def validate_test(request: TestValidationRequest):
         print(f"[DEBUG] Extracted {len(test_names)} {request.test_type} test names")
         
         if not test_names:
+            # Store the unmatched test in session
+            session_manager.add_test_order(
+                student_id=student_id,
+                case_id=request.case_id,
+                test_type=request.test_type,
+                test_name=request.test_name
+            )
             return {
                 "case_id": request.case_id,
                 "test_type": request.test_type,
@@ -177,17 +195,29 @@ async def validate_test(request: TestValidationRequest):
         end_time = datetime.now()
         processing_time = (end_time - start_time).total_seconds()
         
-        # If there's a match, get the full test data
+        # If there's a match, get the full test data and update session
         test_data = None
+        final_test_name = request.test_name  # Default to requested name
+        
         if validation_result.get("match") and validation_result.get("matched_test"):
             matched_test_name = validation_result["matched_test"]
             if matched_test_name in test_exam_data.get(request.test_type, {}):
                 test_data = test_exam_data[request.test_type][matched_test_name]
+                final_test_name = matched_test_name  # Use matched name
+        
+        # Always store the test in session - either matched or unmatched
+        session_manager.add_test_order(
+            student_id=student_id,
+            case_id=request.case_id,
+            test_type=request.test_type,
+            test_name=final_test_name
+        )
         
         response_data = {
             "case_id": request.case_id,
             "test_type": request.test_type,
-            "test_name": request.test_name,
+            "test_name": final_test_name,  # Use final test name here
+            "student_id": student_id,
             "timestamp": datetime.now().isoformat(),
             "result": validation_result,
             "test_data": test_data,

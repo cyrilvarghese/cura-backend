@@ -124,7 +124,7 @@ async def login(email: str, password: str) -> Dict[str, Any]:
     try:
         global current_session, current_user
         
-        # Sign in the user
+        # Sign in the user with session options
         auth_response = supabase.auth.sign_in_with_password({
             "email": email,
             "password": password
@@ -137,7 +137,7 @@ async def login(email: str, password: str) -> Dict[str, Any]:
             if profile_response.data and len(profile_response.data) > 0:
                 profile = profile_response.data[0]
                 
-                # Set global session and user info
+                # Store session info
                 current_session = auth_response.session
                 current_user = {
                     "id": auth_response.user.id,
@@ -146,17 +146,16 @@ async def login(email: str, password: str) -> Dict[str, Any]:
                     "role": profile.get("role")
                 }
                 
-                print("Login successful. Current user:", {
-                    "id": current_user["id"],
-                    "email": current_user["email"],
-                    "role": current_user["role"],
-                    "session_expires_at": current_session.expires_at if current_session else None,
-                    "has_access_token": bool(current_session.access_token) if current_session else False
+                print("Login successful. Session info:", {
+                    "user": current_user["email"],
+                    "access_token_expires_at": current_session.expires_at if current_session else None,
+                    "has_refresh_token": bool(current_session.refresh_token) if current_session else False
                 })
                 
                 return {
                     "success": True,
                     "token": auth_response.session.access_token if auth_response.session else None,
+                    "refresh_token": auth_response.session.refresh_token if auth_response.session else None,
                     "user": current_user
                 }
             
@@ -294,7 +293,16 @@ def get_authenticated_client() -> Client:
             else:
                 raise Exception("No valid session found")
 
-        # Set the session explicitly on the existing client
+        # Always try to refresh the session if access token is close to expiring
+        try:
+            refresh_response = supabase.auth.refresh_session()
+            if refresh_response and refresh_response.session:
+                current_session = refresh_response.session
+                print("Session refreshed successfully")
+        except Exception as refresh_error:
+            print(f"Session refresh failed: {str(refresh_error)}")
+
+        # Set the session on the client
         supabase.auth.set_session(
             current_session.access_token,
             current_session.refresh_token

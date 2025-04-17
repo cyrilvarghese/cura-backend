@@ -1,0 +1,20 @@
+{
+  "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
+  "case_id": "1",
+  "session_start": "2025-04-17T17:10:44.467067",
+  "interactions": {
+    "history_taking": [
+      {
+        "question": "hi",
+        "response": "Hello, Doctor.",
+        "timestamp": "2025-04-17T17:11:02.128815"
+      }
+    ],
+    "physical_examinations": [],
+    "tests_ordered": [],
+    "diagnosis_submission": null,
+    "pre_treatment_checks": [],
+    "treatment_plan": null,
+    "post_treatment_monitoring": []
+  }
+}

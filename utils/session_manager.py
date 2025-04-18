@@ -13,7 +13,7 @@ class SessionManager:
 
     def _get_session_file_path(self, student_id: str, case_id: str) -> str:
         """Generate the file path for a session file."""
-        return os.path.join(self.base_dir, f"{student_id}_case{case_id}_session.json")
+        return os.path.join(self.base_dir, f"{student_id}_case_session.json")
 
     def create_or_load_session(self, student_id: str, case_id: str) -> Dict[str, Any]:
         """Create a new session file or load an existing one."""

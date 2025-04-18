@@ -58,87 +58,87 @@ async def get_case_details(case_id: str):
         else:
             print(f"WARNING: Patient persona not found at: {persona_file_path}")
 
-        # Get Google Doc link from Supabase
-        from auth.auth_api import get_client
-        supabase = get_client()
+        # # Get Google Doc link from Supabase
+        # from auth.auth_api import get_client
+        # supabase = get_client()
         
-        print(f"Querying Supabase for document with title: {case_cover_data['case_name']}")
-        supabase_result = supabase.table("documents")\
-            .select("google_doc_id, google_doc_link, last_modified_time")\
-            .eq("title", case_cover_data['case_name'])\
-            .execute()
+        # print(f"Querying Supabase for document with title: {case_cover_data['case_name']}")
+        # supabase_result = supabase.table("documents")\
+        #     .select("google_doc_id, google_doc_link, last_modified_time")\
+        #     .eq("title", case_cover_data['case_name'])\
+        #     .execute()
         
-        doc_has_changed = False
-        if supabase_result.data and len(supabase_result.data) > 0:
-            doc_data = supabase_result.data[0]
-            google_doc_id = doc_data.get('google_doc_id')
-            google_doc_link = doc_data.get('google_doc_link')
-            stored_modified_time = doc_data.get('last_modified_time')
+        # doc_has_changed = False
+        # if supabase_result.data and len(supabase_result.data) > 0:
+        #     doc_data = supabase_result.data[0]
+        #     google_doc_id = doc_data.get('google_doc_id')
+        #     google_doc_link = doc_data.get('google_doc_link')
+        #     stored_modified_time = doc_data.get('last_modified_time')
             
-            print(f"Stored: {stored_modified_time}")
+        #     print(f"Stored: {stored_modified_time}")
             
-            case_cover_data['google_doc_link'] = google_doc_link
+        #     case_cover_data['google_doc_link'] = google_doc_link
             
-            # Check if the document has been modified
-            if google_doc_id:
-                try:
-                    # Import here to avoid circular imports
-                    from utils.google_docs import GoogleDocsManager
+        #     # Check if the document has been modified
+        #     if google_doc_id:
+        #         try:
+        #             # Import here to avoid circular imports
+        #             from utils.google_docs import GoogleDocsManager
                     
-                    # Get the document details from Google Drive
-                    gdocs = GoogleDocsManager()
-                    doc_details = gdocs.get_doc_details(google_doc_id)
+        #             # Get the document details from Google Drive
+        #             gdocs = GoogleDocsManager()
+        #             doc_details = gdocs.get_doc_details(google_doc_id)
                     
-                    if doc_details:
-                        current_modified_time = doc_details.get('modifiedTime')
-                        print(f"Current: {current_modified_time}")
+        #             if doc_details:
+        #                 current_modified_time = doc_details.get('modifiedTime')
+        #                 print(f"Current: {current_modified_time}")
                         
-                        # If stored_modified_time is None or empty, update it without marking as changed
-                        if not stored_modified_time:
-                            try:
-                                supabase.table("documents")\
-                                    .update({"last_modified_time": current_modified_time})\
-                                    .eq("google_doc_id", google_doc_id)\
-                                    .execute()
-                                doc_has_changed = False
-                                print(f"Updated null last_modified_time to: {current_modified_time}")
-                            except Exception as update_error:
-                                print(f"Error updating last_modified_time: {str(update_error)}")
-                        # Otherwise just check if it's different but don't update
-                        else:
-                            # Normalize time formats for comparison
-                            try:
-                                # Parse both times to datetime objects and compare
-                                stored_dt = dateutil.parser.parse(stored_modified_time)
-                                current_dt = dateutil.parser.parse(current_modified_time)
+        #                 # If stored_modified_time is None or empty, update it without marking as changed
+        #                 if not stored_modified_time:
+        #                     try:
+        #                         supabase.table("documents")\
+        #                             .update({"last_modified_time": current_modified_time})\
+        #                             .eq("google_doc_id", google_doc_id)\
+        #                             .execute()
+        #                         doc_has_changed = False
+        #                         print(f"Updated null last_modified_time to: {current_modified_time}")
+        #                     except Exception as update_error:
+        #                         print(f"Error updating last_modified_time: {str(update_error)}")
+        #                 # Otherwise just check if it's different but don't update
+        #                 else:
+        #                     # Normalize time formats for comparison
+        #                     try:
+        #                         # Parse both times to datetime objects and compare
+        #                         stored_dt = dateutil.parser.parse(stored_modified_time)
+        #                         current_dt = dateutil.parser.parse(current_modified_time)
                                 
-                                print(f"Parsed stored time: {stored_dt.isoformat()}")
-                                print(f"Parsed current time: {current_dt.isoformat()}")
+        #                         print(f"Parsed stored time: {stored_dt.isoformat()}")
+        #                         print(f"Parsed current time: {current_dt.isoformat()}")
                                 
-                                if stored_dt != current_dt:
-                                    doc_has_changed = True
-                                    print(f"Document has changed! Times are different after normalization")
-                                else:
-                                    print(f"Document has NOT changed - times match after normalization")
-                            except Exception as parse_error:
-                                print(f"Error parsing time formats: {str(parse_error)}")
-                                # Fall back to string comparison if parsing fails
-                                if current_modified_time != stored_modified_time:
-                                    doc_has_changed = True
-                                    print(f"Document has changed! String comparison of times")
-                                else:
-                                    print(f"Document has NOT changed - string comparison match")
-                except Exception as e:
-                    print(f"WARNING: Could not check document modification: {str(e)}")
-            else:
-                case_cover_data['google_doc_link'] = None
-                print(f"No document found in Supabase with title: {case_cover_data['case_name']}")
-        else:
-            case_cover_data['google_doc_link'] = None
+        #                         if stored_dt != current_dt:
+        #                             doc_has_changed = True
+        #                             print(f"Document has changed! Times are different after normalization")
+        #                         else:
+        #                             print(f"Document has NOT changed - times match after normalization")
+        #                     except Exception as parse_error:
+        #                         print(f"Error parsing time formats: {str(parse_error)}")
+        #                         # Fall back to string comparison if parsing fails
+        #                         if current_modified_time != stored_modified_time:
+        #                             doc_has_changed = True
+        #                             print(f"Document has changed! String comparison of times")
+        #                         else:
+        #                             print(f"Document has NOT changed - string comparison match")
+        #         except Exception as e:
+        #             print(f"WARNING: Could not check document modification: {str(e)}")
+        #     else:
+        #         case_cover_data['google_doc_link'] = None
+        #         print(f"No document found in Supabase with title: {case_cover_data['case_name']}")
+        # else:
+        #     case_cover_data['google_doc_link'] = None
         
-        # Add the change status to the response
-        case_cover_data['doc_has_changed'] = doc_has_changed
-        print(f"Final doc_has_changed status: {doc_has_changed}")
+        # # Add the change status to the response
+        # case_cover_data['doc_has_changed'] = doc_has_changed
+        # print(f"Final doc_has_changed status: {doc_has_changed}")
 
         return {
             "content": {

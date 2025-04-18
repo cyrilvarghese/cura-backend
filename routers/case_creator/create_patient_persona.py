@@ -34,6 +34,7 @@ class PatientPersonaRequest(BaseModel):
 
 class CreatePersonaRequest(BaseModel):
     file_name: Optional[str] = None
+    google_doc_link: Optional[str] = None
     department: Optional[str] = None #to fix make this dept ID instead of name
     case_id: Optional[Any] = None
 
@@ -64,7 +65,7 @@ def save_case_document(case_id: Any, case_document: str) -> str:
     
     return case_doc_path
 
-def save_case_cover(case_id: Any, filename: str, department: str) -> str:
+def save_case_cover(case_id: Any, filename: str, department: str, google_doc_link: Optional[str] = None) -> str:
     """Save the case cover data to a JSON file and return the file path."""
     case_name = create_case_name(filename)
     case_folder = f"case-data/case{case_id}"
@@ -72,7 +73,8 @@ def save_case_cover(case_id: Any, filename: str, department: str) -> str:
         "case_name": case_name,
         "case_id": case_id,
         "department": department,
-        "published": False
+        "published": False,
+        "google_doc_link": google_doc_link
     }
     
     case_cover_path = os.path.join(case_folder, "case_cover.json")
@@ -86,7 +88,7 @@ def create_case_name(filename: str) -> str:
     base_name = os.path.splitext(os.path.basename(filename))[0]
     return base_name.replace(" ", "_") + ".md" #.md is used to locate the physical file
 
-async def process_patient_persona(case_document: str, case_id: Any, filename: str, department: str):
+async def process_patient_persona(case_document: str, case_id: Any, filename: str, department: str, google_doc_link: Optional[str] = None):
     """Common processing logic for both routes"""
     try:
         # Load prompts
@@ -97,7 +99,7 @@ async def process_patient_persona(case_document: str, case_id: Any, filename: st
         case_folder = f"case-data/case{case_id}"
         os.makedirs(case_folder, exist_ok=True)
         save_case_document(case_id, case_document)
-        save_case_cover(case_id, filename, department)
+        save_case_cover(case_id, filename, department, google_doc_link)
 
         # Create prompt and get response
         prompt_template = ChatPromptTemplate.from_messages([
@@ -166,7 +168,8 @@ async def create_patient_persona(request: CreatePersonaRequest):
 
         case_id = request.case_id if request.case_id is not None else get_next_case_id()
         department = request.department
-        return await process_patient_persona(case_document, case_id, filename, department)
+        google_doc_link = request.google_doc_link   
+        return await process_patient_persona(case_document, case_id, filename, department, google_doc_link)
 
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

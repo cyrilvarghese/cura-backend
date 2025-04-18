@@ -2,6 +2,7 @@ import os
 from supabase import create_client, Client
 from typing import Dict, Any, Optional
 from dotenv import load_dotenv
+import asyncio
 
 # Load environment variables
 load_dotenv()
@@ -36,7 +37,7 @@ def get_supabase_client(use_service_role: bool = False) -> Client:
 # Initialize default client
 supabase: Client = get_supabase_client()
 
-async def signup(email: str, password: str, username: str, role: str = "user") -> Dict[str, Any]:
+async def signup(email: str, password: str, username: str, role: str = "user", timeout: int = 15) -> Dict[str, Any]:
     """
     Register a new user with email, password, username and role.
     
@@ -49,6 +50,20 @@ async def signup(email: str, password: str, username: str, role: str = "user") -
     Returns:
         Dict containing user data and session
     """
+    try:
+        return await asyncio.wait_for(
+            _signup_internal(email, password, username, role),
+            timeout=timeout
+        )
+    except asyncio.TimeoutError:
+        print(f"Signup operation timed out after {timeout} seconds")
+        return {
+            "success": False,
+            "error": "Operation timed out"
+        }
+
+async def _signup_internal(email: str, password: str, username: str, role: str):
+    """Internal signup function wrapped with timeout"""
     try:
         print("\n=== Starting Signup Process ===")
         print(f"Email: {email}")
@@ -119,8 +134,22 @@ async def signup(email: str, password: str, username: str, role: str = "user") -
             "error": str(e)
         }
 
-async def login(email: str, password: str) -> Dict[str, Any]:
+async def login(email: str, password: str, timeout: int = 15) -> Dict[str, Any]:
     """Sign in a user with email and password."""
+    try:
+        return await asyncio.wait_for(
+            _login_internal(email, password),
+            timeout=timeout
+        )
+    except asyncio.TimeoutError:
+        print(f"Login operation timed out after {timeout} seconds")
+        return {
+            "success": False,
+            "error": "Operation timed out"
+        }
+
+async def _login_internal(email: str, password: str):
+    """Internal login function wrapped with timeout"""
     try:
         global current_session, current_user
         
@@ -232,13 +261,27 @@ async def get_user() -> Dict[str, Any]:
             "error": str(e)
         }
 
-async def logout() -> Dict[str, Any]:
+async def logout(timeout: int = 15) -> Dict[str, Any]:
     """
     Sign out the current user and clear session data.
     
     Returns:
         Dict indicating success or failure
     """
+    try:
+        return await asyncio.wait_for(
+            _logout_internal(),
+            timeout=timeout
+        )
+    except asyncio.TimeoutError:
+        print(f"Logout operation timed out after {timeout} seconds")
+        return {
+            "success": False,
+            "error": "Operation timed out"
+        }
+
+async def _logout_internal():
+    """Internal logout function wrapped with timeout"""
     try:
         global current_session, current_user
         

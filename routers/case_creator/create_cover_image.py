@@ -105,25 +105,23 @@ class PhraseRequest(BaseModel):
 
 @router.post("/create")
 async def create_cover_image(
-    case_id: str,  # Required parameter
+    case_id: str,
     cover_data: Optional[CoverImageRequest] = None,
     request: Request = None
 ):
-    # Access optional fields with default values
-    prompt = cover_data.prompt if cover_data else None
-    title = cover_data.title if cover_data else None
-    quote = cover_data.quote if cover_data else None
-    
     try:
         formatted_response = {}
+        image_prompt = None  # Initialize image_prompt variable
+        
         if cover_data and cover_data.prompt:
             # Generate image using provided prompt
-            image_url = await call_image_gen(case_id, cover_data.prompt, True)
+            image_prompt = cover_data.prompt  # Set image_prompt here
+            image_url = await call_image_gen(case_id, image_prompt, True)
             
             title = cover_data.title
             quote = cover_data.quote
             formatted_response = {
-                "prompt": cover_data.prompt,
+                "prompt": image_prompt,
                 "image_url": image_url,
                 "title": title,
                 "quote": quote
@@ -143,11 +141,11 @@ async def create_cover_image(
             cleaned_response = extract_code_blocks(cover_image_prompt.content)
             responseJSON = json.loads(cleaned_response[0])
             
-            image_prompt = responseJSON["image_prompt"]
+            image_prompt = responseJSON["image_prompt"]  # Set image_prompt here
             title = responseJSON["title"]
             quote = responseJSON["quote"]
             
-            image_url = await call_image_gen(case_id, image_prompt,)
+            image_url = await call_image_gen(case_id, image_prompt)
             
             formatted_response = {
                 "prompt": image_prompt,
@@ -155,9 +153,8 @@ async def create_cover_image(
                 "title": title,
                 "quote": quote
             }
-          
         
-        update_case_cover(case_id, title, quote, image_url,image_prompt)
+        update_case_cover(case_id, title, quote, image_url, image_prompt)
 
         formatted_log = (
             f"Cover image prompt generated successfully.\n"

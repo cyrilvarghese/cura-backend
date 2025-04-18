@@ -35,7 +35,8 @@ class SessionManager:
                 "diagnosis_submission": None,
                 "pre_treatment_checks": [],
                 "treatment_plan": None,
-                "post_treatment_monitoring": []
+                "post_treatment_monitoring": [],
+                "clinical_findings": []
             }
         }
         
@@ -52,6 +53,7 @@ class SessionManager:
             "student_id": student_id,
             "case_id": case_id,
             "session_start": datetime.now().isoformat(),
+            "current_step": "History Taking",
             "interactions": {
                 "history_taking": [],
                 "physical_examinations": [],
@@ -59,7 +61,8 @@ class SessionManager:
                 "diagnosis_submission": None,
                 "pre_treatment_checks": [],
                 "treatment_plan": None,
-                "post_treatment_monitoring": []
+                "post_treatment_monitoring": [],
+                "clinical_findings": []
             }
         }
         
@@ -103,6 +106,49 @@ class SessionManager:
         else:  # lab_test
             session_data["interactions"]["tests_ordered"].append(test_entry)
         
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
+    def add_clinical_finding(self, student_id: str, case_id: str, finding: str) -> Dict[str, Any]:
+        """Add a clinical finding to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            case_id (str): The ID of the case
+            finding (str): The clinical finding to add
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id, case_id)
+        session_data = self.create_or_load_session(student_id, case_id)
+        
+        # Add the finding directly to the array
+        session_data["interactions"]["clinical_findings"].append(finding)
+        session_data["current_step"] = "Clinical Findings"
+        
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
+    def add_diagnosis_submission(self, student_id: str, case_id: str, diagnosis_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Add a diagnosis submission to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            case_id (str): The ID of the case
+            diagnosis_data (Dict[str, Any]): The diagnosis submission data
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id, case_id)
+        session_data = self.create_or_load_session(student_id, case_id)
+        
+        # Update the diagnosis submission
+        session_data["interactions"]["diagnosis_submission"] = diagnosis_data
+        session_data["current_step"] = "Primary Diagnosis"
         # Save the updated session
         self._save_session(file_path, session_data)
         return session_data

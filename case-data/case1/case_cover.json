@@ -15,5 +15,13 @@
     "last_updated": "2024-12-18T13:14:54.123488",
     "department": "Dermatology",
     "published": true,
-    "image_prompt": "Maya Singh, a 30-year-old Indian woman and project manager, sitting in a modern clinical examination room in Pune, India. She has long black hair tied back in a loose ponytail, wearing a comfortable white t-shirt and linen trousers, which are slightly rolled up to reveal red, raised patches that resemble hives on her arms and legs. Her expression is one of mild distress, with her brows furrowed and her posture slightly hunched as she glances down at her arms, seemingly reflecting on the discomfort. The room has soft, natural light coming through a window, with a clean examination bed, medical charts on the wall, and a small plant in the corner, creating a warm yet clinical atmosphere. A nurse is seen in the background, adjusting supplies, emphasizing care and support in the environment."
+    "image_prompt": "Maya Singh, a 30-year-old Indian woman and project manager, sitting in a modern clinical examination room in Pune, India. She has long black hair tied back in a loose ponytail, wearing a comfortable white t-shirt and linen trousers, which are slightly rolled up to reveal red, raised patches that resemble hives on her arms and legs. Her expression is one of mild distress, with her brows furrowed and her posture slightly hunched as she glances down at her arms, seemingly reflecting on the discomfort. The room has soft, natural light coming through a window, with a clean examination bed, medical charts on the wall, and a small plant in the corner, creating a warm yet clinical atmosphere. A nurse is seen in the background, adjusting supplies, emphasizing care and support in the environment.",
+    "error": {
+        "type": "physical_exam",
+        "name": "Wood light exam",
+        "comments": [
+            "ad",
+            "asd"
+        ]
+    }
 }

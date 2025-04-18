@@ -1,7 +1,8 @@
 {
   "student_id": "fc591596-41e0-4e11-a2a2-af71171524d2",
-  "case_id": "2",
-  "session_start": "2025-04-18T05:38:32.733590",
+  "case_id": "12",
+  "session_start": "2025-04-18T15:28:02.245946",
+  "current_step": "History Taking",
   "interactions": {
     "history_taking": [],
     "physical_examinations": [],
@@ -9,6 +10,7 @@
     "diagnosis_submission": null,
     "pre_treatment_checks": [],
     "treatment_plan": null,
-    "post_treatment_monitoring": []
+    "post_treatment_monitoring": [],
+    "clinical_findings": []
   }
 }

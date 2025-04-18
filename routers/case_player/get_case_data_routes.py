@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 from datetime import datetime
 from utils.session_manager import SessionManager
-from auth.auth_api import get_user
+from auth.auth_api import get_user, get_authenticated_client
 
 case_router = APIRouter()
 session_manager = SessionManager()
@@ -31,38 +31,55 @@ class CaseCoverUpdate(BaseModel):
 @case_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():
     """List all available cases by reading case_cover.json files"""
-    cases = []
-    case_data_dir = Path("case-data")
-    
-    # Iterate through all case folders
-    for case_dir in sorted(case_data_dir.glob("case*")):
-        cover_file = case_dir / "case_cover.json"
-        if cover_file.exists():
-            try:
-                with open(cover_file, "r") as f:
-                    cover_data = json.load(f)
-                    case_info = CaseInfo(
-                        case_id=cover_data.get("case_id", 0),  # Default to 0 if not specified
-                        case_name=cover_data["case_name"],
-                        title=cover_data.get("title"),
-                        quote=cover_data.get("quote"),
-                        image_url=cover_data.get("image_url"),
-                        last_updated=cover_data.get("last_updated"),
-                        differential_diagnosis=cover_data.get("differential_diagnosis"),
-                        department=cover_data.get("department"),
-                        published=cover_data.get("published")
-                    )
-                    cases.append(case_info)
-            except (json.JSONDecodeError, KeyError) as e:
-                print(f"Error reading {cover_file}: {e}")
-                continue
-    
-    # Sort cases by case_id
-    cases.sort(key=lambda x: x.case_id)
-    return cases
+    try:
+        # First check authentication
+        user_response = await get_user()
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            raise HTTPException(status_code=401, detail=error_message)
+
+        cases = []
+        case_data_dir = Path("case-data")
+        
+        # Iterate through all case folders
+        for case_dir in sorted(case_data_dir.glob("case*")):
+            cover_file = case_dir / "case_cover.json"
+            if cover_file.exists():
+                try:
+                    with open(cover_file, "r") as f:
+                        cover_data = json.load(f)
+                        case_info = CaseInfo(
+                            case_id=cover_data.get("case_id", 0),
+                            case_name=cover_data["case_name"],
+                            title=cover_data.get("title"),
+                            quote=cover_data.get("quote"),
+                            image_url=cover_data.get("image_url"),
+                            last_updated=cover_data.get("last_updated"),
+                            differential_diagnosis=cover_data.get("differential_diagnosis"),
+                            department=cover_data.get("department"),
+                            published=cover_data.get("published")
+                        )
+                        cases.append(case_info)
+                except json.JSONDecodeError as e:
+                    print(f"Error parsing JSON in {cover_file}: {e}")
+                    continue
+                except KeyError as e:
+                    print(f"Missing required field in {cover_file}: {e}")
+                    continue
+        
+        # Sort cases by case_id
+        cases.sort(key=lambda x: x.case_id)
+        return cases
+
+    except HTTPException as http_error:
+        raise http_error
+    except Exception as e:
+        print(f"Unexpected error in list_cases: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error retrieving case list")
 
 @case_router.get("/cases/{case_id}", response_model=CaseData)
 async def get_case_data(case_id: str):
+    """Get case data including physical exam and lab test data"""
     # First handle authentication outside main try block
     try:
         user_response = await get_user()
@@ -84,11 +101,9 @@ async def get_case_data(case_id: str):
         data_file_path = os.path.join('case-data', f'case{case_id}', 'test_exam_data.json')
         cover_file_path = os.path.join('case-data', f'case{case_id}', 'case_cover.json')
         
-        # Check if the case data file exists
+        # Check if files exist
         if not os.path.exists(data_file_path):
             raise HTTPException(status_code=404, detail=f"Case exam data not found for case {case_id}")
-        
-        # Check if the case cover file exists
         if not os.path.exists(cover_file_path):
             raise HTTPException(status_code=404, detail=f"Case cover data not found for case {case_id}")
         
@@ -96,18 +111,16 @@ async def get_case_data(case_id: str):
             # Load the case data
             with open(data_file_path, 'r') as file:
                 data = json.load(file)
-            
-            # Load the case cover data
             with open(cover_file_path, 'r') as cover_file:
                 case_cover_data = json.load(cover_file)
         except json.JSONDecodeError as json_error:
             raise HTTPException(
-                status_code=500, 
+                status_code=500,
                 detail=f"Invalid JSON format in case files: {str(json_error)}"
             )
         except Exception as file_error:
             raise HTTPException(
-                status_code=500, 
+                status_code=500,
                 detail=f"Error reading case files: {str(file_error)}"
             )
 
@@ -120,7 +133,6 @@ async def get_case_data(case_id: str):
         }
         
     except HTTPException as http_error:
-        # Re-raise HTTP exceptions with their original status codes
         raise http_error
     except Exception as e:
         print(f"Unexpected error in get_case_data: {str(e)}")
@@ -131,48 +143,65 @@ async def get_case_data(case_id: str):
 
 @case_router.post("/cases/{case_id}/publish", response_model=dict)
 async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):
-    """Update published status and department in the case cover file"""
+    """Update published status in the case cover file"""
     try:
+        # First check authentication
+        user_response = await get_user()
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            raise HTTPException(status_code=401, detail=error_message)
+
         cover_file_path = os.path.join('case-data', f'case{case_id}', 'case_cover.json')
         
         # Check if the case cover file exists
         if not os.path.exists(cover_file_path):
-            raise HTTPException(status_code=404, detail="Case cover data not found")
+            raise HTTPException(status_code=404, detail=f"Case cover data not found for case {case_id}")
         
-        # Read existing case cover data
-        with open(cover_file_path, 'r') as f:
-            case_cover_data = json.load(f)
+        try:
+            # Read existing case cover data
+            with open(cover_file_path, 'r') as f:
+                case_cover_data = json.load(f)
+        except json.JSONDecodeError as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Invalid JSON format in case cover file: {str(e)}"
+            )
         
-        # Update only published 
+        # Update published status and timestamp
         case_cover_data["published"] = update_data.published
-        
-        # Update last_updated timestamp
         case_cover_data["last_updated"] = datetime.now().isoformat()
         
-        # Reset the last_modified_time in Supabase to null
         try:
-            from auth.auth_api import get_client
-            supabase = get_client()
-            
-            # Find the document by case name
+            # Write updated data back to the file
+            with open(cover_file_path, 'w') as f:
+                json.dump(case_cover_data, f, indent=2)
+        except Exception as write_error:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error writing to case cover file: {str(write_error)}"
+            )
+        
+        # Reset the last_modified_time in Supabase
+        try:
+            supabase = get_authenticated_client()
             case_name = case_cover_data.get("case_name")
             if case_name:
-                print(f"Resetting last_modified_time for case: {case_name}")
-                
-                # Update the document to set last_modified_time to null
                 result = supabase.table("documents")\
                     .update({"last_modified_time": None})\
                     .eq("title", case_name)\
                     .execute()
-                
                 print(f"Reset result: {result.data}")
-        except Exception as e:
-            print(f"WARNING: Could not reset last_modified_time in Supabase: {str(e)}")
-        
-        # Write updated data back to the file
-        with open(cover_file_path, 'w') as f:
-            json.dump(case_cover_data, f, indent=2)
+        except Exception as db_error:
+            print(f"WARNING: Could not reset last_modified_time in Supabase: {str(db_error)}")
+            # Don't raise HTTP exception here as this is not critical
         
         return {"message": "Case cover updated successfully"}
+
+    except HTTPException as http_error:
+        raise http_error
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating case cover: {str(e)}")
+        print(f"Unexpected error in update_case_cover: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred while updating the case cover"
+        )

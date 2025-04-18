@@ -63,14 +63,20 @@ async def list_cases():
 
 @case_router.get("/cases/{case_id}", response_model=CaseData)
 async def get_case_data(case_id: str):
+    # First handle authentication outside main try block
     try:
-        # Get authenticated user
         user_response = await get_user()
         if not user_response["success"]:
-            raise HTTPException(status_code=401, detail="Authentication required")
+            error_message = user_response.get("error", "Authentication required")
+            raise HTTPException(status_code=401, detail=error_message)
         
         student_id = user_response["user"]["id"]
-        
+    except HTTPException as auth_error:
+        raise auth_error
+    except Exception as auth_error:
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+    try:
         # Clear the session for this student-case combination
         session_manager.clear_session(student_id, case_id)
         
@@ -80,29 +86,48 @@ async def get_case_data(case_id: str):
         
         # Check if the case data file exists
         if not os.path.exists(data_file_path):
-            raise HTTPException(status_code=404, detail="Case exam data not found")
-        
-        # Load the case data
-        with open(data_file_path, 'r') as file:
-            data = json.load(file)
+            raise HTTPException(status_code=404, detail=f"Case exam data not found for case {case_id}")
         
         # Check if the case cover file exists
         if not os.path.exists(cover_file_path):
-            raise HTTPException(status_code=404, detail="Case cover data not found")
+            raise HTTPException(status_code=404, detail=f"Case cover data not found for case {case_id}")
         
-        # Load the case cover data
-        with open(cover_file_path, 'r') as cover_file:
-            case_cover_data = json.load(cover_file)
+        try:
+            # Load the case data
+            with open(data_file_path, 'r') as file:
+                data = json.load(file)
+            
+            # Load the case cover data
+            with open(cover_file_path, 'r') as cover_file:
+                case_cover_data = json.load(cover_file)
+        except json.JSONDecodeError as json_error:
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Invalid JSON format in case files: {str(json_error)}"
+            )
+        except Exception as file_error:
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Error reading case files: {str(file_error)}"
+            )
 
         return {
             "content": {
                 "physical_exam": data.get("physical_exam", {}),
                 "lab_test": data.get("lab_test", {}),
-                "case_cover": case_cover_data  # Include case cover data in the response
+                "case_cover": case_cover_data
             }
         }
+        
+    except HTTPException as http_error:
+        # Re-raise HTTP exceptions with their original status codes
+        raise http_error
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Unexpected error in get_case_data: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred while processing the case data"
+        )
 
 @case_router.post("/cases/{case_id}/publish", response_model=dict)
 async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):

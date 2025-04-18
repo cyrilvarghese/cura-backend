@@ -26,6 +26,7 @@ from routers.case_creator.update_test_comment import router as update_test_comme
 from routers.case_player.create_pre_treatment_feedback import router as pre_treatment_feedback_router
 from routers.case_player.treatment_feedback_gemini import router as treatment_feedback_gemini_router
 from routers.case_player.test_validator import router as test_validator_router
+from routers.feature_requests.feature_request_routes import feature_router
 api_router = APIRouter()
 
 class StudentAction(BaseModel):
@@ -67,6 +68,7 @@ api_router.include_router(findings_router)
 api_router.include_router(pre_treatment_feedback_router)
 api_router.include_router(treatment_feedback_gemini_router)
 api_router.include_router(test_validator_router)
+api_router.include_router(feature_router)
 @api_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():
     """List all available cases by reading case_cover.json files"""

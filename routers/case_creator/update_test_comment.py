@@ -72,11 +72,34 @@ async def add_test_comment(request: CommentUpdateRequest):
         test_data = test_category.get(request.test_name)
         if not test_data:
             print(f"[{datetime.now()}] ❌ Test name not found: {request.test_name}")
+            
+            # Load case_cover.json and update error structure
+            error_path = f"case-data/case{request.case_id}/case_cover.json"
+            with open(error_path, 'r') as file:
+                error_data = json.load(file)
+            
+            # Initialize or update error structure
+            if "error" not in error_data:
+                error_data["error"] = {
+                    "type": request.test_type,
+                    "name": request.test_name,
+                    "comments": []
+                }
+            
+            # Append the new comment
+            error_data["error"]["comments"].append(request.comment)
+            
+            # Save the updated error data
+            with open(error_path, 'w') as file:
+                json.dump(error_data, file, indent=4)
+            
             print(f"[DEBUG] Available tests in {request.test_type}: {list(test_category.keys())}")
-            raise HTTPException(
-                status_code=404,
-                detail=f"Test {request.test_name} not found"
-            )
+            return {
+                "message": "Comment added to error log",
+                "test_name": request.test_name,
+                "comments": error_data["error"]["comments"],
+                "total_comments": len(error_data["error"]["comments"])
+            }
 
         # Initialize comments array if it doesn't exist
         if "comments" not in test_data:

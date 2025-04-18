@@ -20,7 +20,10 @@
                 ]
             },
             "status": "completed",
-            "interpretation": "Consistent with urticarial vasculitis."
+            "interpretation": "Consistent with urticarial vasculitis.",
+            "comments": [
+                "add"
+            ]
         },
         "Musculoskeletal Examination": {
             "purpose": "Evaluate joint symptoms",
@@ -205,7 +208,11 @@
                 }
             },
             "interpretation": "Indicates significant inflammation.",
-            "status": "completed"
+            "status": "completed",
+            "comments": [
+                "test",
+                "sda"
+            ]
         },
         "C3 and C4 Complement Levels": {
             "testName": "C3 and C4 Complement Levels",

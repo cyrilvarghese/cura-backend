@@ -114,12 +114,17 @@ def update_test_exam_data(case_id: str, test_name: str, test_type: TestType, ima
                 "caption": f"Test images for {test_name}"
             }
         elif results["type"] == "image":
-            # If type is already "image", replace the content
-            results["content"] = {
-                "url": image_urls,
-                "altText": f"Images for {test_name}",
-                "caption": f"Test images for {test_name}"
-            }
+            # If type is already "image", append to existing URLs
+            existing_urls = results["content"].get("url", [])
+            if not isinstance(existing_urls, list):
+                existing_urls = [existing_urls]
+            
+            # Filter out example.com URLs
+            existing_urls = [url for url in existing_urls if not "example.com" in url]
+            
+            # Combine existing and new URLs, removing duplicates
+            combined_urls = existing_urls + [url for url in image_urls if url not in existing_urls]
+            results["content"]["url"] = combined_urls
         elif results["type"] == "mixed":
             # For mixed type, find or add an image content item
             if "content" not in results:
@@ -134,12 +139,17 @@ def update_test_exam_data(case_id: str, test_name: str, test_type: TestType, ima
             for i, item in enumerate(results["content"]):
                 if isinstance(item, dict) and item.get("type") == "image":
                     image_item_found = True
-                    # Replace the existing image item
-                    item["content"] = {
-                        "url": image_urls,
-                        "altText": f"Images for {test_name}",
-                        "caption": f"Test images for {test_name}"
-                    }
+                    # Get existing URLs
+                    existing_urls = item["content"].get("url", [])
+                    if not isinstance(existing_urls, list):
+                        existing_urls = [existing_urls]
+                    
+                    # Filter out example.com URLs
+                    existing_urls = [url for url in existing_urls if not "example.com" in url]
+                    
+                    # Combine existing and new URLs, removing duplicates
+                    combined_urls = existing_urls + [url for url in image_urls if url not in existing_urls]
+                    item["content"]["url"] = combined_urls
                     
                     # Update the item in the content list
                     results["content"][i] = item
@@ -221,7 +231,7 @@ async def upload_test_image(
         # Use assets directory instead of images
         assets_dir = ensure_assets_directory(case_id)
         
-        image_urls = []
+        new_image_urls = []
         
         for file in files:
             # Generate a unique filename
@@ -237,14 +247,17 @@ async def upload_test_image(
             
             # Create the relative URL for the image (using assets path)
             image_url = f"/case-images/case{case_id}/assets/{filename}"
-            image_urls.append(image_url)
+            new_image_urls.append(image_url)
         
         # Update the test_exam_data.json file with all image URLs
-        update_test_exam_data(case_id, test_name, test_type, image_urls)
+        update_test_exam_data(case_id, test_name, test_type, new_image_urls)
+        
+        # Get all image URLs for this test (including previously existing ones)
+        all_image_urls = get_all_image_urls(case_id, test_name, test_type)
         
         return {
-            "message": f"Successfully uploaded {len(image_urls)} image(s) for {test_name}",
-            "image_urls": image_urls,
+            "message": f"Successfully uploaded {len(new_image_urls)} image(s) for {test_name}",
+            "image_urls": all_image_urls,  # Return all URLs, not just the new ones
             "case_id": case_id,
             "test_name": test_name,
             "test_type": test_type.value,
@@ -255,6 +268,58 @@ async def upload_test_image(
             status_code=500,
             detail=f"An error occurred while uploading the image: {str(e)}"
         )
+
+def get_all_image_urls(case_id: str, test_name: str, test_type: TestType) -> List[str]:
+    """
+    Get all image URLs for a specific test
+    
+    Args:
+        case_id: The case ID
+        test_name: The name of the test
+        test_type: The type of test
+        
+    Returns:
+        List of all image URLs for the test
+    """
+    try:
+        json_path = f"case-data/case{case_id}/test_exam_data.json"
+        
+        if not os.path.exists(json_path):
+            return []
+        
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        
+        test_category = data.get(test_type.value, {})
+        test_entry = test_category.get(test_name, {})
+        
+        results_key = "findings" if test_type.value == "physical_exam" else "results"
+        if results_key not in test_entry:
+            return []
+        
+        results = test_entry[results_key]
+        
+        if results["type"] == "image":
+            urls = results["content"].get("url", [])
+            if not isinstance(urls, list):
+                urls = [urls]
+            # Filter out example.com URLs
+            return [url for url in urls if not "example.com" in url]
+        elif results["type"] == "mixed":
+            all_urls = []
+            for item in results["content"]:
+                if isinstance(item, dict) and item.get("type") == "image":
+                    urls = item["content"].get("url", [])
+                    if not isinstance(urls, list):
+                        urls = [urls]
+                    # Filter out example.com URLs
+                    all_urls.extend([url for url in urls if not "example.com" in url])
+            return all_urls
+        
+        return []
+    except Exception as e:
+        print(f"Error getting all image URLs: {str(e)}")
+        return []
 
 @router.delete("/delete/{case_id}/{test_type}/{test_name}")
 async def delete_test_image(
@@ -274,34 +339,79 @@ async def delete_test_image(
         JSON response confirming deletion
     """
     try:
-        assets_dir = f"case-data/case{case_id}/assets"
-        sanitized_test_name = test_name.replace(" ", "_").lower()
-        base_filename = f"{test_type.value}_{sanitized_test_name}"
+        # Path to the test_exam_data.json file
+        json_path = f"case-data/case{case_id}/test_exam_data.json"
         
-        # Check for both possible extensions
-        for ext in ['.jpg', '.jpeg', '.png']:
-            file_path = os.path.join(assets_dir, f"{base_filename}{ext}")
-            if os.path.exists(file_path):
-                os.remove(file_path)
-                return JSONResponse(
-                    content={
-                        "message": f"Test image {test_name} deleted successfully",
-                        "case_id": case_id,
-                        "test_type": test_type,
-                        "test_name": test_name
-                    }
-                )
+        # Check if the file exists
+        if not os.path.exists(json_path):
+            raise HTTPException(
+                status_code=404,
+                detail=f"Test data file not found for case {case_id}"
+            )
         
-        raise HTTPException(
-            status_code=404,
-            detail=f"Test image {test_name} not found for case {case_id}"
+        # Read the existing data
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        
+        # Get the test category
+        test_category = data.get(test_type.value, {})
+        
+        # Check if the test exists
+        if test_name not in test_category:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Test {test_name} not found in {test_type.value} category"
+            )
+        
+        # Get the test entry
+        test_entry = test_category[test_name]
+        
+        # Determine the key based on test type
+        results_key = "findings" if test_type.value == "physical_exam" else "results"
+        
+        if results_key not in test_entry:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No {results_key} found for test {test_name}"
+            )
+        
+        # Get the results/findings object
+        results = test_entry[results_key]
+        
+        # Create a dummy URL
+        dummy_url = f"https://example.com/{test_name.replace(' ', '_')}.jpg"
+        
+        # Update the URL based on the structure
+        if results["type"] == "image":
+            results["content"]["url"] = [dummy_url]
+        elif results["type"] == "mixed":
+            for item in results["content"]:
+                if isinstance(item, dict) and item.get("type") == "image":
+                    item["content"]["url"] = [dummy_url]
+        
+        # Write the updated data back to the file
+        with open(json_path, 'w') as f:
+            json.dump(data, f, indent=4)
+        
+        return JSONResponse(
+            content={
+                "message": f"Test image URLs for {test_name} replaced with dummy URL",
+                "case_id": case_id,
+                "test_type": test_type.value,
+                "test_name": test_name,
+                "dummy_url": dummy_url
+            }
         )
 
+    except HTTPException:
+        # Re-raise HTTP exceptions
+        raise
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         error_message = f"[{error_timestamp}] ❌ Error in delete_test_image: {str(e)}"
         print(error_message)
-        raise HTTPException(status_code=500, detail=str(e)) 
+        traceback.print_exc()  # Print the full traceback for debugging
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/upload-from-url", response_model=UploadResponse)
 async def upload_test_image_from_url(request: UploadFromUrlRequest):

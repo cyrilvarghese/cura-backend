@@ -13,7 +13,7 @@
                         "type": "image",
                         "content": {
                             "url": [
-                                "/case-images/case12/assets/Skin_Examination_1744993087853_urticarial-vasculitis-affecting-skin.webp"
+                                "https://example.com/Skin_Examination.jpg"
                             ],
                             "altText": "Images for Skin Examination",
                             "caption": "Test images for Skin Examination"
@@ -22,7 +22,8 @@
                 ]
             },
             "status": "completed",
-            "interpretation": "Physical findings are consistent with histoid leprosy."
+            "interpretation": "Physical findings are consistent with histoid leprosy.",
+            "comments": []
         },
         "Sensory Testing of Limbs and Lesions": {
             "purpose": "Assess sensory loss in affected areas",
@@ -85,7 +86,7 @@
                         "type": "image",
                         "content": {
                             "url": [
-                                "/case-images/case12/assets/Slit-skin_Smear_1744993108442_urticarial-vasculitis-affecting-skin.webp"
+                                "https://example.com/Slit-skin_Smear.jpg"
                             ],
                             "altText": "Images for Slit-skin Smear",
                             "caption": "Test images for Slit-skin Smear"

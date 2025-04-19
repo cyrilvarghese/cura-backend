@@ -1,11 +1,32 @@
 {
   "student_id": "fc591596-41e0-4e11-a2a2-af71171524d2",
-  "case_id": "14",
-  "session_start": "2025-04-19T03:25:08.954398",
+  "case_id": "12",
+  "session_start": "2025-04-19T08:52:22.181757",
   "current_step": "History Taking",
   "interactions": {
     "history_taking": [],
-    "physical_examinations": [],
+    "physical_examinations": [
+      {
+        "test_name": "Skin Examination",
+        "timestamp": "2025-04-19T08:52:25.385751"
+      },
+      {
+        "test_name": "Nikolsky sign",
+        "timestamp": "2025-04-19T08:52:28.975640"
+      },
+      {
+        "test_name": "vitals",
+        "timestamp": "2025-04-19T08:52:35.069788"
+      },
+      {
+        "test_name": "Wood's lamp",
+        "timestamp": "2025-04-19T08:52:51.924923"
+      },
+      {
+        "test_name": "vitals",
+        "timestamp": "2025-04-19T08:52:55.121858"
+      }
+    ],
     "tests_ordered": [],
     "diagnosis_submission": null,
     "pre_treatment_checks": [],

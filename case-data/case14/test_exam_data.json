@@ -1,77 +1,79 @@
 {
     "physical_exam": {
         "Skin Examination": {
-            "purpose": "Evaluate the nature and extent of erythematous nodules.",
+            "purpose": "Assess characteristics of erythematous nodules caused by ENL",
             "findings": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Multiple tender, erythematous nodules on extensor surfaces of arms and thighs; size 1-3 cm, well-defined."
+                        "content": "Multiple tender erythematous nodules observed on arms and thighs, typical of Erythema Nodosum Leprosum. No new anesthetic patches found."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/nodules.jpg",
-                            "altText": "Erythematous Nodules on Arm",
-                            "caption": "Erythematous nodules observed on patient's arm."
+                            "url": [
+                                "/case-images/case14/assets/Skin_Examination_1745045220915_image.png"
+                            ],
+                            "altText": "Images for Skin Examination",
+                            "caption": "Test images for Skin Examination"
                         }
                     }
                 ]
             },
             "status": "completed",
-            "interpretation": "Findings consistent with Erythema Nodosum Leprosum (Type 2 reaction)."
+            "interpretation": "Findings are consistent with Type 2 leprosy reactions (ENL)."
         },
         "Joint Examination": {
-            "purpose": "Assess joint swelling and tenderness.",
+            "purpose": "Evaluate swelling and tenderness in joints",
             "findings": {
                 "type": "text",
-                "content": "Mild swelling and tenderness noted in multiple joints, primarily wrists and knees. Range of motion slightly reduced due to pain."
+                "content": "Mild swelling and tenderness noted in wrists and knees with reduced range of motion."
             },
             "status": "completed",
-            "interpretation": "Joint involvement consistent with systemic response in ENL."
+            "interpretation": "Joint pain and swelling are likely related to systemic inflammation due to ENL."
         },
         "Vital Signs": {
-            "purpose": "Monitor fever and overall physiological state.",
+            "purpose": "Monitor patient's vitals for fever and overall stability",
             "findings": {
                 "type": "text",
-                "content": "Temperature: 99.8\u00b0F, HR: 92 bpm, BP: 128/78 mmHg; stable but indicates low-grade fever."
+                "content": "Vital Signs: Temp: 99.8\u00b0F, HR: 92 bpm, BP: 128/78 mmHg."
             },
             "status": "completed",
-            "interpretation": "Fever likely associated with ongoing inflammatory process."
+            "interpretation": "Low-grade fever consistent with systemic inflammatory response."
         },
         "Eye Examination": {
-            "purpose": "Screen for iritis or other ocular complications.",
+            "purpose": "Check for signs of iritis associated with ENL",
             "findings": {
                 "type": "text",
-                "content": "Eyes normal, no signs of iritis or redness; pupil reaction normal."
+                "content": "Eyes appear normal with no signs of redness or pain; no evidence of iritis."
             },
             "status": "completed",
-            "interpretation": "No ocular involvement detected."
+            "interpretation": "No ocular involvement noted, indicating low risk for ocular complications at this time."
         },
         "Palpation of Peripheral Nerves": {
-            "purpose": "Assess nerve tenderness and function.",
+            "purpose": "Assess nerve tenderness that may indicate leprosy complications",
             "findings": {
                 "type": "text",
-                "content": "No acute tenderness over major peripheral nerves; sensation intact."
+                "content": "No acute tenderness noted in peripheral nerves during examination."
             },
             "status": "completed",
-            "interpretation": "Nerve function appears preserved."
+            "interpretation": "Peripheral nerves appear normal; no acute leprosy complications detected."
         },
-        "Sensory Exam": {
-            "purpose": "Evaluate any sensory changes.",
+        "Sensory Examination": {
+            "purpose": "Evaluate sensory functions and asymmetry",
             "findings": {
                 "type": "text",
-                "content": "Sensory examination unchanged; no new anesthetic patches noted."
+                "content": "Sensory examination unchanged from previous assessments; no new neural deficits."
             },
             "status": "completed",
-            "interpretation": "No evidence of sensory loss."
+            "interpretation": "No new anesthetic patches noted; sensory function largely intact."
         }
     },
     "lab_test": {
         "Complete Blood Count (CBC)": {
             "testName": "Complete Blood Count",
-            "purpose": "Evaluate blood components for neutrophilia or anemia.",
+            "purpose": "Assess leukocytosis and anemia in ENL",
             "results": {
                 "type": "table",
                 "content": {
@@ -83,52 +85,63 @@
                     ],
                     "rows": [
                         [
-                            "Hemoglobin",
-                            "12 g/dL",
-                            "13.5-17.5 g/dL",
-                            "LOW"
-                        ],
-                        [
-                            "White Blood Cells (WBC)",
-                            "15 x10^9/L",
+                            "WBC Count",
+                            "12.5 x10^9/L",
                             "4.0-11.0 x10^9/L",
                             "HIGH"
                         ],
                         [
-                            "Platelets",
+                            "Hemoglobin",
+                            "12.0 g/dL",
+                            "13.5-17.5 g/dL",
+                            "LOW"
+                        ],
+                        [
+                            "Platelet Count",
                             "250 x10^9/L",
-                            "150-450 x10^9/L",
+                            "150-400 x10^9/L",
                             "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "Leukocytosis indicates active inflammation; mild anemia may be noted.",
+            "interpretation": "Leukocytosis suggests systemic inflammation, mild anemia present.",
             "status": "completed"
         },
-        "Erythrocyte Sedimentation Rate (ESR)": {
-            "testName": "ESR",
-            "purpose": "Assess inflammation levels.",
+        "Erythrocyte Sedimentation Rate (ESR) and C-Reactive Protein (CRP)": {
+            "testName": "ESR and CRP",
+            "purpose": "Evaluate levels of inflammation in response to ENL",
             "results": {
-                "type": "text",
-                "content": "ESR: 45 mm/hr; elevated compared to normal range."
+                "type": "table",
+                "content": {
+                    "headers": [
+                        "Test",
+                        "Result",
+                        "Reference Range",
+                        "Status"
+                    ],
+                    "rows": [
+                        [
+                            "ESR",
+                            "35 mm/hr",
+                            "0-20 mm/hr",
+                            "HIGH"
+                        ],
+                        [
+                            "CRP",
+                            "12 mg/L",
+                            "0-5 mg/L",
+                            "HIGH"
+                        ]
+                    ]
+                }
             },
-            "interpretation": "Elevated ESR consistent with active inflammatory disease process.",
+            "interpretation": "Both ESR and CRP are elevated, indicating significant inflammatory activity consistent with ENL.",
             "status": "completed"
         },
-        "C-Reactive Protein (CRP)": {
-            "testName": "CRP",
-            "purpose": "Evaluate inflammation.",
-            "results": {
-                "type": "text",
-                "content": "CRP: 10 mg/L; elevated from normal."
-            },
-            "interpretation": "Suggests acute inflammation in line with clinical presentation.",
-            "status": "completed"
-        },
-        "Liver Function Tests (LFTs)": {
-            "testName": "LFTs",
-            "purpose": "Baseline assessment before starting immunosuppressive therapy.",
+        "Liver Function Tests (LFTs) and Renal Function Tests (RFTs)": {
+            "testName": "LFTs and RFTs",
+            "purpose": "Assess baseline organ function prior to potential treatment with steroids",
             "results": {
                 "type": "table",
                 "content": {
@@ -142,105 +155,80 @@
                         [
                             "ALT",
                             "25 U/L",
-                            "7-56 U/L",
+                            "0-40 U/L",
                             "NORMAL"
                         ],
                         [
                             "AST",
-                            "30 U/L",
-                            "10-40 U/L",
+                            "23 U/L",
+                            "0-40 U/L",
+                            "NORMAL"
+                        ],
+                        [
+                            "Creatinine",
+                            "0.8 mg/dL",
+                            "0.6-1.2 mg/dL",
                             "NORMAL"
                         ],
                         [
                             "Bilirubin",
-                            "0.8 mg/dL",
+                            "1.0 mg/dL",
                             "0.1-1.2 mg/dL",
                             "NORMAL"
                         ]
                     ]
                 }
             },
-            "interpretation": "Liver function tests within normal limits.",
-            "status": "completed"
-        },
-        "Renal Function Tests (RFTs)": {
-            "testName": "RFTs",
-            "purpose": "Assess kidney function as a baseline for steroid therapy.",
-            "results": {
-                "type": "table",
-                "content": {
-                    "headers": [
-                        "Test",
-                        "Result",
-                        "Reference Range",
-                        "Status"
-                    ],
-                    "rows": [
-                        [
-                            "Creatinine",
-                            "0.9 mg/dL",
-                            "0.6-1.2 mg/dL",
-                            "NORMAL"
-                        ],
-                        [
-                            "Urea",
-                            "20 mg/dL",
-                            "7-20 mg/dL",
-                            "NORMAL"
-                        ]
-                    ]
-                }
-            },
-            "interpretation": "Renal function appears stable, no concerns prior to steroid therapy.",
+            "interpretation": "All liver and renal tests within normal ranges, suitable for steroid therapy.",
             "status": "completed"
         },
         "Blood Glucose": {
             "testName": "Blood Glucose",
-            "purpose": "Screen for risk associated with steroid usage.",
+            "purpose": "Monitor blood sugar levels before starting steroid therapy",
             "results": {
                 "type": "text",
-                "content": "Blood Glucose: 90 mg/dL; normal pre-treatment level."
+                "content": "Blood glucose level is 90 mg/dL, within normal limits."
             },
-            "interpretation": "Normal level prior to steroid initiation.",
+            "interpretation": "No contraindication for steroids based on blood glucose level.",
             "status": "completed"
         },
         "Slit-Skin Smear": {
             "testName": "Slit-Skin Smear",
-            "purpose": "Monitor bacterial index (BI), not specific to ENL diagnosis.",
+            "purpose": "Track Bacterial Index for leprosy, not specifically for ENL diagnosis",
             "results": {
                 "type": "mixed",
                 "content": [
                     {
                         "type": "text",
-                        "content": "Microscopic examination shows 3+ bacilli in the smear."
+                        "content": "Smear shows moderate presence of acid-fast bacilli consistent with leprosy diagnosis."
                     },
                     {
                         "type": "image",
                         "content": {
-                            "url": "https://example.com/slit_skin_smear.jpg",
-                            "altText": "Slit Skin Smear Result",
-                            "caption": "Microscopic view of slit-skin smear showing bacilli."
+                            "url": "https://example.com/slit_skin_smear_image.jpg",
+                            "altText": "Slit-skin smear showing bacilli",
+                            "caption": "Slit-skin smear with moderate presence of bacilli."
                         }
                     }
                 ]
             },
-            "interpretation": "Bacterial index indicates ongoing leprosy infection.",
+            "interpretation": "Presence of bacilli supports the diagnosis of leprosy but is not indicative of ENL severity.",
             "status": "completed"
         },
-        "ANA/Autoimmune Screen": {
-            "testName": "ANA Screen",
-            "purpose": "Rule out other autoimmune causes.",
+        "Autoimmune Screen": {
+            "testName": "Autoimmune Screen (ANA)",
+            "purpose": "Rule out other rheumatological causes for symptoms",
             "results": {
                 "type": "text",
-                "content": "ANA: Negative."
+                "content": "Autoimmune screen negative; no autoimmune disorders detected at this time."
             },
-            "interpretation": "No signs indicative of autoimmune processes; supports diagnosis of ENL.",
+            "interpretation": "No association with autoimmune conditions; reinforces diagnosis of ENL.",
             "status": "completed"
         }
     },
     "validation": {
         "all_tests_generated": true,
-        "expected_count": 8,
-        "actual_count": 8
+        "expected_count": 6,
+        "actual_count": 6
     }
 }

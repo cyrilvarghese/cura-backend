@@ -195,6 +195,5 @@ dependencies:
       - supabase
       - markdown
       - langchain-google-genai
-      - crawl4ai==0.1.0
 
 prefix: /root/conda/envs/cura-env

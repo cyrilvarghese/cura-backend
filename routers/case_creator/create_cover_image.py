@@ -96,40 +96,38 @@ async def call_image_gen(case_id: str, image_prompt: str, hasPrompt: bool = Fals
     return server_image_url
 
 class CoverImageRequest(BaseModel):
+    case_id: str
     prompt: Optional[str] = None
     title: Optional[str] = None
-    quote: Optional[str] = None 
+    quote: Optional[str] = None
 
 class PhraseRequest(BaseModel):
     phrase: str
 
-@router.post("/create")
+@router.post("/generate")
 async def create_cover_image(
-    case_id: str,
-    cover_data: Optional[CoverImageRequest] = None,
+    cover_data: CoverImageRequest,
     request: Request = None
 ):
     try:
         formatted_response = {}
         image_prompt = None  # Initialize image_prompt variable
         
-        if cover_data and cover_data.prompt:
+        if cover_data.prompt:
             # Generate image using provided prompt
-            image_prompt = cover_data.prompt  # Set image_prompt here
-            image_url = await call_image_gen(case_id, image_prompt, True)
+            image_prompt = cover_data.prompt
+            image_url = await call_image_gen(cover_data.case_id, image_prompt, True)
             
-            title = cover_data.title
-            quote = cover_data.quote
             formatted_response = {
                 "prompt": image_prompt,
                 "image_url": image_url,
-                "title": title,
-                "quote": quote
+                "title": cover_data.title,
+                "quote": cover_data.quote
             }
         else:
             # Existing flow for generating prompt using GPT
             prompt = load_prompt("prompts/cover_image_prompt1.txt")
-            patient_persona = load_patient_persona(case_id)
+            patient_persona = load_patient_persona(cover_data.case_id)
             
             prompt_template = ChatPromptTemplate.from_messages([
                 ("system", prompt),
@@ -141,11 +139,11 @@ async def create_cover_image(
             cleaned_response = extract_code_blocks(cover_image_prompt.content)
             responseJSON = json.loads(cleaned_response[0])
             
-            image_prompt = responseJSON["image_prompt"]  # Set image_prompt here
+            image_prompt = responseJSON["image_prompt"]
             title = responseJSON["title"]
             quote = responseJSON["quote"]
             
-            image_url = await call_image_gen(case_id, image_prompt)
+            image_url = await call_image_gen(cover_data.case_id, image_prompt)
             
             formatted_response = {
                 "prompt": image_prompt,
@@ -154,21 +152,13 @@ async def create_cover_image(
                 "quote": quote
             }
         
-        update_case_cover(case_id, title, quote, image_url, image_prompt)
-
-        formatted_log = (
-            f"Cover image prompt generated successfully.\n"
-            f"Prompt: {formatted_response['prompt']}\n"
-            f"Image URL: {formatted_response['image_url']}"
-        )
-        print(formatted_log)
-        
+        update_case_cover(cover_data.case_id, formatted_response["title"], formatted_response["quote"], formatted_response["image_url"], image_prompt)
         return formatted_response
 
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{error_timestamp}] ❌ Error in create_cover_image: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e))
 
 def update_case_cover_phrases(case_folder: str, phrase: str) -> list:
     """

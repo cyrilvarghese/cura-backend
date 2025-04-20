@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional, Literal
+from typing import Dict, Any, Optional, Literal, List
 
 class SessionManager:
     def __init__(self, base_dir: str = "session-data"):
@@ -33,6 +33,7 @@ class SessionManager:
                 "physical_examinations": [],
                 "tests_ordered": [],
                 "diagnosis_submission": None,
+                "final_diagnosis": None,
                 "pre_treatment_checks": [],
                 "treatment_plan": None,
                 "post_treatment_monitoring": [],
@@ -59,6 +60,7 @@ class SessionManager:
                 "physical_examinations": [],
                 "tests_ordered": [],
                 "diagnosis_submission": None,
+                "final_diagnosis": None,
                 "pre_treatment_checks": [],
                 "treatment_plan": None,
                 "post_treatment_monitoring": [],
@@ -149,6 +151,87 @@ class SessionManager:
         # Update the diagnosis submission
         session_data["interactions"]["diagnosis_submission"] = diagnosis_data
         session_data["current_step"] = "Primary Diagnosis"
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
+    def add_final_diagnosis(self, student_id: str, case_id: str, final_diagnosis_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Add a final diagnosis submission to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            case_id (str): The ID of the case
+            final_diagnosis_data (Dict[str, Any]): The final diagnosis submission data
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id, case_id)
+        session_data = self.create_or_load_session(student_id, case_id)
+        
+        # Update the final diagnosis submission
+        session_data["interactions"]["final_diagnosis"] = final_diagnosis_data
+        session_data["current_step"] = "Final Diagnosis"
+        
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
+    def add_treatment_monitoring_data(self, student_id: str, case_id: str, pre_treatment_checks: List[str], post_treatment_monitoring: List[str]) -> Dict[str, Any]:
+        """Add pre-treatment checks and post-treatment monitoring data to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            case_id (str): The ID of the case
+            pre_treatment_checks (List[str]): List of pre-treatment checks
+            post_treatment_monitoring (List[str]): List of post-treatment monitoring parameters
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id, case_id)
+        session_data = self.create_or_load_session(student_id, case_id)
+        
+        # Create monitoring data structure with timestamp
+        monitoring_data = {
+            "pre_treatment_checks": pre_treatment_checks,
+            "post_treatment_monitoring": post_treatment_monitoring,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Update both pre-treatment checks and post-treatment monitoring
+        session_data["interactions"]["pre_treatment_checks"] = pre_treatment_checks
+        session_data["interactions"]["post_treatment_monitoring"] = post_treatment_monitoring
+        session_data["current_step"] = "Treatment Monitoring"
+        
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
+    def add_treatment_plan(self, student_id: str, case_id: str, treatment_plan: List[str]) -> Dict[str, Any]:
+        """Add treatment plan to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            case_id (str): The ID of the case
+            treatment_plan (List[str]): List of treatment steps/medications
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id, case_id)
+        session_data = self.create_or_load_session(student_id, case_id)
+        
+        # Create treatment plan data structure with timestamp
+        plan_data = {
+            "treatment_steps": treatment_plan,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Update the treatment plan
+        session_data["interactions"]["treatment_plan"] = plan_data
+        session_data["current_step"] = "Treatment Plan"
+        
         # Save the updated session
         self._save_session(file_path, session_data)
         return session_data

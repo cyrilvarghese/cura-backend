@@ -29,6 +29,10 @@ from routers.case_player.test_validator import router as test_validator_router
 from routers.feature_requests.feature_request_routes import feature_router
 from routers.record_clinical_findings import router as clinical_findings_router
 from routers.record_diagnosis import router as diagnosis_router
+from routers.final_diagnosis import router as final_diagnosis_router
+from routers.treatment_monitoring import router as treatment_monitoring_router
+from routers.treatment_plan import router as treatment_plan_router
+from routers.osce_generator import router as osce_generator_router
 api_router = APIRouter()
 
 class StudentAction(BaseModel):
@@ -73,6 +77,10 @@ api_router.include_router(test_validator_router)
 api_router.include_router(feature_router)
 api_router.include_router(clinical_findings_router)
 api_router.include_router(diagnosis_router)
+api_router.include_router(final_diagnosis_router)
+api_router.include_router(treatment_monitoring_router)
+api_router.include_router(treatment_plan_router)
+api_router.include_router(osce_generator_router)
 @api_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():
     """List all available cases by reading case_cover.json files"""

@@ -84,7 +84,7 @@ def call_gemini_model(state: PatientSimState):
         "sender": "Patient",
         "content": response.content,
         "step": "patient-history",
-        "timestamp": datetime.now().isoformat(),
+        "timestamp": datetime.utcnow().isoformat() + "Z",  # Use UTC time with Z suffix for ISO 8601
         "type": "ai",
         "case_id": case_id
     }
@@ -104,7 +104,7 @@ def call_model(state: PatientSimState):
     case_id = state["case_id"]
     
     # Create prompt template with system message and message history
-    system_template = load_prompt_template(case_id)  # Now passing case_id to load_prompt_template
+    system_template = load_prompt_template(case_id)
     prompt = ChatPromptTemplate.from_messages([
         ("system", system_template),
         MessagesPlaceholder(variable_name="messages")
@@ -122,12 +122,12 @@ def call_model(state: PatientSimState):
         "sender": "Patient",
         "content": response.content,
         "step": "patient-history",
-        "timestamp": datetime.now().isoformat(),
+        "timestamp": datetime.utcnow().isoformat() + "Z",  # Use UTC time with Z suffix for ISO 8601
         "type": "ai",
-        "case_id": case_id  # Include case_id in the response
+        "case_id": case_id
     }
     
-    return {"messages": formatted_response, "case_id": case_id}  # Return both messages and case_id
+    return {"messages": formatted_response, "case_id": case_id}
 
 # Add the model node to the graph
 workflow.add_edge(START, "model")

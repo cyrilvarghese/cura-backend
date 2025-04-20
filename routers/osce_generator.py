@@ -72,6 +72,7 @@ async def get_department(case_id: str) -> str:
 
 # Load the OSCE generator prompt
 OSCE_PROMPT = load_prompt("prompts/OSCE-gen3.md")
+print(f"OSCE_PROMPT: {OSCE_PROMPT[:200]}")
 
 @router.post("/generate")
 async def generate_osce_questions(request: OSCERequest):

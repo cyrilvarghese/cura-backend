@@ -62,7 +62,7 @@ Your final output **MUST** be a single, valid JSON array `[...]`. Each element w
   "options": {{ // Use null if question_format is 'written'
     "A": "Plausible Distractor A",
     "B": "Plausible Distractor B",
-    "C": "Correct Answer Option Text ", // Marking the text is still helpful for human readability
+    "C": "Correct Answer Option Text ",  
     "D": "Plausible Distractor D"
   }},
   "mcq_correct_answer_key": "C", // **NEW:** Key (letter) of the correct option. Null if question_format is 'written'.
@@ -87,7 +87,7 @@ Your final output **MUST** be a single, valid JSON array `[...]`. Each element w
     "prompt": "A patient presents with itchy, red welts similar to the case seen. However, the patient emphatically states each individual lesion disappears completely without a trace within 12-18 hours, although new ones appear daily. What does this specific feature strongly suggest?",
     "options": {{
         "A": "Urticarial vasculitis",
-        "B": "Chronic spontaneous urticaria ✅",
+        "B": "Chronic spontaneous urticaria",
         "C": "Erythema multiforme",
         "D": "Fixed drug eruption"
     }},
@@ -126,5 +126,6 @@ Your final output **MUST** be a single, valid JSON array `[...]`. Each element w
 *   **Gap Identification:** **Each** question object **must** include the `"addressed_gap"` property.
 *   **MCQ Correct Key:** For questions where `"question_format"` is "MCQ", the `"mcq_correct_answer_key"` property **must** contain the letter (key) of the correct option (e.g., "A", "B", "C", "D"). This property must be `null` if the `"question_format"` is "written".
 *   **Single JSON Array Output:** The entire response **must** be a single JSON array `[...]` containing the question objects. Do not include *any* introductory text, explanations, comments, or formatting outside of this single JSON array structure.
+*   **No Emojis in Options:** Ensure that the options do not contain any emojis that reveal the correct answer.
 
 ---

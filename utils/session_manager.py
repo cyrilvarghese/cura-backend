@@ -11,7 +11,7 @@ class SessionManager:
         # Create the base directory if it doesn't exist
         Path(base_dir).mkdir(parents=True, exist_ok=True)
 
-    def _get_session_file_path(self, student_id: str, case_id: str) -> str:
+    def _get_session_file_path(self, student_id: str, case_id: str = None) -> str:
         """Generate the file path for a session file."""
         return os.path.join(self.base_dir, f"{student_id}_case_session.json")
 
@@ -241,9 +241,9 @@ class SessionManager:
         with open(file_path, 'w') as f:
             json.dump(session_data, f, indent=2)
 
-    def get_session(self, student_id: str, case_id: str) -> Optional[Dict[str, Any]]:
+    def get_session(self, student_id: str) -> Optional[Dict[str, Any]]:
         """Retrieve a session if it exists."""
-        file_path = self._get_session_file_path(student_id, case_id)
+        file_path = self._get_session_file_path(student_id)
         if os.path.exists(file_path):
             with open(file_path, 'r') as f:
                 return json.load(f)

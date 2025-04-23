@@ -299,4 +299,33 @@ class SupabaseDocumentOps:
             raise HTTPException(
                 status_code=500,
                 detail=f"Failed to fetch department documents: {str(e)}"
+            )
+
+    @staticmethod
+    async def delete_document(google_doc_id: str) -> Dict[str, Any]:
+        """Delete a document from Supabase by google_doc_id"""
+        try:
+            supabase = SupabaseDocumentOps.get_client()
+            
+            # Delete the document
+            result = supabase.table("documents")\
+                .delete()\
+                .eq("google_doc_id", google_doc_id)\
+                .execute()
+                
+            if not result.data:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Document with google_doc_id '{google_doc_id}' not found"
+                )
+                
+            return {"success": True, "message": f"Document with ID {google_doc_id} deleted successfully"}
+            
+        except HTTPException:
+            raise
+        except Exception as e:
+            print(f"Supabase document deletion error: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to delete document: {str(e)}"
             ) 

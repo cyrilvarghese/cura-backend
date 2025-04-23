@@ -19,6 +19,9 @@ ENV PATH /opt/conda/envs/cura-env/bin:$PATH
 # Install SQLite CLI (not included by default in some base images)
 RUN apt-get update && apt-get install -y sqlite3 && apt-get clean
 
+# Create case-data directory if it doesn't exist
+RUN mkdir -p /app/case-data
+
 # Expose the port your FastAPI app runs on
 EXPOSE 8000
 

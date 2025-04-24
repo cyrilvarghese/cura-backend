@@ -61,7 +61,8 @@ async def list_cases():
                             last_updated=cover_data.get("last_updated"),
                             differential_diagnosis=cover_data.get("differential_diagnosis"),
                             department=cover_data.get("department"),
-                            published=cover_data.get("published")
+                            published=cover_data.get("published"),
+                            deleted=cover_data.get("deleted")
                         )
                         cases.append(case_info)
                 except json.JSONDecodeError as e:

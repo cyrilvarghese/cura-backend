@@ -104,3 +104,6 @@ wheels/
 
 # Project specific
 /case-data/
+
+# Session data files
+session-data/

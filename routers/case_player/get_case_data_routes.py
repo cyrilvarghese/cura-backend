@@ -24,9 +24,13 @@ class CaseInfo(BaseModel):
     differential_diagnosis: list[str] | None = None
     department: str | None = None
     published: bool | None = None
+    deleted: bool | None = None
 
 class CaseCoverUpdate(BaseModel):
     published: bool
+
+class CaseDeleteUpdate(BaseModel):
+    deleted: bool
 
 @case_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():
@@ -57,7 +61,8 @@ async def list_cases():
                             last_updated=cover_data.get("last_updated"),
                             differential_diagnosis=cover_data.get("differential_diagnosis"),
                             department=cover_data.get("department"),
-                            published=cover_data.get("published")
+                            published=cover_data.get("published"),
+                            deleted=cover_data.get("deleted")
                         )
                         cases.append(case_info)
                 except json.JSONDecodeError as e:
@@ -204,4 +209,55 @@ async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):
         raise HTTPException(
             status_code=500,
             detail="An unexpected error occurred while updating the case cover"
+        )
+
+@case_router.post("/cases/{case_id}/delete", response_model=dict)
+async def soft_delete_case(case_id: str, update_data: CaseDeleteUpdate):
+    """Mark a case as deleted (soft delete) by updating the deleted flag in the case cover file"""
+    try:
+        # First check authentication
+        user_response = await get_user()
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            raise HTTPException(status_code=401, detail=error_message)
+
+        cover_file_path = os.path.join('case-data', f'case{case_id}', 'case_cover.json')
+        
+        # Check if the case cover file exists
+        if not os.path.exists(cover_file_path):
+            raise HTTPException(status_code=404, detail=f"Case cover data not found for case {case_id}")
+        
+        try:
+            # Read existing case cover data
+            with open(cover_file_path, 'r') as f:
+                case_cover_data = json.load(f)
+        except json.JSONDecodeError as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Invalid JSON format in case cover file: {str(e)}"
+            )
+        
+        # Update deleted status and timestamp
+        case_cover_data["deleted"] = update_data.deleted
+        case_cover_data["last_updated"] = datetime.now().isoformat()
+        
+        try:
+            # Write updated data back to the file
+            with open(cover_file_path, 'w') as f:
+                json.dump(case_cover_data, f, indent=2)
+        except Exception as write_error:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error writing to case cover file: {str(write_error)}"
+            )
+        
+        return {"message": "Case deletion status updated successfully"}
+
+    except HTTPException as http_error:
+        raise http_error
+    except Exception as e:
+        print(f"Unexpected error in soft_delete_case: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred while updating the case deletion status"
         )

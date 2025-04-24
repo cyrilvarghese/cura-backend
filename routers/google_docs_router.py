@@ -116,10 +116,17 @@ async def get_document_comments(doc_id: str, include_deleted: bool = False):
 async def delete_google_doc(doc_id: str):
     """Delete a Google Doc and its database record"""
     try:
+        # Delete from Google Drive
         docs_manager = GoogleDocsManager()
         docs_manager.delete_doc(doc_id)
+        
+        # Delete from Supabase
+        await SupabaseDocumentOps.delete_document(doc_id)
+        
         return {"message": f"Document {doc_id} deleted successfully"}
     except Exception as e:
+        print(f"Error in delete_google_doc: {str(e)}")
+        print(f"Full traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/google-docs/{doc_id}/approve")

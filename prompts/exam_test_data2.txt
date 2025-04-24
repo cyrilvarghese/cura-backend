@@ -54,8 +54,9 @@ You are a data generation assistant tasked with creating detailed, structured JS
 3. **Realistic Alignment with Case**:  
      
    - Relevant tests must have findings that align with the specific case details.  
-   - Non-relevant tests must still have realistic results to simulate a real-world diagnostic environment.
-
+   - Non-relevant tests must still have realistic normal results to simulate a real-world diagnostic environment.
+   - If the test is not relevant to the case, return normal results.
+   - never reveal diagnostic results in the findings section or mention the diagnosis in the interpretation section.
    
 
 4. **Iterative Process**:  

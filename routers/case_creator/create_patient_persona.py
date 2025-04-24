@@ -76,6 +76,7 @@ def save_case_cover(case_id: Any, filename: str, department: str, google_doc_lin
         "published": False,
         "google_doc_link": google_doc_link
     }
+    print(f"case_cover_data: {case_cover_data}")
     
     case_cover_path = os.path.join(case_folder, "case_cover.json")
     with open(case_cover_path, 'w') as json_file:

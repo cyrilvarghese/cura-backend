@@ -35,22 +35,18 @@ Analyze the student's interaction based on their demonstration of these principl
 ## 🩺 Case Context (Input):
 
 {case_context}
-*   **Instructions:** Paste the concise summary of key history points relevant to the case. Use this to understand the clinical scenario and what a competent interaction should cover.
-
+ 
 ---
 
 ## ✅ Expected Questions (Input - for Context):
 
 {expected_questions}
-*   **Instructions:** Paste the JSON array of expected questions. Use this list *for context* on what key areas *should have been* explored, but **do not score question-by-question**.
-
----
+ --
 
 ## 🧑‍🎓 Student Questions & Interaction Log (Input):
 
 {student_questions}
-*   **Instructions:** Paste the JSON array of student interactions. **Analyze this dialogue directly** to assess AETCOM performance.
-
+ 
 ---
 
 ## 🧠 Your Tasks for this Call (Independent AETCOM Evaluation with TSCAE Feedback & Level):

@@ -224,6 +224,8 @@ async def upload_test_image(
         A dictionary with the uploaded image URLs and metadata
     """
     try:
+        print(f"\n{'='*80}\n🖼️  UPLOAD STARTED: {len(files)} image(s) for '{test_name}' in case {case_id} 🖼️\n{'='*80}\n")
+
         # Create directory if it doesn't exist
         case_dir = f"case-data/case{case_id}"
         os.makedirs(case_dir, exist_ok=True)

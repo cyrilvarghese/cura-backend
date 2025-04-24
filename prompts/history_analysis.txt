@@ -77,7 +77,7 @@ For context, the standard history-taking domains considered in this evaluation f
         *   Calculate the average score.
         *   Scale to 0-5 (`average_score * 5`).
         *   Determine a very brief `reason_for_score` (string, ~10 words), particularly if the score is low (e.g., "Key questions missed," "Lacked depth," "Covered well").
-        *   Add an entry to the `domain_score_summary` object: `"domain_name": {{ "score": scaled_score, "reason_for_score": brief_reason_string }}`.
+        *   Add an entry to the `domain_score_summary` object: `"domain_name": {{ "score": scaled_score, "reason_for_score": brief_reason_string ,"Example": "Example: what is the rash like?"}}`.
     *   Return the complete `domain_score_summary` object, including all domains that had expected questions.
 
 ---
@@ -106,10 +106,12 @@ Return a single JSON object containing **only** the `missed_highlights`, `improv
     "chief_complaint": {{
       "score": 7.0, // Float: Avg score * 10
       "reason_for_score": "string: ~10 words justifying score (e.g., 'Good start, but missed duration detail.')"
+      "Example": "What is the rash like?"
     }},
     "medications": {{
       "score": 1.0,
       "reason_for_score": "string: ~10 words (e.g., 'Critically incomplete; missed key drug and allergy questions.')"
+      "Example": "are you taking any medications?"
     }}
     // ... map of all domains analyzed
   }}

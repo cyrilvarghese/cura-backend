@@ -1,0 +1,82 @@
+ 
+# 📝 Prompt: Extract History Summary and Expected Question Strings
+
+**Persona:** You are a **Clinical Case Analyst and Medical Education Content Creator**.
+
+**Context:** You are processing comprehensive clinical case documents to extract specific components needed for an AI-driven feedback system focused on student history-taking skills.
+
+**Objective:** Read the provided full clinical case document and generate a single JSON object containing two distinct components:
+1.  `case_summary_history`: A concise JSON object summarizing *only* the essential patient history information relevant for a student taking the initial history.
+2.  `expected_questions`: A JSON array containing strings of the key questions a student should ask during the history-taking phase of this specific case.
+
+**Input Data:**
+*   `full_case_document`: The complete text content of the clinical case document, including description, symptoms, background, required questions (if listed), physical exam details, labs, diagnosis, etc.
+
+**Output:**
+*   A single JSON object containing two top-level keys: `case_summary_history` (object) and `expected_questions` (array of strings).
+
+---
+
+## 📄 Full Case Document (Input):
+
+{full_case_document}
+
+---
+
+## 🧠 Your Tasks:
+
+1.  **Read and Analyze History:** Carefully read the entire `{{ full_case_document }}`. Identify all sections related to the patient's history, including chief complaint, history of present illness, demographics, risk factors, associated symptoms, relevant background (PMH, FH, SH), and pertinent positives/negatives *derivable from the history*.
+2.  **Exclude Non-History Information:** Explicitly **ignore and exclude** information related to physical examination findings, lab results, diagnostic reasoning, treatment plans, etc., *when constructing the history summary*.
+3.  **Generate `case_summary_history` JSON:**
+    *   Synthesize the extracted history information into a concise, structured JSON object.
+    *   Use clear keys like `chief_complaint`, `demographics_risk`, `history_timeline`, `associated_symptoms`, `pertinent_positives`, `pertinent_negatives_from_history`, etc. (adapt based on case content).
+    *   Focus only on the historical details provided. Keep it brief and factual.
+    *   *Example Structure (adapt fields based on case content):*
+        ```json
+        {{
+          "chief_complaint": "string",
+          "demographics_risk": {{  /* ... */ }},
+          "history_timeline": {{ /* ... */ }},
+          "associated_symptoms": {{ /* ... */ }},
+          "pertinent_positives": [ /* ... */ ],
+          "pertinent_negatives_from_history": [ /* ... */ ],
+          // ... other relevant history keys ...
+        }}
+        ```
+
+4.  **Generate `expected_questions` JSON Array (Strings Only):**
+    *   Based on the *entire* case document (including diagnosis pitfalls and context), identify the text of the *most important* questions a student should ask during the history-taking phase to gather critical information and differentiate key possibilities.
+    *   If the case document explicitly lists required history questions, use their text as a primary source, but refine wording or add other essential questions identified from the case analysis.
+    *   Formulate each question clearly and concisely as a string.
+    *   Combine these question strings into a single JSON array.
+    *   *Example Structure:*
+        ```json
+        [
+          "Can you tell me exactly when the groin swelling and rectal discomfort started?",
+          "You mentioned a penile sore a few weeks ago. Was it painful or painless? How long did it last?",
+          "Regarding the rectal symptoms, can you describe the pain, any discharge (color, amount), and changes in bowel habits?"
+          // ... other question strings ...
+        ]
+        ```
+
+5.  **Format Final Output:** Combine the generated `case_summary_history` object and the `expected_questions` array (of strings) into a single parent JSON object with those two keys.
+
+---
+
+## 📤 Final Output Format (JSON only):
+
+Return **only** a single JSON object containing the `case_summary_history` (object) and `expected_questions` (array of strings) as top-level keys. Do not include any other text or explanations outside this JSON structure.
+
+```json
+{{
+  "case_summary_history": {{
+    // Generated JSON object summarizing history
+  }},
+  "expected_questions": [
+    // Generated JSON array of question strings
+    "string: Full text of question 1",
+    "string: Full text of question 2",
+    // ... other question strings ...
+  ]
+}}
+```

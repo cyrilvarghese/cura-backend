@@ -1,0 +1,51 @@
+{
+    "case_summary_history": {
+        "chief_complaint": "30-year-old woman with a 2-week history of itchy rash on arms and legs, plus joint pain and fatigue.",
+        "demographics_risk": {
+            "age": 30,
+            "gender": "Female",
+            "relevant_context": null,
+            "primary_risk_factor": null
+        },
+        "symptom_details": {
+            "onset_duration": "Started two weeks ago.",
+            "persistence": "Individual lesions (red, raised patches resembling hives) last more than 24 hours.",
+            "resolution": "Fade slowly, leaving bruise-like discoloration.",
+            "character": "Itchy, red, raised patches.",
+            "location": "Arms and legs."
+        },
+        "associated_symptoms": {
+            "musculoskeletal": "Stiffness and aching in wrists and knees, especially in the morning (arthralgia).",
+            "systemic": "Mild fatigue and general low energy."
+        },
+        "pertinent_positives": [
+            "Rash lesion duration > 24 hours",
+            "Post-lesional bruising/discoloration",
+            "Associated arthralgia (morning stiffness)",
+            "Associated fatigue",
+            "Family history of Rheumatoid Arthritis (mother - mentioned in reasoning section)"
+        ],
+        "pertinent_negatives_from_history": [
+            "No recent new medications reported",
+            "No recent new environmental exposures reported",
+            "No recent new foods reported",
+            "No significant skincare routine adjustments",
+            "No fever reported"
+        ],
+        "family_history_note": "Mother has Rheumatoid Arthritis (from reasoning section, implies need to ask).",
+        "past_medical_history_note": "Not explicitly mentioned in history sections.",
+        "medication_note": "No new medications reported initially."
+    },
+    "expected_questions": [
+        "Can you describe the rash? When did it first appear, and how long does a single spot typically last before fading?",
+        "After a spot fades away, what does the skin look like? Does it leave any marks, like bruises or discoloration?",
+        "Have you experienced any joint pain, stiffness, or swelling? If yes, which joints are affected, and is it worse at certain times, like in the morning?",
+        "Aside from the rash and joint issues, have you noticed any other symptoms, like feeling unusually tired, having fevers, or losing weight?",
+        "Have you started any new medications recently? Please include prescription drugs, over-the-counter medicines, vitamins, or herbal supplements.",
+        "Have you been exposed to anything new in your environment, diet, or started using any new soaps, lotions, or detergents recently?",
+        "Have you had any illnesses recently, like a cold, flu, or infection?",
+        "Have you ever had a similar rash or these types of symptoms before?",
+        "Do you have any other diagnosed medical conditions?",
+        "Does anyone in your family have issues with similar rashes, arthritis, lupus, or other autoimmune conditions?"
+    ]
+}

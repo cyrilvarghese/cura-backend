@@ -7,6 +7,7 @@ from routers.google_docs_router import router as google_docs_router
 from datetime import datetime
 from routers.case_creator.create_patient_persona import router as create_patient_persona_router
 from routers.case_creator.create_exam_test_data import router as create_exam_test_data_router
+from routers.case_creator.create_history_context import router as create_history_context_router
 from routers.case_creator.create_cover_image import router as create_cover_image_router
 from routers.case_creator.create_diff_diagnosis import router as create_diff_diagnosis_router
 from routers.case_player.get_student_feedback import feedback_router
@@ -61,6 +62,7 @@ api_router.include_router(case_router)
 api_router.include_router(patient_simulation_router) 
 api_router.include_router(create_patient_persona_router) 
 api_router.include_router(create_exam_test_data_router)
+api_router.include_router(create_history_context_router)
 api_router.include_router(create_cover_image_router)
 api_router.include_router(create_diff_diagnosis_router)
 api_router.include_router(upload_test_image_router)     

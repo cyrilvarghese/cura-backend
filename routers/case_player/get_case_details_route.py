@@ -22,11 +22,13 @@ async def get_case_details(case_id: str):
     data_file_path = os.path.join(case_base_path, 'test_exam_data.json')
     cover_file_path = os.path.join(case_base_path, 'case_cover.json')
     persona_file_path = os.path.join(case_base_path, 'patient_prompts', 'patient_persona.txt')
+    history_context_path = os.path.join(case_base_path, 'history_context.json')
     
     print(f"Looking for files:")
     print(f"Data file: {data_file_path} (exists: {os.path.exists(data_file_path)})")
     print(f"Cover file: {cover_file_path} (exists: {os.path.exists(cover_file_path)})")
     print(f"Persona file: {persona_file_path} (exists: {os.path.exists(persona_file_path)})")
+    print(f"History context file: {history_context_path} (exists: {os.path.exists(history_context_path)})")
     
     # Check if required files exist
     if not os.path.exists(data_file_path):
@@ -57,6 +59,17 @@ async def get_case_details(case_id: str):
                 print(f"Persona content length: {len(persona_text)} characters")
         else:
             print(f"WARNING: Patient persona not found at: {persona_file_path}")
+            
+        # Load history context data if available
+        history_context = {"content": {}}  # Initialize with empty content object
+        if os.path.exists(history_context_path):
+            print("Loading history context...")
+            with open(history_context_path, 'r', encoding='utf-8') as history_file:
+                history_data = json.load(history_file)
+                history_context["content"] = history_data
+                print(f"History context loaded successfully")
+        else:
+            print(f"WARNING: History context not found at: {history_context_path}")
 
         # # Get Google Doc link from Supabase
         # from auth.auth_api import get_client
@@ -144,7 +157,8 @@ async def get_case_details(case_id: str):
             "content": {
                 "case_cover": case_cover_data,
                 "test_data": exam_data,
-                "patient_persona": patient_persona
+                "patient_persona": patient_persona,
+                "history_context": history_context
             }
         }
 

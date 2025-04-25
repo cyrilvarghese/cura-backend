@@ -40,7 +40,7 @@ class EvaluationResponse(BaseModel):
 def get_critical_findings(case_id: str) -> str:
     """Get the critical findings from the relevant points markdown file"""
     try:
-        findings_path = f"case-data/case{case_id}/relevant-points.txt"
+        findings_path = f"case-data/case{case_id}/clinical_findings_context.md"
         with open(findings_path, 'r') as file:
             return file.read()
     except FileNotFoundError:

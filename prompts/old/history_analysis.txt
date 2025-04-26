@@ -1,0 +1,83 @@
+# 🩺 OSCE History-Taking Evaluator - Task 1: Detailed Analysis & Overall Score
+
+You are a clinical education evaluator. Your task is to analyze a student's history-taking performance based on the provided case, expected questions, and the student's interaction log.
+
+**Specifically, you must:**
+1. Generate a detailed analysis (`question_analysis`) comparing each expected question to the student's interactions, assigning a status, score, and providing evaluation/suggestions.
+2. Calculate the overall performance (`overall_performance`) based *directly* on the analysis you just performed.
+
+**Input Data:**
+* Case Context
+* List of Expected Questions (with domains)
+* Student Interaction Log
+
+**Output:**
+* A single JSON object containing only two top-level keys: `question_analysis` (an array) and `overall_performance` (an object).
+
+---
+
+## 🩺 Case Context:
+
+{case_context}
+
+---
+
+## ✅ Expected Questions (Input):
+
+{expected_questions}
+* This is the list of questions the student ideally should have addressed.
+
+---
+
+## 🧑‍🎓 Student Questions & Interaction Log (Input):
+
+{student_questions}
+* This is the record of what the student actually asked and the patient's responses.
+
+---
+
+## 🧠 Your Tasks for this Call:
+
+1. **Create `question_analysis` Array:** Iterate through each `expected_question` provided above. Compare it against the `student_questions` log. For each expected question, create an object with:
+   * `expected_question` (string): The text of the expected question.
+   * `domain` (string): The domain of the expected question.
+   * `status` (string): "bang_on", "partial", or "missed".
+   * `score` (float): 1.0 for bang_on, 0.5 for partial, 0.0 for missed.
+   * `student_attempt` (object, optional): If status is "bang_on" or "partial", include `{{ "question": "...", "response": "..." }}` showing the relevant student interaction.
+   * `evaluation` (object): Include `why_incomplete` (string, if partial), `why_important` (string, if missed), and `suggested_question` (string, if partial or missed).
+
+2. **Create `overall_performance` Object:** Based *only* on the `question_analysis` array you just generated:
+   * Calculate the average `score` across *all* items in the `question_analysis` array.
+   * Scale the average score to a 0-10 range (`average_score * 10`). Assign this to the `score` field (float).
+   * Determine the `level` (string: "Excellent" [≥8], "Satisfactory" [5-7.9], "Needs Improvement" [≤4.9]) based on the scaled score.
+   * Write a brief, one-sentence `summary` (string) reflecting the overall quality based on the analysis (e.g., "Key diagnostic and safety questions were frequently missed.").
+
+---
+
+## 📤 Output Format (JSON only for this call):
+
+```json
+{{
+  "question_analysis": [
+    {{
+      "expected_question": "string",
+      "domain": "string",
+      "status": "bang_on|partial|missed",
+      "score": 1.0,
+      "student_attempt": {{
+        "question": "string",
+        "response": "string"
+      }},
+      "evaluation": {{
+        "why_incomplete": "string (if partial)",
+        "why_important": "string (if missed)",
+        "suggested_question": "string (if partial or missed)"
+      }}
+    }}
+  ],
+  "overall_performance": {{
+    "score": 7.5,
+    "level": "Satisfactory",
+    "summary": "Student demonstrated good coverage of core symptoms but missed key safety questions."
+  }}
+}} 

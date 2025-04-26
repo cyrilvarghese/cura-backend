@@ -64,7 +64,9 @@ class SessionManager:
                 "pre_treatment_checks": [],
                 "treatment_plan": None,
                 "post_treatment_monitoring": [],
-                "clinical_findings": []
+                "clinical_findings": [],
+                "feedback": {}
+
             }
         }
         
@@ -236,14 +238,75 @@ class SessionManager:
         self._save_session(file_path, session_data)
         return session_data
 
+    def add_history_feedback(self, student_id: str, analysis_result: Dict[str, Any], domain_feedback: Dict[str, Any]) -> Dict[str, Any]:
+        """Add history taking feedback results to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            analysis_result (Dict[str, Any]): Results from the analysis step
+            domain_feedback (Dict[str, Any]): Results from the domain feedback step
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id)
+        session_data = self.get_session(student_id)
+        
+        if not session_data:
+            raise ValueError("No active session found")
+        
+        # Add feedback data to the session
+        if "feedback" not in session_data["interactions"]:
+            session_data["interactions"]["feedback"] = {}
+            
+        session_data["interactions"]["feedback"]["history_taking"] = {
+            "analysis": analysis_result,
+            "domain_feedback": domain_feedback,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
+    def add_history_analysis(self, student_id: str, analysis_result: Dict[str, Any]) -> Dict[str, Any]:
+        """Add history taking analysis results to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            analysis_result (Dict[str, Any]): The analysis results to store
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id)
+        session_data = self.get_session(student_id)
+        
+        if not session_data:
+            raise ValueError("No active session found")
+        
+        # Initialize feedback structure if it doesn't exist
+        if "feedback" not in session_data["interactions"]:
+            session_data["interactions"]["feedback"] = {}
+            
+        if "history_taking" not in session_data["interactions"]["feedback"]:
+            session_data["interactions"]["feedback"]["history_taking"] = {}
+            
+        # Store the analysis results
+        session_data["interactions"]["feedback"]["history_taking"]["analysis"] = analysis_result
+        
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
     def _save_session(self, file_path: str, session_data: Dict[str, Any]) -> None:
         """Save the session data to file."""
         with open(file_path, 'w') as f:
             json.dump(session_data, f, indent=2)
 
-    def get_session(self, student_id: str) -> Optional[Dict[str, Any]]:
+    def get_session(self, student_id: str, case_id: str = None) -> Optional[Dict[str, Any]]:
         """Retrieve a session if it exists."""
-        file_path = self._get_session_file_path(student_id)
+        file_path = self._get_session_file_path(student_id, case_id)
         if os.path.exists(file_path):
             with open(file_path, 'r') as f:
                 return json.load(f)

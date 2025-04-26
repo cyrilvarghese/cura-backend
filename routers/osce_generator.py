@@ -59,7 +59,7 @@ async def load_case_doc(case_id: str) -> str:
 async def get_department(case_id: str) -> str:
     """Get the department from the case cover file."""
     try:
-        file_path = Path(f"case-data/case{case_id}/cover.json")
+        file_path = Path(f"case-data/case{case_id}/case_cover.json")
         if not file_path.exists():
             raise FileNotFoundError(f"Cover file not found for case {case_id}")
         

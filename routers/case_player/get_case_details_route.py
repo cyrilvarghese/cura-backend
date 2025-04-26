@@ -23,12 +23,16 @@ async def get_case_details(case_id: str):
     cover_file_path = os.path.join(case_base_path, 'case_cover.json')
     persona_file_path = os.path.join(case_base_path, 'patient_prompts', 'patient_persona.txt')
     history_context_path = os.path.join(case_base_path, 'history_context.json')
+    treatment_context_path = os.path.join(case_base_path, 'treatment_context.json')
+    clinical_findings_context_path = os.path.join(case_base_path, 'clinical_findings_context.json')
     
     print(f"Looking for files:")
     print(f"Data file: {data_file_path} (exists: {os.path.exists(data_file_path)})")
     print(f"Cover file: {cover_file_path} (exists: {os.path.exists(cover_file_path)})")
     print(f"Persona file: {persona_file_path} (exists: {os.path.exists(persona_file_path)})")
     print(f"History context file: {history_context_path} (exists: {os.path.exists(history_context_path)})")
+    print(f"Treatment context file: {treatment_context_path} (exists: {os.path.exists(treatment_context_path)})")
+    print(f"Clinical findings context file: {clinical_findings_context_path} (exists: {os.path.exists(clinical_findings_context_path)})")
     
     # Check if required files exist
     if not os.path.exists(data_file_path):
@@ -70,6 +74,28 @@ async def get_case_details(case_id: str):
                 print(f"History context loaded successfully")
         else:
             print(f"WARNING: History context not found at: {history_context_path}")
+            
+        # Load treatment context data if available
+        treatment_context = {"content": {}}  # Initialize with empty content object
+        if os.path.exists(treatment_context_path):
+            print("Loading treatment context...")
+            with open(treatment_context_path, 'r', encoding='utf-8') as treatment_file:
+                treatment_data = json.load(treatment_file)
+                treatment_context["content"] = treatment_data
+                print(f"Treatment context loaded successfully")
+        else:
+            print(f"WARNING: Treatment context not found at: {treatment_context_path}")
+            
+        # Load clinical findings context data if available
+        clinical_findings_context = {"content": {}}  # Initialize with empty content object
+        if os.path.exists(clinical_findings_context_path):
+            print("Loading clinical findings context...")
+            with open(clinical_findings_context_path, 'r', encoding='utf-8') as findings_file:
+                findings_data = json.load(findings_file)
+                clinical_findings_context["content"] = findings_data
+                print(f"Clinical findings context loaded successfully")
+        else:
+            print(f"WARNING: Clinical findings context not found at: {clinical_findings_context_path}")
 
         # # Get Google Doc link from Supabase
         # from auth.auth_api import get_client
@@ -158,7 +184,9 @@ async def get_case_details(case_id: str):
                 "case_cover": case_cover_data,
                 "test_data": exam_data,
                 "patient_persona": patient_persona,
-                "history_context": history_context
+                "history_context": history_context,
+                "treatment_context": treatment_context,
+                "clinical_findings_context": clinical_findings_context
             }
         }
 

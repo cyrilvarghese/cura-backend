@@ -1,0 +1,23 @@
+{
+  "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
+  "case_id": "1",
+  "session_start": "2025-04-25T04:58:30.106572",
+  "current_step": "Clinical Findings",
+  "interactions": {
+    "history_taking": [],
+    "physical_examinations": [],
+    "tests_ordered": [],
+    "diagnosis_submission": null,
+    "final_diagnosis": null,
+    "pre_treatment_checks": [],
+    "treatment_plan": null,
+    "post_treatment_monitoring": [],
+    "clinical_findings": [
+      "rash with joint pain",
+      "family history of rheumatoid arthritis",
+      "stomach pain",
+      "rash>24 hours",
+      "foliculitis"
+    ]
+  }
+}

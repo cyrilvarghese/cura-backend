@@ -73,7 +73,7 @@ def load_prompt(file_path: str) -> str:
 # Load the prompt from file
 PRE_TREATMENT_FEEDBACK_PROMPT = load_prompt("prompts/pre_treatment_feedback.txt")
 MONITORING_FEEDBACK_PROMPT = load_prompt("prompts/monitoring_feedback.txt")
-TREATMENT_FEEDBACK_PROMPT = load_prompt("prompts/treatment_feedback_gemini.txt")
+TREATMENT_FEEDBACK_PROMPT = load_prompt("prompts/treatment_feedback.txt")
 
 async def load_case_context(case_id: int) -> str:
     """Load the pre-treatment context from the case file."""

@@ -184,9 +184,9 @@ async def get_case_details(case_id: str):
                 "case_cover": case_cover_data,
                 "test_data": exam_data,
                 "patient_persona": patient_persona,
-                "history_context": history_context,
-                "treatment_context": treatment_context,
-                "clinical_findings_context": clinical_findings_context
+                "history_context": None if not history_context["content"] else history_context,
+                "treatment_context": None if not treatment_context["content"] else treatment_context,
+                "clinical_findings_context": None if not clinical_findings_context["content"] else clinical_findings_context
             }
         }
 

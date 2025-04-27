@@ -1,30 +1,35 @@
- 
-# 📋 Prompt: Extract Critical Clinical Findings (History & Exam)
+Okay, I understand. You want to ensure the prompt explicitly guides the AI to select the Top 5 findings by considering the most crucial elements from *both* the patient's history *and* the physical examination, rather than potentially pulling all five only from history if those happen to be ranked highest overall.
 
-**Persona:** You are a **Clinical Case Summarizer** focused on identifying the most salient diagnostic clues presented in a patient's initial evaluation.
+I've adjusted Task 4 in the prompt to emphasize this requirement.
 
-**Context:** You are processing a comprehensive clinical case document to extract a concise list of the most critical findings obtained from the patient's history and physical examination *before* laboratory or imaging results are available. This list is intended for educational purposes, highlighting key data points for clinical reasoning.
+```text
+# 📋 Prompt: Extract Top 5 Critical Diagnostic Findings (Combined History & Exam)
 
-**Objective:** Read the provided full clinical case document and generate a JSON object containing a single key, `critical_findings`. The value associated with this key should be a JSON array of strings, where each string represents a single, crucial clinical finding from the history or physical exam.
+**Persona:** You are a **Clinical Case Summarizer** focused on identifying the absolute most critical diagnostic clues presented in a patient's initial evaluation, drawing from both history and physical exam.
+
+**Context:** You are processing a comprehensive clinical case document to extract a concise list of the **Top 5 most critical findings** obtained from the patient's history *and* physical examination *before* laboratory or imaging results are available. This list is intended for comparing student-identified findings against the essential data points required for reaching the primary diagnosis in this case.
+
+**Objective:** Read the provided full clinical case document, identify the primary diagnosis, and then extract the **Top 5** clinical findings (drawn from *both* History *and* Physical Exam sections where applicable) that carry the highest diagnostic weight for reaching that primary diagnosis. Output these as a JSON object containing a single key, `critical_findings`, with a JSON array of 5 strings as its value.
 
 **Input Data:**
-*   `full_case_document`: The complete text content of the clinical case document.
+*   `full_case_document`: The complete text content of the clinical case document, including the primary diagnosis and reasoning sections.
 
 **Output:**
-*   A single JSON object: `{ "critical_findings": ["Finding 1 String", "Finding 2 String", ...] }`
+*   A single JSON object: `{{ "critical_findings": ["Top Finding 1 String", "Top Finding 2 String", "Top Finding 3 String", "Top Finding 4 String", "Top Finding 5 String"] }}`
 
 ---
 
 ## 📄 Full Case Document (Input):
 
 {full_case_document}
- 
+*   **Instructions:** Paste the entire text content of the clinical case document here.
+
 ---
 
 ## 🧠 Your Tasks:
 
-1.  **Read and Analyze:** Carefully read the entire `{{ full_case_document }}` to understand the patient's presentation and the context.
-2.  **Focus on History and Physical Exam:** Concentrate *only* on the information presented in sections describing:
+1.  **Read and Identify Primary Diagnosis:** Carefully read the `{{ full_case_document }}` to understand the patient's presentation and clearly identify the **Expected Primary Diagnosis** stated within the case (e.g., Urticarial Vasculitis, LGV). Also, note any diagnostic reasoning or pitfalls mentioned.
+2.  **Focus on History and Physical Exam Sources:** Concentrate *only* on extracting findings from the information presented in sections describing:
     *   Chief Complaint
     *   History of Present Illness
     *   Past Medical History
@@ -33,22 +38,25 @@
     *   Review of Systems
     *   Vital Signs
     *   Physical Examination Findings (all systems examined)
-3.  **Exclude Post-Exam Data:** Explicitly **ignore and exclude** information from sections detailing:
+3.  **Exclude Post-Exam Data Sources:** Explicitly **ignore and exclude** information *sourced* from sections detailing:
     *   Laboratory Test Results
     *   Imaging Results
-    *   Diagnostic Reasoning / Interpretations
-    *   Differential Diagnoses
-    *   Final Diagnosis
+    *   Diagnostic Reasoning / Interpretations (use only to *inform importance*, not as source of finding)
+    *   Differential Diagnoses (use only to *inform importance*)
+    *   Final Diagnosis confirmation steps
     *   Treatment Plans / Management / Prognosis
-4.  **Identify "Critical" Findings:** From the focused history and physical exam sections, identify the findings that are most significant for understanding the patient's core problem and formulating initial diagnostic hypotheses. Consider findings that are:
-    *   Directly related to the chief complaint's core features (e.g., specific characteristics of a rash, pain quality).
-    *   Strong "pertinent positives" (symptoms/signs expected for potential diagnoses).
-    *   Highly relevant "pertinent negatives" (absence of expected symptoms/signs that help differentiate).
-    *   Key risk factors identified in the history (e.g., specific exposures, relevant family history, impactful co-medications).
-    *   Objective, significant abnormalities found on physical examination (e.g., specific lesion morphology, organomegaly, significant vital sign abnormalities, specific neurological deficits).
-5.  **Synthesize Findings into Strings:** Formulate each identified critical finding as a concise, clear string (e.g., "Urticarial lesions lasting > 24 hours", "History of angioedema with cold exposure", "Mild tenderness in wrists and knees on exam", "Current use of propranolol reported").
-6.  **Generate `critical_findings` Array:** Collect these strings into a JSON array. The number of findings is not fixed but should capture the most essential clinical data points from the initial evaluation.
-7.  **Format Final Output:** Create a single JSON object with the key `critical_findings` and the generated array of strings as its value.
+4.  **Identify, Evaluate, and Select Top 5-8 Findings (History & Exam):**
+    *   From the focused history and physical exam sections, identify *all* findings potentially relevant to the **Primary Diagnosis**.
+    *   Evaluate these findings based on their diagnostic significance *for differentiating the primary diagnosis from key differentials or common pitfalls mentioned in the case*. Consider:
+        *   Findings that are pathognomonic or highly specific.
+        *   Key characteristics distinguishing the condition (e.g., lesion duration > 24h for UV).
+        *   Presence of specific systemic symptoms linked to the diagnosis (from **history**).
+        *   Crucial risk factors or historical events (e.g., painless ulcer in LGV - from **history**).
+        *   Objective physical exam signs strongly supporting the diagnosis (e.g., specific lesion morphology like post-inflammatory hyperpigmentation, joint tenderness without swelling, bubo characteristics - from **physical exam**).
+    *   **Prioritize and select the Top 5 findings** that collectively provide the most compelling evidence for the Expected Primary Diagnosis. **Ensure this selection process actively considers and includes the most critical findings from *both* the history *and* the physical examination, provided diagnostically significant findings exist in both areas for the specific case.** The goal is the 5 most impactful findings overall, drawn from the complete initial clinical picture.
+5.  **Synthesize Findings into Strings:** Formulate each of the selected Top 5 critical findings as a concise, clear string. Indicate if the finding is primarily from history or exam if helpful for clarity, but the string itself should state the finding (e.g., "History: Lesions last > 24h", "Exam: Mild wrist/knee tenderness, no swelling").
+6.  **Generate `critical_findings` Array:** Collect **only these 5 strings** into a JSON array.
+7.  **Format Final Output:** Create a single JSON object with the key `critical_findings` and the generated array of 5 strings as its value.
 
 ---
 
@@ -56,20 +64,15 @@
 
 Return **only** the generated JSON object. Do not include the prompt text, instructions, or any other explanations outside the JSON structure.
 
-*Example Output Structure:*
+*Example Output Structure (Illustrative for Urticarial Vasculitis case, emphasizing Hx & PE):*
 ```json
-{{
+{{  
   "critical_findings": [
-    "Episodic itchy welts triggered by cold exposure",
-    "History of mild lip swelling and throat tightness (angioedema)",
-    "Reported current use of propranolol for anxiety",
-    "Urticarial lesions lasting > 24 hours described",
-    "Lesions resolve leaving bruise-like discoloration (ecchymosis) described",
-    "Associated joint stiffness and aching reported",
-    "Associated fatigue reported",
-    "Family history of rheumatoid arthritis (mother)",
-    "Skin exam: Erythematous raised plaques with residual hyperpigmentation",
-    "Musculoskeletal exam: Mild tenderness in wrists and knees, no swelling"
+    "History: Urticarial lesions lasting > 24 hours",
+    "History: Lesions resolve leaving bruise-like discoloration (ecchymosis)",
+    "History: Associated joint stiffness and aching (especially morning)",
+    "Exam: Erythematous raised plaques with residual hyperpigmentation on skin",
+    "Exam: Mild tenderness in wrists and knees without visible swelling"
   ]
 }}
 ```

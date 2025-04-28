@@ -76,14 +76,17 @@ MONITORING_FEEDBACK_PROMPT = load_prompt("prompts/monitoring_feedback.txt")
 TREATMENT_FEEDBACK_PROMPT = load_prompt("prompts/treatment_feedback.txt")
 
 async def load_case_context(case_id: int) -> str:
-    """Load the pre-treatment context from the case file."""
+    """Load the treatment context from the case file."""
     try:
-        file_path = Path(f"case-data/case{case_id}/treatment_context.md")
+        file_path = Path(f"case-data/case{case_id}/treatment_context.json")
         if not file_path.exists():
             raise FileNotFoundError(f"Context file not found for case {case_id}")
         
         with open(file_path, 'r') as file:
-            return file.read()
+            # Load the JSON data
+            context_data = json.load(file)
+            # Return the JSON data as a string for the prompt
+            return json.dumps(context_data, indent=2)
     except Exception as e:
         raise HTTPException(
             status_code=404, 

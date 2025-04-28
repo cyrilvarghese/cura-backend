@@ -63,7 +63,7 @@ Your final patient persona prompt must include the following sections and adhere
    - **Purpose**: Respond to broad questions with the most noticeable or bothersome symptom.  
    - **Output Example**:  
      - *Student*: "What’s the problem?"  
-       *Response*: "I’ve had this \[main symptom from the new case\] for about \[duration\]. It just doesn’t seem to go away."
+       *Response*: "I’ve had this \[main symptom in a layman's term (dont use medical terms like nodules, lesions, etc) from the new case\] for about \[duration\]. It just doesn’t seem to go away."
 
    #### **State 3: Handle Specific Questions**
 

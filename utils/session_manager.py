@@ -299,6 +299,36 @@ class SessionManager:
         self._save_session(file_path, session_data)
         return session_data
 
+    def add_diagnosis_feedback(self, student_id: str, feedback_result: Dict[str, Any]) -> Dict[str, Any]:
+        """Add diagnosis feedback results to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            feedback_result (Dict[str, Any]): The feedback results to store
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id)
+        session_data = self.get_session(student_id)
+        
+        if not session_data:
+            raise ValueError("No active session found")
+        
+        # Initialize feedback structure if it doesn't exist
+        if "feedback" not in session_data["interactions"]:
+            session_data["interactions"]["feedback"] = {}
+            
+        # Store the feedback results
+        session_data["interactions"]["feedback"]["diagnosis"] = {
+            "feedback": feedback_result,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
     def _save_session(self, file_path: str, session_data: Dict[str, Any]) -> None:
         """Save the session data to file."""
         with open(file_path, 'w') as f:

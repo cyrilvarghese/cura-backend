@@ -25,6 +25,7 @@ async def get_case_details(case_id: str):
     history_context_path = os.path.join(case_base_path, 'history_context.json')
     treatment_context_path = os.path.join(case_base_path, 'treatment_context.json')
     clinical_findings_context_path = os.path.join(case_base_path, 'clinical_findings_context.json')
+    diagnosis_context_path = os.path.join(case_base_path, 'diagnosis_context.json')
     
     print(f"Looking for files:")
     print(f"Data file: {data_file_path} (exists: {os.path.exists(data_file_path)})")
@@ -33,6 +34,7 @@ async def get_case_details(case_id: str):
     print(f"History context file: {history_context_path} (exists: {os.path.exists(history_context_path)})")
     print(f"Treatment context file: {treatment_context_path} (exists: {os.path.exists(treatment_context_path)})")
     print(f"Clinical findings context file: {clinical_findings_context_path} (exists: {os.path.exists(clinical_findings_context_path)})")
+    print(f"Diagnosis context file: {diagnosis_context_path} (exists: {os.path.exists(diagnosis_context_path)})")
     
     # Check if required files exist
     if not os.path.exists(data_file_path):
@@ -96,6 +98,17 @@ async def get_case_details(case_id: str):
                 print(f"Clinical findings context loaded successfully")
         else:
             print(f"WARNING: Clinical findings context not found at: {clinical_findings_context_path}")
+            
+        # Load diagnosis context data if available
+        diagnosis_context = {"content": {}}  # Initialize with empty content object
+        if os.path.exists(diagnosis_context_path):
+            print("Loading diagnosis context...")
+            with open(diagnosis_context_path, 'r', encoding='utf-8') as diagnosis_file:
+                diagnosis_data = json.load(diagnosis_file)
+                diagnosis_context["content"] = diagnosis_data
+                print(f"Diagnosis context loaded successfully")
+        else:
+            print(f"WARNING: Diagnosis context not found at: {diagnosis_context_path}")
 
         # # Get Google Doc link from Supabase
         # from auth.auth_api import get_client
@@ -181,12 +194,13 @@ async def get_case_details(case_id: str):
 
         return {
             "content": {
-                "case_cover": case_cover_data,
-                "test_data": exam_data,
-                "patient_persona": patient_persona,
-                "history_context": None if not history_context["content"] else history_context,
-                "treatment_context": None if not treatment_context["content"] else treatment_context,
-                "clinical_findings_context": None if not clinical_findings_context["content"] else clinical_findings_context
+                "case_cover": case_cover_data if case_cover_data != {} else None,
+                "test_data": exam_data if exam_data != {} else None,
+                "patient_persona": patient_persona if patient_persona != {} else None,
+                "history_context": history_context if history_context['content'] != {} else None,
+                "treatment_context": treatment_context if treatment_context['content'] != {} else None,
+                "clinical_findings_context": clinical_findings_context if clinical_findings_context['content'] != {} else None,
+                "diagnosis_context": diagnosis_context if diagnosis_context['content'] != {} else None
             }
         }
 

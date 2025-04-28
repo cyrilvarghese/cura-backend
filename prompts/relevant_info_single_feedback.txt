@@ -19,7 +19,7 @@ Your task is to analyze the student's finding against the critical findings and 
 
 3.  **Determine Output Based on Match Type (Max 15 words):**
     *   a.  **Exact Match:** Set `match: true`. Provide a short, encouraging message confirming the finding (e.g., "Good observation!", "Correct, that's important.").
-    *   b.  **Partial Match:** Set `match: true`. Provide a short, **strong Socratic-style hint question** that specifically asks for the key information missing from the `student_finding` when compared to the `matched_finding`. **Do not ask about information the student already provided.** (e.g., If student said "rash", ask "Can you describe the rash characteristics or location?").
+    *   b.  **Partial Match:** Set `match: true`. Provide a short, **encouraging message with Socratic-style hint question in a good to have tone** that specifically asks for the key information missing from the `student_finding` when compared to the `matched_finding`. **Do not ask about information the student already provided.** (e.g., If student said "rash", ask "Can you describe the rash characteristics or location?").
     *   c.  **Incorrect Match or No Match:** Set `match: false`. Provide a short, Socratic-style hint question guiding them towards relevant clinical areas or questioning the finding's relevance/accuracy. (e.g., If student said "fever", ask "What specific findings suggest infection here?" or "Is fever typically seen in this condition?").
 
 4.  **JSON Output:** Return *only* a JSON object with:

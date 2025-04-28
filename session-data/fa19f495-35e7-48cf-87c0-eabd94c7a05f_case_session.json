@@ -1,20 +1,11 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
   "case_id": "9",
-  "session_start": "2025-04-28T08:10:50.103454",
+  "session_start": "2025-04-28T19:11:22.503198",
   "current_step": "History Taking",
   "interactions": {
     "history_taking": [],
-    "physical_examinations": [
-      {
-        "test_name": "Skin examination",
-        "timestamp": "2025-04-28T08:10:55.848576"
-      },
-      {
-        "test_name": "vitals",
-        "timestamp": "2025-04-28T08:11:02.241092"
-      }
-    ],
+    "physical_examinations": [],
     "tests_ordered": [],
     "diagnosis_submission": null,
     "final_diagnosis": null,

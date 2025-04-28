@@ -11,7 +11,6 @@ from datetime import datetime
 from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 from googleapiclient.errors import HttpError
 import socket
-from markdownify import markdownify as md
 import io
 from dotenv import load_dotenv
 

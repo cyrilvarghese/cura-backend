@@ -1,9 +1,5 @@
-Okay, I understand. You want to ensure the prompt explicitly guides the AI to select the Top 5 findings by considering the most crucial elements from *both* the patient's history *and* the physical examination, rather than potentially pulling all five only from history if those happen to be ranked highest overall.
-
-I've adjusted Task 4 in the prompt to emphasize this requirement.
-
-```text
-# 📋 Prompt: Extract Top 5 Critical Diagnostic Findings (Combined History & Exam)
+ 
+# 📋 Prompt: Extract Top (5 to 8 ) Critical Diagnostic Findings (Combined History & Exam)
 
 **Persona:** You are a **Clinical Case Summarizer** focused on identifying the absolute most critical diagnostic clues presented in a patient's initial evaluation, drawing from both history and physical exam.
 

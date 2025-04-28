@@ -1,5 +1,9 @@
 import os
 import re
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 def export_file(drive_service, doc_id: str, doc_type: str = 'PDF') -> tuple[str, bytes]:
     """Export a file from Google Drive"""
@@ -14,16 +18,19 @@ def export_file(drive_service, doc_id: str, doc_type: str = 'PDF') -> tuple[str,
     # Create a safe filename
     safe_filename = re.sub(r'[^a-zA-Z0-9-_]', '_', original_name)
     
+    # Use the environment variable for uploads directory
+    uploads_dir = os.getenv("UPLOADS_DIR", "case-data/uploads")
+    
     if doc_type == 'MARKDOWN':
         # Export as plain text for markdown
-        file_path = os.path.join('uploads', f"{safe_filename}.md")
+        file_path = os.path.join(uploads_dir, f"{safe_filename}.md")
         response = drive_service.files().export(
             fileId=doc_id,
             mimeType='text/plain'
         ).execute()
     else:
         # Export as PDF for other types
-        file_path = os.path.join('uploads', f"{safe_filename}.pdf")
+        file_path = os.path.join(uploads_dir, f"{safe_filename}.pdf")
         response = drive_service.files().export(
             fileId=doc_id,
             mimeType='application/pdf'

@@ -133,14 +133,12 @@ async def process_patient_persona(case_document: str, case_id: Any, filename: st
         print(f"[{error_timestamp}] ❌ Error in process_patient_persona: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
- 
-
 @router.post("/create")
 async def create_patient_persona(request: CreatePersonaRequest):
     """Create a patient persona from a file name."""
     try:
-        # Get the uploads directory path
-        uploads_dir = Path("uploads")
+        # Get the uploads directory path from environment variable with fallback
+        uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         
         # Convert the incoming filename to a safe version by:
         # - Keeping only alphanumeric characters, hyphens, underscores, and dots

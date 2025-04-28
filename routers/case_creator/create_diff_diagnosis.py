@@ -47,7 +47,7 @@ async def create_differential_diagnosis(request: CreateDiffDiagnosisRequest):
     """Create differential diagnosis based on a case document."""
     try:
         # Get the uploads directory path
-        uploads_dir = Path("uploads")
+        uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         
         # Convert the incoming filename to a safe version by:
         # - Keeping only alphanumeric characters, hyphens, underscores, and dots
@@ -160,7 +160,7 @@ async def create_differential_diagnosis_from_url(request: CreateDiffDiagnosisFro
     """Create differential diagnosis based on a case document from URL."""
     try:
         # Get the filename from the URL and look for it in uploads directory
-        uploads_dir = Path("uploads")
+        uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         filename = Path(request.file_url).name
         file_path = uploads_dir / filename
 

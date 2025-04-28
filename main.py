@@ -7,6 +7,10 @@ import os
 from routers.api import api_router
 from auth.router import router as auth_router
 from routers import google_docs_router
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI()
 
@@ -30,7 +34,7 @@ if not CASE_DATA_DIR.exists():
     CASE_DATA_DIR.mkdir(parents=True)
 
 # Create uploads directory if it doesn't exist
-UPLOAD_DIR = "uploads"
+UPLOAD_DIR = os.getenv("UPLOADS_DIR", "case-data/uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Mount the static files directories

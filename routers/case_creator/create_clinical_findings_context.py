@@ -45,7 +45,8 @@ async def create_clinical_findings_context(request: CreateClinicalFindingsContex
     try:
         print(f"[{datetime.now()}] Starting clinical findings context creation for file: {request.file_name}, case_id: {request.case_id}")
         
-        uploads_dir = Path("uploads")
+        # Get the uploads directory path
+        uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         
         # Convert the incoming filename to a safe version
         filename = re.sub(r'[^a-zA-Z0-9-_.]', '_', request.file_name)

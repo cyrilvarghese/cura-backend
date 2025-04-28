@@ -72,7 +72,7 @@ async def upload_document(
         department_id = await SupabaseDocumentOps.get_department_id(department_name)
         
         # Create uploads directory if it doesn't exist
-        upload_dir = Path("uploads")
+        upload_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         upload_dir.mkdir(exist_ok=True)
         
         responses = []

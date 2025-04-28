@@ -53,18 +53,14 @@ class CommentModel(BaseModel):
 async def list_google_docs():
     """List all Google Docs in the designated folder with their comment counts"""
     try:
-        print("Starting Google Docs list request...")
-        
         # Define an async function to wrap the synchronous call
         async def get_files():
             docs_manager = GoogleDocsManager()
-            print("GoogleDocsManager initialized")
             # If list_folder_files is synchronous, run it in a thread pool
             if asyncio.iscoroutinefunction(docs_manager.list_folder_files):
                 files = await docs_manager.list_folder_files()
             else:
                 files = await asyncio.to_thread(docs_manager.list_folder_files)
-            print(f"Retrieved {len(files) if files else 0} files")
             return files
         
         # Use wait_for which works in all Python versions
@@ -72,15 +68,12 @@ async def list_google_docs():
         return files
             
     except asyncio.TimeoutError:
-        print("Request timed out after 15 seconds")
         raise HTTPException(
             status_code=504,
             detail="Request timed out after 15 seconds. Please retry."
         )
     except Exception as e:
-        print(f"Error type: {type(e).__name__}")
-        print(f"Error in list_google_docs: {str(e)}")
-        print(f"Full traceback: {traceback.format_exc()}")
+        traceback_str = traceback.format_exc()
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 @router.get("/google-docs/{doc_id}/comments/count", response_model=dict)
@@ -125,23 +118,19 @@ async def delete_google_doc(doc_id: str):
         
         return {"message": f"Document {doc_id} deleted successfully"}
     except Exception as e:
-        print(f"Error in delete_google_doc: {str(e)}")
-        print(f"Full traceback: {traceback.format_exc()}")
+        traceback_str = traceback.format_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/google-docs/{doc_id}/approve")
 async def approve_and_download_doc(doc_id: str):
     """Download a Google Doc and set its status to CASE_REVIEW_COMPLETE"""
     try:
-        print(f"Starting approval process for doc_id: {doc_id}")
-        
         # Update status using Supabase
         doc_details = await SupabaseDocumentOps.approve_document(doc_id)
         
         # Get updated document details and download
         docs_manager = GoogleDocsManager()
         file_path = docs_manager.download_doc(doc_id)
-        print(f"File downloaded to: {file_path}")
         
         # Get Google Drive details for response
         drive_details = docs_manager.drive_service.files().get(
@@ -167,8 +156,7 @@ async def approve_and_download_doc(doc_id: str):
         }
         
     except Exception as e:
-        print(f"Error in approve_and_download_doc: {str(e)}")
-        print(f"Full traceback: {traceback.format_exc()}")
+        traceback_str = traceback.format_exc()
         if isinstance(e, HTTPException):
             raise
         raise HTTPException(status_code=500, detail=str(e)) 

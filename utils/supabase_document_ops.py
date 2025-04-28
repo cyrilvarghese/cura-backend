@@ -2,11 +2,15 @@ from typing import Dict, Any, List, Optional
 from auth.auth_api import get_supabase_client, get_user
 from fastapi import HTTPException
 import os
+from dotenv import load_dotenv
 import re
 
 from utils.file_ops import export_file
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+
+# Load environment variables
+load_dotenv()
 
 class SupabaseDocumentOps:
     """Handles all Supabase document operations"""
@@ -223,7 +227,7 @@ class SupabaseDocumentOps:
             if doc_details.data:
                 try:
                     # Create uploads directory if it doesn't exist
-                    upload_dir = os.path.join(os.getcwd(), 'uploads')
+                    upload_dir = os.getenv("UPLOADS_DIR", "case-data/uploads")
                     os.makedirs(upload_dir, exist_ok=True)
                     
                     # Get drive service

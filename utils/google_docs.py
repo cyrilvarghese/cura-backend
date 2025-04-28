@@ -11,8 +11,14 @@ from datetime import datetime
 from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 from googleapiclient.errors import HttpError
 import socket
+from markdownify import markdownify as md
+import io
+from dotenv import load_dotenv
 
 from utils.supabase_document_ops import SupabaseDocumentOps
+
+# Load environment variables
+load_dotenv()
 
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 # SERVICE_ACCOUNT_FILE = 'utils/service-account-key.json'
@@ -537,7 +543,7 @@ class GoogleDocsManager:
                 )
             
             # Create uploads directory if it doesn't exist
-            upload_dir = 'uploads'
+            upload_dir = os.getenv("UPLOADS_DIR", "case-data/uploads")
             os.makedirs(upload_dir, exist_ok=True)
             
             # Get document type from Supabase - no need for service role

@@ -64,7 +64,8 @@ async def create_exam_test_data(request: CreateExamTestDataRequest):
     try:
         print(f"[{datetime.now()}] Starting exam test data creation for file: {request.file_name}, case_id: {request.case_id}")
         
-        uploads_dir = Path("uploads")
+        # Get the uploads directory path
+        uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         
         # Convert the incoming filename to a safe version by:
         # - Keeping only alphanumeric characters, hyphens, underscores, and dots

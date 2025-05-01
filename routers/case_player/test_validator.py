@@ -94,7 +94,7 @@ def load_prompt(file_path: str) -> str:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail=f"Prompt file not found: {file_path}")
 
-TEST_VALIDATION_PROMPT = load_prompt("prompts/test_validation.md")
+TEST_VALIDATION_PROMPT = load_prompt("prompts/test_validation_v2.md")
 
 @router.post("/validate")
 async def validate_test(request: TestValidationRequest):

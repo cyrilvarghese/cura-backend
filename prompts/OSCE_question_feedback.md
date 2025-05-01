@@ -35,7 +35,7 @@ Evaluate the `student_response` based on the `osce_question_details`, determinin
         *   Analyze the `student_response.student_written_answer` by comparing its content and meaning against the `osce_question_details.expected_answer` and the concepts mentioned in the `osce_question_details.explanation`.
         *   Identify key points correctly included, missed, or misunderstood.
         *   Determine the `evaluation_result` ("Correct", "Partially Correct", "Incorrect", "Needs Review").
-        *   Set the `score` reflecting correctness (e.g., 1.0, 0.5, 0.0).
+        *   Set the `score` reflecting correctness,its(0/1 no .5)  1 for correct and partially correct, 0 for incorrect.
         *   Generate specific, constructive `feedback` **in a supportive, guiding tone.**
             *   Acknowledge correct elements positively (e.g., "You're right on track with mentioning [correct point]...").
             *   Clearly explain missed or misunderstood points by relating them to the clinical reasoning (e.g., "...a key aspect to also include is [missing point], as this helps distinguish it from [other condition] in this clinical picture." or "One point to clarify – while you mentioned [student's point], the more typical finding/approach here is [correct info from expected_answer], because...").

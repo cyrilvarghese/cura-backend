@@ -26,6 +26,7 @@ from routers.case_player.get_case_details_route import case_details_router
 from routers.case_creator.evaluate_student_questions import router as evaluate_student_questions_router
 from routers.relevant_info_feedback import findings_router
 from routers.case_creator.update_test_comment import router as update_test_comment_router
+from routers.case_creator.update_case_quote import router as update_case_quote_router
 from routers.case_player.treatment_feedback_gemini import router as treatment_feedback_gemini_router
 from routers.case_player.history_feedback_gemini import router as history_feedback_gemini_router
 from routers.case_player.history_feedback_langchain import router as history_feedback_langchain_router
@@ -77,6 +78,7 @@ api_router.include_router(curriculum_router)
 api_router.include_router(upload_resource_router)
 api_router.include_router(update_test_table_router)
 api_router.include_router(update_test_comment_router)
+api_router.include_router(update_case_quote_router)
 api_router.include_router(google_docs_router)
 api_router.include_router(case_details_router)
 api_router.include_router(evaluate_student_questions_router)

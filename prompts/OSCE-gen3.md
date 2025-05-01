@@ -45,7 +45,7 @@ The questions must:
     *   Explicitly incorporate questions testing atypical presentations.
     *   Design several questions using modified vignettes that challenge the student to re-evaluate based on key differences from the master case.
     *   Ensure MCQs have strong distractors derived from common errors or the modified vignettes. **For MCQs, clearly identify the correct answer key.**
-    *   Ensure written questions require specific, targeted analysis or justification based on the provided scenario.
+    *   Expect written questions to require specific, targeted analysis in aroudn 10-15 words, keep the written questions of the same level of difficulty as the MCQs.
 
 ---
 
@@ -66,7 +66,7 @@ Your final output **MUST** be a single, valid JSON array `[...]`. Each element w
     "D": "Plausible Distractor D"
   }},
   "mcq_correct_answer_key": "C", // **NEW:** Key (letter) of the correct option. Null if question_format is 'written'.
-  "expected_answer": "Model answer for written questions (null if question_format is 'MCQ')",
+  "expected_answer": "Model answer for written questions should be very short and concise (null if question_format is 'MCQ')",
   "explanation": "Clear rationale for the correct answer and why distractors are wrong, referencing prompt details.",
   "concept_modal": {{
     "specific": "Why this point/variation is crucial in this context.",

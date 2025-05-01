@@ -8,7 +8,7 @@ You are given:
 
 Your task:
 1. Compare the student's findings with the expected list.
-2. Accept partial matches (e.g., "tired" matches "general fatigue").
+2. Accept partial matches and any relevant information / fuzzy keyword matches (e.g., "tired" matches "general fatigue").
 3. Identify any expected findings that the student **completely missed** or **hinted at too weakly**.
 4. For each missed finding, return a:
    - `finding`: the exact expected finding.

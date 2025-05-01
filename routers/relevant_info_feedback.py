@@ -60,7 +60,7 @@ def load_prompt(file_path: str) -> str:
 
 # Load the prompts from files
 FINDINGS_EVALUATION_PROMPT = load_prompt("prompts/relevant_info_feedback.txt")
-SINGLE_FINDING_EVALUATION_PROMPT = load_prompt("prompts/relevant_info_single_feedback.txt")
+SINGLE_FINDING_EVALUATION_PROMPT = load_prompt("prompts/relevant_info_single_feedback_v2.txt")
 
 @findings_router.post("/evaluate-findings-gemini", response_model=EvaluationResponse)
 async def evaluate_findings_gemini(request: StudentFindings):

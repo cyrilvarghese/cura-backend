@@ -75,7 +75,7 @@ async def create_clinical_findings_context(request: CreateClinicalFindingsContex
             raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
 
         print(f"[{datetime.now()}] Loading prompt...")
-        prompt = load_prompt("prompts/gen_clinical_findings_context.txt")
+        prompt = load_prompt("prompts/gen_clinical_findings_context_v2.txt")
         
         # Format the prompt with the case document
         formatted_prompt = prompt.format(full_case_document=case_document)

@@ -1,0 +1,95 @@
+ 
+# 📋 Prompt: Extract Top 5 Critical Diagnostic Findings (Combined History & Exam) with Relevance
+
+**Persona:** You are a **Clinical Case Summarizer** focused on identifying the absolute most critical diagnostic clues presented in a patient's initial evaluation, drawing from both history and physical exam, and articulating *why* they are critical.
+
+**Context:** You are processing a comprehensive clinical case document to extract a concise list of the **Top 5 most critical findings** obtained from the patient's history *and* physical examination *before* laboratory or imaging results are available. For each finding, you must also provide a brief explanation of its diagnostic relevance in this specific case context. This list is intended for comparing student-identified findings against the essential data points required for reaching the primary diagnosis.
+
+**Objective:** Read the provided full clinical case document, identify the primary diagnosis, and then extract the **Top 5** clinical findings (drawn from *both* History *and* Physical Exam sections where applicable) that carry the highest diagnostic weight. **Crucially, for each finding, also extract a concise explanation of its relevance.** Output these as a JSON object containing a single key, `critical_findings_with_relevance`, with a JSON array of 5 objects (each containing `finding` and `relevance` strings) as its value.
+
+**Input Data:**
+*   `full_case_document`: The complete text content of the clinical case document, including the primary diagnosis and reasoning sections.
+
+**Output:**
+*   A single JSON object containing the key `critical_findings_with_relevance` whose value is a JSON array. Each element in the array is an object with two keys: `finding` (string) and `relevance` (string).
+
+---
+
+## 📄 Full Case Document (Input):
+
+{full_case_document}
+*   **Instructions:** Paste the entire text content of the clinical case document here.
+
+---
+
+## 🧠 Your Tasks:
+
+1.  **Read and Identify Primary Diagnosis:** Carefully read the `{{ full_case_document }}` to understand the patient's presentation and clearly identify the **Expected Primary Diagnosis** stated within the case (e.g., Urticarial Vasculitis, LGV). Also, note any diagnostic reasoning or pitfalls mentioned.
+2.  **Focus on History and Physical Exam Sources:** Concentrate *only* on extracting findings from the information presented in sections describing:
+    *   Chief Complaint
+    *   History of Present Illness
+    *   Past Medical History
+    *   Family History
+    *   Social History / Medications / Allergies (as relevant historical facts)
+    *   Review of Systems
+    *   Vital Signs
+    *   Physical Examination Findings (all systems examined)
+3.  **Exclude Post-Exam Data Sources:** Explicitly **ignore and exclude** information *sourced* from sections detailing:
+    *   Laboratory Test Results
+    *   Imaging Results
+    *   Diagnostic Reasoning / Interpretations (use only to *inform importance*, not as source of finding/relevance)
+    *   Differential Diagnoses (use only to *inform importance*)
+    *   Final Diagnosis confirmation steps
+    *   Treatment Plans / Management / Prognosis
+4.  **Identify, Evaluate, and Select Top 5 Findings & Determine Relevance (History & Exam):**
+    *   From the focused history and physical exam sections, identify *all* findings potentially relevant to the **Primary Diagnosis**.
+    *   Evaluate these findings based on their diagnostic significance *for differentiating the primary diagnosis from key differentials or common pitfalls mentioned in the case*. Consider:
+        *   Findings that are pathognomonic or highly specific.
+        *   Key characteristics distinguishing the condition (e.g., lesion duration > 24h for UV).
+        *   Presence of specific systemic symptoms linked to the diagnosis (from **history**).
+        *   Crucial risk factors or historical events (e.g., painless ulcer in LGV - from **history**).
+        *   Objective physical exam signs strongly supporting the diagnosis (e.g., specific lesion morphology, joint tenderness without swelling, bubo characteristics - from **physical exam**).
+    *   **Prioritize and select the Top 5 findings** that collectively provide the most compelling evidence for the Expected Primary Diagnosis. **Ensure this selection includes the most critical findings from *both* history *and* physical examination where applicable.**
+    *   **For *each* selected finding, determine *why* it is critically important for reaching the primary diagnosis (its relevance).** Briefly articulate this relevance.
+
+5.  **Synthesize Findings and Relevance into Strings:**
+    *   Formulate each of the selected Top 5 critical findings as a concise, clear `finding` string. Indicate if the finding is primarily from history or exam if helpful for clarity.
+    *   *Separately*, for each finding, formulate a concise `relevance` string (max ~20 words) explaining *why* that specific finding is diagnostically important in this case context (linking it to the diagnosis or differential).
+
+6.  **Generate Array of Finding/Relevance Objects:** Collect these 5 pairs of `finding` and `relevance` strings into a JSON array of objects. Each object in the array should have two keys: `finding` (string value) and `relevance` (string value).
+7.  **Format Final Output:** Create a single JSON object with the key `critical_findings_with_relevance` and the generated array of 5 objects as its value.
+
+---
+
+## 📤 Final Output Format (JSON only):
+
+Return **only** the generated JSON object. Do not include the prompt text, instructions, or any other explanations outside the JSON structure.
+
+*Example Output Structure (Illustrative for Urticarial Vasculitis case, emphasizing Hx & PE):*
+```json
+{{ 
+  "critical_findings_with_relevance": [
+    {{
+      "finding": "History: Urticarial lesions lasting > 24 hours",
+      "relevance": "Differentiates from simple urticaria which typically resolves faster."
+    }},
+    {{
+      "finding": "History: Lesions resolve leaving bruise-like discoloration (ecchymosis)",
+      "relevance": "Suggests vessel damage (vasculitis) rather than just histamine release."
+    }},
+    {{
+      "finding": "History: Associated joint stiffness and aching (especially morning)",
+      "relevance": "Indicates systemic inflammation common in vasculitis syndromes."
+    }},
+    {{
+      "finding": "Exam: Erythematous raised plaques with residual hyperpigmentation on skin",
+      "relevance": "Objective sign consistent with resolving vasculitic lesions."
+    }},
+    {{
+      "finding": "Exam: Mild tenderness in wrists and knees without visible swelling",
+      "relevance": "Supports arthralgia component of UV, distinguishing from overt arthritis."
+    }}
+  ]
+}}
+```
+ 

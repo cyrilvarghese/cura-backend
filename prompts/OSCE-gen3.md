@@ -20,7 +20,7 @@ You will receive:
 
 ### 🎯 Your Objective:
 
-Generate a bundle of **10 to 15 challenging and clinically relevant** OSCE-style questions designed to assess the student's understanding *after* completing the clinical case simulation.
+Generate a bundle of **5-7 challenging and clinically relevant** OSCE-style questions designed to assess the student's understanding *after* completing the clinical case simulation.
 
 The questions must:
 
@@ -31,7 +31,7 @@ The questions must:
 5.  **Be Departmentally Authentic:** Reflect the priorities, common challenges, and cognitive demands typical of the specified department: **{department}**.
 6.  **Employ Varied Text-Based Formats:** Use a mix of:
     *   **MCQs:** With plausible distractors that reflect common misconceptions or diagnostic errors based on subtle vignette changes.
-    *   **Short Written Responses:** Requiring concise synthesis, justification, or comparison, often based on provided vignettes.
+    *   **Short Written Responses:(maximum 2 nos.)** Requiring concise synthesis, justification, or comparison, often based on provided vignettes. Simpler questions should be included that test basic recall and can be answered in 1-2 sentences.
 
 ---
 

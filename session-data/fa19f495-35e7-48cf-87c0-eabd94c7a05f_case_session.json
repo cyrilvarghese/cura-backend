@@ -1,18 +1,203 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
-  "case_id": "9",
-  "session_start": "2025-04-28T19:11:22.503198",
-  "current_step": "History Taking",
+  "case_id": "2",
+  "session_start": "2025-05-01T04:31:22.002083",
+  "current_step": "Final Diagnosis",
   "interactions": {
     "history_taking": [],
     "physical_examinations": [],
     "tests_ordered": [],
     "diagnosis_submission": null,
-    "final_diagnosis": null,
+    "final_diagnosis": {
+      "final_diagnosis": "tuberculoid leprosy",
+      "final_reason": "a",
+      "timestamp": "2025-05-01T04:31:43.898106"
+    },
     "pre_treatment_checks": [],
     "treatment_plan": null,
     "post_treatment_monitoring": [],
     "clinical_findings": [],
-    "feedback": {}
+    "feedback": {
+      "history_taking": {
+        "analysis": {
+          "student_question_evaluation": [],
+          "critical_missed_areas": [
+            {
+              "domain": "chief_complaint",
+              "importance_reason": "Understanding the onset and progression is vital to differentiate leprosy from other hypopigmentation causes.",
+              "example_missed_question": "When did the patch first appear?"
+            },
+            {
+              "domain": "social_exposure",
+              "importance_reason": "In a leprosy-endemic region, determining prior exposure is crucial for assessing the likelihood of infection.",
+              "example_missed_question": "Any prior skin issues or contact with known leprosy patients?"
+            },
+            {
+              "domain": "associated_symptoms",
+              "importance_reason": "Specifically asking about sensory changes is key for early leprosy diagnosis and preventing nerve damage.",
+              "example_missed_question": "Have you experienced reduced sensation?"
+            }
+          ],
+          "summary_feedback": {
+            "key_strength": "No history was taken, so there are no strengths to evaluate.",
+            "key_weakness": "Failure to obtain any history prevents forming a differential or assessing risk factors.",
+            "cumulative_score": 1.0,
+            "score_reason": "No relevant questions were asked, and critical areas were missed, severely limiting diagnostic progress. Only awarded points for understanding the prompt."
+          }
+        },
+        "domain_feedback": {
+          "aetcom_evaluation": {
+            "communication": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student did not ask any questions, indicating a significant breakdown in communication. Action: Practice initiating and maintaining a conversational flow with patients to gather necessary information."
+            },
+            "empathy_patient_centeredness": {
+              "performance_level": "Needs Improvement",
+              "feedback": "Due to the absence of any interaction, there was no demonstration of empathy or patient-centeredness. Action: Actively listen to the patient's concerns and respond with empathy to build trust and rapport."
+            },
+            "professionalism_ethics": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student's failure to engage in any history taking raises concerns about responsibility and thoroughness. Action: Understand and adhere to the ethical obligation to gather comprehensive information for patient care."
+            },
+            "information_gathering": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student gathered no information from the patient. Action: Develop a systematic approach to history taking, ensuring all relevant aspects of the patient's condition are explored."
+            }
+          }
+        },
+        "timestamp": "2025-05-01T04:31:50.116087"
+      },
+      "diagnosis": {
+        "feedback": {
+          "evaluationSummary": {
+            "physicalExamPerformance": 1,
+            "testOrderingPerformance": 1,
+            "primaryDiagnosisAccuracy": 5,
+            "reasoningQuality": 1,
+            "differentialListMatch": 1
+          },
+          "scoreBreakdown": {
+            "physicalExams": {
+              "score": 1,
+              "explanation": "You did not perform any physical exams. This is a major oversight. A thorough physical exam is crucial for diagnosing leprosy. You need to conduct a complete skin exam, sensory testing, and peripheral nerve palpation, at minimum, to properly assess the patient. Failure to do so significantly hinders your ability to arrive at the correct diagnosis.",
+              "missedItems": [
+                {
+                  "name": "Skin exam (macule with clear border)",
+                  "specificRelevance": "Identify and characterize the lesion",
+                  "generalDescription": "Visual inspection of the skin for abnormalities, including color, texture, and size of lesions.",
+                  "educationalTip": "Pay close attention to the borders and surrounding skin."
+                },
+                {
+                  "name": "Sensory testing over lesion (cotton, pinprick, warm/cold object)",
+                  "specificRelevance": "Assess sensory function within the lesion",
+                  "generalDescription": "Application of light touch, pinprick, and temperature stimuli to assess the patient's ability to perceive sensation.",
+                  "educationalTip": "Compare sensation within the lesion to sensation in unaffected areas."
+                },
+                {
+                  "name": "Peripheral nerve palpation (especially radial cutaneous or ulnar)",
+                  "specificRelevance": "Detect nerve thickening",
+                  "generalDescription": "Palpation of peripheral nerves to assess for enlargement or tenderness.",
+                  "educationalTip": "Palpate along the course of the nerve, comparing to the contralateral side."
+                },
+                {
+                  "name": "Hair density over patch",
+                  "specificRelevance": "Assess for hair loss within the lesion",
+                  "generalDescription": "Visual inspection of hair growth within the lesion.",
+                  "educationalTip": "Note the presence or absence of hair and any changes in hair texture."
+                },
+                {
+                  "name": "Reflex testing",
+                  "specificRelevance": "Rule out neurological deficits",
+                  "generalDescription": "Assessment of deep tendon reflexes to evaluate neurological function.",
+                  "educationalTip": "Normal reflexes help rule out other neurological conditions."
+                },
+                {
+                  "name": "Eye, ENT, oral mucosa exams",
+                  "specificRelevance": "Rule out mucosal involvement",
+                  "generalDescription": "Visual inspection of the eyes, ears, nose, and throat, and oral mucosa for signs of lesions or abnormalities.",
+                  "educationalTip": "Leprosy can affect mucosal surfaces, although less common in tuberculoid leprosy."
+                },
+                {
+                  "name": "Systemic exam",
+                  "specificRelevance": "Rule out systemic involvement",
+                  "generalDescription": "A comprehensive physical examination to assess overall health and identify any signs of systemic disease.",
+                  "educationalTip": "Tuberculoid leprosy is typically localized, so a systemic exam helps rule out other conditions."
+                }
+              ]
+            },
+            "testsOrdered": {
+              "score": 1,
+              "explanation": "You did not order any tests. This is a significant problem, as diagnostic tests are essential to confirm the diagnosis of leprosy and rule out other conditions. At a minimum, you need to order a slit-skin smear and skin biopsy with Fite-Faraco stain. The lepromin test is also useful. Failure to order these tests makes it impossible to confirm your diagnosis.",
+              "missedItems": [
+                {
+                  "name": "Slit-skin smear",
+                  "specificRelevance": "Rule out multibacillary leprosy",
+                  "generalDescription": "Microscopic examination of skin scrapings to detect the presence of acid-fast bacilli.",
+                  "educationalTip": "Typically negative in tuberculoid leprosy."
+                },
+                {
+                  "name": "Skin biopsy with Fite-Faraco stain",
+                  "specificRelevance": "Confirm diagnosis and rule out other conditions",
+                  "generalDescription": "Histopathological examination of a skin sample stained with Fite-Faraco stain to identify acid-fast bacilli.",
+                  "educationalTip": "Look for granulomas and few or no bacilli in tuberculoid leprosy."
+                },
+                {
+                  "name": "Skin biopsy H and E stain",
+                  "specificRelevance": "Confirm diagnosis and rule out other conditions",
+                  "generalDescription": "Histopathological examination of a skin sample stained with Hematoxylin and Eosin stain to identify tissue structures and abnormalities.",
+                  "educationalTip": "Look for granulomas and inflammation."
+                },
+                {
+                  "name": "Lepromin test",
+                  "specificRelevance": "Assess cell-mediated immunity",
+                  "generalDescription": "Intradermal injection of lepromin antigen to assess the patient's immune response to Mycobacterium leprae.",
+                  "educationalTip": "Strongly positive in tuberculoid leprosy, indicating robust cell-mediated immunity."
+                },
+                {
+                  "name": "CBC, LFT, RFT",
+                  "specificRelevance": "Assess for contraindications to treatment",
+                  "generalDescription": "Routine blood tests to evaluate blood cell counts, liver function, and kidney function.",
+                  "educationalTip": "Important for monitoring potential side effects of medications."
+                },
+                {
+                  "name": "Fasting glucose",
+                  "specificRelevance": "Rule out baseline diabetes",
+                  "generalDescription": "Measure blood sugar levels after fasting to screen for diabetes.",
+                  "educationalTip": "Diabetes can affect nerve function and complicate diagnosis."
+                },
+                {
+                  "name": "HIV test",
+                  "specificRelevance": "Rule out immunosuppression",
+                  "generalDescription": "Screen for HIV infection, which can affect the presentation and course of leprosy.",
+                  "educationalTip": "Immunosuppression can alter the typical presentation of leprosy."
+                },
+                {
+                  "name": "Nerve conduction study",
+                  "specificRelevance": "Assess nerve function",
+                  "generalDescription": "Electrodiagnostic test to evaluate the function of peripheral nerves.",
+                  "educationalTip": "May show mild slowing in tuberculoid leprosy."
+                }
+              ]
+            },
+            "diagnosisAccuracy": {
+              "score": 5,
+              "explanation": "Your final diagnosis of tuberculoid leprosy is correct. Good job!",
+              "educationalTip": "Remember that tuberculoid leprosy presents with a single, well-defined hypopigmented patch with sensory loss and nerve thickening. Slit-skin smear is typically negative, and the lepromin test is positive."
+            },
+            "reasoningQuality": {
+              "score": 1,
+              "explanation": "Your reasoning ('a') is insufficient. To justify the diagnosis of tuberculoid leprosy, you need to provide evidence from the patient's presentation, such as the presence of a single hypopigmented patch with sensory loss, localized nerve thickening, negative slit-skin smear, and positive lepromin test. You did not provide any of this information.",
+              "educationalTip": "When justifying a diagnosis, always refer back to the key clinical findings and diagnostic test results. This will help you build a strong and convincing argument."
+            },
+            "differentials": {
+              "score": 1,
+              "explanation": "You did not consider any differential diagnoses. This is a crucial step in the diagnostic process. Considering differential diagnoses helps you rule out other conditions that may present similarly to leprosy. You must consider other conditions.",
+              "educationalTip": "When considering differential diagnoses for leprosy, remember to think about conditions like vitiligo (no sensory loss, sharp margins), pityriasis alba (mild, itchy, not anesthetic), tinea versicolor (scaly, itchy, positive KOH), and psoriasis (scaly, erythematous plaques). Indeterminate leprosy is also important to consider if the lesion was vague and early. Indeterminate leprosy represents an early, undifferentiated stage of leprosy."
+            }
+          }
+        },
+        "timestamp": "2025-05-01T04:31:59.368695"
+      }
+    }
   }
 }

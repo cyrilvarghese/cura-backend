@@ -1,4 +1,3 @@
-```text
 # 🧪 Prompt: Extract Treatment Context JSON from Full Case Document
 
 **Persona:** You are a **Clinical Case Analyst and Medical Education Content Creator**, specializing in extracting and structuring treatment-related information into machine-readable formats.
@@ -7,8 +6,8 @@
 
 **Objective:** Read the provided full clinical case document, focusing on the final diagnosis and the proposed management/treatment plan. Generate a single JSON object containing structured details for:
 1.  A brief **patient summary** relevant to treatment.
-2.  **Pre-treatment investigations**.
-3.  **Monitoring protocols during treatment**.
+2.  **Pre-treatment investigations**, ensuring **each test is listed as a separate entry**.
+3.  **Monitoring protocols during treatment**, ensuring **each distinct parameter/test is listed as a separate entry**.
 4.  The **expected treatment plan** (categorized, with drug details).
 5.  Relevant **additional notes** (supportive care, education).
 
@@ -31,15 +30,21 @@
 1.  **Identify Key Information:** Read the `{{ full_case_document }}` thoroughly. Identify the final diagnosis, key patient characteristics influencing treatment (e.g., age, specific symptoms like angioedema, relevant comorbidities or co-medications), and the specific sections detailing Management, Treatment Plans, Pre-Treatment Investigations, and Monitoring.
 2.  **Generate Parent JSON Object:** Create a root JSON object that will contain all extracted information.
 3.  **Populate `patient_summary` Key:** Add a key `patient_summary` to the root object. Its value should be an object containing key-value pairs summarizing the patient profile relevant to treatment (e.g., `"age": number`, `"gender": "string"`, `"diagnosis": "string"`, `"critical_factors": ["string", "string"]` like relevant co-medications or symptoms).
-4.  **Populate `pre_treatment_investigations` Key:** Add a key `pre_treatment_investigations` to the root object. Its value should be an array of objects. Each object represents a required test/check and should contain keys like:
-    *   `test_name`: (String)
-    *   `purpose`: (String)
-    *   `relevant_drugs`: (Array of Strings)
-5.  **Populate `monitoring_during_treatment` Key:** Add a key `monitoring_during_treatment` to the root object. Its value should be an array of objects. Each object represents a monitoring action and should contain keys like:
-    *   `parameter_to_monitor`: (String)
-    *   `frequency_timing`: (String)
-    *   `purpose`: (String)
-    *   `relevant_drugs`: (Array of Strings)
+4.  **Populate `pre_treatment_investigations` Key:** Add a key `pre_treatment_investigations` to the root object. Its value should be an array of objects.
+    *   **CRITICAL RULE:** Each object must represent **only one single, distinct** required test or check.
+    *   **If the source document lists combined tests (e.g., "CBC and ESR", "LFTs/RFTs"), you MUST create a *separate object* for each individual test (e.g., one object for "CBC", another separate object for "ESR").**
+    *   Each object should contain keys like:
+        *   `test_name`: (String - **Single test name only**)
+        *   `purpose`: (String - Explain the purpose relevant to *this specific single test*)
+        *   `relevant_drugs`: (Array of Strings)
+5.  **Populate `monitoring_during_treatment` Key:** Add a key `monitoring_during_treatment` to the root object. Its value should be an array of objects.
+    *   **CRITICAL RULE:** Each object must represent monitoring of **only one single, distinct** parameter or test.
+    *   **If the source document lists combined parameters (e.g., "Monitor CBC and ESR", "Check LFTs/RFTs"), you MUST create a *separate object* for each individual parameter/test.**
+    *   Each object represents a monitoring action and should contain keys like:
+        *   `parameter_to_monitor`: (String - **Single parameter/test name only**)
+        *   `frequency_timing`: (String)
+        *   `purpose`: (String - Explain the purpose relevant to monitoring *this specific single parameter*)
+        *   `relevant_drugs`: (Array of Strings)
 6.  **Populate `treatment_plan` Key:** Add a key `treatment_plan` to the root object. Its value should be an object containing keys that represent treatment categories (e.g., `first_line`, `escalation`, `steroid_sparing`, `contraindicated`). The value for each category key should be an array of objects, where each object represents a specific drug/treatment and contains keys like:
     *   `drug_name`: (String)
     *   `details`: (String, e.g., dose, route, frequency like "10-20 mg PO once daily")
@@ -55,126 +60,54 @@
 Return **only** the generated JSON object. Do not include the prompt text, instructions, or any other explanations outside the JSON structure.
 
 ```json
+// Example structure - Note how CBC and ESR would be separate entries now
 {{
   "patient_summary": {{
-    "age": 26,
-    "gender": "Female",
-    "diagnosis": "Urticarial Vasculitis",
-    "critical_factors": [
-      "Cold-induced triggers",
-      "History of angioedema",
-      "Current use of propranolol (potential epinephrine interaction)",
-      "Family history of Rheumatoid Arthritis"
-    ]
+    // ... same as before ...
   }},
   "pre_treatment_investigations": [
     {{
-      "test_name": "CBC",
-      "purpose": "Rule out eosinophilia or systemic inflammation",
+      "test_name": "CBC", // Single test
+      "purpose": "Rule out eosinophilia or assess for systemic inflammation/anemia",
       "relevant_drugs": ["Antihistamines", "Prednisone"]
     }},
     {{
-      "test_name": "LFT, RFT",
-      "purpose": "Baseline organ function",
+      "test_name": "ESR", // Separate entry
+      "purpose": "Detect systemic inflammation",
+      "relevant_drugs": ["Prednisone"] // Example: ESR more specific to inflammation marker
+    }},
+    {{
+      "test_name": "LFT", // Separate entry
+      "purpose": "Baseline liver function",
       "relevant_drugs": ["Prednisone", "Hydroxychloroquine"]
     }},
     {{
-      "test_name": "Cold Stimulation Test",
-      "purpose": "Confirm diagnosis of cold-induced urticaria",
-      "relevant_drugs": ["Diagnostic"]
+      "test_name": "RFT", // Separate entry
+      "purpose": "Baseline renal function",
+      "relevant_drugs": ["Prednisone", "Hydroxychloroquine"]
     }},
-    {{
-       "test_name": "Review Medication List",
-       "purpose": "Detect high-risk agents (e.g., beta-blockers affecting epinephrine)",
-       "relevant_drugs": ["Epinephrine"]
-     }},
-    {{
-      "test_name": "ANA, C3, C4",
-      "purpose": "Confirm autoimmune activity",
-      "relevant_drugs": ["General"]
-    }},
-    {{
-      "test_name": "Skin Biopsy",
-      "purpose": "Diagnostic confirmation of vasculitis",
-      "relevant_drugs": ["None"]
-    }}
+    // ... other single tests ...
   ],
   "monitoring_during_treatment": [
-    {{
-      "parameter_to_monitor": "Skin reaction diary",
-      "frequency_timing": "Monthly",
-      "purpose": "Monitor frequency/severity of flares",
-      "relevant_drugs": ["All"]
-    }},
-    {{
-      "parameter_to_monitor": "Medication reconciliation",
-      "frequency_timing": "PRN",
-      "purpose": "Assess for beta-blocker interference with potential epinephrine use",
-      "relevant_drugs": ["Epinephrine"]
-    }},
-    {{
-      "parameter_to_monitor": "Emergency readiness check",
-      "frequency_timing": "If severe / PRN",
-      "purpose": "Patient education, EpiPen instruction",
-      "relevant_drugs": ["All"]
-    }},
-    {{
-      "parameter_to_monitor": "CBC, ESR",
+     {{
+      "parameter_to_monitor": "CBC", // Single parameter
       "frequency_timing": "Every 2 weeks (while on steroids)",
-      "purpose": "Monitor response to treatment",
+      "purpose": "Monitor for hematologic changes/response",
       "relevant_drugs": ["Prednisone"]
     }},
-    {{
-      "parameter_to_monitor": "LFT, RFT",
-      "frequency_timing": "Monthly (if on HCQ)",
-      "purpose": "Monitor drug safety",
-      "relevant_drugs": ["Hydroxychloroquine"]
+     {{
+      "parameter_to_monitor": "ESR", // Separate entry
+      "frequency_timing": "Every 2 weeks (while on steroids)",
+      "purpose": "Monitor inflammatory response to treatment",
+      "relevant_drugs": ["Prednisone"]
     }},
-    {{
-      "parameter_to_monitor": "Skin and joint exam",
-      "frequency_timing": "PRN",
-      "purpose": "Assess flare-ups or ongoing inflammation",
-      "relevant_drugs": ["All"]
-    }}
+    // ... other single parameters ...
   ],
   "treatment_plan": {{
-    "first_line_mild_moderate": [
-      {{
-        "drug_name": "Antihistamines (e.g., Cetirizine, Loratadine, Fexofenadine)",
-        "details": "Standard dosing (e.g., Cetirizine 10mg PO daily)",
-        "rationale": "Control pruritus and reduce flare frequency in milder cases."
-      }},
-      {{
-         "drug_name": "Prednisone",
-         "details": "10-20 mg PO once daily (short course, taper based on response)",
-         "rationale": "For moderate symptoms or flares despite antihistamines."
-       }}
-    ],
-    "severe_refractory": [
-      {{
-        "drug_name": "Hydroxychloroquine",
-        "details": "200-400 mg PO once daily",
-        "rationale": "Steroid-sparing agent for chronic, recurrent, or steroid-dependent cases. Requires monitoring."
-      }},
-      {{
-        "drug_name": "Immunosuppressants (e.g., Azathioprine)",
-        "details": "Specific dosing varies",
-        "rationale": "Considered for severe, refractory cases unresponsive to other therapies."
-      }}
-    ],
-    "contraindicated_or_discontinue": [
-      {{
-        "drug_name": "Propranolol",
-        "details": "Patient currently taking for anxiety",
-        "rationale": "Should be reviewed/discontinued due to potential interference with epinephrine efficacy during possible anaphylaxis/severe angioedema."
-      }}
-    ]
+    // ... same as before ...
   }},
   "additional_notes": [
-    "Patient education on cold avoidance and flare triggers.",
-    "Stress management and sleep hygiene recommended.",
-    "Consider prescribing Epinephrine auto-injector due to history of angioedema.",
-    "Photoprotection advised if immunomodulators are used."
+    // ... same as before ...
   ]
 }}
 ```

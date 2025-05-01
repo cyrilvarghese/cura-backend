@@ -5,11 +5,18 @@ import os
 from dotenv import load_dotenv
 import json
 from pathlib import Path
-import google.generativeai as genai
+import asyncio
+
+# LangChain imports
+from langchain_openai import ChatOpenAI
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
+from langchain.output_parsers import ResponseSchema, StructuredOutputParser
+
+# Local utility imports
 from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
 from auth.auth_api import get_user
-import asyncio
 
 # Load environment variables
 load_dotenv()
@@ -20,11 +27,10 @@ HISTORY_CONTEXT_FILENAME = "history_context.json"
 
 router = APIRouter(
     prefix="/feedback",
-    tags=["history-feedback"]
+    tags=["history-feedback-langchain"]
 )
 
-# Initialize the Gemini client and SessionManager
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# Initialize the SessionManager
 session_manager = SessionManager()
 
 def load_prompt(file_path: str) -> str:
@@ -82,10 +88,10 @@ async def load_expected_questions(case_id: int) -> List[str]:
         with open(file_path, 'r') as file:
             data = json.load(file)
             # Extract just the expected_questions array from the JSON
-            if "expected_questions_with_domains" in data:
-                return data["expected_questions_with_domains"]
+            if "expected_questions" in data:
+                return data["expected_questions"]
             else:
-                raise ValueError("No 'expected_questions_with_domains' field found in history context file")
+                raise ValueError("No 'expected_questions' field found in history context file")
     except Exception as e:
         raise HTTPException(
             status_code=404,
@@ -104,12 +110,37 @@ async def get_session_data():
         raise HTTPException(status_code=404, detail="No active session found")
     
     return student_id, session_data
- 
-@router.get("/history-taking/analysis")
+
+# Define output schemas for each analysis component
+def get_analysis_output_parser():
+    """Create a structured output parser for the history analysis step."""
+    schemas = [
+        ResponseSchema(name="overall_score", description="Overall score out of 10"),
+        ResponseSchema(name="question_coverage", description="Assessment of questions asked vs expected"),
+        ResponseSchema(name="question_quality", description="Assessment of question phrasing and clarity"),
+        ResponseSchema(name="question_sequencing", description="Assessment of logical flow of questions"),
+        ResponseSchema(name="missed_areas", description="Key areas missed in history taking"),
+        ResponseSchema(name="detailed_feedback", description="Comprehensive qualitative feedback")
+    ]
+    return StructuredOutputParser.from_response_schemas(schemas)
+
+def get_aetcom_output_parser():
+    """Create a structured output parser for the AETCOM feedback step."""
+    schemas = [
+        ResponseSchema(name="empathy_score", description="Score for empathy shown"),
+        ResponseSchema(name="communication_score", description="Score for communication effectiveness"),
+        ResponseSchema(name="professionalism_score", description="Score for professional behavior"),
+        ResponseSchema(name="rapport_building", description="Assessment of rapport building"),
+        ResponseSchema(name="specific_feedback", description="Specific actionable feedback"),
+        ResponseSchema(name="improvement_areas", description="Areas that need improvement")
+    ]
+    return StructuredOutputParser.from_response_schemas(schemas)
+
+@router.get("/history-taking/analysis-langchain")
 async def get_history_analysis():
-    """Step 1: Generate detailed analysis and overall score."""
+    """Step 1: Generate detailed analysis and overall score using LangChain."""
     try:
-        print(f"\n[{datetime.now()}] 🔍 Starting history analysis generation (Step 1)")
+        print(f"\n[{datetime.now()}] 🔍 Starting LangChain history analysis generation (Step 1)")
         
         # Get session data
         student_id, session_data = await get_session_data()
@@ -128,42 +159,45 @@ async def get_history_analysis():
             for interaction in session_data["interactions"]["history_taking"]
         ]
         
-        # Configure the model
-        model = genai.GenerativeModel('gemini-2.0-flash')
-        generation_config = {
-            "temperature": 0.7,
-            "top_p": 0.8,
-            "top_k": 40
-        }
-        
-        # Format the prompt with the required data
-        formatted_prompt = HISTORY_ANALYSIS_PROMPT.format(
-            case_context=context,
-            expected_questions_with_domains=json.dumps(expected_questions, indent=2),
-            student_questions=json.dumps(student_questions, indent=2)
+        # Initialize LangChain components
+        llm = ChatOpenAI(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            model="gpt-4o",
+            temperature=0.7
         )
         
-        # Generate the analysis
-        start_time = datetime.now()
-        content = {
-            "contents": [
-                {
-                    "parts": [
-                        {"text": formatted_prompt}
-                    ]
-                }
-            ],
-            "generation_config": generation_config
-        }
+        # Format the prompt for LangChain
+        prompt_template = PromptTemplate(
+            input_variables=["case_context", "expected_questions", "student_questions"],
+            template=HISTORY_ANALYSIS_PROMPT
+        )
         
-        response = await asyncio.to_thread(model.generate_content, **content)
+        # Create LangChain chain
+        analysis_chain = LLMChain(
+            llm=llm,
+            prompt=prompt_template
+        )
+        
+        # Execute the chain
+        start_time = datetime.now()
+        response = await asyncio.to_thread(
+            analysis_chain.invoke,
+            {
+                "case_context": context,
+                "expected_questions": json.dumps(expected_questions, indent=2),
+                "student_questions": json.dumps(student_questions, indent=2)
+            }
+        )
         
         # Process and return the response
-        cleaned_content = clean_code_block(response.text)
+        raw_response = response["text"]
+        cleaned_content = clean_code_block(raw_response)
         analysis_result = json.loads(cleaned_content)
-        #add analysis_result to session
+        
+        # Add analysis_result to session
         session_manager.add_history_analysis(student_id, analysis_result)
         print(f"[DEBUG] Successfully saved analysis results to session")
+        
         return {
             "case_id": case_id,
             "student_id": student_id,
@@ -171,20 +205,21 @@ async def get_history_analysis():
             "analysis_result": analysis_result,
             "metadata": {
                 "processing_time_seconds": (datetime.now() - start_time).total_seconds(),
-                "model_version": model.model_name
+                "model_version": "gpt-4-turbo",
+                "source": "langchain"
             }
         }
         
     except Exception as e:
-        error_msg = f"Error in get_history_analysis: {str(e)}"
+        error_msg = f"Error in get_history_analysis with LangChain: {str(e)}"
         print(f"[{datetime.now()}] ❌ {error_msg}")
         raise HTTPException(status_code=500, detail=error_msg)
 
-@router.get("/history-taking/aetcom")
+@router.get("/history-taking/aetcom-langchain")
 async def get_history_aetcom_feedback():
-    """Step 2: Generate domain scores and final feedback using analysis results."""
+    """Step 2: Generate domain scores and final feedback using LangChain."""
     try:
-        print(f"\n[{datetime.now()}] 🔍 Starting AETCOM feedback generation (Step 2)")
+        print(f"\n[{datetime.now()}] 🔍 Starting LangChain AETCOM feedback generation (Step 2)")
         
         # Get session data
         try:
@@ -261,68 +296,121 @@ async def get_history_aetcom_feedback():
                 print(f"[{datetime.now()}] ❌ First history_taking item: {json.dumps(session_data['interactions']['history_taking'][0] if session_data['interactions']['history_taking'] else 'empty', indent=2)}")
             raise
         
-        # Configure the model
+        # Initialize LangChain components
         try:
-            model = genai.GenerativeModel('gemini-2.0-flash')
-            generation_config = {
-                "temperature": 0.7,
-                "top_p": 0.8,
-                "top_k": 40
-            }
-            print(f"[{datetime.now()}] ✅ Configured Gemini model: {model.model_name}")
+            llm = ChatOpenAI(
+                api_key=os.getenv("OPENAI_API_KEY"),
+                model="gpt-4o",
+                temperature=0.7
+            )
+            print(f"[{datetime.now()}] ✅ Initialized OpenAI ChatModel: gpt-4-turbo")
         except Exception as model_error:
-            print(f"[{datetime.now()}] ❌ Error configuring Gemini model: {str(model_error)}")
+            print(f"[{datetime.now()}] ❌ Error initializing ChatOpenAI: {str(model_error)}")
             print(f"[{datetime.now()}] ❌ Error details: {type(model_error).__name__}")
             raise
         
-        # Format the prompt with the required data
+        # Format the prompt for LangChain
         try:
-            formatted_prompt = HISTORY_AETCOM_PROMPT.format(
-                case_context=context,
-                expected_questions=json.dumps(expected_questions, indent=2),
-                student_questions=json.dumps(student_questions, indent=2),
+            prompt_template = PromptTemplate(
+                input_variables=["case_context", "expected_questions", "student_questions"],
+                template=HISTORY_AETCOM_PROMPT
             )
-            print(f"[{datetime.now()}] ✅ Formatted prompt, length: {len(formatted_prompt)} characters")
+            print(f"[{datetime.now()}] ✅ Created prompt template for AETCOM feedback")
         except Exception as prompt_error:
-            print(f"[{datetime.now()}] ❌ Error formatting prompt: {str(prompt_error)}")
+            print(f"[{datetime.now()}] ❌ Error creating prompt template: {str(prompt_error)}")
             print(f"[{datetime.now()}] ❌ Error details: {type(prompt_error).__name__}")
             raise
         
-        # Generate the feedback
+        # Create LangChain chain
+        aetcom_chain = LLMChain(
+            llm=llm,
+            prompt=prompt_template
+        )
+        
+        # Execute the chain
         try:
             start_time = datetime.now()
-            content = {
-                "contents": [
-                    {
-                        "parts": [
-                            {"text": formatted_prompt}
-                        ]
-                    }
-                ],
-                "generation_config": generation_config
-            }
+            print(f"[{datetime.now()}] 🔄 Executing LangChain for AETCOM feedback...")
             
-            print(f"[{datetime.now()}] 🔄 Sending request to Gemini API...")
-            response = await asyncio.to_thread(model.generate_content, **content)
-            print(f"[{datetime.now()}] ✅ Received response from Gemini API, length: {len(response.text)} characters")
-        except Exception as api_error:
-            print(f"[{datetime.now()}] ❌ Error calling Gemini API: {str(api_error)}")
-            print(f"[{datetime.now()}] ❌ Error details: {type(api_error).__name__}")
+            response = await asyncio.to_thread(
+                aetcom_chain.invoke,
+                {
+                    "case_context": context,
+                    "expected_questions": json.dumps(expected_questions, indent=2),
+                    "student_questions": json.dumps(student_questions, indent=2)
+                }
+            )
+            
+            print(f"[{datetime.now()}] ✅ Received response from LangChain")
+        except Exception as chain_error:
+            print(f"[{datetime.now()}] ❌ Error executing LangChain: {str(chain_error)}")
+            print(f"[{datetime.now()}] ❌ Error details: {type(chain_error).__name__}")
             raise
         
         # Process and return the response
         try:
-            cleaned_content = clean_code_block(response.text)
+            raw_response = response["text"]
+            
+            # Save raw response to file for debugging
+            debug_dir = Path("debug_logs")
+            debug_dir.mkdir(exist_ok=True)
+            debug_file = debug_dir / f"aetcom_response_{student_id}_{case_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+            with open(debug_file, "w") as f:
+                f.write(f"RAW RESPONSE:\n{raw_response}\n\n")
+            
+            cleaned_content = clean_code_block(raw_response)
+            
+            # Also save cleaned content
+            with open(debug_file, "a") as f:
+                f.write(f"CLEANED CONTENT:\n{cleaned_content}\n\n")
+            
             print(f"[{datetime.now()}] ✅ Cleaned response content, length: {len(cleaned_content)} characters")
-            feedback_result = json.loads(cleaned_content)
-            print(f"[{datetime.now()}] ✅ Parsed JSON response successfully")
-        except json.JSONDecodeError as json_error:
-            print(f"[{datetime.now()}] ❌ JSON parsing error: {str(json_error)}")
-            print(f"[{datetime.now()}] ❌ First 500 chars of cleaned content: {cleaned_content[:500]}")
-            raise HTTPException(
-                status_code=500, 
-                detail=f"Failed to parse Gemini response as JSON: {str(json_error)}"
-            )
+            print(f"[{datetime.now()}] ✅ Saved raw and cleaned response to {debug_file}")
+            
+            # More robust JSON parsing with fallback
+            try:
+                feedback_result = json.loads(cleaned_content)
+                print(f"[{datetime.now()}] ✅ Parsed JSON response successfully")
+            except json.JSONDecodeError as json_error:
+                print(f"[{datetime.now()}] ⚠️ JSON parsing error: {str(json_error)}")
+                print(f"[{datetime.now()}] ⚠️ Attempting to fix JSON...")
+                
+                # Try to fix common JSON issues
+                import re
+                
+                # Log the error position
+                with open(debug_file, "a") as f:
+                    f.write(f"JSON ERROR: {str(json_error)}\n")
+                    error_pos = int(re.search(r'char (\d+)', str(json_error)).group(1))
+                    f.write(f"Error position: {error_pos}\n")
+                    f.write(f"Content around error: {cleaned_content[max(0, error_pos-50):min(len(cleaned_content), error_pos+50)]}\n\n")
+                
+                # Try to fix common JSON issues
+                fixed_content = cleaned_content
+                # Replace single quotes with double quotes
+                fixed_content = re.sub(r"'([^']*)':", r'"\1":', fixed_content)
+                # Fix trailing commas in arrays and objects
+                fixed_content = re.sub(r",\s*}", "}", fixed_content)
+                fixed_content = re.sub(r",\s*\]", "]", fixed_content)
+                
+                with open(debug_file, "a") as f:
+                    f.write(f"FIXED CONTENT:\n{fixed_content}\n\n")
+                
+                try:
+                    feedback_result = json.loads(fixed_content)
+                    print(f"[{datetime.now()}] ✅ Parsed fixed JSON successfully")
+                except json.JSONDecodeError:
+                    # If still failing, create a simplified response
+                    print(f"[{datetime.now()}] ⚠️ Still unable to parse JSON, creating fallback response")
+                    feedback_result = {
+                        "empathy_score": "5/10",
+                        "communication_score": "5/10",
+                        "professionalism_score": "5/10",
+                        "rapport_building": "Unable to parse detailed feedback",
+                        "specific_feedback": "The system encountered an error processing the detailed feedback. Please review the raw response for more information.",
+                        "improvement_areas": "Unable to parse detailed feedback",
+                        "raw_response": raw_response[:1000] + "..." if len(raw_response) > 1000 else raw_response
+                    }
         except Exception as parse_error:
             print(f"[{datetime.now()}] ❌ Error processing response: {str(parse_error)}")
             print(f"[{datetime.now()}] ❌ Error details: {type(parse_error).__name__}")
@@ -347,15 +435,17 @@ async def get_history_aetcom_feedback():
             "feedback_result": feedback_result,
             "metadata": {
                 "processing_time_seconds": (datetime.now() - start_time).total_seconds(),
-                "model_version": model.model_name
+                "model_version": "gpt-4-turbo",
+                "source": "langchain",
+                "debug_file": str(debug_file) if 'debug_file' in locals() else None
             }
         }
         
     except Exception as e:
-        error_msg = f"Error in get_history_aetcom_feedback: {str(e)}"
+        error_msg = f"Error in get_history_aetcom_feedback with LangChain: {str(e)}"
         print(f"[{datetime.now()}] ❌ {error_msg}")
         print(f"[{datetime.now()}] ❌ Error type: {type(e).__name__}")
         print(f"[{datetime.now()}] ❌ Error details: {str(e)}")
         import traceback
         print(f"[{datetime.now()}] ❌ Traceback: {traceback.format_exc()}")
-        raise HTTPException(status_code=500, detail=error_msg)
+        raise HTTPException(status_code=500, detail=error_msg) 

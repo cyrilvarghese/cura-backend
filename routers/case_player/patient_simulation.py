@@ -62,7 +62,7 @@ workflow = StateGraph(PatientSimState)
 # Define the graph workflow for Gemini
 gemini_workflow = StateGraph(PatientSimState)
 
-def call_gemini_model(state: PatientSimState):
+async def call_gemini_model(state: PatientSimState):
     # Access both messages and case_id
     case_id = state["case_id"]
     
@@ -76,7 +76,7 @@ def call_gemini_model(state: PatientSimState):
     # Create the chain
     chain = prompt | gemini_model
 
-    response = chain.invoke(state)
+    response = await chain.ainvoke(state)
     
     # Format response as a dict with metadata
     formatted_response = {
@@ -99,7 +99,7 @@ gemini_workflow.add_node("model", call_gemini_model)
 gemini_memory = MemorySaver()
 gemini_app = gemini_workflow.compile(checkpointer=gemini_memory)
 
-def call_model(state: PatientSimState):
+async def call_model(state: PatientSimState):
     # Now we have type-safe access to both messages and case_id
     case_id = state["case_id"]
     
@@ -114,7 +114,7 @@ def call_model(state: PatientSimState):
     chain = prompt | model
 
     """Process the message through the model and return response"""
-    response = chain.invoke(state)
+    response = await chain.ainvoke(state)
     
     # Format response as a dict with metadata
     formatted_response = {
@@ -164,7 +164,7 @@ async def ask_patient(student_query: str, case_id: str = "1", thread_id: str = N
             "case_id": case_id
         }
         
-        response = app.invoke(
+        response = await app.ainvoke(
             initial_state,  # Pass the complete state object
             config={"configurable": {"thread_id": thread_id}}
         )
@@ -219,7 +219,7 @@ async def ask_patient_gemini(student_query: str, case_id: str = "1", thread_id: 
             "case_id": case_id
         }
         
-        response = gemini_app.invoke(
+        response = await gemini_app.ainvoke(
             initial_state,
             config={"configurable": {"thread_id": thread_id}}
         )

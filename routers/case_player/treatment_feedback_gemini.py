@@ -27,11 +27,13 @@ class PreTreatmentFeedbackRequest(BaseModel):
 
     def get_pre_treatment_inputs(self) -> List[str]:
         """Get pre-treatment inputs from either field name."""
-        return self.student_inputs_pre_treatment or self.student_input_pre_treatment or []
+        inputs = self.student_inputs_pre_treatment or self.student_input_pre_treatment or []
+        return [input.upper() for input in inputs]
 
     def get_monitoring_inputs(self) -> List[str]:
         """Get monitoring inputs from either field name."""
-        return self.student_inputs_monitoring or self.student_input_monitoring or []
+        inputs = self.student_inputs_monitoring or self.student_input_monitoring or []
+        return [input.upper() for input in inputs]
 
     class Config:
         # Add schema extra to show example
@@ -237,7 +239,7 @@ async def get_monitoring_feedback(request: PreTreatmentFeedbackRequest):
         feedback_results = {}
         
         # Configure the model with high temperature for more creative responses
-        model = genai.GenerativeModel('gemini-2.0-flash-lite')
+        model = genai.GenerativeModel('gemini-2.0-flash')
         generation_config = {
             "temperature": 0.9,  # High temperature for more creative responses
             "top_p": 0.8,       # Slightly lower top_p to maintain some consistency

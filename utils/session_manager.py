@@ -329,6 +329,32 @@ class SessionManager:
         self._save_session(file_path, session_data)
         return session_data
 
+    def add_osce_score(self, student_id: str, case_id: str, osce_score_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Add OSCE score data to the session feedback.
+        
+        Args:
+            student_id (str): The ID of the student
+            case_id (str): The ID of the case
+            osce_score_data (Dict[str, Any]): The OSCE score data including overall performance and by question type
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id, case_id)
+        session_data = self.create_or_load_session(student_id, case_id)
+        
+        # Ensure feedback object exists
+        if "feedback" not in session_data["interactions"]:
+            session_data["interactions"]["feedback"] = {}
+        
+        # Add OSCE score to feedback
+        session_data["interactions"]["feedback"]["osce_score"] = osce_score_data
+        session_data["current_step"] = "OSCE Evaluation"
+        
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data
+
     def _save_session(self, file_path: str, session_data: Dict[str, Any]) -> None:
         """Save the session data to file."""
         with open(file_path, 'w') as f:

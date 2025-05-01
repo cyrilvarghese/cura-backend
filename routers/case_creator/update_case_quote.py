@@ -43,8 +43,8 @@ async def update_case_quote(request: UpdateQuoteRequest):
         with open(case_cover_path, 'r') as json_file:
             case_cover_data = json.load(json_file)
         
-        # Update the quote field
-        case_cover_data["quote"] = request.quote_text
+        # Update the quote field - actually the title
+        case_cover_data["title"] = request.quote_text
         
         # Update the last_updated timestamp
         case_cover_data["last_updated"] = datetime.now().isoformat()

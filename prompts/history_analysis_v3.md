@@ -40,7 +40,7 @@
     *   Based on the overall interaction (`student_question_evaluation`) and the `critical_missed_areas`:
         *   Identify the single **`key_strength`**: What was the most positive aspect of the student's history taking?
         *   Identify the single **`key_weakness`**: What was the most significant shortcoming?
-        *   Calculate a **`cumulative_score`** (float, scale 0-10) based on the proportion of relevant questions asked, the severity/number of critical missed areas, and the overall clinical progression facilitated by the history.
+        *   Calculate a **`cumulative_score`** (float, scale 0-5) based on the proportion of relevant questions asked, the severity/number of critical missed areas, and the overall clinical progression facilitated by the history.
         *   Provide a concise **`score_reason`** (~20 words) justifying the score.
 
 **Output Format:** Return a single JSON object containing **only** the following four top-level keys. Keep all string explanations concise and specific to the case.
@@ -66,7 +66,7 @@
   "summary_feedback": {{
     "key_strength": "string: ~15 words describing the main positive aspect",
     "key_weakness": "string: ~15 words describing the main shortcoming",
-    "cumulative_score": 0.0, // Float score from 0.0 to 10.0
+    "cumulative_score": 0.0, // Float score from 0.0 to 5.0
     "score_reason": "string: ~20 words justifying the score based on relevance, misses, strength/weakness"
   }}
 }}

@@ -1,18 +1,299 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
-  "case_id": "2",
-  "session_start": "2025-05-01T17:08:11.473060",
-  "current_step": "History Taking",
+  "case_id": "1",
+  "session_start": "2025-04-24T14:34:56.319443",
+  "current_step": "OSCE Evaluation",
   "interactions": {
-    "history_taking": [],
-    "physical_examinations": [],
-    "tests_ordered": [],
-    "diagnosis_submission": null,
-    "final_diagnosis": null,
-    "pre_treatment_checks": [],
+    "history_taking": [
+      {
+        "question": "hi how are you feeling?",
+        "response": "I've had this itchy rash on my arms and legs for about two weeks now.",
+        "timestamp": "2025-04-24T14:35:20.393986"
+      },
+      {
+        "question": "two weeks is a long time, any other symptoms?",
+        "response": "Yes, my wrists and knees feel stiff and achy, especially in the morning; it\u2019s a bit frustrating.",
+        "timestamp": "2025-04-24T14:35:36.950461"
+      },
+      {
+        "question": "only in morning",
+        "response": "I\u2019ve been feeling generally more tired than usual, like I just don\u2019t have the energy to do the things I love.",
+        "timestamp": "2025-04-24T14:35:49.487914"
+      },
+      {
+        "question": "ok you are also tired, any family history of any illness - somehting similar?",
+        "response": "Yes, my mother has rheumatoid arthritis.",
+        "timestamp": "2025-04-24T14:36:26.697987"
+      },
+      {
+        "question": "how bad is it ?",
+        "response": "It\u2019s honestly pretty worrying. I feel a bit embarrassed about the rash and frustrated with how tired I\u2019ve been.",
+        "timestamp": "2025-04-24T14:36:38.525909"
+      },
+      {
+        "question": "ok any other issues you have?",
+        "response": "The rash on my arms and legs looks like red, raised patches that resemble hives but stay for more than a day before fading and leaving behind bruised marks.",
+        "timestamp": "2025-04-24T14:36:52.567575"
+      },
+      {
+        "question": "ok, are you on nay medications?",
+        "response": "No, I haven\u2019t started any new medications recently.",
+        "timestamp": "2025-04-24T14:37:23.420463"
+      },
+      {
+        "question": "ok any travel or any allegies?",
+        "response": "No, I haven\u2019t traveled recently.",
+        "timestamp": "2025-04-24T14:37:34.107569"
+      },
+      {
+        "question": "any allergies?",
+        "response": "Not that I know of.",
+        "timestamp": "2025-04-24T14:37:40.469205"
+      }
+    ],
+    "physical_examinations": [
+      {
+        "test_name": "Skin Examination",
+        "timestamp": "2025-04-24T14:38:03.890990"
+      },
+      {
+        "test_name": "Wood's lamp",
+        "timestamp": "2025-04-24T14:38:11.414573"
+      },
+      {
+        "test_name": "abdominal inspection",
+        "timestamp": "2025-04-24T14:38:22.153009"
+      }
+    ],
+    "tests_ordered": [
+      {
+        "test_name": "Antinuclear Antibody (ANA) test",
+        "timestamp": "2025-04-24T14:41:48.069945"
+      },
+      {
+        "test_name": "Complete Blood Count (CBC)",
+        "timestamp": "2025-04-24T14:41:51.506256"
+      },
+      {
+        "test_name": "C-reactive protein",
+        "timestamp": "2025-04-24T14:42:03.869114"
+      },
+      {
+        "test_name": "Complete Blood Count (CBC)",
+        "timestamp": "2025-04-24T14:42:12.170075"
+      },
+      {
+        "test_name": "C3 and C4 Complement Levels",
+        "timestamp": "2025-04-24T14:42:21.007104"
+      },
+      {
+        "test_name": "Skin Biopsy",
+        "timestamp": "2025-04-24T14:42:43.585697"
+      }
+    ],
+    "diagnosis_submission": {
+      "primary_diagnosis": "Urticarial Vasculitis",
+      "reason": "rash with morning stiffness \nfamily history \nrashes last>24 hours",
+      "differentials": [
+        "Systemic Lupus Erythematosus (SLE) with cutaneous manifestations",
+        "Hypersensitivity Vasculitis",
+        "Chronic Idiopathic Urticaria"
+      ],
+      "timestamp": "2025-04-24T14:41:40.485058"
+    },
+    "final_diagnosis": {
+      "final_diagnosis": "Urticarial Vasculitis",
+      "final_reason": "biospy+family history+low complement\n",
+      "timestamp": "2025-05-01T13:17:24.704241"
+    },
+    "pre_treatment_checks": [
+      "CBC",
+      "LFT",
+      "RFT",
+      "NCV"
+    ],
     "treatment_plan": null,
-    "post_treatment_monitoring": [],
-    "clinical_findings": [],
-    "feedback": {}
+    "post_treatment_monitoring": [
+      "two weeks - CBC",
+      "as required - skin diary",
+      "monthly - LFT,RFT"
+    ],
+    "clinical_findings": [
+      "rash with join pain",
+      "morning stiff ness",
+      "rash for two eeks now",
+      "family history of arheumatoid arthritis",
+      "discoloration post rash and general fatigue",
+      "rash more than 24 hours"
+    ],
+    "feedback": {
+      "history_taking": {
+        "analysis": {
+          "student_question_evaluation": [
+            {
+              "question_asked": "hi how are you feeling?",
+              "relevance_grade": "relevant",
+              "reason": "Establishes rapport and opens the conversation, allowing the patient to express their chief complaint."
+            },
+            {
+              "question_asked": "two weeks is a long time, any other symptoms?",
+              "relevance_grade": "relevant",
+              "reason": "Probes for associated symptoms related to the chief complaint, expanding the clinical picture."
+            },
+            {
+              "question_asked": "only in morning",
+              "relevance_grade": "relevant",
+              "reason": "Clarifies the timing of joint pain, which is crucial for differential diagnosis."
+            },
+            {
+              "question_asked": "ok you are also tired, any family history of any illness - somehting similar?",
+              "relevance_grade": "relevant",
+              "reason": "Explores family history, specifically looking for similar conditions, which is highly relevant."
+            },
+            {
+              "question_asked": "how bad is it ?",
+              "relevance_grade": "relevant",
+              "reason": "Assesses the impact of the condition on the patient's life and emotional well-being."
+            },
+            {
+              "question_asked": "ok any other issues you have?",
+              "relevance_grade": "relevant",
+              "reason": "Open-ended question to elicit additional information or unreported symptoms."
+            },
+            {
+              "question_asked": "ok, are you on nay medications?",
+              "relevance_grade": "relevant",
+              "reason": "Determines if medications could be contributing to or interacting with the current condition."
+            },
+            {
+              "question_asked": "ok any travel or any allegies?",
+              "relevance_grade": "relevant",
+              "reason": "Asks about potential exposures and allergies, which could be related to the rash."
+            },
+            {
+              "question_asked": "any allergies?",
+              "relevance_grade": "relevant",
+              "reason": "Directly asks about allergies, a common cause of rashes and other symptoms."
+            }
+          ],
+          "critical_missed_areas": [
+            {
+              "domain": "chief_complaint",
+              "importance_reason": "Details on rash appearance and evolution help differentiate urticaria from urticarial vasculitis, a key diagnostic point.",
+              "example_missed_question": "Can you describe the rash in more detail? What does it look like, and how does it feel?"
+            },
+            {
+              "domain": "social_exposure",
+              "importance_reason": "Ruling out triggers like new foods or environments helps narrow down possible causes of the rash and joint pain.",
+              "example_missed_question": "Have you been exposed to new medications, environments, or foods recently?"
+            },
+            {
+              "domain": "red_flag_symptoms",
+              "importance_reason": "Systemic symptoms like fever or weight loss suggest a more serious underlying condition requiring prompt investigation.",
+              "example_missed_question": "Have you experienced any fever, weight loss, or other systemic symptoms?"
+            }
+          ],
+          "summary_feedback": {
+            "key_strength": "The student effectively explored associated symptoms and family history, revealing crucial diagnostic clues.",
+            "key_weakness": "The student failed to fully characterize the chief complaint, missing key features of the rash.",
+            "cumulative_score": 6.5,
+            "score_reason": "Relevant questions were asked, but critical details about the rash and potential triggers were missed, impacting diagnostic accuracy."
+          }
+        },
+        "domain_feedback": {
+          "aetcom_evaluation": {
+            "communication": {
+              "performance_level": "Satisfactory",
+              "feedback": "The student started with an open-ended question ('hi how are you feeling?'), which is a good way to initiate rapport. However, the student then used closed-ended questions ('only in morning') which limited the patient's ability to provide detailed information. Action: Use open-ended questions to encourage the patient to elaborate on their symptoms and experiences."
+            },
+            "empathy_patient_centeredness": {
+              "performance_level": "Satisfactory",
+              "feedback": "The student acknowledged the patient's feelings ('two weeks is a long time'), which shows some empathy. However, when the patient expressed feeling 'embarrassed' and 'frustrated,' the student did not explore these feelings further. Action: Use reflective statements (e.g., 'It sounds like you're feeling self-conscious about the rash') to validate the patient's emotions and encourage them to share more."
+            },
+            "professionalism_ethics": {
+              "performance_level": "Good",
+              "feedback": "The student maintained a respectful tone throughout the interaction. Action: Continue to maintain a professional and respectful demeanor in all patient interactions."
+            },
+            "information_gathering": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student asked about family history and allergies, but missed key elements of the chief complaint (e.g. rash characteristics, previous episodes) and pertinent negatives (e.g. diet changes, skincare routine changes). Action: Develop a systematic approach to history-taking to ensure all relevant information is gathered."
+            }
+          }
+        },
+        "timestamp": "2025-05-01T13:17:35.583046"
+      },
+      "diagnosis": {
+        "feedback": {
+          "evaluationSummary": {
+            "physicalExamPerformance": 3,
+            "testOrderingPerformance": 4,
+            "primaryDiagnosisAccuracy": 5,
+            "reasoningQuality": 4,
+            "differentialListMatch": 4
+          },
+          "scoreBreakdown": {
+            "physicalExams": {
+              "score": 3,
+              "explanation": "The student performed a Skin Examination, which is relevant. However, the student included a Wood's lamp exam and abdominal inspection, which are less relevant in this context. The student missed a Musculoskeletal Examination and a Vitals Check, which are important for assessing joint involvement and establishing baseline vital signs, respectively.",
+              "missedItems": [
+                {
+                  "name": "Musculoskeletal Examination",
+                  "specificRelevance": "Assess joint tenderness and range of motion",
+                  "generalDescription": "Evaluation of the musculoskeletal system for pain, swelling, range of motion, and stability.",
+                  "educationalTip": null
+                },
+                {
+                  "name": "Vitals Check",
+                  "specificRelevance": "Establish baseline vital signs and identify any immediate concerns",
+                  "generalDescription": "Measurement of temperature, pulse, blood pressure, and respiratory rate.",
+                  "educationalTip": null
+                }
+              ]
+            },
+            "testsOrdered": {
+              "score": 4,
+              "explanation": "The student ordered several key tests, including ANA, CBC, Complement Levels, and Skin Biopsy, which are all relevant. However, the student also ordered C-reactive protein, which is a general marker of inflammation but less specific than ESR in this context. The student ordered Complete Blood Count (CBC) twice, which is redundant. The student missed ordering an ESR, which is important for detecting inflammation.",
+              "missedItems": [
+                {
+                  "name": "Complete Blood Count (CBC) and ESR",
+                  "specificRelevance": "Detect inflammation",
+                  "generalDescription": "CBC evaluates blood cell counts; ESR measures the rate at which red blood cells settle, indicating inflammation.",
+                  "educationalTip": null
+                }
+              ]
+            },
+            "diagnosisAccuracy": {
+              "score": 5,
+              "explanation": "The student correctly identified the primary diagnosis as Urticarial Vasculitis.",
+              "educationalTip": null
+            },
+            "reasoningQuality": {
+              "score": 4,
+              "explanation": "The student's final reasoning included biopsy results, family history, and low complement levels, which are relevant to the diagnosis of Urticarial Vasculitis. However, the student did not explicitly mention the persistence of hives lasting over 24 hours or post-lesional bruising in their reasoning. These are key pieces of evidence that support the diagnosis.",
+              "educationalTip": null
+            },
+            "differentials": {
+              "score": 4,
+              "explanation": "The student included Systemic Lupus Erythematosus (SLE), Hypersensitivity Vasculitis, and Chronic Idiopathic Urticaria in their differential list, which are all relevant. The student did not include Drug-Induced Urticarial Rash. Drug-Induced Urticarial Rash should be considered, but it's less likely without recent medication changes.",
+              "educationalTip": null
+            }
+          }
+        },
+        "timestamp": "2025-05-01T13:17:40.083028"
+      },
+      "osce_score": {
+        "overallPerformance": {
+          "overallPercentage": 0.0,
+          "totalPointsEarned": 0.0,
+          "totalPossiblePoints": 1.0
+        },
+        "performanceByQuestionType": {
+          "imageBasedPercentage": 0.0,
+          "multipleChoicePercentage": 0.0,
+          "writtenResponsePercentage": 0.0
+        },
+        "timestamp": "2025-05-02T07:03:09.005594"
+      }
+    }
   }
 }

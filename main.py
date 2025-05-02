@@ -14,13 +14,28 @@ load_dotenv()
 
 app = FastAPI()
 
-# Add CORS middleware
+# Define allowed origins - use specific origins in production for security
+origins = [
+    "http://localhost",
+    "http://localhost:3000",  # Common React development port
+    "http://localhost:5173",  # Common Vite development port
+    "http://localhost:5174",  # Another Vite port
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5174",
+    "http://127.0.0.1:3000",
+    # Add your production URLs here
+    "*"  # Allow all origins - remove this in production
+]
+
+# Add CORS middleware with explicit configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=600  # Cache preflight requests for 10 minutes
 )
 
 # Create static directory if it doesn't exist

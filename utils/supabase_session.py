@@ -68,7 +68,19 @@ async def submit_session_to_supabase(session_data: Dict[str, Any]) -> Dict[str, 
         print(f"[SUPABASE] OSCE summary: {json.dumps(osce_summary, indent=2)}")
         
         print(f"[SUPABASE] Extracting feedback summary...")
-        feedback_summary = interactions.get("feedback", {}).get("history_taking", {}).get("analysis", {}).get("summary_feedback", {}).get("key_weakness", "")
+        # Get diagnosis accuracy and reasoning quality information
+        diagnosis_accuracy = interactions.get("feedback", {}).get("diagnosis", {}).get("feedback", {}).get("evaluationSummary", {}).get("diagnosisAccuracy", {})
+        reasoning_quality = interactions.get("feedback", {}).get("diagnosis", {}).get("feedback", {}).get("evaluationSummary", {}).get("reasoningQuality", {})
+        
+        # Combine the explanations from both components
+        diagnosis_explanation = diagnosis_accuracy.get("explanation", "") if isinstance(diagnosis_accuracy, dict) else ""
+        reasoning_explanation = reasoning_quality.get("explanation", "") if isinstance(reasoning_quality, dict) else ""
+        
+        feedback_summary = f"Diagnosis: {diagnosis_explanation} Reasoning: {reasoning_explanation}".strip()
+        if not feedback_summary:
+            # Fallback to original key_weakness if the new approach yields empty results
+            feedback_summary = interactions.get("feedback", {}).get("history_taking", {}).get("analysis", {}).get("summary_feedback", {}).get("key_weakness", "")
+        
         print(f"[SUPABASE] Feedback summary: {feedback_summary}")
         
         # Prepare payload for insertion

@@ -42,6 +42,7 @@ from routers.record_treatment_plan import router as treatment_plan_router
 from routers.osce_generator import router as osce_generator_router
 from routers.case_player.final_osce_feedback import router as final_osce_feedback_router
 from routers.record_osce_score import router as osce_score_router
+from routers.student_performance_api import performance_router
 api_router = APIRouter()
 
 class StudentAction(BaseModel):
@@ -99,6 +100,7 @@ api_router.include_router(treatment_plan_router)
 api_router.include_router(osce_generator_router)
 api_router.include_router(final_osce_feedback_router)
 api_router.include_router(osce_score_router)
+api_router.include_router(performance_router)
 @api_router.get("/cases", response_model=List[CaseInfo])
 async def list_cases():
     """List all available cases by reading case_cover.json files"""

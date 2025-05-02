@@ -361,3 +361,27 @@ def get_authenticated_client() -> Client:
 def get_client() -> Client:
     """Get the Supabase client"""
     return supabase 
+
+async def is_admin() -> bool:
+    """
+    Check if the current user has admin privileges.
+    
+    Returns:
+        bool: True if user is an admin, False otherwise
+    """
+    try:
+        user_response = await get_user()
+        
+        if not user_response["success"]:
+            print(f"Admin check failed: {user_response.get('error', 'User not authenticated')}")
+            return False
+        
+        user_role = user_response["user"].get("role")
+        is_admin_role = user_role == "admin"
+        
+        print(f"Admin check: User role is '{user_role}', admin status: {is_admin_role}")
+        return is_admin_role
+        
+    except Exception as e:
+        print(f"Error checking admin status: {str(e)}")
+        return False 

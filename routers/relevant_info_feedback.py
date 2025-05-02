@@ -44,7 +44,7 @@ def get_critical_findings(case_id: str) -> str:
         with open(findings_path, 'r') as file:
             findings_data = json.load(file)
             # Format the critical findings as a bulleted list for the prompt
-            return "\n".join(f"- {item}" for item in findings_data["critical_findings"])
+            return "\n".join(f"- {item}" for item in findings_data["critical_findings_with_relevance"])
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail=f"Critical findings not found for case ID: {case_id}")
     except json.JSONDecodeError:

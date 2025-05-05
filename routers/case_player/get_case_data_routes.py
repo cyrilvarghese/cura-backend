@@ -105,6 +105,7 @@ async def get_case_data(case_id: str):
         # Define paths for the case data and case cover
         data_file_path = os.path.join('case-data', f'case{case_id}', 'test_exam_data.json')
         cover_file_path = os.path.join('case-data', f'case{case_id}', 'case_cover.json')
+        diagnosis_context_path = os.path.join('case-data', f'case{case_id}', 'diagnosis_context.json')
         
         # Check if files exist
         if not os.path.exists(data_file_path):
@@ -118,6 +119,17 @@ async def get_case_data(case_id: str):
                 data = json.load(file)
             with open(cover_file_path, 'r') as cover_file:
                 case_cover_data = json.load(cover_file)
+                
+            # Load diagnosis context if available
+            diagnosis_context_data = {}
+            if os.path.exists(diagnosis_context_path):
+                try:
+                    with open(diagnosis_context_path, 'r') as context_file:
+                        diagnosis_context_data = json.load(context_file)
+                except json.JSONDecodeError as json_error:
+                    print(f"Invalid JSON in diagnosis_context.json: {str(json_error)}")
+                except Exception as file_error:
+                    print(f"Error reading diagnosis_context.json: {str(file_error)}")
         except json.JSONDecodeError as json_error:
             raise HTTPException(
                 status_code=500,
@@ -133,7 +145,8 @@ async def get_case_data(case_id: str):
             "content": {
                 "physical_exam": data.get("physical_exam", {}),
                 "lab_test": data.get("lab_test", {}),
-                "case_cover": case_cover_data
+                "case_cover": case_cover_data,
+                "diagnosis_context": diagnosis_context_data
             }
         }
         

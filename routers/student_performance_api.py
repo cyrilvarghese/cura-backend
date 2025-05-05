@@ -15,12 +15,12 @@ class StudentCaseComparison(BaseModel):
     student_id: str
     case_id: str
     primary_diagnosis: Optional[str] = None
-    student_history: Optional[str] = None
-    student_physicals: Optional[str] = None
-    student_tests: Optional[str] = None
-    student_diagnosis: Optional[str] = None
-    student_reasoning: Optional[str] = None
-    student_differentials: Optional[str] = None
+    student_history: Optional[float] = None
+    student_physicals: Optional[float] = None
+    student_tests: Optional[float] = None
+    student_diagnosis: Optional[float] = None
+    student_reasoning: Optional[float] = None
+    student_differentials: Optional[float] = None
     avg_history: Optional[float] = None
     max_history: Optional[float] = None
     avg_physicals: Optional[float] = None
@@ -145,9 +145,10 @@ async def get_student_case_comparison():
                                'student_diagnosis', 'student_reasoning', 'student_differentials']:
                 if row.get(score_field) is not None:
                     try:
-                        row[score_field] = str(float(row[score_field]))
+                        # Simply convert to float
+                        row[score_field] = float(row[score_field])
                     except (ValueError, TypeError):
-                        pass  # Keep as string if conversion fails
+                        pass  # Keep as is if conversion fails
             
             # Add primary diagnosis for the case
             row['primary_diagnosis'] = get_primary_diagnosis(row['case_id'])
@@ -218,9 +219,10 @@ async def get_student_case_comparison_by_case(case_id: str):
                           'student_diagnosis', 'student_reasoning', 'student_differentials']:
             if row.get(score_field) is not None:
                 try:
-                    row[score_field] = str(float(row[score_field]))
+                    # Simply convert to float
+                    row[score_field] = float(row[score_field])
                 except (ValueError, TypeError):
-                    pass  # Keep as string if conversion fails
+                    pass  # Keep as is if conversion fails
         
         # Add primary diagnosis for the case
         row['primary_diagnosis'] = get_primary_diagnosis(case_id)

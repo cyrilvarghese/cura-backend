@@ -169,27 +169,29 @@ async def ask_patient(student_query: str, case_id: str = "1", thread_id: str = N
             config={"configurable": {"thread_id": thread_id}}
         )
         
+       
+        
         # Parse the JSON string and extract content
         content = clean_code_block(response['messages'][-1].content)
         try:
             response_obj = json.loads(content)
-            content = response_obj.get('content', content)  # Fallback to original content if parsing fails
+            answer = response_obj.get('content', content)  # Fallback to original content if parsing fails
         except json.JSONDecodeError:
             # Keep the original content if JSON parsing fails
-            pass
+            answer = content
         
         # Track the history-taking question in the session
-        session_manager.add_history_question(student_id, case_id, student_query, content)
+        session_manager.add_history_question(student_id, case_id, student_query, answer)
         
         # Print in specified format
         print(f"Thread ID: {thread_id}")
         print(f"Case ID: {case_id}")
         print(f"Student ID: {student_id}")
-        print(f"Message: {content}")
+        print(f"Message: {answer}")
         print("="*50)
         
         return {
-            "response": content,
+            "response": content,  # Return the full JSON structure as is
             "thread_id": thread_id,
             "case_id": case_id,
             "student_id": student_id

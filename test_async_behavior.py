@@ -72,46 +72,67 @@ async def test_multiple_api_calls():
         "student_inputs_monitoring": ["monitor1", "monitor2", "monitor3"]
     }
     
-    start_time = time.perf_counter()  # Use perf_counter for more precise timing
+    start_time = time.perf_counter()
     
-    # Make multiple concurrent API calls
-    async with TestClient(router) as client:
+    # Import the actual app instead of just the router
+    from main import app  # Make sure to import your FastAPI app
+    
+    # Use TestClient in a way that actually tests the real endpoints
+    client = TestClient(app)
+    
+    # Make multiple API calls in sequence to measure baseline
+    sequential_start = time.perf_counter()
+    
+    response1 = client.post("/feedback/pre_treatment_gemini", json=test_data)
+    response2 = client.post("/feedback/monitoring_gemini", json=test_data)
+    response3 = client.post("/feedback/pre_treatment_gemini", json=test_data)
+    
+    sequential_time = time.perf_counter() - sequential_start
+    
+    # Now test concurrent behavior using asyncio and httpx for true async HTTP requests
+    import httpx
+    
+    async_start = time.perf_counter()
+    
+    # Use httpx.AsyncClient for true asynchronous HTTP requests
+    async with httpx.AsyncClient(app=app, base_url="http://test") as async_client:
         tasks = [
-            client.post("/feedback/pre_treatment_gemini", json=test_data),
-            client.post("/feedback/monitoring_gemini", json=test_data),
-            client.post("/feedback/pre_treatment_gemini", json=test_data)
+            async_client.post("/feedback/pre_treatment_gemini", json=test_data),
+            async_client.post("/feedback/monitoring_gemini", json=test_data),
+            async_client.post("/feedback/pre_treatment_gemini", json=test_data)
         ]
         
         responses = await asyncio.gather(*tasks)
     
-    total_time = time.perf_counter() - start_time
-    expected_sequential_time = 6.0  # Assuming each call takes ~2s
+    concurrent_time = time.perf_counter() - async_start
     
-    # Calculate efficiency metrics with safeguards
-    efficiency = min(100, ((expected_sequential_time - total_time) / expected_sequential_time * 100))
+    # Calculate efficiency metrics
+    efficiency = min(100, ((sequential_time - concurrent_time) / sequential_time * 100)) if sequential_time > 0 else 0
     
     print("\n=== API Concurrency Analysis ===")
-    print(f"Total time for 3 API calls: {total_time:.2f}s")
-    print(f"Expected sequential time: {expected_sequential_time:.2f}s")
+    print(f"Sequential time for 3 API calls: {sequential_time:.2f}s")
+    print(f"Concurrent time for 3 API calls: {concurrent_time:.2f}s")
     print(f"Efficiency gained: {efficiency:.1f}%")
     
     if efficiency > 60:
-        print("\n✅ EXCELLENT! API calls are running highly concurrently!")
+        print("\n✅ EXCELLENT! API endpoints are truly asynchronous!")
     elif efficiency > 40:
-        print("\n✅ GOOD! API calls show good concurrent behavior.")
+        print("\n✅ GOOD! API endpoints show good asynchronous behavior.")
     elif efficiency > 20:
-        print("\n⚠️ FAIR. API calls show some concurrency but could be improved.")
+        print("\n⚠️ FAIR. API endpoints show some asynchronicity but could be improved.")
     else:
-        print("\n❌ POOR. API calls are running almost sequentially.")
+        print("\n❌ POOR. API endpoints are running almost sequentially.")
+        print("Check for blocking operations in your endpoint handlers.")
     
     # Verify all requests succeeded
     for response in responses:
         assert response.status_code == 200
     
-    # Updated assertion with more realistic timing expectation
-    assert total_time < expected_sequential_time, (
-        f"API calls appear to be running sequentially. "
-        f"Expected less than {expected_sequential_time:.2f}s, got {total_time:.2f}s"
+    # Assert that concurrent execution is significantly faster
+    assert concurrent_time < sequential_time * 0.7, (
+        f"API endpoints don't appear to be truly asynchronous. "
+        f"Expected concurrent time to be at least 30% faster than sequential time. "
+        f"Sequential: {sequential_time:.2f}s, Concurrent: {concurrent_time:.2f}s"
     )
 
 if __name__ == "__main__":

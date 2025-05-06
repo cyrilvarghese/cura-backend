@@ -23,6 +23,7 @@ class OSCEScoreSubmission(BaseModel):
     case_id: str
     overallPerformance: OSCEScoreDetails
     performanceByQuestionType: QuestionTypePerformance
+    department: str
 
 @router.post("/record-osce-score")
 async def record_osce_score(
@@ -87,7 +88,7 @@ async def record_osce_score(
         # Submit the complete session data to Supabase
         print(f"[OSCE_SCORE] 🚀 Submitting session data to Supabase...")
         try:
-            supabase_result = await submit_session_to_supabase(session_data)
+            supabase_result = await submit_session_to_supabase(session_data, request.department)
             print(f"[OSCE_SCORE] ✅ Session data submitted to Supabase successfully!")
             print(f"[OSCE_SCORE] Supabase result: {json.dumps(supabase_result, indent=2)}")
         except Exception as supabase_error:

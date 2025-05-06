@@ -36,7 +36,7 @@ def extract_rubric_scores(interactions: Dict[str, Any]) -> Dict[str, Any]:
     print(f"[SUPABASE] Extracted rubric scores: {json.dumps(scores, indent=2)}")
     return scores
 
-async def submit_session_to_supabase(session_data: Dict[str, Any]) -> Dict[str, Any]:
+async def submit_session_to_supabase(session_data: Dict[str, Any], department: str) -> Dict[str, Any]:
     """Submit complete session data to Supabase after OSCE score is recorded."""
     try:
         print(f"[SUPABASE] Beginning session submission process...")
@@ -95,7 +95,8 @@ async def submit_session_to_supabase(session_data: Dict[str, Any]) -> Dict[str, 
             "final_diagnosis": final_diagnosis,
             "osce_score_summary": osce_summary,
             "feedback_summary": feedback_summary,
-            "inserted_at": now
+            "inserted_at": now,
+            "department": department
         }
         
         # Print size of payload for debugging

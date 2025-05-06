@@ -22,7 +22,7 @@
 
 1.  **Evaluate Student Questions for Relevance:**
     *   Iterate through each question in `{{student_questions}}`.
-    *   For each question, assess its relevance to the `{{case_context}}`. Be **generous** and assume good intent. Grade as either `"relevant"` or `"non-relevant"`.
+    *   For each question, assess its relevance to the `{{case_context}}`. Be **generous** and assume good intent. Grade as either `"relevant"` or `"non-relevant"`. questions that are generic like generic greetings or small talk are relevant as it leads to a better patient relationship.
     *   Provide a brief (`~10-15 words`) `reason` explaining the relevance grade.
     *   Compile these evaluations into the `student_question_evaluation` array.
 

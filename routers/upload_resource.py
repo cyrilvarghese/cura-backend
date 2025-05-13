@@ -64,22 +64,26 @@ async def upload_document(
     files: List[UploadFile] = File(...),
     titles: List[str] = Form(...),
     descriptions: List[str] = Form(None),
-    department_name: str = Form(...)
+    department_name: str = Form(...),
+    department_id: int = Form(...)
 ):
     """Upload multiple documents and optionally convert to Google Docs"""
+    # Initialize uploaded_files list here so it's always defined
+    uploaded_files = []
+    
     try:
         # Get department ID from name
-        department_id = await SupabaseDocumentOps.get_department_id(department_name)
+        # department_id = await SupabaseDocumentOps.get_department_id(department_name)
         
         # Create uploads directory if it doesn't exist
         upload_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         upload_dir.mkdir(exist_ok=True)
         
         responses = []
-        uploaded_files = []
         
         # Process each file
         for file, title, description in zip(files, titles, descriptions or [None] * len(files)):
+            file_path = None
             try:
                 # Check for duplicates
                 is_duplicate = await SupabaseDocumentOps.check_duplicate(title, department_id)
@@ -93,7 +97,9 @@ async def upload_document(
                 file_path = upload_dir / file.filename
                 with file_path.open("wb") as buffer:
                     shutil.copyfileobj(file.file, buffer)
-                uploaded_files.append(file_path)
+                
+                if file_path:
+                    uploaded_files.append(file_path)
                                 
                 # Determine file type and handle accordingly
                 file_type = "MARKDOWN" if file.filename.endswith('.md') else "PDF"
@@ -108,7 +114,6 @@ async def upload_document(
                     google_doc_id, google_doc_link = docs_manager.create_doc(title, content)
                 
                 # Insert document into Supabase
-                
                 doc_data = await SupabaseDocumentOps.insert_document(
                     title=title,
                     file_type=file_type,
@@ -136,7 +141,7 @@ async def upload_document(
                 
             except Exception as e:
                 # Clean up this file if there was an error
-                if file_path.exists():
+                if file_path and file_path.exists():
                     try:
                         os.remove(file_path)
                     except:
@@ -149,7 +154,8 @@ async def upload_document(
         # Clean up any uploaded files
         for file_path in uploaded_files:
             try:
-                os.remove(file_path)
+                if file_path.exists():
+                    os.remove(file_path)
             except:
                 pass
         

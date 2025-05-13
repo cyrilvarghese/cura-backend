@@ -96,7 +96,7 @@ async def submit_session_to_supabase(session_data: Dict[str, Any], department: s
             "osce_score_summary": osce_summary,
             "feedback_summary": feedback_summary,
             "inserted_at": now,
-            "department": department
+            "department": department.lower() if department else None
         }
         
         # Print size of payload for debugging

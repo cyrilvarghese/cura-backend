@@ -24,7 +24,7 @@
 *   `past_medical_history`: Past illnesses, surgeries, relevant health events.
 *   `family_history`: Genetic, hereditary, or exposure-based risks.
 *   `medications`: Drug history, allergies, recent treatments (incl. OTC/supplements).
-*   `social_exposure`: Lifestyle, occupational, travel, sexual history, triggers, diet.
+*   `social_exposure_and_lifestyle`: Lifestyle, occupational, travel, sexual history, triggers, diet.
 *   `red_flag_symptoms`: Systemic signs suggesting severe disease or complications.
 *   `differential_diagnoses`: Questions specifically aimed at distinguishing between likely possibilities.
 

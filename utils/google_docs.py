@@ -380,8 +380,8 @@ class GoogleDocsManager:
             print(f"Full traceback: {traceback.format_exc()}")
             return None
 
-    def list_folder_files(self) -> list:
-        """List all files in the designated folder with their statuses"""
+    def list_folder_files(self, department_id: Optional[str] = None) -> list:
+        print(f"list_folder_files called with dept={department_id}")
         try:
             # Get files from Google Drive
             results = self.drive_service.files().list(
@@ -395,42 +395,68 @@ class GoogleDocsManager:
             supabase = get_client()
             session = supabase.auth.get_session()
             
-            
-            
             # Query will automatically include auth headers
-            supabase_result = supabase.table("documents")\
-                .select("google_doc_id, status, approved_by, approved_at, approved_by_email, approved_by_username")\
-                .execute()
+            query = supabase.table("documents")\
+                .select("google_doc_id, status, approved_by, approved_at, approved_by_email, approved_by_username, department_id")
             
-             # Create a dictionary of document data from Supabase
-            supabase_docs = {
-                doc['google_doc_id']: {
-                    'status': doc['status'],
-                    'approved_by': doc['approved_by'],
-                    'approved_at': doc['approved_at'],
-                    'approved_by_email': doc['approved_by_email'],
-                    'approved_by_username': doc['approved_by_username']
-                } 
-                for doc in supabase_result.data
-            } if supabase_result.data else {}
-
-            # Combine Drive and Supabase data
-            for file in files:
-                doc_data = supabase_docs.get(file['id'], {
-                    'status': 'CASE_REVIEW_PENDING',
-                    'approved_by': None,
-                    'approved_at': None,
-                    'approved_by_email': None,
-                    'approved_by_username': None
-                })
+            # Apply department filter if provided
+            if department_id:
+                print(f"Filtering Supabase query by department_id: {department_id}")
+                query = query.eq("department_id", department_id)
+            else:
+                print("No department_id filter applied to Supabase query")
                 
-                file['status'] = doc_data['status']
-                file['approved_by'] = doc_data['approved_by']
-                file['approved_at'] = doc_data['approved_at']
-                file['approved_by_email'] = doc_data['approved_by_email']
-                file['approved_by_username'] = doc_data['approved_by_username']
+            supabase_result = query.execute()
+            
+            # Log the query results
+            print(f"Supabase query executed, got {len(supabase_result.data)} records")
+            if supabase_result.data:
+                print(f"First record: {supabase_result.data[0]}")
+                # Log department_ids present in results
+                dept_ids = [doc.get('department_id') for doc in supabase_result.data]
+                print(f"Department IDs in results: {dept_ids}")
 
-            return files
+            # Create a dictionary of Google Drive files for easier lookup
+            drive_files_dict = {file['id']: file for file in files}
+            print(f"Created lookup dictionary with {len(drive_files_dict)} Google Drive files")
+            
+            # Combine Supabase and Drive data
+            # Start with Supabase docs (which are already filtered by department_id if needed)
+            combined_files = []
+            for doc in supabase_result.data:
+                doc_id = doc.get('google_doc_id')
+                if not doc_id:
+                    print(f"Warning: Missing google_doc_id in record: {doc}")
+                    continue
+                    
+                # Check if this document exists in Google Drive
+                if doc_id in drive_files_dict:
+                    print(f"Found matching Google Drive file for {doc_id}")
+                    # Get the Google Drive file data
+                    drive_file = drive_files_dict[doc_id]
+                    
+                    # Create a combined record
+                    combined_file = {
+                        'id': doc_id,
+                        'name': drive_file.get('name', ''),
+                        'webViewLink': drive_file.get('webViewLink', ''),
+                        'createdTime': drive_file.get('createdTime', ''),
+                        'modifiedTime': drive_file.get('modifiedTime', ''),
+                        'status': doc.get('status', 'CASE_REVIEW_PENDING'),
+                        'approved_by': doc.get('approved_by'),
+                        'approved_at': doc.get('approved_at'),
+                        'approved_by_email': doc.get('approved_by_email'),
+                        'approved_by_username': doc.get('approved_by_username'),
+                        'department_id': doc.get('department_id')
+                    }
+                    
+                    combined_files.append(combined_file)
+                    
+                else:
+                    print(f"Warning: Document {doc_id} exists in Supabase but not in Google Drive")
+            
+            print(f"Returning {len(combined_files)} combined files")
+            return combined_files
 
         except Exception as e:
             print(f"Error listing files: {str(e)}")

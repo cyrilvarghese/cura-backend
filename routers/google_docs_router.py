@@ -50,7 +50,7 @@ class CommentModel(BaseModel):
     quotedText: Optional[str] = None
 
 @router.get("/google-docs", response_model=List[GoogleDocFile])
-async def list_google_docs():
+async def list_google_docs(department_id: Optional[str] = None):
     """List all Google Docs in the designated folder with their comment counts"""
     try:
         # Define an async function to wrap the synchronous call
@@ -58,9 +58,9 @@ async def list_google_docs():
             docs_manager = GoogleDocsManager()
             # If list_folder_files is synchronous, run it in a thread pool
             if asyncio.iscoroutinefunction(docs_manager.list_folder_files):
-                files = await docs_manager.list_folder_files()
+                files = await docs_manager.list_folder_files(department_id=department_id)
             else:
-                files = await asyncio.to_thread(docs_manager.list_folder_files)
+                files = await asyncio.to_thread(docs_manager.list_folder_files, department_id=department_id)
             return files
         
         # Use wait_for which works in all Python versions

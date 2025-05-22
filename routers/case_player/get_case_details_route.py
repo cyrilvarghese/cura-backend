@@ -5,6 +5,7 @@ import json
 import os
 import traceback
 import dateutil.parser
+import shutil
 
 from routers.curriculum import get_db_connection
 
@@ -13,11 +14,75 @@ case_details_router = APIRouter()
 class CaseDetailsResponse(BaseModel):
     content: Dict[str, Any]
 
+def update_case_doc_from_uploads(case_id: str) -> bool:
+    """
+    Update the case_doc.txt file from the @uploads folder for the given case_id.
+    Returns True if successfully updated, False otherwise.
+    """
+    try:
+        # Get case_cover.json path
+        case_base_path = os.path.join('case-data', f'case{case_id}')
+        cover_file_path = os.path.join(case_base_path, 'case_cover.json')
+        
+        # Check if cover file exists
+        if not os.path.exists(cover_file_path):
+            print(f"ERROR: Case cover file not found at: {cover_file_path}")
+            return False
+            
+        # Read case_cover.json to get case_name
+        with open(cover_file_path, 'r') as file:
+            case_data = json.load(file)
+            case_name = case_data.get('case_name')
+            
+        if not case_name:
+            print(f"ERROR: No case_name found in case cover file")
+            return False
+            
+        # Get uploads directory from environment variable
+        upload_dir = os.getenv("UPLOADS_DIR", "case-data/uploads")
+        
+        # Look for the exact file with the extension as specified in case_name
+        file_path = os.path.join(upload_dir, case_name)
+        
+        if not os.path.exists(file_path):
+            print(f"WARNING: File not found in uploads: {file_path}")
+            return False
+            
+        # Copy the found file to case_doc.txt in the case folder
+        target_path = os.path.join(case_base_path, 'case_doc.txt')
+        
+        # If the file is a text file or markdown, copy content directly
+        if file_path.endswith(('.txt', '.md')):
+            with open(file_path, 'r', encoding='utf-8') as source:
+                content = source.read()
+                with open(target_path, 'w', encoding='utf-8') as target:
+                    target.write(content)
+            print(f"SUCCESS: Copied text content from {file_path} to case_doc.txt")
+        # For other file types, perform direct file copy
+        else:
+            print(f"NOTE: Non-text file found ({file_path}). Direct copy performed.")
+            shutil.copy2(file_path, target_path)
+            
+        print(f"SUCCESS: Updated case_doc.txt for case {case_id} from {file_path}")
+        return True
+        
+    except Exception as e:
+        print(f"ERROR updating case_doc.txt: {str(e)}")
+        traceback.print_exc()
+        return False
+
 @case_details_router.get("/case-details/{case_id}", response_model=CaseDetailsResponse)
 async def get_case_details(case_id: str):
     case_base_path = os.path.join('case-data', f'case{case_id}')
     print(f"\nAccessing case directory: {case_base_path}")
     
+    # Try to update the case document
+    update_result = update_case_doc_from_uploads(case_id)
+    if update_result:
+        print(f"Case document was successfully updated from @uploads folder")
+    else:
+        print(f"No updates made to case document or update failed")
+
     # Define all required file paths with correct structure
     data_file_path = os.path.join(case_base_path, 'test_exam_data.json')
     cover_file_path = os.path.join(case_base_path, 'case_cover.json')

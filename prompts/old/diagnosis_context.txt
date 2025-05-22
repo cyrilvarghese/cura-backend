@@ -13,8 +13,8 @@ Analyze the input text and generate a JSON object containing:
 2.  `keyEvidence`: 3-5 critical findings (Hx, Sx, Exam, Test results) supporting the diagnosis (*Keep this focused on the most discriminating evidence for reasoning evaluation*).
 3.  `physicalExams`: **All relevant physical examinations** mentioned or implied in the master case document. Include `name`, `purpose` (specific relevance, if stated/inferable), `generalDescription` (if inferable/standard), and optional `educationalTip`.
 4.  `diagnosticTests`: **All relevant diagnostic tests** (labs, imaging, procedures) mentioned in the master case document. Include `name`, `purpose` (specific relevance, if stated/inferable), `generalDescription` (if inferable/standard), and optional `educationalTip`.
-5.  `differentials`: **All differential diagnoses** explicitly listed in the master case document. Include `name`, `primaryDifferentiator` (reason it's less likely *in this case*, if stated), and optional `educationalTip`.
-
+5.  `keyCorrectDifferentials`: **All correct differential diagnoses** explicitly listed in the master case document. Include `name`, `primaryDifferentiator` (reason it's less likely *in this case*, if stated), and optional `educationalTip`.
+6.  `keyIncorrectDifferentials`: **All incorrect differential diagnoses** explicitly listed in the master case document. Include `name`, `primaryDifferentiator` (reason it's incorrect *in this case*, if stated), and optional `educationalTip`.
 **Output:** Respond with *only* the valid JSON object adhering to the structure below.
 
 **JSON Structure:**
@@ -28,7 +28,10 @@ Analyze the input text and generate a JSON object containing:
   "keyDiagnosticTests": [
     {{"name": "String", "purpose": "String", "generalDescription": "String", "educationalTip": "String | Null"}}
   ],
-  "keyDifferentials": [
+  "keyCorrectDifferentials": [
+    {{"name": "String", "primaryDifferentiator": "String", "educationalTip": "String | Null"}}
+  ],
+  "keyIncorrectDifferentials": [
     {{"name": "String", "primaryDifferentiator": "String", "educationalTip": "String | Null"}}
   ]
 }}

@@ -20,7 +20,7 @@ You will receive:
 
 ### 🎯 Your Objective:
 
-Generate a bundle of **10 challenging and clinically relevant** OSCE-style questions designed to assess the student's understanding *after* completing the clinical case simulation.
+Generate a bundle of **3 challenging and clinically relevant** OSCE-style questions designed to assess the student's understanding *after* completing the clinical case simulation.
 
 The questions must:
 

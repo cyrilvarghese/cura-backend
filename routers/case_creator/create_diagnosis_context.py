@@ -75,7 +75,7 @@ async def create_diagnosis_context(request: CreateDiagnosisContextRequest):
             raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
 
         print(f"[{datetime.now()}] Loading prompt...")
-        prompt = load_prompt("prompts/diagnosis_context.txt")
+        prompt = load_prompt("prompts/diagnosis_context_v2.txt")
         
         # Format the prompt with the case document
         formatted_prompt = prompt.format(full_case_document=case_document)

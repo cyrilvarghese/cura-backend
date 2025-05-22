@@ -75,7 +75,7 @@ async def create_differential_diagnosis(request: CreateDiffDiagnosisRequest):
             raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
 
         # Load the meta prompt
-        prompt = load_prompt("prompts/diagnosis_context.txt")
+        prompt = load_prompt("prompts/diagnosis_context_v2.txt")
         
         # Escape curly braces in the meta prompt
         prompt = prompt.replace("{", "{{").replace("}", "}}")

@@ -10,6 +10,7 @@ from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
 from auth.auth_api import get_user
 import asyncio
+from routers.case_player.diagnosis_feedback_v2 import router as diagnosis_feedback_v2_router
 
 # Load environment variables
 load_dotenv()
@@ -172,4 +173,6 @@ async def get_diagnosis_feedback():
     except Exception as e:
         error_msg = f"Error in get_diagnosis_feedback: {str(e)}"
         print(f"[{datetime.now()}] ❌ {error_msg}")
-        raise HTTPException(status_code=500, detail=error_msg) 
+        raise HTTPException(status_code=500, detail=error_msg)
+
+ 

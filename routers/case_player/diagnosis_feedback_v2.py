@@ -262,7 +262,7 @@ async def get_educational_resources():
         diagnosis_context = await load_diagnosis_context(int(case_id))
         
         # Generate the educational capsules
-        start_time = datetime.now()
+        start_time = datetime.now() 
         feedback_result = await generate_feedback(
             prompt_template=EDUCATIONAL_CAPSULES_PROMPT,
             diagnosis_context=diagnosis_context,

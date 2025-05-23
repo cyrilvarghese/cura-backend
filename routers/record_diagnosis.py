@@ -10,6 +10,7 @@ router = APIRouter()
 class DiagnosisSubmission(BaseModel):
     case_id: str
     primary_diagnosis: str
+    incorrect_differentials: List[str]
     reason: str
     differentials: List[str]  # Simple array of strings
 
@@ -39,7 +40,8 @@ async def record_diagnosis(
         diagnosis_data = {
             "primary_diagnosis": request.primary_diagnosis,
             "reason": request.reason,
-            "differentials": request.differentials,  # Now just an array of strings
+            "differentials": request.differentials, 
+            "incorrect_differentials": request.incorrect_differentials, # Now just an array of strings
             "timestamp": datetime.now().isoformat()
         }
         

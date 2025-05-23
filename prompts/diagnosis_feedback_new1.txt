@@ -24,26 +24,26 @@
     ```
 
 **Instructions:**
-As the AI Teaching Assistant, evaluate the student's approach to the primary diagnosis as follows:
+As the AI Teaching Assistant, evaluate the student's approach to the final diagnosis as follows:
 
-1.  **Score Primary Diagnosis Accuracy (1-5):**
-    *   Compare the student's `STUDENT_SESSION_JSON.interactions.diagnosis_submission.primary_diagnosis` with `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`.
+1.  **Score final diagnosis accuracy (1-5):**
+    *   Compare the student's `STUDENT_SESSION_JSON.interactions.diagnosis_submission.final_diagnosis.final_diagnosis` with `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`.
     *   Assign a score: 5 = Perfect match. 3-4 = Close/Plausible but not exact. 1-2 = Significantly incorrect.
-    *   Provide a concise `explanation` for this score.
-2.  **Score Evidence Gathering for Primary Dx (History, Exams, Labs) (1-5):**
+    *   Provide a concise `explanation` for this score comparing the student's final reasoning with  keyEvidence from `DIAGNOSIS_CONTEXT_JSON`.
+2.  **Score Evidence Gathering for final diagnosis (History, Exams, Labs) (1-5):**
     *   Review all `keyEvidence` points for the `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`.
     *   Assess student's coverage of this key evidence through history, exams, and labs.
     *   Note any irrelevant exams/tests performed.
     *   Assign a score based on comprehensiveness and relevance: 5 = Gathered all/most key supporting evidence with minimal irrelevant actions. 1 = Missed most key evidence, or many irrelevant actions.
     *   **For the `evidenceGatheringExplanation` (which is an object):** Keep each point brief and direct.
         *   `overallSummary`: A very brief (1 sentence) overall comment.
-        *   `historyStrengths`: Briefly list 1-2 key history points successfully elicited for the primary Dx.
-        *   `examStrengths`: Briefly list 1-2 essential exams performed relevant to the primary Dx.
-        *   `testStrengths`: Briefly list 1-2 key tests ordered relevant to the primary Dx.
-        *   `areasForImprovement_Exams`: Briefly list 1-2 specific *essential* exams for primary Dx that were missed.
-        *   `areasForImprovement_Tests`: Briefly list 1-2 specific *key* tests for primary Dx that were missed.
+        *   `historyStrengths`: Briefly list 1-2 key history points successfully elicited for the final diagnosis.
+        *   `examStrengths`: Briefly list 1-2 essential exams performed relevant to the final diagnosis.
+        *   `testStrengths`: Briefly list 1-2 key tests ordered relevant to the final diagnosis.
+        *   `areasForImprovement_Exams`: Briefly list 1-2 specific *essential* exams for final diagnosis that were missed.
+        *   `areasForImprovement_Tests`: Briefly list 1-2 specific *key* tests for final diagnosis that were missed.
         *   `irrelevantActionsNoted`: Briefly mention 1-2 irrelevant exams/tests if performed. (Empty array if none).
-3.  **Detail ALL Supporting Evidence for the Correct Primary Diagnosis:** (Instructions remain the same)
+3.  **Detail ALL Supporting Evidence for the Correct final diagnosis:** (Instructions remain the same)
 4.  **Detail Missed Crucial Evidence:** (Instructions remain the same)
 
 **Output:** Respond *only* with a valid JSON object, structured as follows:
@@ -51,12 +51,12 @@ As the AI Teaching Assistant, evaluate the student's approach to the primary dia
 {{ 
   "primaryDxFeedback": {{ 
     "studentStated": {{
-      "dx": "string",//student_primary_diagnosis_name
-      "isCorrect": "boolean" //true if student_primary_diagnosis_name is correct, false otherwise
+      "dx": "string",//student_final_diagnosis_name
+      "isCorrect": "boolean" //true if student_final_diagnosis_name is correct, false otherwise
     }},
       "scores": {{
         "accuracyScore": "number (1-5)",
-        "accuracyExplanation": "string (Concise)",
+        "accuracyExplanation": "string (20 word explanation comparing the student's final reasoning with keyEvidence from DIAGNOSIS_CONTEXT_JSON)",
         "evidenceGatheringScore": "number (1-5)",
         "evidenceGatheringExplanation": {{ 
             "overallSummary": "string (Brief: 1 sentence)",
@@ -71,14 +71,14 @@ As the AI Teaching Assistant, evaluate the student's approach to the primary dia
       "correctPrimary": {{
       "dx": "string",//correct_primary_diagnosis_name
       "allSupportingEvidence": {{ 
-        "history": [ 
+        "history": [  //top 3 critical history points
           {{
             "desc": "string",
             "alignsWithKeyEvidence": "string",
             "studentDidIdentify": "boolean"
           }}
         ],
-        "exams": [ 
+        "exams": [ //top 3 critical exams
           {{
             "name": "string",
             "expectedFindingSupportingDx": "string",
@@ -87,7 +87,7 @@ As the AI Teaching Assistant, evaluate the student's approach to the primary dia
             "studentDidIdentifyFinding": "boolean"
           }}
         ],
-        "tests": [ 
+        "tests": [ //top 3 critical tests
           {{
             "name": "string",
             "expectedResultSupportingDx": "string",
@@ -99,14 +99,14 @@ As the AI Teaching Assistant, evaluate the student's approach to the primary dia
       }}
     }},
     "missedCrucialEvidence": {{ 
-      "missedExams": [ 
+      "missedExams": [ //all exams missed as per DIAGNOSIS_CONTEXT_JSON
         {{
           "name": "string",
           "relevance": "string",
           "educationalTip": "string | null"
         }}
       ],
-      "missedLabs": [ 
+      "missedLabs": [ //all labs missed as per DIAGNOSIS_CONTEXT_JSON -
         {{
           "testName": "string",
           "relevance": "string",

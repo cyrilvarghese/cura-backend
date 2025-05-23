@@ -366,4 +366,38 @@ class SessionManager:
         if os.path.exists(file_path):
             with open(file_path, 'r') as f:
                 return json.load(f)
-        return None 
+        return None
+
+    def get_session_by_id(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """Retrieve a session by its ID (student_id in our case)."""
+        return self.get_session(session_id)
+
+    def add_treatment_feedback(self, student_id: str, feedback_result: Dict[str, Any]) -> Dict[str, Any]:
+        """Add treatment plan feedback results to the session.
+        
+        Args:
+            student_id (str): The ID of the student
+            feedback_result (Dict[str, Any]): The treatment feedback results to store
+            
+        Returns:
+            Dict[str, Any]: The updated session data
+        """
+        file_path = self._get_session_file_path(student_id)
+        session_data = self.get_session(student_id)
+        
+        if not session_data:
+            raise ValueError("No active session found")
+        
+        # Initialize feedback structure if it doesn't exist
+        if "feedback" not in session_data["interactions"]:
+            session_data["interactions"]["feedback"] = {}
+            
+        # Store the feedback results
+        session_data["interactions"]["feedback"]["treatment_plan"] = {
+            "feedback": feedback_result,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Save the updated session
+        self._save_session(file_path, session_data)
+        return session_data 

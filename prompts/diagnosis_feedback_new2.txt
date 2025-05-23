@@ -28,9 +28,9 @@
 As the AI Teaching Assistant, evaluate the student's differential diagnosis reasoning as follows:
 
 1.  **Score Differential List Match (1-5):**
-    *   Compare the student's submitted differentials (`STUDENT_SESSION_JSON.interactions.diagnosis_submission.differentials`) against the union of names from `DIAGNOSIS_CONTEXT_JSON.plausibleDifferentials` and `DIAGNOSIS_CONTEXT_JSON.ruledOutDifferentials`.
-    *   Assess how many relevant `plausibleDifferentials` the student included.
-    *   Note if the student correctly avoided listing `ruledOutDifferentials` as strong possibilities, or if they appropriately recognized them as ruled out.
+    *   Compare the student's submitted differentials (`STUDENT_SESSION_JSON.interactions.diagnosis_submission.differentials`) against the names from `DIAGNOSIS_CONTEXT_JSON.plausibleDifferentials` .
+    *   Assess how many relevant `plausibleDifferentials` the student included
+    *   Note if the student marked incorrect differentials (STUDENT_SESSION_JSON.interactions.diagnosis_submission.incorrect_differentials ) against the names from DIAGNOSIS_CONTEXT_JSON.ruledOutDifferentials
     *   Note if the student included any differentials not listed in either context list and assess if those are contextually appropriate or irrelevant for this specific case presentation.
     *   Assign a score: 5 = Excellent match – included most/all `plausibleDifferentials`, correctly handled/avoided `ruledOutDifferentials`, no clearly irrelevant additions. 3-4 = Good coverage, perhaps missed one plausible DDx or included a mildly questionable one/mismanaged a ruled-out one. 1-2 = Poor match, many plausible DDx missed or several clearly irrelevant/ruled-out ones listed as strong possibilities.
     *   Provide an `explanation` for this score, addressing the student directly (e.g., "You correctly identified X and Y from the plausible differentials. It was good that you avoided Z, which is clearly ruled out here because [...]. However, you listed A which is less relevant because... and you missed considering the important plausible alternative of B...").
@@ -55,7 +55,7 @@ As the AI Teaching Assistant, evaluate the student's differential diagnosis reas
       {{
         "dx": "string", //differential diagnosis name
         "isPlausibleDifferential_InContext": "boolean", 
-        "studentDidConsider": "boolean", 
+        "studentDidConsider": "boolean", //true if the student considered the differential, false if they did not || for ruled out differentials, true if Dx was supposed to be ruled out and student marked as ruled out, false if Dx was not supposed to be ruled out and student marked as not ruled out
         "reasoningDetail": {{
           "differentiatingHistoryFromContext": [ 
             {{

@@ -43,6 +43,9 @@ Speak like a sharp but kind clinical mentor. Be clear, concise, and helpful. Use
     "standard_dose": "<Typical adult dose>",
     "dose_adjustment": "<Adjustment guidance if needed>",
     "monitoring": "<Any monitoring required or not>",
+    "indication": "<name of the condition and disease where the drug is used for eg. urticaria, psoraisis, angioedema, urticarial vasculitis, etc.>",
+    "contraindications": "<contraindications of the drug>",
+    "adverse_effects": "<adverse effects of the drug>",
     "teaching_tagline": "<Sticky clinical takeaway>",
     "mechanism": {{
       "label": "<Mechanism class>",
@@ -76,13 +79,33 @@ Speak like a sharp but kind clinical mentor. Be clear, concise, and helpful. Use
     "class": "<Drug Class>",
     "used_for": "<What this drug IS typically used for>",
     "compare_to_correct": "<Why another drug/dose/reasoning IS better suited for THIS situation>",
+    "standard_dose": "<Typical adult dose>",
+    "dose_adjustment": "<Adjustment guidance if needed>",
+    "monitoring": "<Any monitoring required or not>",
+    "indication": "<name of the condition and disease where the drug is used for eg. urticaria, psoraisis, angioedema, urticarial vasculitis, etc.>",
+    "contraindications": "<Contraindications of the drug>",
+    "adverse_effects": "<Adverse effects of the drug>",
+    "teaching_tagline": "<Sticky clinical takeaway>",
      "mechanism": {{
       "label": "<Mechanism class>",
       "what_it_means": "<Plain-language function>",
       "how_it_works": "<Mechanistic explanation>",
       "memory_tip": "<Mnemonic or visual clue with emojis but not substituting words>"
     }},
-    "teaching_tagline": "<Catchy reminder of the mismatch>"
+    "teaching_tagline": "<Catchy reminder of the mismatch>",
+    "alternative_options": [
+      {{
+        "condition": "<If ___ applies>",
+        "alternative": "<Another drug>",
+        "reason": "<Why it would be better in that case>"
+      }}
+    ],
+    "other_drugs_in_class": [
+      {{
+        "name": "<Another drug>",
+        "note": "<Key distinction>"
+      }}
+    ]
   }}
 }}
 

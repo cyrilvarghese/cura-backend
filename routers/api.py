@@ -30,8 +30,6 @@ from routers.case_creator.update_case_quote import router as update_case_quote_r
 from routers.case_player.treatment_feedback_gemini import router as treatment_feedback_gemini_router
 from routers.case_player.history_feedback_gemini import router as history_feedback_gemini_router
 from routers.case_player.history_feedback_langchain import router as history_feedback_langchain_router
-from routers.case_player.diagnosis_feedback_gemini import router as diagnosis_feedback_gemini_router
-from routers.case_player.diagnosis_feedback_langchain import router as diagnosis_feedback_langchain_router
 from routers.case_player.test_validator import router as test_validator_router
 from routers.case_player.history_match import router as history_match_router
 from routers.feature_requests.feature_request_routes import feature_router
@@ -92,8 +90,7 @@ api_router.include_router(findings_router)
 api_router.include_router(treatment_feedback_gemini_router)
 api_router.include_router(history_feedback_gemini_router)
 api_router.include_router(history_feedback_langchain_router)
-api_router.include_router(diagnosis_feedback_gemini_router)
-api_router.include_router(diagnosis_feedback_langchain_router)
+ 
 api_router.include_router(test_validator_router)
 api_router.include_router(history_match_router)
 api_router.include_router(feature_router)

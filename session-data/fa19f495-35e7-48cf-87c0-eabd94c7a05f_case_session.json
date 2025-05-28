@@ -1,23 +1,356 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
-  "case_id": "27",
-  "session_start": "2025-05-22T08:45:11.053302",
-  "current_step": "History Taking",
+  "case_id": "29",
+  "session_start": "2025-05-28T08:57:06.367299",
+  "current_step": "Final Diagnosis",
   "interactions": {
     "history_taking": [],
-    "physical_examinations": [
-      {
-        "test_name": "Skin Examination",
-        "timestamp": "2025-05-22T08:45:23.652198"
-      }
-    ],
+    "physical_examinations": [],
     "tests_ordered": [],
     "diagnosis_submission": null,
-    "final_diagnosis": null,
+    "final_diagnosis": {
+      "final_diagnosis": "asd",
+      "final_reason": "asdd",
+      "timestamp": "2025-05-28T08:57:19.764124"
+    },
     "pre_treatment_checks": [],
     "treatment_plan": null,
     "post_treatment_monitoring": [],
     "clinical_findings": [],
-    "feedback": {}
+    "feedback": {
+      "history_taking": {
+        "analysis": {
+          "student_question_evaluation": [],
+          "critical_missed_areas": [
+            {
+              "domain": "chief_complaint",
+              "importance_reason": "Critical to understand onset and sensory changes, key for leprosy diagnosis given hypopigmentation and sensory loss.",
+              "example_missed_question": "When did the patch first appear?"
+            },
+            {
+              "domain": "social_exposure_and_lifestyle",
+              "importance_reason": "Crucial to assess leprosy risk, given endemic region and lack of identified contacts in the provided history.",
+              "example_missed_question": "Do you have any prior skin issues or contact with known leprosy patients?"
+            },
+            {
+              "domain": "associated_symptoms",
+              "importance_reason": "Important to rule out other causes of hypopigmentation and neurological symptoms.",
+              "example_missed_question": "Have you noticed any other symptoms, such as itching, pain, or numbness, in the affected area or elsewhere on your body?"
+            }
+          ],
+          "summary_feedback": {
+            "key_strength": "No questions were asked, so no strengths could be identified in the history taking.",
+            "key_weakness": "Failure to ask any questions hinders diagnosis and patient care in this leprosy-endemic case.",
+            "cumulative_score": 0.5,
+            "score_reason": "No history was taken, missing key diagnostic information. Minimal attempt made to address the chief complaint."
+          }
+        },
+        "domain_feedback": {
+          "aetcom_evaluation": {
+            "communication": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student did not ask any questions, so there was no opportunity to assess communication skills. Action: In future interactions, ensure you engage the patient by asking open-ended questions to elicit a comprehensive history."
+            },
+            "empathy_patient_centeredness": {
+              "performance_level": "Needs Improvement",
+              "feedback": "Since the student did not interact with the patient, there was no opportunity to demonstrate empathy or patient-centeredness. Action: Remember to acknowledge the patient's feelings and perspective during the interaction to build rapport and trust."
+            },
+            "professionalism_ethics": {
+              "performance_level": "Needs Improvement",
+              "feedback": "Due to the lack of interaction, it's difficult to assess professionalism and ethics. Action: Always introduce yourself, explain the purpose of the interview, and ensure patient comfort and privacy during the interaction."
+            },
+            "information_gathering": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student failed to gather any information relevant to the patient's condition. Action: Systematically inquire about the chief complaint, history of present illness, past medical history, family history, social history, and medications to build a comprehensive understanding of the patient's health status."
+            }
+          }
+        },
+        "timestamp": "2025-05-28T08:57:28.045528"
+      },
+      "diagnosis": {
+        "feedback": {
+          "primaryDiagnosis": {
+            "primaryDxFeedback": {
+              "studentStated": {
+                "dx": "asd",
+                "isCorrect": false
+              },
+              "scores": {
+                "accuracyScore": 1,
+                "accuracyExplanation": "The student's diagnosis 'asd' is not even close to the correct diagnosis of Paucibacillary Leprosy \u2013 Tuberculoid Type. The provided reason 'asdd' does not align with any of the key evidence for leprosy.",
+                "evidenceGatheringScore": 1,
+                "evidenceGatheringExplanation": {
+                  "overallSummary": "The student did not perform any physical exams or order any tests, indicating a complete lack of evidence gathering for this diagnosis.",
+                  "historyStrengths": [],
+                  "examStrengths": [],
+                  "testStrengths": [],
+                  "areasForImprovement_Exams": [
+                    "Skin exam (macule with clear border)",
+                    "Sensory testing over lesion (cotton, pinprick, warm/cold object)"
+                  ],
+                  "areasForImprovement_Tests": [
+                    "Slit-skin smear",
+                    "Skin biopsy with Fite-Faraco stain"
+                  ],
+                  "irrelevantActionsNoted": []
+                }
+              },
+              "correctPrimary": {
+                "dx": "Paucibacillary Leprosy \u2013 Tuberculoid Type",
+                "allSupportingEvidence": {
+                  "history": [
+                    {
+                      "desc": "Single hypopigmented patch on arm",
+                      "alignsWithKeyEvidence": "Confirms presence of characteristic skin lesion",
+                      "studentDidIdentify": false
+                    },
+                    {
+                      "desc": "Altered skin sensation on patch",
+                      "alignsWithKeyEvidence": "Supports nerve involvement",
+                      "studentDidIdentify": false
+                    },
+                    {
+                      "desc": "Residence in leprosy-endemic region",
+                      "alignsWithKeyEvidence": "Identifies a significant risk factor",
+                      "studentDidIdentify": false
+                    }
+                  ],
+                  "exams": [
+                    {
+                      "name": "Skin exam (macule with clear border)",
+                      "expectedFindingSupportingDx": "Well-defined, hypopigmented macule",
+                      "alignsWithKeyEvidence": "Identifies and characterizes the skin lesion",
+                      "studentDidPerform": false,
+                      "studentDidIdentifyFinding": false
+                    },
+                    {
+                      "name": "Sensory testing over lesion (cotton, pinprick, warm/cold object)",
+                      "expectedFindingSupportingDx": "Complete sensory loss over the lesion",
+                      "alignsWithKeyEvidence": "Assesses for sensory loss",
+                      "studentDidPerform": false,
+                      "studentDidIdentifyFinding": false
+                    },
+                    {
+                      "name": "Peripheral nerve palpation (especially radial cutaneous or ulnar)",
+                      "expectedFindingSupportingDx": "Localized nerve thickening",
+                      "alignsWithKeyEvidence": "Detects nerve thickening",
+                      "studentDidPerform": false,
+                      "studentDidIdentifyFinding": false
+                    }
+                  ],
+                  "tests": [
+                    {
+                      "name": "Slit-skin smear",
+                      "expectedResultSupportingDx": "Negative for acid-fast bacilli",
+                      "alignsWithKeyEvidence": "Rules out multibacillary leprosy",
+                      "studentDidOrder": false,
+                      "studentDidIdentifyResult": false
+                    },
+                    {
+                      "name": "Skin biopsy with Fite-Faraco stain",
+                      "expectedResultSupportingDx": "Granulomas with few or no acid-fast bacilli",
+                      "alignsWithKeyEvidence": "Confirms diagnosis and rules out other conditions",
+                      "studentDidOrder": false,
+                      "studentDidIdentifyResult": false
+                    },
+                    {
+                      "name": "Lepromin test",
+                      "expectedResultSupportingDx": "Positive",
+                      "alignsWithKeyEvidence": "Assesses cell-mediated immunity",
+                      "studentDidOrder": false,
+                      "studentDidIdentifyResult": false
+                    }
+                  ]
+                }
+              },
+              "missedCrucialEvidence": {
+                "missedExams": [
+                  {
+                    "name": "Skin exam (macule with clear border)",
+                    "relevance": "To identify and characterize the skin lesion.",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "Sensory testing over lesion (cotton, pinprick, warm/cold object)",
+                    "relevance": "To assess for sensory loss.",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "Peripheral nerve palpation (especially radial cutaneous or ulnar)",
+                    "relevance": "To detect nerve thickening.",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "Hair density over patch",
+                    "relevance": "To assess for hair loss over the lesion.",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "Reflex testing",
+                    "relevance": "To rule out neurological involvement.",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "Eye, ENT, oral mucosa exams",
+                    "relevance": "To rule out mucosal involvement.",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "Systemic exam",
+                    "relevance": "To rule out systemic involvement.",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "Clinical lesion exam + nerve palpation",
+                    "relevance": "Track resolution, detect neuritis",
+                    "educationalTip": null
+                  }
+                ],
+                "missedLabs": [
+                  {
+                    "testName": "Slit-skin smear",
+                    "relevance": "To assess for the presence of acid-fast bacilli.",
+                    "educationalTip": null
+                  },
+                  {
+                    "testName": "Skin biopsy with Fite-Faraco stain",
+                    "relevance": "To confirm the diagnosis and rule out other conditions.",
+                    "educationalTip": null
+                  },
+                  {
+                    "testName": "Lepromin test",
+                    "relevance": "To assess cell-mediated immunity to Mycobacterium leprae.",
+                    "educationalTip": null
+                  },
+                  {
+                    "testName": "CBC, LFT, RFT",
+                    "relevance": "For MDT safety",
+                    "educationalTip": null
+                  },
+                  {
+                    "testName": "Fasting glucose",
+                    "relevance": "For MDT safety, esp. reactions",
+                    "educationalTip": null
+                  },
+                  {
+                    "testName": "HIV test",
+                    "relevance": "MDT safety",
+                    "educationalTip": null
+                  },
+                  {
+                    "testName": "Nerve conduction study",
+                    "relevance": "If extensive nerve thickening suspected",
+                    "educationalTip": null
+                  }
+                ]
+              },
+              "idealDiagnosticTimeline": [
+                {
+                  "stepNumber": 1,
+                  "type": "HistoryTaking - Broad",
+                  "actionDescription": "Inquire about the onset, location, and progression of any skin lesions.",
+                  "rationaleTags": [
+                    "Identify Skin Abnormalities",
+                    "Gather Initial Clues"
+                  ],
+                  "detailedRationale": "Initial broad history helps establish the timeline and characteristics of the skin lesion, guiding further investigation. It helps to narrow down the broad differential for skin lesions."
+                },
+                {
+                  "stepNumber": 2,
+                  "type": "HistoryTaking - Focused",
+                  "actionDescription": "Specifically ask about changes in sensation (touch, temperature, pain) within the lesion and surrounding areas.",
+                  "rationaleTags": [
+                    "Confirm Sensory Loss",
+                    "Differentiate: Leprosy vs Vitiligo"
+                  ],
+                  "detailedRationale": "This step is crucial to confirm sensory loss, a cardinal feature of leprosy, and helps differentiate it from conditions like Vitiligo which typically have intact sensation."
+                },
+                {
+                  "stepNumber": 3,
+                  "type": "HistoryTaking - Focused",
+                  "actionDescription": "Ask about potential exposures, travel history, and family history of skin conditions or leprosy.",
+                  "rationaleTags": [
+                    "Assess Risk Factors",
+                    "Social and Family Context"
+                  ],
+                  "detailedRationale": "Understanding the patient's environment and potential exposures can help identify risk factors for leprosy, especially in endemic regions. Family history can also point to genetic predispositions or shared environmental exposures."
+                },
+                {
+                  "stepNumber": 4,
+                  "type": "PhysicalExam - General",
+                  "actionDescription": "Perform a thorough skin exam, paying close attention to the lesion's morphology, borders, and surrounding skin.",
+                  "rationaleTags": [
+                    "Characterize Skin Lesion",
+                    "Assess Morphology"
+                  ],
+                  "detailedRationale": "Detailed visual inspection and palpation are essential to characterize the lesion (size, shape, color, texture) and identify key features that support or refute the diagnosis of leprosy versus other skin conditions like Tinea Corporis."
+                },
+                {
+                  "stepNumber": 5,
+                  "type": "PhysicalExam - Specific",
+                  "actionDescription": "Conduct sensory testing (light touch, pinprick, temperature) over the lesion and compare it to unaffected skin.",
+                  "rationaleTags": [
+                    "Quantify Sensory Loss",
+                    "Confirm Nerve Damage"
+                  ],
+                  "detailedRationale": "Objective assessment of sensation is crucial for confirming nerve involvement, a key diagnostic criterion for leprosy. The degree of sensory loss helps to distinguish it from other hypopigmented lesions."
+                },
+                {
+                  "stepNumber": 6,
+                  "type": "PhysicalExam - Specific",
+                  "actionDescription": "Palpate peripheral nerves (ulnar, radial cutaneous) for thickening or tenderness.",
+                  "rationaleTags": [
+                    "Assess Nerve Involvement",
+                    "Detect Nerve Thickening"
+                  ],
+                  "detailedRationale": "Palpation of peripheral nerves can reveal nerve thickening, another hallmark of leprosy. Tenderness may indicate neuritis, a complication of leprosy."
+                },
+                {
+                  "stepNumber": 7,
+                  "type": "InitialLabTest",
+                  "actionDescription": "Order a slit-skin smear from the lesion.",
+                  "rationaleTags": [
+                    "Detect Acid-Fast Bacilli",
+                    "Initial Diagnostic Test"
+                  ],
+                  "detailedRationale": "Slit-skin smear is a relatively simple and inexpensive test to detect the presence of Mycobacterium leprae. A negative result does not rule out paucibacillary leprosy but helps to classify the disease."
+                },
+                {
+                  "stepNumber": 8,
+                  "type": "ConfirmatoryLabTest",
+                  "actionDescription": "Perform a skin biopsy with Fite-Faraco stain.",
+                  "rationaleTags": [
+                    "Confirm Diagnosis",
+                    "Rule Out Other Conditions"
+                  ],
+                  "detailedRationale": "Skin biopsy is the gold standard for confirming the diagnosis of leprosy. Fite-Faraco stain helps to visualize Mycobacterium leprae and identify granulomas, while also ruling out other conditions like cutaneous sarcoidosis."
+                },
+                {
+                  "stepNumber": 9,
+                  "type": "ConfirmatoryLabTest",
+                  "actionDescription": "Administer a Lepromin test.",
+                  "rationaleTags": [
+                    "Assess Cell-Mediated Immunity",
+                    "Support Diagnosis"
+                  ],
+                  "detailedRationale": "A positive Lepromin test supports the diagnosis of tuberculoid leprosy by demonstrating a strong cell-mediated immune response to Mycobacterium leprae.  A negative test is more common in lepromatous leprosy."
+                },
+                {
+                  "stepNumber": 10,
+                  "type": "InitialLabTest",
+                  "actionDescription": "Order CBC, LFT, RFT, Fasting Glucose, and HIV test.",
+                  "rationaleTags": [
+                    "MDT Safety",
+                    "Baseline Health Assessment"
+                  ],
+                  "detailedRationale": "These tests are important for assessing the patient's overall health and organ function before starting multidrug therapy (MDT). HIV testing is important due to potential interactions and altered immune responses."
+                }
+              ]
+            }
+          }
+        },
+        "timestamp": "2025-05-28T08:59:26.379273"
+      }
+    }
   }
 }

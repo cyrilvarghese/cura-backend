@@ -37,8 +37,8 @@ def load_prompt(file_path: str) -> str:
         raise HTTPException(status_code=404, detail=f"Prompt file not found: {file_path}")
 
 # Load the prompts from files
-PRIMARY_DIAGNOSIS_PROMPT = load_prompt("prompts/diagnosis_feedback_new1.txt")
-DIFFERENTIAL_DIAGNOSIS_PROMPT = load_prompt("prompts/diagnosis_feedback_new2.txt")
+PRIMARY_DIAGNOSIS_PROMPT = load_prompt("prompts/diagnosis_feedback_new1_v2.txt")
+DIFFERENTIAL_DIAGNOSIS_PROMPT = load_prompt("prompts/diagnosis_feedback_new2_v2.txt")
 EDUCATIONAL_CAPSULES_PROMPT = load_prompt("prompts/diagnosis_feedback_new3.txt")
 
 async def load_diagnosis_context(case_id: int) -> Dict[str, Any]:

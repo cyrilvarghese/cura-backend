@@ -71,7 +71,7 @@ As the AI Teaching Assistant, evaluate the student's approach to the final diagn
       "correctPrimary": {{
       "dx": "string",//correct_primary_diagnosis_name
       "allSupportingEvidence": {{ 
-        "history": [  //top 3 critical history points
+        "history": [  //top 3 critical history points/ do not repeat and desc should be aroudn 5-10 words
           {{
             "desc": "string",
             "alignsWithKeyEvidence": "string",

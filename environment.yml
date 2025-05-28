@@ -195,5 +195,6 @@ dependencies:
       - supabase
       - markdown
       - langchain-google-genai
+      - gunicorn
 
 prefix: /root/conda/envs/cura-env

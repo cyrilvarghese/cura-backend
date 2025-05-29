@@ -13,17 +13,17 @@ Analyze the input text and generate a JSON object containing:
 2.  `keyEvidence`: 3-5 critical findings (Hx, Sx, Exam, Test results) supporting the diagnosis (*Keep this focused on the most discriminating evidence for reasoning evaluation*).
 3.  `essentialPhysicalExams`: **All relevant physical examinations** mentioned or implied in the master case document. Include `name`, `purpose` (specific relevance, if stated/inferable), `generalDescription` (if inferable/standard), and optional `educationalTip`.
 4.  `keyDiagnosticTests`: **All relevant diagnostic tests** (labs, imaging, procedures) mentioned in the master case document. Include `name`, `purpose` (specific relevance, if stated/inferable), `generalDescription` (if inferable/standard), and optional `educationalTip`.
-5.  `plausibleDifferentials`: **Extract data from the table in Part 8D "Key Differentiating Features for Plausible Differentials"**. For each differential listed in this table:
+5.  `plausibleDifferentials`: **Extract data from the table in Part 8 "Key Differentiating Features for Plausible Differentials,do not include ruled out differentials"**. For each differential listed in this table:
     *   `name`: The name of the differential diagnosis.
     *   `differentiatingHistoryClues`: The content from the "Differentiating History Clue(s)" column for that differential.
     *   `differentiatingExamFindings`: The content from the "Differentiating Exam Finding(s)" column for that differential.
     *   `differentiatingTestResults`: The content from the "Differentiating Test Result(s)" column for that differential.
     *   `educationalTip`: (Optional) Any educational tip if provided specifically for this differential in the table.
-6.  `ruledOutDifferentials`: **All "Less Likely/Incorrect Differentials" listed in Part 8B** of the master case document. For each:
+6.  `ruledOutDifferentials`: **All "Less Likely/Incorrect Differentials" listed in Part 8, do not include plausible differentials** of the master case document. For each:
     *   `name`: The name of the differential diagnosis.
     *   `reasonForExclusion`: The rationale provided in Part 8C for why this differential is incorrect or less likely *in this specific case*.
     *   `educationalTip`: (Optional) Any educational tip.
-
+**important: do not include ruled out differentials in plausible differentials, and do not include plausible differentials in ruled out differentials, they are mutually exclusive sets**
 **Output:** Respond with *only* the valid JSON object adhering to the structure below.
 
 **JSON Structure:**

@@ -24,6 +24,7 @@ As the AI Teaching Assistant, evaluate the student's differential diagnosis reas
 1.  **Score Differential List Match (1-5):**
     *   (Instructions for scoring remain the same as previous version of Prompt 2)
     *   Provide an `explanation` for this score in `differentialListExplanation`.
+    
 
 2.  **Prepare `detailedAnalysis` Array for Comparative Table:**
     *   **First Element (Primary Diagnosis):**
@@ -32,7 +33,7 @@ As the AI Teaching Assistant, evaluate the student's differential diagnosis reas
         *   Set `dxName`.
         *   Populate `supportingFeatures_ThisCase.history`, `supportingFeatures_ThisCase.exam`, `supportingFeatures_ThisCase.lab` with 2-3 concise key points *from this specific case* that CONFIRM the primary diagnosis (sourced from `DIAGNOSIS_CONTEXT_JSON.keyEvidence`, `HISTORY_CONTEXT_JSON`, expected findings from `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams/keyDiagnosticTests`). These should be tag-like.
         *   Include `educationalTip` from `DIAGNOSIS_CONTEXT_JSON` if associated with the primary diagnosis.
-    *   **Subsequent Elements (Plausible Differentials):**
+    *   **Subsequent Elements (Plausible Differentials): (do not include ruled out differentials)** 
         *   Iterate through `DIAGNOSIS_CONTEXT_JSON.plausibleDifferentials`.
         *   For each, create an object with `type: "PlausibleDifferential"`.
         *   Include `dxName`, `studentDidConsiderAsPlausible`, `studentDidMarkAsIncorrect`.
@@ -40,7 +41,7 @@ As the AI Teaching Assistant, evaluate the student's differential diagnosis reas
         *   For `caseSpecificDifferentiation`:
             *   Generate 2-3 `quickDifferentiatingTags_ThisCase`: These should be very short phrases (3-5 words) highlighting the *most critical findings from THIS specific case* (from `HISTORY_CONTEXT_JSON` or implied results for primary Dx) that make this DDx less likely than the primary.
             *   Generate `detailedExplanation_ThisCase`: A more narrative explanation elaborating on the quick tags, explaining why this DDx is not the primary *for this specific case*, referencing how the case's actual findings contrast with this DDx's typical features or support the primary diagnosis more strongly.
-    *   **Final Elements (Ruled-Out Differentials):**
+    *   **Final Elements (Ruled-Out Differentials): (do not include plausible differentials)**
         *   Iterate through `DIAGNOSIS_CONTEXT_JSON.ruledOutDifferentials`.
         *   For each, create an object with `type: "RuledOutDifferential"`.
         *   Include `dxName`, `studentDidConsiderAsPlausible`, `studentDidMarkAsIncorrect`.

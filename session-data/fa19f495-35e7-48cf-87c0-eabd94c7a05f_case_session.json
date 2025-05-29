@@ -1,7 +1,7 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
-  "case_id": "29",
-  "session_start": "2025-05-28T08:57:06.367299",
+  "case_id": "30",
+  "session_start": "2025-05-29T05:10:22.077466",
   "current_step": "Final Diagnosis",
   "interactions": {
     "history_taking": [],
@@ -9,9 +9,9 @@
     "tests_ordered": [],
     "diagnosis_submission": null,
     "final_diagnosis": {
-      "final_diagnosis": "asd",
-      "final_reason": "asdd",
-      "timestamp": "2025-05-28T08:57:19.764124"
+      "final_diagnosis": "ds",
+      "final_reason": "d",
+      "timestamp": "2025-05-29T05:10:27.484896"
     },
     "pre_treatment_checks": [],
     "treatment_plan": null,
@@ -23,140 +23,140 @@
           "student_question_evaluation": [],
           "critical_missed_areas": [
             {
-              "domain": "chief_complaint",
-              "importance_reason": "Critical to understand onset and sensory changes, key for leprosy diagnosis given hypopigmentation and sensory loss.",
-              "example_missed_question": "When did the patch first appear?"
+              "domain": "social_exposure_and_lifestyle",
+              "importance_reason": "Determining exposure location and intensity helps narrow differential (Dengue vs. other tropical diseases).",
+              "example_missed_question": "Where exactly did you travel in Thailand?"
             },
             {
-              "domain": "social_exposure_and_lifestyle",
-              "importance_reason": "Crucial to assess leprosy risk, given endemic region and lack of identified contacts in the provided history.",
-              "example_missed_question": "Do you have any prior skin issues or contact with known leprosy patients?"
+              "domain": "red_flag_symptoms",
+              "importance_reason": "Gum bleeding suggests possible hemorrhagic fever; assessing other bleeding sites is critical for risk stratification.",
+              "example_missed_question": "Did you notice bleeding from gums or nose?"
             },
             {
               "domain": "associated_symptoms",
-              "importance_reason": "Important to rule out other causes of hypopigmentation and neurological symptoms.",
-              "example_missed_question": "Have you noticed any other symptoms, such as itching, pain, or numbness, in the affected area or elsewhere on your body?"
+              "importance_reason": "Characterizing the rash (macular, papular, etc.) and itchiness helps differentiate between viral exanthems.",
+              "example_missed_question": "Can you describe the characteristics of your rash?"
             }
           ],
           "summary_feedback": {
-            "key_strength": "No questions were asked, so no strengths could be identified in the history taking.",
-            "key_weakness": "Failure to ask any questions hinders diagnosis and patient care in this leprosy-endemic case.",
+            "key_strength": "No questions were asked, so there are no strengths to identify.",
+            "key_weakness": "The student failed to ask any questions, preventing any meaningful history taking.",
             "cumulative_score": 0.5,
-            "score_reason": "No history was taken, missing key diagnostic information. Minimal attempt made to address the chief complaint."
+            "score_reason": "No history was taken, leading to significant missed opportunities to explore critical aspects of the patient's presentation."
           }
         },
         "domain_feedback": {
           "aetcom_evaluation": {
             "communication": {
               "performance_level": "Needs Improvement",
-              "feedback": "The student did not ask any questions, so there was no opportunity to assess communication skills. Action: In future interactions, ensure you engage the patient by asking open-ended questions to elicit a comprehensive history."
+              "feedback": "The student did not ask any questions, resulting in a complete lack of communication with the patient. Action: Begin the interaction by introducing yourself and asking open-ended questions to establish rapport and gather information."
             },
             "empathy_patient_centeredness": {
               "performance_level": "Needs Improvement",
-              "feedback": "Since the student did not interact with the patient, there was no opportunity to demonstrate empathy or patient-centeredness. Action: Remember to acknowledge the patient's feelings and perspective during the interaction to build rapport and trust."
+              "feedback": "Due to the absence of any questions asked by the student, there was no demonstration of empathy or patient-centeredness. Action: Actively listen to the patient's concerns and acknowledge their feelings by using empathetic statements, such as 'I understand this must be worrying for you'."
             },
             "professionalism_ethics": {
               "performance_level": "Needs Improvement",
-              "feedback": "Due to the lack of interaction, it's difficult to assess professionalism and ethics. Action: Always introduce yourself, explain the purpose of the interview, and ensure patient comfort and privacy during the interaction."
+              "feedback": "The student's failure to initiate any interaction raises concerns about their responsibility in gathering crucial information for patient care. Action: Demonstrate professionalism by being proactive in obtaining a thorough history, respecting patient privacy, and maintaining confidentiality."
             },
             "information_gathering": {
               "performance_level": "Needs Improvement",
-              "feedback": "The student failed to gather any information relevant to the patient's condition. Action: Systematically inquire about the chief complaint, history of present illness, past medical history, family history, social history, and medications to build a comprehensive understanding of the patient's health status."
+              "feedback": "The student failed to gather any information relevant to the patient's condition, missing key details about their symptoms, medical history, and risk factors. Action: Systematically inquire about the patient's chief complaint, associated symptoms, past medical history, medications, allergies, and social history to build a comprehensive understanding of their condition."
             }
           }
         },
-        "timestamp": "2025-05-28T08:57:28.045528"
+        "timestamp": "2025-05-29T05:10:34.466427"
       },
       "diagnosis": {
         "feedback": {
           "primaryDiagnosis": {
             "primaryDxFeedback": {
               "studentStated": {
-                "dx": "asd",
+                "dx": "ds",
                 "isCorrect": false
               },
               "scores": {
                 "accuracyScore": 1,
-                "accuracyExplanation": "The student's diagnosis 'asd' is not even close to the correct diagnosis of Paucibacillary Leprosy \u2013 Tuberculoid Type. The provided reason 'asdd' does not align with any of the key evidence for leprosy.",
+                "accuracyExplanation": "The student's diagnosis of 'ds' is incorrect and does not align with the key evidence for Dengue Fever, which includes travel to an endemic area, fever, rash, myalgia, retro-orbital pain, bleeding signs, maculopapular rash, and a positive NS1 antigen test.",
                 "evidenceGatheringScore": 1,
                 "evidenceGatheringExplanation": {
-                  "overallSummary": "The student did not perform any physical exams or order any tests, indicating a complete lack of evidence gathering for this diagnosis.",
+                  "overallSummary": "The student did not perform any physical exams or order any tests, indicating a lack of evidence gathering.",
                   "historyStrengths": [],
                   "examStrengths": [],
                   "testStrengths": [],
                   "areasForImprovement_Exams": [
-                    "Skin exam (macule with clear border)",
-                    "Sensory testing over lesion (cotton, pinprick, warm/cold object)"
+                    "Skin inspection to identify maculopapular rash",
+                    "Vital signs to detect fever, hypotension, tachycardia"
                   ],
                   "areasForImprovement_Tests": [
-                    "Slit-skin smear",
-                    "Skin biopsy with Fite-Faraco stain"
+                    "Dengue NS1 antigen test to confirm acute dengue",
+                    "CBC with differential to evaluate for thrombocytopenia and leukopenia"
                   ],
                   "irrelevantActionsNoted": []
                 }
               },
               "correctPrimary": {
-                "dx": "Paucibacillary Leprosy \u2013 Tuberculoid Type",
+                "dx": "Dengue Fever",
                 "allSupportingEvidence": {
                   "history": [
                     {
-                      "desc": "Single hypopigmented patch on arm",
-                      "alignsWithKeyEvidence": "Confirms presence of characteristic skin lesion",
-                      "studentDidIdentify": false
+                      "desc": "Recent travel to Thailand",
+                      "alignsWithKeyEvidence": "Travel to endemic area",
+                      "studentDidIdentify": true
                     },
                     {
-                      "desc": "Altered skin sensation on patch",
-                      "alignsWithKeyEvidence": "Supports nerve involvement",
-                      "studentDidIdentify": false
+                      "desc": "High-grade fever, myalgias",
+                      "alignsWithKeyEvidence": "Fever, rash, myalgia",
+                      "studentDidIdentify": true
                     },
                     {
-                      "desc": "Residence in leprosy-endemic region",
-                      "alignsWithKeyEvidence": "Identifies a significant risk factor",
-                      "studentDidIdentify": false
+                      "desc": "Gum bleeding reported",
+                      "alignsWithKeyEvidence": "Retro-orbital pain and bleeding signs",
+                      "studentDidIdentify": true
                     }
                   ],
                   "exams": [
                     {
-                      "name": "Skin exam (macule with clear border)",
-                      "expectedFindingSupportingDx": "Well-defined, hypopigmented macule",
-                      "alignsWithKeyEvidence": "Identifies and characterizes the skin lesion",
+                      "name": "Skin inspection",
+                      "expectedFindingSupportingDx": "Maculopapular rash",
+                      "alignsWithKeyEvidence": "Maculopapular rash appears after fever onset",
                       "studentDidPerform": false,
                       "studentDidIdentifyFinding": false
                     },
                     {
-                      "name": "Sensory testing over lesion (cotton, pinprick, warm/cold object)",
-                      "expectedFindingSupportingDx": "Complete sensory loss over the lesion",
-                      "alignsWithKeyEvidence": "Assesses for sensory loss",
+                      "name": "HEENT exam",
+                      "expectedFindingSupportingDx": "Assess for scleral injection and gum bleeding",
+                      "alignsWithKeyEvidence": "Retro-orbital pain and bleeding signs",
                       "studentDidPerform": false,
                       "studentDidIdentifyFinding": false
                     },
                     {
-                      "name": "Peripheral nerve palpation (especially radial cutaneous or ulnar)",
-                      "expectedFindingSupportingDx": "Localized nerve thickening",
-                      "alignsWithKeyEvidence": "Detects nerve thickening",
+                      "name": "Vital signs",
+                      "expectedFindingSupportingDx": "Detect fever, hypotension, tachycardia",
+                      "alignsWithKeyEvidence": "Fever, rash, myalgia",
                       "studentDidPerform": false,
                       "studentDidIdentifyFinding": false
                     }
                   ],
                   "tests": [
                     {
-                      "name": "Slit-skin smear",
-                      "expectedResultSupportingDx": "Negative for acid-fast bacilli",
-                      "alignsWithKeyEvidence": "Rules out multibacillary leprosy",
-                      "studentDidOrder": false,
-                      "studentDidIdentifyResult": false
-                    },
-                    {
-                      "name": "Skin biopsy with Fite-Faraco stain",
-                      "expectedResultSupportingDx": "Granulomas with few or no acid-fast bacilli",
-                      "alignsWithKeyEvidence": "Confirms diagnosis and rules out other conditions",
-                      "studentDidOrder": false,
-                      "studentDidIdentifyResult": false
-                    },
-                    {
-                      "name": "Lepromin test",
+                      "name": "Dengue NS1 antigen test",
                       "expectedResultSupportingDx": "Positive",
-                      "alignsWithKeyEvidence": "Assesses cell-mediated immunity",
+                      "alignsWithKeyEvidence": "Positive NS1 antigen test",
+                      "studentDidOrder": false,
+                      "studentDidIdentifyResult": false
+                    },
+                    {
+                      "name": "CBC with differential",
+                      "expectedResultSupportingDx": "Thrombocytopenia and leukopenia",
+                      "alignsWithKeyEvidence": "Fever, rash, myalgia",
+                      "studentDidOrder": false,
+                      "studentDidIdentifyResult": false
+                    },
+                    {
+                      "name": "Liver function tests (AST/ALT)",
+                      "expectedResultSupportingDx": "Elevated AST/ALT",
+                      "alignsWithKeyEvidence": "Fever, rash, myalgia",
                       "studentDidOrder": false,
                       "studentDidIdentifyResult": false
                     }
@@ -166,80 +166,95 @@
               "missedCrucialEvidence": {
                 "missedExams": [
                   {
-                    "name": "Skin exam (macule with clear border)",
-                    "relevance": "To identify and characterize the skin lesion.",
+                    "name": "General appearance",
+                    "relevance": "Assess overall condition",
                     "educationalTip": null
                   },
                   {
-                    "name": "Sensory testing over lesion (cotton, pinprick, warm/cold object)",
-                    "relevance": "To assess for sensory loss.",
+                    "name": "Vital signs",
+                    "relevance": "Detect fever, hypotension, tachycardia",
                     "educationalTip": null
                   },
                   {
-                    "name": "Peripheral nerve palpation (especially radial cutaneous or ulnar)",
-                    "relevance": "To detect nerve thickening.",
+                    "name": "Skin inspection",
+                    "relevance": "Identify maculopapular rash",
                     "educationalTip": null
                   },
                   {
-                    "name": "Hair density over patch",
-                    "relevance": "To assess for hair loss over the lesion.",
+                    "name": "HEENT exam",
+                    "relevance": "Assess for scleral injection and gum bleeding",
                     "educationalTip": null
                   },
                   {
-                    "name": "Reflex testing",
-                    "relevance": "To rule out neurological involvement.",
+                    "name": "Abdominal exam",
+                    "relevance": "Detect hepatomegaly (if severe)",
                     "educationalTip": null
                   },
                   {
-                    "name": "Eye, ENT, oral mucosa exams",
-                    "relevance": "To rule out mucosal involvement.",
+                    "name": "Lymph node assessment",
+                    "relevance": "Identify mild cervical nodes",
                     "educationalTip": null
                   },
                   {
-                    "name": "Systemic exam",
-                    "relevance": "To rule out systemic involvement.",
+                    "name": "Musculoskeletal exam",
+                    "relevance": "Assess for tenderness on palpation and joint pain",
                     "educationalTip": null
                   },
                   {
-                    "name": "Clinical lesion exam + nerve palpation",
-                    "relevance": "Track resolution, detect neuritis",
+                    "name": "Neurological exam",
+                    "relevance": "Exclude CNS infection",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "Pulmonary exam",
+                    "relevance": "Exclude pneumonia",
+                    "educationalTip": null
+                  },
+                  {
+                    "name": "CV exam",
+                    "relevance": "Assess heart sounds",
                     "educationalTip": null
                   }
                 ],
                 "missedLabs": [
                   {
-                    "testName": "Slit-skin smear",
-                    "relevance": "To assess for the presence of acid-fast bacilli.",
+                    "testName": "CBC with differential",
+                    "relevance": "Evaluate for thrombocytopenia and leukopenia",
                     "educationalTip": null
                   },
                   {
-                    "testName": "Skin biopsy with Fite-Faraco stain",
-                    "relevance": "To confirm the diagnosis and rule out other conditions.",
+                    "testName": "Platelet count",
+                    "relevance": "Assess bleeding risk",
                     "educationalTip": null
                   },
                   {
-                    "testName": "Lepromin test",
-                    "relevance": "To assess cell-mediated immunity to Mycobacterium leprae.",
+                    "testName": "Hematocrit",
+                    "relevance": "Assess hemoconcentration",
                     "educationalTip": null
                   },
                   {
-                    "testName": "CBC, LFT, RFT",
-                    "relevance": "For MDT safety",
+                    "testName": "Liver function tests (AST/ALT)",
+                    "relevance": "Detect hepatic strain",
                     "educationalTip": null
                   },
                   {
-                    "testName": "Fasting glucose",
-                    "relevance": "For MDT safety, esp. reactions",
+                    "testName": "Dengue NS1 antigen test",
+                    "relevance": "Confirm acute dengue",
+                    "educationalTip": "Positive in early illness (days 1-5)."
+                  },
+                  {
+                    "testName": "Dengue IgM and IgG serology",
+                    "relevance": "Detect dengue antibodies",
+                    "educationalTip": "IgM positive by day 5-7."
+                  },
+                  {
+                    "testName": "Blood cultures",
+                    "relevance": "Rule out other causes",
                     "educationalTip": null
                   },
                   {
-                    "testName": "HIV test",
-                    "relevance": "MDT safety",
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Nerve conduction study",
-                    "relevance": "If extensive nerve thickening suspected",
+                    "testName": "Malaria rapid diagnostic test",
+                    "relevance": "Rule out malaria",
                     "educationalTip": null
                   }
                 ]
@@ -248,108 +263,123 @@
                 {
                   "stepNumber": 1,
                   "type": "HistoryTaking - Broad",
-                  "actionDescription": "Inquire about the onset, location, and progression of any skin lesions.",
+                  "actionDescription": "Elicit detailed travel history, including specific locations, duration, and activities.",
                   "rationaleTags": [
-                    "Identify Skin Abnormalities",
-                    "Gather Initial Clues"
+                    "Travel History",
+                    "Endemic Exposure",
+                    "Risk Factors"
                   ],
-                  "detailedRationale": "Initial broad history helps establish the timeline and characteristics of the skin lesion, guiding further investigation. It helps to narrow down the broad differential for skin lesions."
+                  "detailedRationale": "Understanding the specific regions visited and activities undertaken helps assess the risk of exposure to various vector-borne diseases, including Dengue, Chikungunya, and Malaria. This information is crucial for narrowing the differential diagnosis."
                 },
                 {
                   "stepNumber": 2,
                   "type": "HistoryTaking - Focused",
-                  "actionDescription": "Specifically ask about changes in sensation (touch, temperature, pain) within the lesion and surrounding areas.",
+                  "actionDescription": "Inquire about the onset, duration, and characteristics of fever, rash, headache, myalgias, and bleeding.",
                   "rationaleTags": [
-                    "Confirm Sensory Loss",
-                    "Differentiate: Leprosy vs Vitiligo"
+                    "Fever",
+                    "Rash",
+                    "Myalgia",
+                    "Bleeding",
+                    "Dengue Symptoms"
                   ],
-                  "detailedRationale": "This step is crucial to confirm sensory loss, a cardinal feature of leprosy, and helps differentiate it from conditions like Vitiligo which typically have intact sensation."
+                  "detailedRationale": "Specific symptoms like retro-orbital headache, severe myalgias (bone-breaking pain), and bleeding tendencies are highly suggestive of Dengue fever. The timing of the rash in relation to the fever is also important."
                 },
                 {
                   "stepNumber": 3,
-                  "type": "HistoryTaking - Focused",
-                  "actionDescription": "Ask about potential exposures, travel history, and family history of skin conditions or leprosy.",
+                  "type": "PhysicalExam",
+                  "actionDescription": "Perform a thorough skin inspection to characterize the rash (maculopapular, petechial) and its distribution.",
                   "rationaleTags": [
-                    "Assess Risk Factors",
-                    "Social and Family Context"
+                    "Rash Characteristics",
+                    "Maculopapular",
+                    "Petechial",
+                    "Dengue Diagnosis"
                   ],
-                  "detailedRationale": "Understanding the patient's environment and potential exposures can help identify risk factors for leprosy, especially in endemic regions. Family history can also point to genetic predispositions or shared environmental exposures."
+                  "detailedRationale": "The appearance and distribution of the rash are important clues. Dengue typically presents with a maculopapular rash that appears after the onset of fever. Absence of a rash would favor Malaria."
                 },
                 {
                   "stepNumber": 4,
-                  "type": "PhysicalExam - General",
-                  "actionDescription": "Perform a thorough skin exam, paying close attention to the lesion's morphology, borders, and surrounding skin.",
+                  "type": "PhysicalExam",
+                  "actionDescription": "Assess vital signs, including temperature, heart rate, and blood pressure.",
                   "rationaleTags": [
-                    "Characterize Skin Lesion",
-                    "Assess Morphology"
+                    "Fever",
+                    "Hypotension",
+                    "Tachycardia",
+                    "Shock Assessment"
                   ],
-                  "detailedRationale": "Detailed visual inspection and palpation are essential to characterize the lesion (size, shape, color, texture) and identify key features that support or refute the diagnosis of leprosy versus other skin conditions like Tinea Corporis."
+                  "detailedRationale": "Elevated temperature confirms fever. Hypotension and tachycardia may indicate progression to Dengue Hemorrhagic Fever or Dengue Shock Syndrome, requiring immediate intervention."
                 },
                 {
                   "stepNumber": 5,
-                  "type": "PhysicalExam - Specific",
-                  "actionDescription": "Conduct sensory testing (light touch, pinprick, temperature) over the lesion and compare it to unaffected skin.",
+                  "type": "InitialLabTest",
+                  "actionDescription": "Order a CBC with differential and platelet count.",
                   "rationaleTags": [
-                    "Quantify Sensory Loss",
-                    "Confirm Nerve Damage"
+                    "Thrombocytopenia",
+                    "Leukopenia",
+                    "Bleeding Risk",
+                    "Dengue Evaluation"
                   ],
-                  "detailedRationale": "Objective assessment of sensation is crucial for confirming nerve involvement, a key diagnostic criterion for leprosy. The degree of sensory loss helps to distinguish it from other hypopigmented lesions."
+                  "detailedRationale": "Thrombocytopenia and leukopenia are common findings in Dengue fever. These results help assess the severity of the illness and guide management decisions. Normal platelets would favor Chikungunya."
                 },
                 {
                   "stepNumber": 6,
-                  "type": "PhysicalExam - Specific",
-                  "actionDescription": "Palpate peripheral nerves (ulnar, radial cutaneous) for thickening or tenderness.",
+                  "type": "InitialLabTest",
+                  "actionDescription": "Order a Dengue NS1 antigen test.",
                   "rationaleTags": [
-                    "Assess Nerve Involvement",
-                    "Detect Nerve Thickening"
+                    "Dengue Confirmation",
+                    "Acute Infection",
+                    "Early Diagnosis"
                   ],
-                  "detailedRationale": "Palpation of peripheral nerves can reveal nerve thickening, another hallmark of leprosy. Tenderness may indicate neuritis, a complication of leprosy."
+                  "detailedRationale": "The NS1 antigen test is highly sensitive in the early stages of Dengue infection (days 1-5). A positive result confirms the diagnosis of acute Dengue fever."
                 },
                 {
                   "stepNumber": 7,
                   "type": "InitialLabTest",
-                  "actionDescription": "Order a slit-skin smear from the lesion.",
+                  "actionDescription": "Order Liver function tests (AST/ALT).",
                   "rationaleTags": [
-                    "Detect Acid-Fast Bacilli",
-                    "Initial Diagnostic Test"
+                    "Hepatic Strain",
+                    "Liver Damage",
+                    "Dengue Severity"
                   ],
-                  "detailedRationale": "Slit-skin smear is a relatively simple and inexpensive test to detect the presence of Mycobacterium leprae. A negative result does not rule out paucibacillary leprosy but helps to classify the disease."
+                  "detailedRationale": "Elevated AST/ALT indicates liver damage and can help assess the severity of Dengue infection."
                 },
                 {
                   "stepNumber": 8,
                   "type": "ConfirmatoryLabTest",
-                  "actionDescription": "Perform a skin biopsy with Fite-Faraco stain.",
+                  "actionDescription": "Order Dengue IgM and IgG serology if NS1 is negative or if the illness is beyond day 5.",
                   "rationaleTags": [
-                    "Confirm Diagnosis",
-                    "Rule Out Other Conditions"
+                    "Dengue Confirmation",
+                    "Antibody Detection",
+                    "Later Stage Diagnosis"
                   ],
-                  "detailedRationale": "Skin biopsy is the gold standard for confirming the diagnosis of leprosy. Fite-Faraco stain helps to visualize Mycobacterium leprae and identify granulomas, while also ruling out other conditions like cutaneous sarcoidosis."
+                  "detailedRationale": "IgM antibodies typically become detectable after day 5-7 of illness. This test is useful for confirming Dengue in patients presenting later in the course of the disease or if the NS1 antigen test is negative."
                 },
                 {
                   "stepNumber": 9,
-                  "type": "ConfirmatoryLabTest",
-                  "actionDescription": "Administer a Lepromin test.",
+                  "type": "InitialLabTest",
+                  "actionDescription": "Order Malaria rapid diagnostic test.",
                   "rationaleTags": [
-                    "Assess Cell-Mediated Immunity",
-                    "Support Diagnosis"
+                    "Rule Out Malaria",
+                    "Fever Etiology",
+                    "Endemic Region"
                   ],
-                  "detailedRationale": "A positive Lepromin test supports the diagnosis of tuberculoid leprosy by demonstrating a strong cell-mediated immune response to Mycobacterium leprae.  A negative test is more common in lepromatous leprosy."
+                  "detailedRationale": "Given the patient's travel to a tropical region, Malaria is a key differential diagnosis. A rapid diagnostic test can quickly rule out this potentially life-threatening infection."
                 },
                 {
                   "stepNumber": 10,
-                  "type": "InitialLabTest",
-                  "actionDescription": "Order CBC, LFT, RFT, Fasting Glucose, and HIV test.",
+                  "type": "PhysicalExam",
+                  "actionDescription": "Perform HEENT exam to assess for scleral injection and gum bleeding.",
                   "rationaleTags": [
-                    "MDT Safety",
-                    "Baseline Health Assessment"
+                    "Bleeding Signs",
+                    "Dengue Severity",
+                    "Hemorrhagic Fever"
                   ],
-                  "detailedRationale": "These tests are important for assessing the patient's overall health and organ function before starting multidrug therapy (MDT). HIV testing is important due to potential interactions and altered immune responses."
+                  "detailedRationale": "Scleral injection and gum bleeding are signs of increased vascular permeability and bleeding risk, suggesting progression towards Dengue Hemorrhagic Fever."
                 }
               ]
             }
           }
         },
-        "timestamp": "2025-05-28T08:59:26.379273"
+        "timestamp": "2025-05-29T05:10:45.669683"
       }
     }
   }

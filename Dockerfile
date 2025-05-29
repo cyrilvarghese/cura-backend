@@ -13,8 +13,7 @@ COPY environment.yml .
 # Create and activate the Conda environment with improved error logging
 RUN conda env create -f environment.yml --debug > conda_log.txt 2>&1 || (cat conda_log.txt && false)
 
-# Install gunicorn (add this line after creating conda environment)
-RUN conda run -n cura-env pip install gunicorn
+ 
 
 # Set PATH to include the Conda environment's executables
 ENV PATH /opt/conda/envs/cura-env/bin:$PATH
@@ -29,4 +28,4 @@ RUN mkdir -p /app/case-data
 EXPOSE 8000
 
 # Command to create DB from schema, seed it, then run the app
-CMD sh -c "sqlite3 medical_assessment.db < schema.sql && python insert_data.py && gunicorn main:app -w 2 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --access-logfile - --error-logfile -"
+CMD sh -c "sqlite3 medical_assessment.db < schema.sql && python insert_data.py && uvicorn main:app --host 0.0.0.0 --port 8000"

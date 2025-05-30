@@ -45,7 +45,7 @@ from routers.record_osce_score import router as osce_score_router
 from routers.student_performance_api import performance_router
 from routers.case_player.diagnosis_feedback_v2 import router as diagnosis_feedback_v2_router
 from routers.case_player.treatment_final_feedback import router as treatment_final_feedback_router
-from auth.auth_api import get_user_from_token
+from auth.router import router as auth_router
 from fastapi import HTTPException
 
 api_router = APIRouter()
@@ -111,5 +111,6 @@ api_router.include_router(osce_score_router)
 api_router.include_router(performance_router)
 api_router.include_router(diagnosis_feedback_v2_router)
 api_router.include_router(treatment_final_feedback_router)
+api_router.include_router(auth_router)
 
  

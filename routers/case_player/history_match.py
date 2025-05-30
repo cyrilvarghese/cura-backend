@@ -1,5 +1,6 @@
 from typing import List, Dict, Any
-from fastapi import APIRouter, HTTPException, Body, Query
+from fastapi import APIRouter, HTTPException, Body, Query, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -7,7 +8,7 @@ import json
 from pathlib import Path
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
-from auth.auth_api import get_user
+from auth.auth_api import get_user_from_token
 from utils.session_manager import SessionManager
 import asyncio
 from collections import Counter
@@ -16,13 +17,16 @@ from pydantic import BaseModel
 # Load environment variables
 load_dotenv()
 
+# Define the security scheme
+security = HTTPBearer()
+
 # Constants
 CASE_DATA_PATH_PATTERN = "case-data/case{}"
 HISTORY_CONTEXT_FILENAME = "history_context.json"
 
 router = APIRouter(
     prefix="/history-match",
-    tags=["history-match"]
+    tags=["case-player"]
 )
 
 # Initialize the Gemini client and SessionManager
@@ -72,7 +76,8 @@ class SingleInteractionRequest(BaseModel):
 
 @router.post("/unmatched-questions")
 async def get_unmatched_questions(
-   request: UnmatchedQuestionsRequest = Body(...)
+    request: UnmatchedQuestionsRequest = Body(...),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """
     Get a list of expected questions that were not asked by the student in their history taking.
@@ -146,13 +151,22 @@ async def get_unmatched_questions(
     }
     ```
     """
+    print(f"[HISTORY_MATCH] 📋 Processing unmatched questions request")
+    
+    # Extract token and authenticate the user
     try:
-        # Get student ID from authentication
-        user_response = await get_user()
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[HISTORY_MATCH] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
-            raise HTTPException(status_code=401, detail="Authentication required")
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[HISTORY_MATCH] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
         
         student_id = user_response["user"]["id"]
+        print(f"[HISTORY_MATCH] ✅ User authenticated successfully. Student ID: {student_id}")
         
         # Get session data and case ID
         session_data = session_manager.get_session(student_id)
@@ -329,14 +343,17 @@ async def get_unmatched_questions(
             }
         }
         
-    except Exception as e:
-        error_msg = f"Error in get_unmatched_questions: {str(e)}"
-        import traceback
-        raise HTTPException(status_code=500, detail=error_msg)
+    except HTTPException as auth_error:
+        print(f"[HISTORY_MATCH] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[HISTORY_MATCH] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.post("/match-single-interaction")
 async def match_single_interaction(
-    request: SingleInteractionRequest = Body(...)
+    request: SingleInteractionRequest = Body(...),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """
     Determine which outstanding questions are covered by a single student-patient interaction.
@@ -426,7 +443,23 @@ async def match_single_interaction(
     }
     ```
     """
+    print(f"[HISTORY_MATCH] 🔍 Processing single interaction match request")
+    
+    # Extract token and authenticate the user
     try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[HISTORY_MATCH] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[HISTORY_MATCH] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        student_id = user_response["user"]["id"]
+        print(f"[HISTORY_MATCH] ✅ User authenticated successfully. Student ID: {student_id}")
+        
         # Validate input
         current_interaction = request.current_interaction
         uncovered_questions = request.uncovered_questions
@@ -438,13 +471,6 @@ async def match_single_interaction(
                 detail="current_interaction must include student_question and patient_reply fields"
             )
             
-        # Get student ID from authentication
-        user_response = await get_user()
-        if not user_response["success"]:
-            raise HTTPException(status_code=401, detail="Authentication required")
-        
-        student_id = user_response["user"]["id"]
-        
         # Get session data and case ID
         session_data = session_manager.get_session(student_id)
         if not session_data:
@@ -582,7 +608,9 @@ async def match_single_interaction(
             }
         }
         
-    except Exception as e:
-        error_msg = f"Error in match_single_interaction: {str(e)}"
-        import traceback
-        raise HTTPException(status_code=500, detail=error_msg) 
+    except HTTPException as auth_error:
+        print(f"[HISTORY_MATCH] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[HISTORY_MATCH] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed") 

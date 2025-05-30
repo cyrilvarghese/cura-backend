@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from typing import Dict, Any, List
 import json
@@ -6,10 +7,13 @@ import os
 from pathlib import Path
 from datetime import datetime
 from utils.session_manager import SessionManager
-from auth.auth_api import get_user, get_authenticated_client
+from auth.auth_api import get_user, get_authenticated_client, get_user_from_token
 
 case_router = APIRouter()
 session_manager = SessionManager()
+
+# Define the security scheme
+security = HTTPBearer()
 
 class CaseData(BaseModel):
     content: Dict[str, Any]
@@ -33,15 +37,32 @@ class CaseDeleteUpdate(BaseModel):
     deleted: bool
 
 @case_router.get("/cases", response_model=List[CaseInfo])
-async def list_cases():
+async def list_cases(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """List all available cases by reading case_cover.json files"""
+    print(f"[CASE_ROUTER] 📋 Getting list of cases...")
+    
+    # Extract token and authenticate the user
     try:
-        # First check authentication
-        user_response = await get_user()
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[CASE_ROUTER] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
+            print(f"[CASE_ROUTER] ❌ Authentication failed: {error_message}")
             raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[CASE_ROUTER] ✅ User authenticated successfully. User ID: {user_id}")
+    except HTTPException as auth_error:
+        print(f"[CASE_ROUTER] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[CASE_ROUTER] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
+    try:
         cases = []
         case_data_dir = Path("case-data")
         
@@ -74,28 +95,40 @@ async def list_cases():
         
         # Sort cases by case_id
         cases.sort(key=lambda x: x.case_id)
+        print(f"[CASE_ROUTER] ✅ Retrieved {len(cases)} cases successfully")
         return cases
 
     except HTTPException as http_error:
         raise http_error
     except Exception as e:
-        print(f"Unexpected error in list_cases: {str(e)}")
-        raise HTTPException(status_code=500, detail="Error retrieving case list")
+        error_msg = str(e)
+        print(f"[CASE_ROUTER] ❌ Error retrieving cases: {error_msg}")
+        raise HTTPException(status_code=500, detail=f"Error retrieving case list: {error_msg}")
 
 @case_router.get("/cases/{case_id}", response_model=CaseData)
-async def get_case_data(case_id: str):
+async def get_case_data(case_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Get case data including physical exam and lab test data"""
-    # First handle authentication outside main try block
+    print(f"[CASE_ROUTER] 📊 Getting case data for case ID: {case_id}")
+    
+    # Extract token and authenticate the user
     try:
-        user_response = await get_user()
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[CASE_ROUTER] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
+            print(f"[CASE_ROUTER] ❌ Authentication failed: {error_message}")
             raise HTTPException(status_code=401, detail=error_message)
         
         student_id = user_response["user"]["id"]
+        print(f"[CASE_ROUTER] ✅ User authenticated successfully. Student ID: {student_id}")
     except HTTPException as auth_error:
+        print(f"[CASE_ROUTER] ❌ HTTP exception during authentication: {str(auth_error)}")
         raise auth_error
     except Exception as auth_error:
+        print(f"[CASE_ROUTER] ❌ Unexpected error during authentication: {str(auth_error)}")
         raise HTTPException(status_code=401, detail="Authentication failed")
 
     try:
@@ -141,6 +174,7 @@ async def get_case_data(case_id: str):
                 detail=f"Error reading case files: {str(file_error)}"
             )
 
+        print(f"[CASE_ROUTER] ✅ Successfully retrieved case data for case {case_id}")
         return {
             "content": {
                 "physical_exam": data.get("physical_exam", {}),
@@ -153,22 +187,40 @@ async def get_case_data(case_id: str):
     except HTTPException as http_error:
         raise http_error
     except Exception as e:
-        print(f"Unexpected error in get_case_data: {str(e)}")
+        error_msg = str(e)
+        print(f"[CASE_ROUTER] ❌ Error retrieving case data: {error_msg}")
         raise HTTPException(
             status_code=500,
-            detail="An unexpected error occurred while processing the case data"
+            detail=f"An unexpected error occurred while processing the case data: {error_msg}"
         )
 
 @case_router.post("/cases/{case_id}/publish", response_model=dict)
-async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):
+async def update_case_cover(case_id: str, update_data: CaseCoverUpdate, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Update published status in the case cover file"""
+    print(f"[CASE_ROUTER] 📝 Updating case cover for case ID: {case_id}")
+    
+    # Extract token and authenticate the user
     try:
-        # First check authentication
-        user_response = await get_user()
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[CASE_ROUTER] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
+            print(f"[CASE_ROUTER] ❌ Authentication failed: {error_message}")
             raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[CASE_ROUTER] ✅ User authenticated successfully. User ID: {user_id}")
+    except HTTPException as auth_error:
+        print(f"[CASE_ROUTER] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[CASE_ROUTER] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
+    try:
         cover_file_path = os.path.join('case-data', f'case{case_id}', 'case_cover.json')
         
         # Check if the case cover file exists
@@ -213,27 +265,46 @@ async def update_case_cover(case_id: str, update_data: CaseCoverUpdate):
             print(f"WARNING: Could not reset last_modified_time in Supabase: {str(db_error)}")
             # Don't raise HTTP exception here as this is not critical
         
+        print(f"[CASE_ROUTER] ✅ Case cover updated successfully for case {case_id}")
         return {"message": "Case cover updated successfully"}
 
     except HTTPException as http_error:
         raise http_error
     except Exception as e:
-        print(f"Unexpected error in update_case_cover: {str(e)}")
+        error_msg = str(e)
+        print(f"[CASE_ROUTER] ❌ Error updating case cover: {error_msg}")
         raise HTTPException(
             status_code=500,
-            detail="An unexpected error occurred while updating the case cover"
+            detail=f"An unexpected error occurred while updating the case cover: {error_msg}"
         )
 
 @case_router.post("/cases/{case_id}/delete", response_model=dict)
-async def soft_delete_case(case_id: str, update_data: CaseDeleteUpdate):
+async def soft_delete_case(case_id: str, update_data: CaseDeleteUpdate, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Mark a case as deleted (soft delete) by updating the deleted flag in the case cover file"""
+    print(f"[CASE_ROUTER] 🗑️ Soft deleting case ID: {case_id}")
+    
+    # Extract token and authenticate the user
     try:
-        # First check authentication
-        user_response = await get_user()
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[CASE_ROUTER] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
+            print(f"[CASE_ROUTER] ❌ Authentication failed: {error_message}")
             raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[CASE_ROUTER] ✅ User authenticated successfully. User ID: {user_id}")
+    except HTTPException as auth_error:
+        print(f"[CASE_ROUTER] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[CASE_ROUTER] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
+    try:
         cover_file_path = os.path.join('case-data', f'case{case_id}', 'case_cover.json')
         
         # Check if the case cover file exists
@@ -264,13 +335,15 @@ async def soft_delete_case(case_id: str, update_data: CaseDeleteUpdate):
                 detail=f"Error writing to case cover file: {str(write_error)}"
             )
         
+        print(f"[CASE_ROUTER] ✅ Case deletion status updated successfully for case {case_id}")
         return {"message": "Case deletion status updated successfully"}
 
     except HTTPException as http_error:
         raise http_error
     except Exception as e:
-        print(f"Unexpected error in soft_delete_case: {str(e)}")
+        error_msg = str(e)
+        print(f"[CASE_ROUTER] ❌ Error updating case deletion status: {error_msg}")
         raise HTTPException(
             status_code=500,
-            detail="An unexpected error occurred while updating the case deletion status"
+            detail=f"An unexpected error occurred while updating the case deletion status: {error_msg}"
         )

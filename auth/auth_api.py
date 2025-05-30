@@ -3,13 +3,10 @@ from supabase import create_client, Client
 from typing import Dict, Any, Optional
 from dotenv import load_dotenv
 import asyncio
+from fastapi import HTTPException
 
 # Load environment variables
 load_dotenv()
-
-# Global variables to store session info
-current_session = None
-current_user = None
 
 # Initialize Supabase client once
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
@@ -105,9 +102,13 @@ async def _signup_internal(email: str, password: str, username: str, role: str):
                 profile_response = service_client.table("profiles").insert(profile_data).execute()
                 print(f"✓ Profile created successfully: {profile_response}")
                 
+                # Return Supabase's JWT token directly
                 return {
                     "success": True,
-                    "token": auth_response.session.access_token if auth_response.session else None,
+                    "access_token": auth_response.session.access_token,
+                    "refresh_token": auth_response.session.refresh_token,
+                    "token_type": "bearer",
+                    "expires_at": auth_response.session.expires_at,
                     "user": {
                         "id": user_id,
                         "email": email,
@@ -151,41 +152,36 @@ async def login(email: str, password: str, timeout: int = 15) -> Dict[str, Any]:
 async def _login_internal(email: str, password: str):
     """Internal login function wrapped with timeout"""
     try:
-        global current_session, current_user
-        
-        # Sign in the user with session options
+        # Sign in the user
         auth_response = supabase.auth.sign_in_with_password({
             "email": email,
             "password": password
         })
         
-        if auth_response.user:
+        if auth_response.user and auth_response.session:
             # Get the user's profile data
             profile_response = supabase.table("profiles").select("*").eq("id", auth_response.user.id).execute()
             
             if profile_response.data and len(profile_response.data) > 0:
                 profile = profile_response.data[0]
                 
-                # Store session info
-                current_session = auth_response.session
-                current_user = {
+                user_data = {
                     "id": auth_response.user.id,
                     "email": email,
                     "username": profile.get("username"),
                     "role": profile.get("role")
                 }
                 
-                print("Login successful. Session info:", {
-                    "user": current_user["email"],
-                    "access_token_expires_at": current_session.expires_at if current_session else None,
-                    "has_refresh_token": bool(current_session.refresh_token) if current_session else False
-                })
+                print("Login successful. Supabase JWT token issued for user:", user_data["email"])
                 
+                # Return Supabase's JWT tokens
                 return {
                     "success": True,
-                    "token": auth_response.session.access_token if auth_response.session else None,
-                    "refresh_token": auth_response.session.refresh_token if auth_response.session else None,
-                    "user": current_user
+                    "access_token": auth_response.session.access_token,
+                    "refresh_token": auth_response.session.refresh_token,
+                    "token_type": "bearer",
+                    "expires_at": auth_response.session.expires_at,
+                    "user": user_data
                 }
             
         return {
@@ -199,109 +195,93 @@ async def _login_internal(email: str, password: str):
             "error": str(e)
         }
 
-async def get_user() -> Dict[str, Any]:
+async def get_user_from_token(access_token: str) -> Dict[str, Any]:
     """
-    Get the current logged-in user's information.
+    Get user information from Supabase JWT token.
     
+    Args:
+        access_token: Supabase JWT access token
+        
     Returns:
         Dict containing user data
     """
     try:
-        global current_session, current_user
+        # Create a new client with the user's token
+        user_client = create_client(SUPABASE_URL, SUPABASE_KEY)
         
-        # If we have cached user info, return it
-        if current_user and current_session:
-            return {
-                "success": True,
-                "user": current_user
-            }
+        # Don't set session, just get user directly from token
+        user_response = user_client.auth.get_user(access_token)
+        
+        if user_response.user:
+            user_id = user_response.user.id
             
-        # Otherwise get the current session
-        session = supabase.auth.get_session()
-        
-        if not session or not session.user:
+            # Get the user's profile data using the authenticated client
+            # Set the Authorization header manually for this request
+            user_client.postgrest.auth(access_token)
+            profile_response = user_client.table("profiles").select("*").eq("id", user_id).execute()
+            
+            if profile_response.data and len(profile_response.data) > 0:
+                profile = profile_response.data[0]
+                
+                user_data = {
+                    "id": user_id,
+                    "email": user_response.user.email,
+                    "username": profile.get("username"),
+                    "role": profile.get("role")
+                }
+                
+                return {
+                    "success": True,
+                    "user": user_data
+                }
+            else:
+                # Fallback to basic user data if no profile
+                user_data = {
+                    "id": user_id,
+                    "email": user_response.user.email,
+                    "username": None,
+                    "role": None
+                }
+                
+                return {
+                    "success": True,
+                    "user": user_data
+                }
+        else:
             return {
                 "success": False,
-                "error": "No active session found"
-            }
-        
-        user_id = session.user.id
-        
-        # Get the user's profile data
-        profile_response = supabase.table("profiles").select("*").eq("id", user_id).execute()
-        
-        if profile_response.data and len(profile_response.data) > 0:
-            profile = profile_response.data[0]
-            
-            # Store session info globally
-            current_session = session
-            current_user = {
-                "id": user_id,
-                "email": session.user.email,
-                "username": profile.get("username"),
-                "role": profile.get("role")
+                "error": "Invalid or expired token"
             }
             
-            return {
-                "success": True,
-                "user": current_user
-            }
-        else:
-            current_user = {
-                "id": user_id,
-                "email": session.user.email
-            }
-            return {
-                "success": True,
-                "user": current_user
-            }
     except Exception as e:
+        print(f"Error getting user from token: {str(e)}")
         return {
             "success": False,
-            "error": str(e)
+            "error": "Invalid or expired token"
         }
+
+# Remove the old get_user function that relied on global state
+async def get_user() -> Dict[str, Any]:
+    """
+    DEPRECATED: Use get_user_from_token instead.
+    """
+    return {
+        "success": False,
+        "error": "This function is deprecated. Use token-based authentication instead."
+    }
 
 async def logout(timeout: int = 15) -> Dict[str, Any]:
     """
-    Sign out the current user and clear session data.
-    
-    Returns:
-        Dict indicating success or failure
+    Sign out the current user.
     """
     try:
-        return await asyncio.wait_for(
-            _logout_internal(),
-            timeout=timeout
-        )
-    except asyncio.TimeoutError:
-        print(f"Logout operation timed out after {timeout} seconds")
-        return {
-            "success": False,
-            "error": "Operation timed out"
-        }
-
-async def _logout_internal():
-    """Internal logout function wrapped with timeout"""
-    try:
-        global current_session, current_user
-        
-        # Log current state before clearing
-        print("Logging out user:", {
-            "email": current_user.get("email") if current_user else None,
-            "role": current_user.get("role") if current_user else None
-        })
-        
-        # Sign out from Supabase
-        supabase.auth.sign_out()
-        
-        # Clear session info
-        current_session = None
-        current_user = None
-        
-        print("Session cleared - current_session and current_user set to None")
+        # With Supabase, logout is handled client-side by clearing the token
+        # The token will naturally expire based on Supabase's settings
+        print("User logged out (token should be cleared client-side)")
         
         return {
-            "success": True
+            "success": True,
+            "message": "Logged out successfully"
         }
     except Exception as e:
         print(f"Logout error: {str(e)}")
@@ -310,67 +290,25 @@ async def _logout_internal():
             "error": str(e)
         }
 
-# Add this helper function to get authenticated client
-def get_authenticated_client() -> Client:
-    """Get a Supabase client with the current user's session"""
-    global current_session, current_user, supabase
-
+def get_authenticated_client(access_token: str) -> Client:
+    """Get a Supabase client with the user's JWT token"""
     try:
-        if not current_session or not current_user:
-            print("No active session found, attempting to refresh...")
-            # Try to get session from Supabase
-            session_response = supabase.auth.get_session()
-
-            if session_response and session_response.session:
-                current_session = session_response.session
-                user = session_response.user
-                if user:
-                    current_user = {
-                        "id": user.id,
-                        "email": user.email,
-                        "role": user.user_metadata.get("role") if user.user_metadata else None
-                    }
-                    print(f"Session refreshed for user: {current_user['email']}")
-                else:
-                    raise Exception("No user data in session")
-            else:
-                raise Exception("No valid session found")
-
-        # Always try to refresh the session if access token is close to expiring
-        try:
-            refresh_response = supabase.auth.refresh_session()
-            if refresh_response and refresh_response.session:
-                current_session = refresh_response.session
-                print("Session refreshed successfully")
-        except Exception as refresh_error:
-            print(f"Session refresh failed: {str(refresh_error)}")
-
-        # Set the session on the client
-        supabase.auth.set_session(
-            current_session.access_token,
-            current_session.refresh_token
-        )
-
-        print(f"Using authenticated session for user: {current_user['email']}")
-        return supabase
+        # Create client with user's token
+        user_client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        user_client.auth.set_session(access_token, None)
+        
+        return user_client
+        
     except Exception as e:
         print(f"Authentication error: {str(e)}")
         raise Exception("Authentication required. Please log in.")
 
-# Simple function to get the client
-def get_client() -> Client:
-    """Get the Supabase client"""
-    return supabase 
-
-async def is_admin() -> bool:
+async def is_admin_from_token(access_token: str) -> bool:
     """
-    Check if the current user has admin privileges.
-    
-    Returns:
-        bool: True if user is an admin, False otherwise
+    Check if the user with the given token has admin privileges.
     """
     try:
-        user_response = await get_user()
+        user_response = await get_user_from_token(access_token)
         
         if not user_response["success"]:
             print(f"Admin check failed: {user_response.get('error', 'User not authenticated')}")

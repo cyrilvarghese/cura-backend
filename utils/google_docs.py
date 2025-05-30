@@ -6,7 +6,7 @@ from typing import Optional, List, Dict, Any, Tuple
 import re
 import traceback
 from utils.file_ops import export_file
-from auth.auth_api import get_client
+from auth.auth_api import get_supabase_client
 from datetime import datetime
 from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 from googleapiclient.errors import HttpError
@@ -392,7 +392,7 @@ class GoogleDocsManager:
             files = results.get('files', [])
 
             # Get Supabase client and log auth info
-            supabase = get_client()
+            supabase = get_supabase_client()
             session = supabase.auth.get_session()
             
             # Query will automatically include auth headers
@@ -552,7 +552,7 @@ class GoogleDocsManager:
             print(f"Downloading document with ID: {doc_id}")
             
             # Get current user info and check role
-            user_info = await get_client()
+            user_info = get_supabase_client()
             if not user_info.get("success"):
                 raise HTTPException(
                     status_code=401,

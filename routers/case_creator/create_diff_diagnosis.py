@@ -1,6 +1,7 @@
 import json
 from typing import Optional
-from fastapi import APIRouter, File, UploadFile, HTTPException, Form
+from fastapi import APIRouter, File, UploadFile, HTTPException, Form, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from datetime import datetime
@@ -14,12 +15,21 @@ from pathlib import Path
 from pydantic import BaseModel
 import uuid
 import re
+import asyncio
+import google.generativeai as genai
+from auth.auth_api import get_user_from_token
 
 # Load environment variables
 load_dotenv()
 
+# Configure Gemini
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+# Define the security scheme
+security = HTTPBearer()
+
 router = APIRouter(
-    prefix="/differential_diagnosis",
+    prefix="/diff_diagnosis",
     tags=["create-data"]
 )
 
@@ -43,8 +53,43 @@ class CreateDiffDiagnosisRequest(BaseModel):
     case_id: Optional[int] = None
 
 @router.post("/create")
-async def create_differential_diagnosis(request: CreateDiffDiagnosisRequest):
-    """Create differential diagnosis based on a case document."""
+async def create_diff_diagnosis(
+    request: CreateDiffDiagnosisRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Create differential diagnosis data based on a case document.
+    """
+    print(f"[{datetime.now()}] Starting differential diagnosis creation for file: {request.file_name}, case_id: {request.case_id}")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[DIFF_DIAGNOSIS] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[DIFF_DIAGNOSIS] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        user_role = user_response["user"].get("role", "")
+        
+        # Check if user is admin or teacher
+        if user_role not in ["admin", "teacher"]:
+            print(f"[DIFF_DIAGNOSIS] ❌ Access denied: User role '{user_role}' is not authorized")
+            raise HTTPException(status_code=403, detail="Only teachers and admins can create differential diagnosis")
+            
+        print(f"[DIFF_DIAGNOSIS] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
+    except HTTPException as auth_error:
+        print(f"[DIFF_DIAGNOSIS] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[DIFF_DIAGNOSIS] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
     try:
         # Get the uploads directory path
         uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))

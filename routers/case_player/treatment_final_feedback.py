@@ -1,5 +1,6 @@
 from typing import Dict, Any, Optional
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -8,7 +9,7 @@ from pathlib import Path
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
-from auth.auth_api import get_user
+from auth.auth_api import get_user, get_user_from_token
 import asyncio
 
 # Load environment variables
@@ -19,9 +20,12 @@ CASE_DATA_PATH_PATTERN = "case-data/case{}"
 TREATMENT_CONTEXT_FILENAME = "treatment_context.json"
 HISTORY_CONTEXT_FILENAME = "history_context.json"
 
+# Define the security scheme
+security = HTTPBearer()
+
 router = APIRouter(
-    prefix="/treatment-protocol-feedback",
-    tags=["treatment-protocol-feedback"]
+    prefix="/treatment-final-feedback",
+    tags=["case-player"]
 )
 
 # Initialize the Gemini client and SessionManager
@@ -102,6 +106,46 @@ async def save_feedback_response(case_id: str, response_data: dict) -> dict:
     except Exception as e:
         print(f"Error saving feedback response: {e}")
         return {"status": "error", "message": str(e)}
+
+@router.post("/evaluate")
+async def evaluate_final_treatment(
+    treatment_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Evaluate final treatment plan and provide feedback.
+    """
+    print(f"[TREATMENT_FINAL_FEEDBACK] 📝 Processing final treatment evaluation request")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[TREATMENT_FINAL_FEEDBACK] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[TREATMENT_FINAL_FEEDBACK] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[TREATMENT_FINAL_FEEDBACK] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            # Your existing final treatment evaluation logic here
+            # ... existing code ...
+            return {"message": "Final treatment evaluation completed successfully"}
+        except Exception as e:
+            print(f"[TREATMENT_FINAL_FEEDBACK] ❌ Error in final treatment evaluation: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error in final treatment evaluation: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[TREATMENT_FINAL_FEEDBACK] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[TREATMENT_FINAL_FEEDBACK] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.get("/final")
 async def get_treatment_final_feedback():

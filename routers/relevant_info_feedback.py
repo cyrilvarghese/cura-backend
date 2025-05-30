@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -10,11 +11,18 @@ import json
 from utils.text_cleaner import clean_code_block
 import google.generativeai as genai
 import asyncio
+from auth.auth_api import get_user_from_token
 
 # Load environment variables
 load_dotenv()
 
-findings_router = APIRouter()
+# Define the security scheme
+security = HTTPBearer()
+
+router = APIRouter(
+    prefix="/relevant-info-feedback",
+    tags=["relevant-info-feedback"]
+)
 
 # Initialize the OpenAI model
 model = ChatOpenAI(
@@ -62,7 +70,58 @@ def load_prompt(file_path: str) -> str:
 FINDINGS_EVALUATION_PROMPT = load_prompt("prompts/relevant_info_feedback.txt")
 SINGLE_FINDING_EVALUATION_PROMPT = load_prompt("prompts/relevant_info_single_feedback_v2.txt")
 
-@findings_router.post("/evaluate-findings-gemini", response_model=EvaluationResponse)
+@router.post("/record")
+async def record_relevant_info_feedback(
+    feedback_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Record relevant information feedback for a case.
+    """
+    print(f"[RELEVANT_INFO_FEEDBACK] 📝 Recording feedback with data: {feedback_data}")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[RELEVANT_INFO_FEEDBACK] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[RELEVANT_INFO_FEEDBACK] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[RELEVANT_INFO_FEEDBACK] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            session_manager = SessionManager()
+            session_data = session_manager.add_relevant_info_feedback(
+                student_id=user_id,
+                case_id=feedback_data["case_id"],
+                feedback=feedback_data["feedback"]
+            )
+            
+            print(f"Recorded relevant info feedback for student {user_id} in case {feedback_data['case_id']}")
+            
+            return {
+                "status": "success",
+                "message": "Relevant info feedback recorded successfully",
+                "session_data": session_data
+            }
+        except Exception as e:
+            print(f"[RELEVANT_INFO_FEEDBACK] ❌ Error recording feedback: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error recording relevant info feedback: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[RELEVANT_INFO_FEEDBACK] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[RELEVANT_INFO_FEEDBACK] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+@router.post("/evaluate-findings-gemini", response_model=EvaluationResponse)
 async def evaluate_findings_gemini(request: StudentFindings):
     try:
         critical_findings = get_critical_findings(request.case_id)
@@ -128,7 +187,7 @@ async def evaluate_findings_gemini(request: StudentFindings):
         print(f"[DEBUG] Full error details: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@findings_router.post("/evaluate-single-finding")
+@router.post("/evaluate-single-finding")
 async def evaluate_single_finding(request: dict):
     """
     Evaluate a single finding against the critical findings for a case.

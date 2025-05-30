@@ -1,5 +1,6 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from fastapi.responses import JSONResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import os
 from datetime import datetime
 from typing import Optional, List
@@ -11,6 +12,10 @@ from .helpers.image_downloader import download_image
 from .helpers.image_extractor import extract_and_save
 import time
 import traceback
+from auth.auth_api import get_user_from_token
+
+# Define the security scheme
+security = HTTPBearer()
 
 router = APIRouter(
     prefix="/test-image",
@@ -210,6 +215,7 @@ async def upload_test_image(
     test_name: str = Form(...),
     test_type: TestType = Form(...),
     files: List[UploadFile] = File(...),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """
     Upload one or more images for a test and update the test_exam_data.json file

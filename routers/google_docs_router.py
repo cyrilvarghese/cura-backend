@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import List, Optional
 from pydantic import BaseModel
 from utils.google_docs import GoogleDocsManager
@@ -12,8 +13,15 @@ import traceback
 from utils.supabase_document_ops import SupabaseDocumentOps
 import asyncio
 from asyncio import TimeoutError
+from auth.auth_api import get_user_from_token
 
-router = APIRouter()
+# Define the security scheme
+security = HTTPBearer()
+
+router = APIRouter(
+    prefix="/google-docs",
+    tags=["google-docs"]
+)
 
 class DocumentStatus(str, Enum):
     CASE_REVIEW_PENDING = "CASE_REVIEW_PENDING"
@@ -48,6 +56,92 @@ class CommentModel(BaseModel):
     modifiedTime: str
     resolved: bool
     quotedText: Optional[str] = None
+
+@router.post("/create")
+async def create_google_doc(
+    doc_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Create a new Google Doc.
+    """
+    print(f"[GOOGLE_DOCS] 📝 Creating new doc with data: {doc_data}")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[GOOGLE_DOCS] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[GOOGLE_DOCS] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        user_role = user_response["user"].get("role", "")
+        
+        # Check if user is admin or teacher
+        if user_role not in ["admin", "teacher"]:
+            print(f"[GOOGLE_DOCS] ❌ Access denied: User role '{user_role}' is not authorized")
+            raise HTTPException(status_code=403, detail="Only teachers and admins can create Google Docs")
+            
+        print(f"[GOOGLE_DOCS] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
+        
+        try:
+            # Your existing Google Doc creation logic here
+            # ... existing code ...
+            return {"message": "Google Doc created successfully"}
+        except Exception as e:
+            print(f"[GOOGLE_DOCS] ❌ Error creating Google Doc: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error creating Google Doc: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[GOOGLE_DOCS] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[GOOGLE_DOCS] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+@router.get("/list")
+async def list_google_docs(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    List all Google Docs.
+    """
+    print(f"[GOOGLE_DOCS] 📋 Listing all docs")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[GOOGLE_DOCS] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[GOOGLE_DOCS] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[GOOGLE_DOCS] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            # Your existing Google Doc listing logic here
+            # ... existing code ...
+            return {"message": "Google Docs listed successfully"}
+        except Exception as e:
+            print(f"[GOOGLE_DOCS] ❌ Error listing Google Docs: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error listing Google Docs: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[GOOGLE_DOCS] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[GOOGLE_DOCS] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.get("/google-docs", response_model=List[GoogleDocFile])
 async def list_google_docs(department_id: Optional[str] = None):

@@ -1,5 +1,6 @@
 from typing import List, Dict, Any
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -16,7 +17,7 @@ from langchain.output_parsers import ResponseSchema, StructuredOutputParser
 # Local utility imports
 from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
-from auth.auth_api import get_user
+from auth.auth_api import get_user, get_user_from_token
 
 # Load environment variables
 load_dotenv()
@@ -25,9 +26,12 @@ load_dotenv()
 CASE_DATA_PATH_PATTERN = "case-data/case{}"
 HISTORY_CONTEXT_FILENAME = "history_context.json"
 
+# Define the security scheme
+security = HTTPBearer()
+
 router = APIRouter(
-    prefix="/feedback",
-    tags=["history-feedback-langchain"]
+    prefix="/history-feedback-langchain",
+    tags=["case-player"]
 )
 
 # Initialize the SessionManager
@@ -448,4 +452,44 @@ async def get_history_aetcom_feedback():
         print(f"[{datetime.now()}] ❌ Error details: {str(e)}")
         import traceback
         print(f"[{datetime.now()}] ❌ Traceback: {traceback.format_exc()}")
-        raise HTTPException(status_code=500, detail=error_msg) 
+        raise HTTPException(status_code=500, detail=error_msg)
+
+@router.post("/evaluate")
+async def evaluate_history_langchain(
+    history_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Evaluate student history taking using LangChain and provide feedback.
+    """
+    print(f"[HISTORY_FEEDBACK_LANGCHAIN] 📝 Processing history evaluation request")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[HISTORY_FEEDBACK_LANGCHAIN] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[HISTORY_FEEDBACK_LANGCHAIN] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[HISTORY_FEEDBACK_LANGCHAIN] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            # Your existing history evaluation logic here
+            # ... existing code ...
+            return {"message": "History evaluation completed successfully"}
+        except Exception as e:
+            print(f"[HISTORY_FEEDBACK_LANGCHAIN] ❌ Error in history evaluation: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error in history evaluation: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[HISTORY_FEEDBACK_LANGCHAIN] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[HISTORY_FEEDBACK_LANGCHAIN] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed") 

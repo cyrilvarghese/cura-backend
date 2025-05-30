@@ -1,5 +1,6 @@
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Form
+from fastapi import APIRouter, HTTPException, Form, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 import uuid
 import os
@@ -12,6 +13,7 @@ import google.generativeai as genai
 from utils.pdf_utils import extract_text_from_document
 from utils.text_cleaner import clean_code_block
 from pydantic import BaseModel
+from auth.auth_api import get_user_from_token
 
 # Load environment variables
 load_dotenv()
@@ -19,8 +21,11 @@ load_dotenv()
 # Configure Gemini
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
+# Define the security scheme
+security = HTTPBearer()
+
 router = APIRouter(
-    prefix="/clinical_findings_context",
+    prefix="/clinical_findings",
     tags=["create-data"]
 )
 
@@ -32,19 +37,49 @@ def load_prompt(file_path: str) -> str:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Prompt file not found.")
 
-class CreateClinicalFindingsContextRequest(BaseModel):
+class CreateClinicalFindingsRequest(BaseModel):
     file_name: str
     case_id: Optional[int] = None
 
 @router.post("/create")
-async def create_clinical_findings_context(request: CreateClinicalFindingsContextRequest):
+async def create_clinical_findings(
+    request: CreateClinicalFindingsRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """
-    Create clinical findings context data based on a case document.
-    Extracts critical clinical findings from history and physical examination using Gemini AI.
+    Create clinical findings data based on a case document.
     """
+    print(f"[{datetime.now()}] Starting clinical findings creation for file: {request.file_name}, case_id: {request.case_id}")
+    
+    # Extract token and authenticate the user
     try:
-        print(f"[{datetime.now()}] Starting clinical findings context creation for file: {request.file_name}, case_id: {request.case_id}")
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
         
+        print(f"[CLINICAL_FINDINGS] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[CLINICAL_FINDINGS] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        user_role = user_response["user"].get("role", "")
+        
+        # Check if user is admin or teacher
+        if user_role not in ["admin", "teacher"]:
+            print(f"[CLINICAL_FINDINGS] ❌ Access denied: User role '{user_role}' is not authorized")
+            raise HTTPException(status_code=403, detail="Only teachers and admins can create clinical findings")
+            
+        print(f"[CLINICAL_FINDINGS] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
+    except HTTPException as auth_error:
+        print(f"[CLINICAL_FINDINGS] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[CLINICAL_FINDINGS] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+    try:
         # Get the uploads directory path
         uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         

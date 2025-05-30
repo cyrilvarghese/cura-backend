@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Header
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 from . import auth_api
+from .dependencies import get_current_user, get_admin_user
 
 # Create router
 router = APIRouter(
@@ -62,4 +63,21 @@ async def logout():
     result = await auth_api.logout()
     if not result.get("success"):
         raise HTTPException(status_code=400, detail=result.get("error", "Logout failed"))
-    return result 
+    return result
+
+@router.get("/me")
+async def get_current_user_route(current_user: dict = Depends(get_current_user)):
+    """Get current user info from JWT token"""
+    return {
+        "success": True,
+        "user": current_user
+    }
+
+@router.get("/admin-check")
+async def admin_check_route(admin_user: dict = Depends(get_admin_user)):
+    """Check if current user is admin"""
+    return {
+        "success": True,
+        "message": f"Admin access confirmed for {admin_user['username']}",
+        "user": admin_user
+    } 

@@ -1,5 +1,5 @@
 import json
-from fastapi import APIRouter, Form, HTTPException, File, UploadFile
+from fastapi import APIRouter, Form, HTTPException, File, UploadFile, Depends
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from datetime import datetime
@@ -13,9 +13,20 @@ from utils.pdf_utils import extract_text_from_document
 from pydantic import BaseModel, model_validator
 from routers.case_creator.helpers.save_data_to_file import save_patient_persona
 import re
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from auth.auth_api import get_user_from_token
+import asyncio
+import google.generativeai as genai
+from utils.text_cleaner import clean_code_block
 
 # Load environment variables
 load_dotenv()
+
+# Configure Gemini
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+# Define the security scheme
+security = HTTPBearer()
 
 router = APIRouter(
     prefix="/patient_persona",
@@ -134,8 +145,43 @@ async def process_patient_persona(case_document: str, case_id: Any, filename: st
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/create")
-async def create_patient_persona(request: CreatePersonaRequest):
-    """Create a patient persona from a file name."""
+async def create_patient_persona(
+    request: CreatePersonaRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Create patient persona data based on a case document.
+    """
+    print(f"[{datetime.now()}] Starting patient persona creation for file: {request.file_name}, case_id: {request.case_id}")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[PATIENT_PERSONA] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[PATIENT_PERSONA] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        user_role = user_response["user"].get("role", "")
+        
+        # Check if user is admin or teacher
+        if user_role not in ["admin", "teacher"]:
+            print(f"[PATIENT_PERSONA] ❌ Access denied: User role '{user_role}' is not authorized")
+            raise HTTPException(status_code=403, detail="Only teachers and admins can create patient personas")
+            
+        print(f"[PATIENT_PERSONA] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
+    except HTTPException as auth_error:
+        print(f"[PATIENT_PERSONA] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[PATIENT_PERSONA] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
     try:
         # Get the uploads directory path from environment variable with fallback
         uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))

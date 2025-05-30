@@ -1,5 +1,6 @@
 from typing import Optional
-from fastapi import APIRouter, File, UploadFile, HTTPException, Form
+from fastapi import APIRouter, File, UploadFile, HTTPException, Form, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from datetime import datetime
@@ -11,13 +12,22 @@ import io
 import json  # Import json for saving data
 from pathlib import Path
 from utils.case_utils import get_next_case_id
-from utils.text_cleaner import extract_code_blocks  # Import the get_next_case_id function
+from utils.text_cleaner import extract_code_blocks, clean_code_block  # Import the get_next_case_id function
 from routers.case_creator.helpers.save_data_to_file import save_examination_data
 from pydantic import BaseModel
 import re
+import asyncio
+import google.generativeai as genai
+from auth.auth_api import get_user_from_token
+
 # Load environment variables
 load_dotenv()
 
+# Configure Gemini
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+# Define the security scheme
+security = HTTPBearer()
 
 # create a exam test data prompt and save it using the existing cases route
 
@@ -59,11 +69,44 @@ class CreateExamTestDataRequest(BaseModel):
     case_id: Optional[int] = None
 
 @router.post("/create")
-async def create_exam_test_data(request: CreateExamTestDataRequest):
-    """Create exam test data based on a meta prompt and a case document."""
+async def create_exam_test_data(
+    request: CreateExamTestDataRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Create exam and test data based on a case document.
+    """
+    print(f"[{datetime.now()}] Starting exam and test data creation for file: {request.file_name}, case_id: {request.case_id}")
+    
+    # Extract token and authenticate the user
     try:
-        print(f"[{datetime.now()}] Starting exam test data creation for file: {request.file_name}, case_id: {request.case_id}")
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
         
+        print(f"[EXAM_TEST_DATA] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[EXAM_TEST_DATA] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        user_role = user_response["user"].get("role", "")
+        
+        # Check if user is admin or teacher
+        if user_role not in ["admin", "teacher"]:
+            print(f"[EXAM_TEST_DATA] ❌ Access denied: User role '{user_role}' is not authorized")
+            raise HTTPException(status_code=403, detail="Only teachers and admins can create exam and test data")
+            
+        print(f"[EXAM_TEST_DATA] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
+    except HTTPException as auth_error:
+        print(f"[EXAM_TEST_DATA] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[EXAM_TEST_DATA] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+    try:
         # Get the uploads directory path
         uploads_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
         

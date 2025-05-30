@@ -1,385 +1,547 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
-  "case_id": "30",
-  "session_start": "2025-05-29T05:10:22.077466",
-  "current_step": "Final Diagnosis",
+  "case_id": "24",
+  "session_start": "2025-05-29T17:09:53.601002",
+  "current_step": "Treatment Plan",
   "interactions": {
-    "history_taking": [],
-    "physical_examinations": [],
-    "tests_ordered": [],
-    "diagnosis_submission": null,
+    "history_taking": [
+      {
+        "question": "How are you doing?",
+        "response": "Honestly, I\u2019ve been feeling pretty unwell lately. I've had a bad fever and my whole body aches.",
+        "timestamp": "2025-05-29T17:10:03.112631"
+      },
+      {
+        "question": "what the problems>",
+        "response": "I woke up yesterday with a terrible fever and my whole body aches like I've been hit by a truck.",
+        "timestamp": "2025-05-29T17:10:14.398578"
+      },
+      {
+        "question": "since how long have you had this?",
+        "response": "I've been feeling this way for about two days now.",
+        "timestamp": "2025-05-29T17:10:34.431260"
+      },
+      {
+        "question": "do you hace a headache?",
+        "response": "Yes, I have this throbbing headache behind my eyes that just won\u2019t go away.",
+        "timestamp": "2025-05-29T17:11:04.875406"
+      },
+      {
+        "question": "what time of the day do you feel feversh?",
+        "response": "I feel the most feverish in the evening and at night, when it seems to really hit me.",
+        "timestamp": "2025-05-29T17:11:31.076991"
+      },
+      {
+        "question": "you have hostiry of mosquito bites?",
+        "response": "Yes, I've had multiple mosquito bites in the past week, especially since we\u2019ve been having more mosquitoes around after the monsoon.",
+        "timestamp": "2025-05-29T17:11:53.589805"
+      },
+      {
+        "question": "any one has similar syptoms int he family?",
+        "response": "No, no one else in my family is showing any similar symptoms right now.",
+        "timestamp": "2025-05-29T17:12:17.249582"
+      }
+    ],
+    "physical_examinations": [
+      {
+        "test_name": "Skin Examination",
+        "timestamp": "2025-05-29T17:14:15.000225"
+      },
+      {
+        "test_name": "Tourniquet Test",
+        "timestamp": "2025-05-29T17:14:29.041183"
+      },
+      {
+        "test_name": "temperature",
+        "timestamp": "2025-05-29T17:15:37.314564"
+      },
+      {
+        "test_name": "blood pressure",
+        "timestamp": "2025-05-29T17:15:55.462933"
+      },
+      {
+        "test_name": "Vital Signs",
+        "timestamp": "2025-05-29T17:17:48.039129"
+      }
+    ],
+    "tests_ordered": [
+      {
+        "test_name": "Peripheral Smear for Malaria",
+        "timestamp": "2025-05-29T17:18:21.783312"
+      },
+      {
+        "test_name": "Complete Blood Count (CBC)",
+        "timestamp": "2025-05-29T17:19:06.179319"
+      },
+      {
+        "test_name": "Dengue NS1 Antigen Test",
+        "timestamp": "2025-05-29T17:19:26.608953"
+      },
+      {
+        "test_name": "Dengue IgM Antibody Test",
+        "timestamp": "2025-05-29T17:19:34.830951"
+      }
+    ],
+    "diagnosis_submission": {
+      "primary_diagnosis": "Dengue Fever (likely primary infection, serotype unknown), currently in Febrile Phase, without Warning Signs",
+      "reason": "headache + body ache + mosquito bites +fever (evening)",
+      "differentials": [
+        "Other Viral Exanthems (Measles, Rubella - if not immunized)",
+        "Acute HIV Seroconversion Syndrome",
+        "Influenza",
+        "Chikungunya",
+        "Leptospirosis",
+        "Enteric Fever (Typhoid)",
+        "Malaria"
+      ],
+      "incorrect_differentials": [
+        "Bacterial Sepsis (e.g., from UTI or skin source)"
+      ],
+      "timestamp": "2025-05-29T17:14:05.042341"
+    },
     "final_diagnosis": {
-      "final_diagnosis": "ds",
-      "final_reason": "d",
-      "timestamp": "2025-05-29T05:10:27.484896"
+      "final_diagnosis": "dengue",
+      "final_reason": "dengue ns1 positive along ",
+      "timestamp": "2025-05-29T17:22:23.211035"
     },
     "pre_treatment_checks": [],
-    "treatment_plan": null,
+    "treatment_plan": {
+      "treatment_steps": [
+        "Drugs - diclofenac 100mg| Notes -  -"
+      ],
+      "timestamp": "2025-05-29T17:31:06.885822"
+    },
     "post_treatment_monitoring": [],
     "clinical_findings": [],
     "feedback": {
       "history_taking": {
         "analysis": {
-          "student_question_evaluation": [],
+          "student_question_evaluation": [
+            {
+              "question_asked": "How are you doing?",
+              "relevance_grade": "relevant",
+              "reason": "Generic greeting, but relevant for establishing rapport and opening the conversation."
+            },
+            {
+              "question_asked": "what the problems>",
+              "relevance_grade": "relevant",
+              "reason": "Attempt to elicit the chief complaint, although phrasing is unclear."
+            },
+            {
+              "question_asked": "since how long have you had this?",
+              "relevance_grade": "relevant",
+              "reason": "Relevant for understanding the duration of the chief complaint, key for diagnosis."
+            },
+            {
+              "question_asked": "do you hace a headache?",
+              "relevance_grade": "relevant",
+              "reason": "Confirms a key associated symptom, important for diagnostic consideration."
+            },
+            {
+              "question_asked": "what time of the day do you feel feversh?",
+              "relevance_grade": "relevant",
+              "reason": "Exploring the pattern of fever can provide some clues, though not highly specific."
+            },
+            {
+              "question_asked": "you have hostiry of mosquito bites?",
+              "relevance_grade": "relevant",
+              "reason": "Addresses a key risk factor given the patient's location and symptoms."
+            },
+            {
+              "question_asked": "any one has similar syptoms int he family?",
+              "relevance_grade": "relevant",
+              "reason": "Relevant for considering potential infectious causes or common exposures."
+            }
+          ],
           "critical_missed_areas": [
             {
-              "domain": "social_exposure_and_lifestyle",
-              "importance_reason": "Determining exposure location and intensity helps narrow differential (Dengue vs. other tropical diseases).",
-              "example_missed_question": "Where exactly did you travel in Thailand?"
+              "domain": "associated_symptoms",
+              "importance_reason": "Failure to ask about bleeding or rash misses critical signs of severe dengue/other infections.",
+              "example_missed_question": "Apart from the body ache and headache, have you noticed any rash on your skin? Any bleeding from your gums when you brush your teeth, or any unusual bruising?"
             },
             {
               "domain": "red_flag_symptoms",
-              "importance_reason": "Gum bleeding suggests possible hemorrhagic fever; assessing other bleeding sites is critical for risk stratification.",
-              "example_missed_question": "Did you notice bleeding from gums or nose?"
+              "importance_reason": "Missing questions about vomiting/abdominal pain/fainting could delay diagnosis of severe dengue.",
+              "example_missed_question": "Have you had any vomiting, severe tummy pain, or felt extremely tired like you might faint?"
             },
             {
-              "domain": "associated_symptoms",
-              "importance_reason": "Characterizing the rash (macular, papular, etc.) and itchiness helps differentiate between viral exanthems.",
-              "example_missed_question": "Can you describe the characteristics of your rash?"
+              "domain": "social_exposure_and_lifestyle",
+              "importance_reason": "Not exploring mosquito exposure details limits understanding of risk and potential source.",
+              "example_missed_question": "Ms. Nair, you mentioned mosquito bites. Has there been a lot of mosquito activity around your home or college recently?"
             }
           ],
           "summary_feedback": {
-            "key_strength": "No questions were asked, so there are no strengths to identify.",
-            "key_weakness": "The student failed to ask any questions, preventing any meaningful history taking.",
-            "cumulative_score": 0.5,
-            "score_reason": "No history was taken, leading to significant missed opportunities to explore critical aspects of the patient's presentation."
+            "key_strength": "Student identified fever, headache, body aches, and mosquito bites, key features of the case.",
+            "key_weakness": "Failed to ask about critical red flag symptoms or fully explore social exposure risks.",
+            "cumulative_score": 2.5,
+            "score_reason": "Identified key symptoms, but missed critical negatives and exposure details, limiting diagnostic and safety considerations."
           }
         },
         "domain_feedback": {
           "aetcom_evaluation": {
             "communication": {
-              "performance_level": "Needs Improvement",
-              "feedback": "The student did not ask any questions, resulting in a complete lack of communication with the patient. Action: Begin the interaction by introducing yourself and asking open-ended questions to establish rapport and gather information."
+              "performance_level": "Satisfactory",
+              "feedback": "The opening question \"How are you doing?\" was a good way to start, but subsequent questions lacked clarity (e.g., \"what the problems>\"). Action: Focus on formulating clear and grammatically correct questions to ensure effective communication."
             },
             "empathy_patient_centeredness": {
               "performance_level": "Needs Improvement",
-              "feedback": "Due to the absence of any questions asked by the student, there was no demonstration of empathy or patient-centeredness. Action: Actively listen to the patient's concerns and acknowledge their feelings by using empathetic statements, such as 'I understand this must be worrying for you'."
+              "feedback": "The student did not acknowledge the patient's discomfort or show empathy when the patient described feeling \"unwell\" and having \"terrible fever\". Action: Acknowledge the patient's feelings with empathetic statements like \"I understand this must be difficult for you\" to build rapport."
             },
             "professionalism_ethics": {
-              "performance_level": "Needs Improvement",
-              "feedback": "The student's failure to initiate any interaction raises concerns about their responsibility in gathering crucial information for patient care. Action: Demonstrate professionalism by being proactive in obtaining a thorough history, respecting patient privacy, and maintaining confidentiality."
+              "performance_level": "Good",
+              "feedback": "The student maintained a respectful tone throughout the interaction. Action: Continue to maintain a professional and respectful demeanor in all patient interactions."
             },
             "information_gathering": {
               "performance_level": "Needs Improvement",
-              "feedback": "The student failed to gather any information relevant to the patient's condition, missing key details about their symptoms, medical history, and risk factors. Action: Systematically inquire about the patient's chief complaint, associated symptoms, past medical history, medications, allergies, and social history to build a comprehensive understanding of their condition."
+              "feedback": "The student elicited the duration of symptoms and history of mosquito bites, but missed opportunities to explore other relevant details (e.g., associated symptoms, medications, past medical history). Action: Use a more structured approach to history-taking to ensure all relevant information is gathered."
             }
           }
         },
-        "timestamp": "2025-05-29T05:10:34.466427"
+        "timestamp": "2025-05-29T17:22:31.379630"
       },
       "diagnosis": {
         "feedback": {
-          "primaryDiagnosis": {
-            "primaryDxFeedback": {
-              "studentStated": {
-                "dx": "ds",
-                "isCorrect": false
-              },
-              "scores": {
-                "accuracyScore": 1,
-                "accuracyExplanation": "The student's diagnosis of 'ds' is incorrect and does not align with the key evidence for Dengue Fever, which includes travel to an endemic area, fever, rash, myalgia, retro-orbital pain, bleeding signs, maculopapular rash, and a positive NS1 antigen test.",
-                "evidenceGatheringScore": 1,
-                "evidenceGatheringExplanation": {
-                  "overallSummary": "The student did not perform any physical exams or order any tests, indicating a lack of evidence gathering.",
-                  "historyStrengths": [],
-                  "examStrengths": [],
-                  "testStrengths": [],
-                  "areasForImprovement_Exams": [
-                    "Skin inspection to identify maculopapular rash",
-                    "Vital signs to detect fever, hypotension, tachycardia"
-                  ],
-                  "areasForImprovement_Tests": [
-                    "Dengue NS1 antigen test to confirm acute dengue",
-                    "CBC with differential to evaluate for thrombocytopenia and leukopenia"
-                  ],
-                  "irrelevantActionsNoted": []
-                }
-              },
-              "correctPrimary": {
+          "educationalCapsules": {
+            "educationalCapsules": {
+              "primaryDxCapsule": {
                 "dx": "Dengue Fever",
-                "allSupportingEvidence": {
-                  "history": [
-                    {
-                      "desc": "Recent travel to Thailand",
-                      "alignsWithKeyEvidence": "Travel to endemic area",
-                      "studentDidIdentify": true
-                    },
-                    {
-                      "desc": "High-grade fever, myalgias",
-                      "alignsWithKeyEvidence": "Fever, rash, myalgia",
-                      "studentDidIdentify": true
-                    },
-                    {
-                      "desc": "Gum bleeding reported",
-                      "alignsWithKeyEvidence": "Retro-orbital pain and bleeding signs",
-                      "studentDidIdentify": true
-                    }
-                  ],
-                  "exams": [
-                    {
-                      "name": "Skin inspection",
-                      "expectedFindingSupportingDx": "Maculopapular rash",
-                      "alignsWithKeyEvidence": "Maculopapular rash appears after fever onset",
-                      "studentDidPerform": false,
-                      "studentDidIdentifyFinding": false
-                    },
-                    {
-                      "name": "HEENT exam",
-                      "expectedFindingSupportingDx": "Assess for scleral injection and gum bleeding",
-                      "alignsWithKeyEvidence": "Retro-orbital pain and bleeding signs",
-                      "studentDidPerform": false,
-                      "studentDidIdentifyFinding": false
-                    },
-                    {
-                      "name": "Vital signs",
-                      "expectedFindingSupportingDx": "Detect fever, hypotension, tachycardia",
-                      "alignsWithKeyEvidence": "Fever, rash, myalgia",
-                      "studentDidPerform": false,
-                      "studentDidIdentifyFinding": false
-                    }
-                  ],
-                  "tests": [
-                    {
-                      "name": "Dengue NS1 antigen test",
-                      "expectedResultSupportingDx": "Positive",
-                      "alignsWithKeyEvidence": "Positive NS1 antigen test",
-                      "studentDidOrder": false,
-                      "studentDidIdentifyResult": false
-                    },
-                    {
-                      "name": "CBC with differential",
-                      "expectedResultSupportingDx": "Thrombocytopenia and leukopenia",
-                      "alignsWithKeyEvidence": "Fever, rash, myalgia",
-                      "studentDidOrder": false,
-                      "studentDidIdentifyResult": false
-                    },
-                    {
-                      "name": "Liver function tests (AST/ALT)",
-                      "expectedResultSupportingDx": "Elevated AST/ALT",
-                      "alignsWithKeyEvidence": "Fever, rash, myalgia",
-                      "studentDidOrder": false,
-                      "studentDidIdentifyResult": false
-                    }
-                  ]
-                }
-              },
-              "missedCrucialEvidence": {
-                "missedExams": [
-                  {
-                    "name": "General appearance",
-                    "relevance": "Assess overall condition",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Vital signs",
-                    "relevance": "Detect fever, hypotension, tachycardia",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Skin inspection",
-                    "relevance": "Identify maculopapular rash",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "HEENT exam",
-                    "relevance": "Assess for scleral injection and gum bleeding",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Abdominal exam",
-                    "relevance": "Detect hepatomegaly (if severe)",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Lymph node assessment",
-                    "relevance": "Identify mild cervical nodes",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Musculoskeletal exam",
-                    "relevance": "Assess for tenderness on palpation and joint pain",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Neurological exam",
-                    "relevance": "Exclude CNS infection",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Pulmonary exam",
-                    "relevance": "Exclude pneumonia",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "CV exam",
-                    "relevance": "Assess heart sounds",
-                    "educationalTip": null
-                  }
+                "overview": "Dengue fever is a mosquito-borne viral infection that causes a flu-like illness. It is prevalent in tropical and subtropical regions worldwide. Infection with one serotype provides lifelong immunity to that serotype, but subsequent infection with a different serotype can lead to more severe disease, including dengue hemorrhagic fever (DHF) and dengue shock syndrome (DSS).",
+                "pathoPoints": [
+                  "Dengue virus is transmitted to humans through the bite of infected Aedes mosquitoes (primarily Aedes aegypti).",
+                  "The virus infects and replicates in host cells, leading to viremia and activation of the immune system.",
+                  "In severe dengue, increased vascular permeability leads to plasma leakage, hemoconcentration, and potentially shock."
                 ],
-                "missedLabs": [
-                  {
-                    "testName": "CBC with differential",
-                    "relevance": "Evaluate for thrombocytopenia and leukopenia",
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Platelet count",
-                    "relevance": "Assess bleeding risk",
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Hematocrit",
-                    "relevance": "Assess hemoconcentration",
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Liver function tests (AST/ALT)",
-                    "relevance": "Detect hepatic strain",
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Dengue NS1 antigen test",
-                    "relevance": "Confirm acute dengue",
-                    "educationalTip": "Positive in early illness (days 1-5)."
-                  },
-                  {
-                    "testName": "Dengue IgM and IgG serology",
-                    "relevance": "Detect dengue antibodies",
-                    "educationalTip": "IgM positive by day 5-7."
-                  },
-                  {
-                    "testName": "Blood cultures",
-                    "relevance": "Rule out other causes",
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Malaria rapid diagnostic test",
-                    "relevance": "Rule out malaria",
-                    "educationalTip": null
-                  }
+                "etiologyRiskFactors": [
+                  "Living in or traveling to dengue-endemic areas.",
+                  "Previous dengue infection (increased risk of severe dengue with subsequent infections).",
+                  "Presence of Aedes mosquitoes and standing water (breeding sites)."
+                ],
+                "clinicalFeatures": [
+                  "High-grade fever (often sudden onset)",
+                  "Severe headache, retro-orbital pain",
+                  "Myalgia and arthralgia (severe joint pain, 'breakbone fever')",
+                  "Rash (maculopapular, typically appearing 3-5 days after fever onset)",
+                  "Nausea, vomiting",
+                  "Leukopenia and thrombocytopenia"
+                ],
+                "complications": [
+                  "Dengue Hemorrhagic Fever (DHF): Characterized by plasma leakage, bleeding, and thrombocytopenia.",
+                  "Dengue Shock Syndrome (DSS): Severe form of DHF with circulatory failure and shock.",
+                  "Organ damage (liver, brain, heart)"
+                ],
+                "diagModalities": [
+                  "Dengue NS1 antigen test (detects viral antigen early in infection)",
+                  "Dengue IgM and IgG antibodies (detects antibodies to dengue virus)",
+                  "Complete Blood Count (CBC) showing leukopenia and thrombocytopenia"
                 ]
               },
-              "idealDiagnosticTimeline": [
+              "differentialDxCapsulesToEmbed": [
                 {
-                  "stepNumber": 1,
-                  "type": "HistoryTaking - Broad",
-                  "actionDescription": "Elicit detailed travel history, including specific locations, duration, and activities.",
-                  "rationaleTags": [
-                    "Travel History",
-                    "Endemic Exposure",
-                    "Risk Factors"
+                  "differentialDxName": "Influenza",
+                  "overview": "Influenza is a common viral respiratory infection caused by influenza viruses. It is characterized by fever, cough, sore throat, and body aches. While typically self-limiting, it can lead to complications, especially in vulnerable populations.",
+                  "pathoPoints": [
+                    "Influenza viruses (A, B, and C) infect the respiratory tract, causing inflammation and cell damage.",
+                    "Transmission occurs primarily through respiratory droplets produced by coughing or sneezing.",
+                    "Viral replication leads to systemic symptoms such as fever, myalgia, and headache."
                   ],
-                  "detailedRationale": "Understanding the specific regions visited and activities undertaken helps assess the risk of exposure to various vector-borne diseases, including Dengue, Chikungunya, and Malaria. This information is crucial for narrowing the differential diagnosis."
+                  "etiologyRiskFactors": [
+                    "Exposure to infected individuals.",
+                    "Lack of influenza vaccination.",
+                    "Age (young children and older adults are at higher risk).",
+                    "Underlying medical conditions (e.g., asthma, diabetes)."
+                  ],
+                  "clinicalFeatures": [
+                    "Fever",
+                    "Cough (usually dry)",
+                    "Sore throat",
+                    "Myalgia (body aches)",
+                    "Headache",
+                    "Fatigue"
+                  ],
+                  "complications": [
+                    "Pneumonia (viral or secondary bacterial)",
+                    "Bronchitis",
+                    "Sinusitis",
+                    "Ear infections",
+                    "Exacerbation of underlying medical conditions"
+                  ],
+                  "diagModalities": [
+                    "Rapid influenza diagnostic tests (RIDTs) on nasopharyngeal swabs.",
+                    "Reverse transcription polymerase chain reaction (RT-PCR) for influenza virus RNA.",
+                    "Clinical presentation during influenza season."
+                  ]
                 },
                 {
-                  "stepNumber": 2,
-                  "type": "HistoryTaking - Focused",
-                  "actionDescription": "Inquire about the onset, duration, and characteristics of fever, rash, headache, myalgias, and bleeding.",
-                  "rationaleTags": [
+                  "differentialDxName": "Chikungunya",
+                  "overview": "Chikungunya is a mosquito-borne viral disease caused by the chikungunya virus (CHIKV). It is characterized by fever and severe joint pain (arthralgia).",
+                  "pathoPoints": [
+                    "Chikungunya virus is transmitted to humans through the bite of infected Aedes mosquitoes (Aedes aegypti and Aedes albopictus).",
+                    "The virus replicates in host cells, leading to viremia and inflammation of joints.",
+                    "Persistent arthralgia is thought to be due to chronic inflammation and viral persistence in joint tissues."
+                  ],
+                  "etiologyRiskFactors": [
+                    "Living in or traveling to chikungunya-endemic areas.",
+                    "Exposure to Aedes mosquitoes.",
+                    "Lack of mosquito control measures."
+                  ],
+                  "clinicalFeatures": [
                     "Fever",
-                    "Rash",
+                    "Severe arthralgia (often debilitating)",
+                    "Rash (maculopapular)",
+                    "Headache",
                     "Myalgia",
-                    "Bleeding",
-                    "Dengue Symptoms"
+                    "Fatigue"
                   ],
-                  "detailedRationale": "Specific symptoms like retro-orbital headache, severe myalgias (bone-breaking pain), and bleeding tendencies are highly suggestive of Dengue fever. The timing of the rash in relation to the fever is also important."
+                  "complications": [
+                    "Chronic arthralgia (can persist for months or years)",
+                    "Uveitis",
+                    "Neurological complications (rare)"
+                  ],
+                  "diagModalities": [
+                    "Chikungunya virus RT-PCR (detects viral RNA in acute phase)",
+                    "Chikungunya IgM and IgG antibodies (detects antibodies to chikungunya virus)"
+                  ]
                 },
                 {
-                  "stepNumber": 3,
-                  "type": "PhysicalExam",
-                  "actionDescription": "Perform a thorough skin inspection to characterize the rash (maculopapular, petechial) and its distribution.",
-                  "rationaleTags": [
-                    "Rash Characteristics",
-                    "Maculopapular",
-                    "Petechial",
-                    "Dengue Diagnosis"
+                  "differentialDxName": "Malaria",
+                  "overview": "Malaria is a life-threatening parasitic disease transmitted to humans through the bite of infected Anopheles mosquitoes. It is caused by Plasmodium parasites, with Plasmodium falciparum being the most deadly species.",
+                  "pathoPoints": [
+                    "Plasmodium parasites are transmitted to humans through the bite of infected Anopheles mosquitoes.",
+                    "The parasites infect liver cells and then red blood cells, causing hemolysis and systemic symptoms.",
+                    "P. falciparum can cause severe complications due to its ability to sequester in capillaries, leading to organ damage."
                   ],
-                  "detailedRationale": "The appearance and distribution of the rash are important clues. Dengue typically presents with a maculopapular rash that appears after the onset of fever. Absence of a rash would favor Malaria."
+                  "etiologyRiskFactors": [
+                    "Living in or traveling to malaria-endemic areas.",
+                    "Exposure to Anopheles mosquitoes.",
+                    "Lack of mosquito control measures.",
+                    "Lack of chemoprophylaxis."
+                  ],
+                  "clinicalFeatures": [
+                    "Fever (often cyclical)",
+                    "Chills",
+                    "Sweats",
+                    "Headache",
+                    "Myalgia",
+                    "Splenomegaly",
+                    "Anemia"
+                  ],
+                  "complications": [
+                    "Severe anemia",
+                    "Cerebral malaria (seizures, coma)",
+                    "Renal failure",
+                    "Acute respiratory distress syndrome (ARDS)",
+                    "Blackwater fever (hemoglobinuria)"
+                  ],
+                  "diagModalities": [
+                    "Peripheral blood smear (microscopic examination for malaria parasites)",
+                    "Rapid diagnostic tests (RDTs) for malaria antigens.",
+                    "PCR for Plasmodium DNA."
+                  ]
                 },
                 {
-                  "stepNumber": 4,
-                  "type": "PhysicalExam",
-                  "actionDescription": "Assess vital signs, including temperature, heart rate, and blood pressure.",
-                  "rationaleTags": [
+                  "differentialDxName": "Leptospirosis",
+                  "overview": "Leptospirosis is a bacterial disease caused by Leptospira bacteria. Humans become infected through contact with water or soil contaminated with the urine of infected animals.",
+                  "pathoPoints": [
+                    "Leptospira bacteria enter the body through mucous membranes or broken skin.",
+                    "The bacteria disseminate through the bloodstream, causing damage to various organs.",
+                    "Immune response to Leptospira can contribute to inflammation and tissue damage."
+                  ],
+                  "etiologyRiskFactors": [
+                    "Exposure to contaminated water or soil.",
+                    "Occupations involving contact with animals (e.g., farmers, veterinarians).",
+                    "Recreational activities in contaminated water (e.g., swimming, rafting).",
+                    "Living in areas with poor sanitation."
+                  ],
+                  "clinicalFeatures": [
                     "Fever",
-                    "Hypotension",
-                    "Tachycardia",
-                    "Shock Assessment"
+                    "Headache",
+                    "Myalgia (especially calf pain)",
+                    "Conjunctival suffusion",
+                    "Abdominal pain",
+                    "Jaundice",
+                    "Renal failure"
                   ],
-                  "detailedRationale": "Elevated temperature confirms fever. Hypotension and tachycardia may indicate progression to Dengue Hemorrhagic Fever or Dengue Shock Syndrome, requiring immediate intervention."
+                  "complications": [
+                    "Weil's disease (severe form with jaundice, renal failure, and hemorrhage)",
+                    "Meningitis",
+                    "Pulmonary hemorrhage",
+                    "Myocarditis"
+                  ],
+                  "diagModalities": [
+                    "Leptospira PCR (detects bacterial DNA in blood or urine)",
+                    "Leptospira IgM antibodies (detects antibodies to Leptospira)",
+                    "Microscopic agglutination test (MAT) (gold standard serologic test)"
+                  ]
                 },
                 {
-                  "stepNumber": 5,
-                  "type": "InitialLabTest",
-                  "actionDescription": "Order a CBC with differential and platelet count.",
-                  "rationaleTags": [
-                    "Thrombocytopenia",
-                    "Leukopenia",
-                    "Bleeding Risk",
-                    "Dengue Evaluation"
+                  "differentialDxName": "Enteric Fever (Typhoid)",
+                  "overview": "Enteric fever, commonly known as typhoid fever, is a systemic infection caused by Salmonella Typhi bacteria. It is typically transmitted through contaminated food or water.",
+                  "pathoPoints": [
+                    "Salmonella Typhi is ingested and invades the intestinal mucosa.",
+                    "The bacteria spread through the bloodstream and infect various organs, including the liver, spleen, and bone marrow.",
+                    "Inflammation and ulceration of the intestinal lining can occur."
                   ],
-                  "detailedRationale": "Thrombocytopenia and leukopenia are common findings in Dengue fever. These results help assess the severity of the illness and guide management decisions. Normal platelets would favor Chikungunya."
+                  "etiologyRiskFactors": [
+                    "Ingestion of contaminated food or water.",
+                    "Poor sanitation and hygiene.",
+                    "Travel to endemic areas.",
+                    "Close contact with infected individuals."
+                  ],
+                  "clinicalFeatures": [
+                    "Prolonged fever (gradual onset)",
+                    "Headache",
+                    "Abdominal pain",
+                    "Constipation or diarrhea",
+                    "Rose spots (maculopapular rash on the trunk)",
+                    "Hepatosplenomegaly"
+                  ],
+                  "complications": [
+                    "Intestinal perforation",
+                    "Hemorrhage",
+                    "Encephalitis",
+                    "Myocarditis",
+                    "Osteomyelitis"
+                  ],
+                  "diagModalities": [
+                    "Blood culture (identifies Salmonella Typhi in the bloodstream)",
+                    "Stool culture (identifies Salmonella Typhi in stool)",
+                    "Bone marrow culture (most sensitive but invasive)",
+                    "Widal test (serologic test, less reliable)"
+                  ]
                 },
                 {
-                  "stepNumber": 6,
-                  "type": "InitialLabTest",
-                  "actionDescription": "Order a Dengue NS1 antigen test.",
-                  "rationaleTags": [
-                    "Dengue Confirmation",
-                    "Acute Infection",
-                    "Early Diagnosis"
+                  "differentialDxName": "Other Viral Exanthems (Measles, Rubella - if not immunized)",
+                  "overview": "Viral exanthems are eruptive skin rashes associated with viral infections. Measles and rubella are two examples that are vaccine-preventable.",
+                  "pathoPoints": [
+                    "Measles virus and rubella virus are transmitted through respiratory droplets.",
+                    "The viruses replicate in the respiratory tract and then spread to other parts of the body, causing systemic symptoms and rash.",
+                    "Immune response to the virus contributes to the rash and other symptoms."
                   ],
-                  "detailedRationale": "The NS1 antigen test is highly sensitive in the early stages of Dengue infection (days 1-5). A positive result confirms the diagnosis of acute Dengue fever."
-                },
-                {
-                  "stepNumber": 7,
-                  "type": "InitialLabTest",
-                  "actionDescription": "Order Liver function tests (AST/ALT).",
-                  "rationaleTags": [
-                    "Hepatic Strain",
-                    "Liver Damage",
-                    "Dengue Severity"
+                  "etiologyRiskFactors": [
+                    "Lack of vaccination (MMR vaccine).",
+                    "Exposure to infected individuals.",
+                    "Travel to areas with outbreaks."
                   ],
-                  "detailedRationale": "Elevated AST/ALT indicates liver damage and can help assess the severity of Dengue infection."
-                },
-                {
-                  "stepNumber": 8,
-                  "type": "ConfirmatoryLabTest",
-                  "actionDescription": "Order Dengue IgM and IgG serology if NS1 is negative or if the illness is beyond day 5.",
-                  "rationaleTags": [
-                    "Dengue Confirmation",
-                    "Antibody Detection",
-                    "Later Stage Diagnosis"
+                  "clinicalFeatures": [
+                    "Measles: Fever, cough, coryza, conjunctivitis, Koplik spots (small white spots on the buccal mucosa), maculopapular rash.",
+                    "Rubella: Fever, mild respiratory symptoms, lymphadenopathy, maculopapular rash."
                   ],
-                  "detailedRationale": "IgM antibodies typically become detectable after day 5-7 of illness. This test is useful for confirming Dengue in patients presenting later in the course of the disease or if the NS1 antigen test is negative."
-                },
-                {
-                  "stepNumber": 9,
-                  "type": "InitialLabTest",
-                  "actionDescription": "Order Malaria rapid diagnostic test.",
-                  "rationaleTags": [
-                    "Rule Out Malaria",
-                    "Fever Etiology",
-                    "Endemic Region"
+                  "complications": [
+                    "Measles: Pneumonia, encephalitis, subacute sclerosing panencephalitis (SSPE).",
+                    "Rubella: Congenital rubella syndrome (if contracted during pregnancy)."
                   ],
-                  "detailedRationale": "Given the patient's travel to a tropical region, Malaria is a key differential diagnosis. A rapid diagnostic test can quickly rule out this potentially life-threatening infection."
-                },
-                {
-                  "stepNumber": 10,
-                  "type": "PhysicalExam",
-                  "actionDescription": "Perform HEENT exam to assess for scleral injection and gum bleeding.",
-                  "rationaleTags": [
-                    "Bleeding Signs",
-                    "Dengue Severity",
-                    "Hemorrhagic Fever"
-                  ],
-                  "detailedRationale": "Scleral injection and gum bleeding are signs of increased vascular permeability and bleeding risk, suggesting progression towards Dengue Hemorrhagic Fever."
+                  "diagModalities": [
+                    "Clinical presentation.",
+                    "Measles and rubella IgM and IgG antibodies.",
+                    "Viral PCR."
+                  ]
                 }
               ]
             }
           }
         },
-        "timestamp": "2025-05-29T05:10:45.669683"
+        "timestamp": "2025-05-29T17:22:41.635045"
+      },
+      "treatment_plan": {
+        "feedback": {
+          "student_diagnosis_acknowledged": "dengue",
+          "student_drug_plan_evaluation": {
+            "assumed_patient_scenario_from_context": "Dengue Fever (likely primary infection, serotype unknown), currently in Febrile Phase, without Warning Signs",
+            "student_prescribed_drugs_summary": [
+              "diclofenac 100mg"
+            ],
+            "appropriateness_of_student_choices_for_scenario": false,
+            "feedback_on_drug_choices": "Diclofenac (an NSAID) is contraindicated in Dengue Fever due to the risk of bleeding."
+          },
+          "clinical_implications_of_students_plan": {
+            "summary": "Diclofenac use in Dengue Fever could increase the risk of gastritis and bleeding complications due to potential thrombocytopenia."
+          },
+          "ideal_drug_therapy_for_learning": {
+            "diagnosis_context": "Dengue Fever (likely primary infection, serotype unknown), currently in Febrile Phase, without Warning Signs",
+            "treatment_options_by_scenario": [
+              {
+                "scenario": "First-line treatment",
+                "recommended_drugs": [
+                  {
+                    "drug_name": "Paracetamol",
+                    "details_brief": "500-1000mg q6h, max 4g/day",
+                    "rationale_brief": "For fever and pain."
+                  },
+                  {
+                    "drug_name": "Oral Rehydration",
+                    "details_brief": "Liberal oral fluid intake (water, ORS, fruit juices, barley water)",
+                    "rationale_brief": "To prevent dehydration from fever and anorexia."
+                  },
+                  {
+                    "drug_name": "Rest",
+                    "details_brief": "Bed rest during febrile phase",
+                    "rationale_brief": "Supportive care"
+                  }
+                ]
+              },
+              {
+                "scenario": "Contraindicated",
+                "recommended_drugs": [
+                  {
+                    "drug_name": "NSAIDs (Ibuprofen, Aspirin, Diclofenac)",
+                    "details_brief": "Avoid",
+                    "rationale_brief": "Due to risk of aggravating gastritis and bleeding tendency (especially with thrombocytopenia)."
+                  },
+                  {
+                    "drug_name": "Steroids",
+                    "details_brief": "Avoid",
+                    "rationale_brief": "No proven benefit, may be harmful."
+                  },
+                  {
+                    "drug_name": "Prophylactic platelet transfusions",
+                    "details_brief": "Avoid",
+                    "rationale_brief": "Without active bleeding."
+                  },
+                  {
+                    "drug_name": "Over-aggressive IV fluid administration",
+                    "details_brief": "Avoid",
+                    "rationale_brief": "Risk of fluid overload, especially in recovery phase when plasma reabsorbs."
+                  }
+                ]
+              },
+              {
+                "scenario": "Escalation",
+                "recommended_drugs": [
+                  {
+                    "drug_name": "IV Fluid Resuscitation",
+                    "details_brief": "Judicious crystalloid (Normal Saline or Ringer's Lactate) administration guided by vital signs, hematocrit, urine output",
+                    "rationale_brief": "To manage plasma leakage and prevent/treat shock. Avoid fluid overload."
+                  },
+                  {
+                    "drug_name": "Platelet transfusion",
+                    "details_brief": "Generally NOT indicated prophylactically even with very low counts unless active, significant bleeding.",
+                    "rationale_brief": "Controversial."
+                  },
+                  {
+                    "drug_name": "Packed Red Cells",
+                    "details_brief": "If significant bleeding and drop in Hgb/Hct",
+                    "rationale_brief": "Replace blood loss"
+                  },
+                  {
+                    "drug_name": "Fresh Frozen Plasma/Cryoprecipitate",
+                    "details_brief": "If coagulopathy with active bleeding",
+                    "rationale_brief": "Correct coagulopathy"
+                  }
+                ]
+              }
+            ],
+            "critical_adjunctive_therapy_notes": [
+              "Explain the natural course of dengue (febrile, critical, recovery phases).",
+              "Educate on WARNING SIGNS requiring immediate return to hospital: Severe abdominal pain, Persistent vomiting (\u22653 times in 24h, or \u22652 in 1h), Mucosal bleeding (gums, nose, hematemesis, melena), Lethargy or restlessness/irritability, Postural dizziness, Cold, clammy extremities, Decreased urine output",
+              "Advise to return for review if fever persists beyond 5-7 days or if any warning signs develop, especially as fever starts to settle (critical phase).",
+              "Eliminate mosquito breeding sites (standing water in containers).",
+              "Use mosquito repellents (containing DEET, Picaridin, or IR3535).",
+              "Wear long-sleeved clothing and pants.",
+              "Use mosquito nets (especially for infants, elderly, or those ill with dengue to prevent mosquitoes biting them and spreading virus)."
+            ]
+          },
+          "key_takeaway_message_on_drug_therapy": "Dengue Fever: Avoid NSAIDs due to bleeding risk. Use paracetamol for fever and pain, and ensure adequate hydration. Monitor for warning signs."
+        },
+        "timestamp": "2025-05-29T17:31:15.465232"
       }
     }
   }

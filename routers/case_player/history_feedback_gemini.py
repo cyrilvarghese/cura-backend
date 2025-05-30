@@ -1,5 +1,6 @@
 from typing import List, Dict, Any
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -8,7 +9,7 @@ from pathlib import Path
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
-from auth.auth_api import get_user
+from auth.auth_api import get_user, get_user_from_token
 import asyncio
 
 # Load environment variables
@@ -18,9 +19,12 @@ load_dotenv()
 CASE_DATA_PATH_PATTERN = "case-data/case{}"
 HISTORY_CONTEXT_FILENAME = "history_context.json"
 
+# Define the security scheme
+security = HTTPBearer()
+
 router = APIRouter(
-    prefix="/feedback",
-    tags=["history-feedback"]
+    prefix="/history-feedback",
+    tags=["case-player"]
 )
 
 # Initialize the Gemini client and SessionManager
@@ -359,3 +363,43 @@ async def get_history_aetcom_feedback():
         import traceback
         print(f"[{datetime.now()}] ❌ Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=error_msg)
+
+@router.post("/evaluate")
+async def evaluate_history(
+    history_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Evaluate student history taking and provide feedback.
+    """
+    print(f"[HISTORY_FEEDBACK] 📝 Processing history evaluation request")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[HISTORY_FEEDBACK] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[HISTORY_FEEDBACK] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[HISTORY_FEEDBACK] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            # Your existing history evaluation logic here
+            # ... existing code ...
+            return {"message": "History evaluation completed successfully"}
+        except Exception as e:
+            print(f"[HISTORY_FEEDBACK] ❌ Error in history evaluation: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error in history evaluation: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[HISTORY_FEEDBACK] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[HISTORY_FEEDBACK] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")

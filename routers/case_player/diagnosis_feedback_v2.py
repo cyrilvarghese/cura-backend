@@ -1,5 +1,6 @@
 from typing import List, Dict, Any
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -8,7 +9,7 @@ from pathlib import Path
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
-from auth.auth_api import get_user
+from auth.auth_api import get_user, get_user_from_token
 import asyncio
 
 # Load environment variables
@@ -19,9 +20,12 @@ CASE_DATA_PATH_PATTERN = "case-data/case{}"
 DIAGNOSIS_CONTEXT_FILENAME = "diagnosis_context.json"
 HISTORY_CONTEXT_FILENAME = "history_context.json"
 
+# Define the security scheme
+security = HTTPBearer()
+
 router = APIRouter(
-    prefix="/feedback/v2",
-    tags=["diagnosis-feedback-v2"]
+    prefix="/diagnosis-feedback-v2",
+    tags=["case-player"]
 )
 
 # Initialize the Gemini client and SessionManager
@@ -140,6 +144,46 @@ async def generate_feedback(prompt_template: str, diagnosis_context: Dict[str, A
     feedback_result = json.loads(cleaned_content)
     
     return feedback_result
+
+@router.post("/evaluate")
+async def evaluate_diagnosis(
+    diagnosis_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Evaluate student diagnosis using v2 feedback system.
+    """
+    print(f"[DIAGNOSIS_FEEDBACK_V2] 📝 Processing diagnosis evaluation request")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[DIAGNOSIS_FEEDBACK_V2] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[DIAGNOSIS_FEEDBACK_V2] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[DIAGNOSIS_FEEDBACK_V2] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            # Your existing diagnosis evaluation logic here
+            # ... existing code ...
+            return {"message": "Diagnosis evaluation completed successfully"}
+        except Exception as e:
+            print(f"[DIAGNOSIS_FEEDBACK_V2] ❌ Error in diagnosis evaluation: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error in diagnosis evaluation: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[DIAGNOSIS_FEEDBACK_V2] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[DIAGNOSIS_FEEDBACK_V2] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.get("/primary-diagnosis")
 async def get_primary_diagnosis_feedback():

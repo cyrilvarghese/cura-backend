@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from .users import user_router
 from typing import List
 from pydantic import BaseModel
@@ -22,9 +23,9 @@ import json
 from pathlib import Path
 from routers.image_search import router as image_search_router
 from routers.case_creator.update_test_table import router as update_test_table_router
-from routers.case_player.get_case_details_route import case_details_router
+from routers.case_player.get_case_details_route import router as case_details_router    
 from routers.case_creator.evaluate_student_questions import router as evaluate_student_questions_router
-from routers.relevant_info_feedback import findings_router
+from routers.relevant_info_feedback import router as relevant_info_feedback_router
 from routers.case_creator.update_test_comment import router as update_test_comment_router
 from routers.case_creator.update_case_quote import router as update_case_quote_router
 from routers.case_player.treatment_feedback_gemini import router as treatment_feedback_gemini_router
@@ -44,8 +45,13 @@ from routers.record_osce_score import router as osce_score_router
 from routers.student_performance_api import performance_router
 from routers.case_player.diagnosis_feedback_v2 import router as diagnosis_feedback_v2_router
 from routers.case_player.treatment_final_feedback import router as treatment_final_feedback_router
+from auth.auth_api import get_user_from_token
+from fastapi import HTTPException
 
 api_router = APIRouter()
+
+# Define the security scheme
+security = HTTPBearer()
 
 class StudentAction(BaseModel):
     content: str
@@ -86,7 +92,7 @@ api_router.include_router(update_case_quote_router)
 api_router.include_router(google_docs_router)
 api_router.include_router(case_details_router)
 api_router.include_router(evaluate_student_questions_router)
-api_router.include_router(findings_router)
+api_router.include_router(relevant_info_feedback_router)
 api_router.include_router(treatment_feedback_gemini_router)
 api_router.include_router(history_feedback_gemini_router)
 api_router.include_router(history_feedback_langchain_router)
@@ -106,32 +112,4 @@ api_router.include_router(performance_router)
 api_router.include_router(diagnosis_feedback_v2_router)
 api_router.include_router(treatment_final_feedback_router)
 
-@api_router.get("/cases", response_model=List[CaseInfo])
-async def list_cases():
-    """List all available cases by reading case_cover.json files"""
-    cases = []
-    case_data_dir = Path("case-data")
-    
-    # Iterate through all case folders
-    for case_dir in sorted(case_data_dir.glob("case*")):
-        cover_file = case_dir / "case_cover.json"
-        if cover_file.exists():
-            try:
-                with open(cover_file, "r") as f:
-                    cover_data = json.load(f)
-                    # Convert to CaseInfo model
-                    case_info = CaseInfo(
-                        case_id=cover_data.get("case_id", 0),  # Default to 0 if not specified
-                        case_name=cover_data["case_name"],
-                        title=cover_data.get("title"),
-                        quote=cover_data.get("quote"),
-                        image_url=cover_data.get("image_url")
-                    )
-                    cases.append(case_info)
-            except (json.JSONDecodeError, KeyError) as e:
-                print(f"Error reading {cover_file}: {e}")
-                continue
-    
-    # Sort cases by case_id
-    cases.sort(key=lambda x: x.case_id)
-    return cases
+ 

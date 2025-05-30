@@ -1,72 +1,104 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-import os
 import json
-from datetime import datetime
+import os
 from pathlib import Path
-from typing import Any
+from datetime import datetime
+from auth.auth_api import get_user_from_token
+
+# Define the security scheme
+security = HTTPBearer()
 
 router = APIRouter(
-    prefix="/case_quote",
-    tags=["create-data"]
+    prefix="/case-quote",
+    tags=["case-quote"]
 )
 
-class UpdateQuoteRequest(BaseModel):
-    case_id: Any
-    quote_text: str
+class UpdateCaseQuoteRequest(BaseModel):
+    case_id: int
+    quote: str
 
 @router.post("/update")
-async def update_case_quote(request: UpdateQuoteRequest):
-    """
-    Update the quote field in the case_cover.json file for the specified case ID.
+async def update_case_quote(
+    request: UpdateCaseQuoteRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Update the quote in a case's cover file"""
+    print(f"[CASE_QUOTE] 📝 Updating case quote for case ID: {request.case_id}")
     
-    Parameters:
-    - case_id: The ID of the case to update
-    - quote_text: The new quote text to be saved
-    
-    Returns:
-    - A JSON object containing the status, file path, and message
-    """
+    # Extract token and authenticate the user
     try:
-        # Construct the case folder path
-        case_folder = f"case-data/case{request.case_id}"
-        case_cover_path = os.path.join(case_folder, "case_cover.json")
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[CASE_QUOTE] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[CASE_QUOTE] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        user_role = user_response["user"].get("role", "")
+        
+        # Check if user is admin or teacher
+        if user_role not in ["admin", "teacher"]:
+            print(f"[CASE_QUOTE] ❌ Access denied: User role '{user_role}' is not authorized")
+            raise HTTPException(status_code=403, detail="Only teachers and admins can update case quotes")
+            
+        print(f"[CASE_QUOTE] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
+    except HTTPException as auth_error:
+        print(f"[CASE_QUOTE] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[CASE_QUOTE] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+    try:
+        # Construct the path to the case cover file
+        cover_file_path = Path(f"case-data/case{request.case_id}/case_cover.json")
         
         # Check if the file exists
-        if not os.path.exists(case_cover_path):
+        if not cover_file_path.exists():
+            print(f"[CASE_QUOTE] ❌ Case cover file not found: {cover_file_path}")
+            raise HTTPException(status_code=404, detail=f"Case cover file not found for case {request.case_id}")
+        
+        try:
+            # Read the existing case cover data
+            with open(cover_file_path, 'r') as f:
+                case_cover_data = json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"[CASE_QUOTE] ❌ Invalid JSON in case cover file: {str(e)}")
             raise HTTPException(
-                status_code=404,
-                detail=f"Case cover file not found for case {request.case_id}"
+                status_code=500,
+                detail=f"Invalid JSON format in case cover file: {str(e)}"
             )
         
-        # Read the existing case cover data
-        with open(case_cover_path, 'r') as json_file:
-            case_cover_data = json.load(json_file)
-        
-        # Update the quote field - actually the title
-        case_cover_data["title"] = request.quote_text
-        
-        # Update the last_updated timestamp
+        # Update the quote and last_updated timestamp
+        case_cover_data["quote"] = request.quote
         case_cover_data["last_updated"] = datetime.now().isoformat()
         
-        # Write the updated JSON data back to the file
-        with open(case_cover_path, 'w') as json_file:
-            json.dump(case_cover_data, json_file, indent=4)
-            
-        return {
-            "status": "success",
-            "file_path": case_cover_path,
-            "message": f"Quote updated successfully for case {request.case_id}",
-            "case_id": request.case_id
-        }
+        try:
+            # Write the updated data back to the file
+            with open(cover_file_path, 'w') as f:
+                json.dump(case_cover_data, f, indent=2)
+        except Exception as write_error:
+            print(f"[CASE_QUOTE] ❌ Error writing to case cover file: {str(write_error)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error writing to case cover file: {str(write_error)}"
+            )
         
-    except FileNotFoundError:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Case cover file not found for case {request.case_id}"
-        )
+        print(f"[CASE_QUOTE] ✅ Successfully updated quote for case {request.case_id}")
+        return {"message": "Case quote updated successfully"}
+        
+    except HTTPException as http_error:
+        raise http_error
     except Exception as e:
+        error_msg = str(e)
+        print(f"[CASE_QUOTE] ❌ Error updating case quote: {error_msg}")
         raise HTTPException(
             status_code=500,
-            detail=f"Error updating quote in case cover: {str(e)}"
+            detail=f"An unexpected error occurred while updating the case quote: {error_msg}"
         ) 

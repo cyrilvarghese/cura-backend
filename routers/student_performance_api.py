@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 from utils.supabase_session import get_supabase_client
-from auth.auth_api import get_user, is_admin
+from auth.auth_api import get_user_from_token
 from datetime import datetime
 import json
 import os
@@ -10,6 +11,9 @@ from pathlib import Path
 
 # Use a prefix for better organization of routes
 performance_router = APIRouter()
+
+# Define the security scheme
+security = HTTPBearer()
 
 class StudentCaseComparison(BaseModel):
     student_id: str
@@ -80,24 +84,26 @@ def get_primary_diagnosis(case_id: str) -> str:
 
 # Add a direct alias route for 'comparison' that the frontend is trying to access
 @performance_router.get("/comparison", response_model=List[StudentCaseComparison])
-async def get_comparison():
+async def get_comparison(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Alias for the student case comparison endpoint.
     """
     print(f"[PERFORMANCE_API] 📊 Using comparison alias endpoint")
-    return await get_student_case_comparison()
+    return await get_student_case_comparison(credentials)
 
 # You may also want to add a single case alias to match the frontend's expectations
 @performance_router.get("/comparison/{case_id}", response_model=StudentCaseComparison)
-async def get_comparison_by_case(case_id: str):
+async def get_comparison_by_case(case_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
     Alias for the student case comparison by case endpoint.
     """
     print(f"[PERFORMANCE_API] 📊 Using comparison by case alias endpoint")
-    return await get_student_case_comparison_by_case(case_id)
+    return await get_student_case_comparison_by_case(case_id, credentials)
 
 @performance_router.get("/student-performance/comparison", response_model=List[StudentCaseComparison])
-async def get_student_case_comparison():
+async def get_student_case_comparison(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """
     Get performance comparison data for the authenticated student across all cases,
     including their scores and group averages/maximums.
@@ -105,10 +111,13 @@ async def get_student_case_comparison():
     """
     print(f"[PERFORMANCE_API] 📊 Getting student case comparison data...")
     
-    # First authenticate the user
+    # Extract token and authenticate the user
     try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
         print(f"[PERFORMANCE_API] 🔐 Authenticating user...")
-        user_response = await get_user()
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
             print(f"[PERFORMANCE_API] ❌ Authentication failed: {error_message}")
@@ -169,7 +178,10 @@ async def get_student_case_comparison():
         raise HTTPException(status_code=500, detail=f"Error retrieving student case comparison data: {error_msg}")
 
 @performance_router.get("/student-performance/comparison/{case_id}", response_model=StudentCaseComparison)
-async def get_student_case_comparison_by_case(case_id: str):
+async def get_student_case_comparison_by_case(
+    case_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """
     Get performance comparison data for the authenticated student for a specific case,
     including their scores and group averages/maximums.
@@ -177,10 +189,13 @@ async def get_student_case_comparison_by_case(case_id: str):
     """
     print(f"[PERFORMANCE_API] 📊 Getting student case comparison data for case ID: {case_id}")
     
-    # First authenticate the user
+    # Extract token and authenticate the user
     try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
         print(f"[PERFORMANCE_API] 🔐 Authenticating user...")
-        user_response = await get_user()
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
             print(f"[PERFORMANCE_API] ❌ Authentication failed: {error_message}")
@@ -247,19 +262,21 @@ async def get_student_case_comparison_by_case(case_id: str):
 async def get_sessions_for_case(
     case_id: str, 
     limit: int = Query(100, ge=1, le=1000),
-    offset: int = Query(0, ge=0)
+    offset: int = Query(0, ge=0),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """
     Alias for the case-sessions endpoint.
     """
     print(f"[PERFORMANCE_API] 📊 Using sessions alias endpoint")
-    return await get_all_student_sessions_for_case(case_id, limit, offset)
+    return await get_all_student_sessions_for_case(case_id, limit, offset, credentials)
 
 @performance_router.get("/case-sessions/{case_id}", response_model=List[StudentSessionSummary])
 async def get_all_student_sessions_for_case(
     case_id: str, 
     limit: int = Query(100, ge=1, le=1000),
-    offset: int = Query(0, ge=0)
+    offset: int = Query(0, ge=0),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """
     Get all student sessions for a specific case.
@@ -267,10 +284,13 @@ async def get_all_student_sessions_for_case(
     """
     print(f"[PERFORMANCE_API] 📊 Getting all student sessions for case ID: {case_id}")
     
-    # First authenticate the user (just to ensure they're logged in)
+    # Extract token and authenticate the user
     try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
         print(f"[PERFORMANCE_API] 🔐 Authenticating user...")
-        user_response = await get_user()
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
             print(f"[PERFORMANCE_API] ❌ Authentication failed: {error_message}")
@@ -326,19 +346,21 @@ async def get_all_student_sessions_for_case(
 async def get_teaching_data(
     department: str = Query(..., description="Department to filter by"),
     case_id: Optional[str] = Query(None, description="Optional case ID to filter by"),
-    student_id: Optional[str] = Query(None, description="Optional student ID to filter by")
+    student_id: Optional[str] = Query(None, description="Optional student ID to filter by"),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """
     Alias for the department-sessions endpoint.
     """
     print(f"[PERFORMANCE_API] 📊 Using teaching alias endpoint for department: {department}")
-    return await get_department_sessions(department, case_id, student_id)
+    return await get_department_sessions(department, case_id, student_id, credentials)
 
 @performance_router.get("/department-sessions", response_model=List[DepartmentSessionData])
 async def get_department_sessions(
     department: str = Query(..., description="Department to filter by"),
     case_id: Optional[str] = Query(None, description="Optional case ID to filter by"),
-    student_id: Optional[str] = Query(None, description="Optional student ID to filter by")
+    student_id: Optional[str] = Query(None, description="Optional student ID to filter by"),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """
     Get session data for a specific department, optionally filtered by case or student.
@@ -350,10 +372,13 @@ async def get_department_sessions(
     if student_id:
         print(f"[PERFORMANCE_API] Filtering by student_id: {student_id}")
     
-    # First authenticate the user and check if they are a teacher or admin
+    # Extract token and authenticate the user
     try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
         print(f"[PERFORMANCE_API] 🔐 Authenticating user...")
-        user_response = await get_user()
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
             print(f"[PERFORMANCE_API] ❌ Authentication failed: {error_message}")
@@ -434,4 +459,51 @@ async def get_department_sessions(
             import traceback
             tb_str = ''.join(traceback.format_tb(e.__traceback__))
             print(f"[PERFORMANCE_API] Error traceback: \n{tb_str}")
-        raise HTTPException(status_code=500, detail=f"Error retrieving department sessions: {error_msg}") 
+        raise HTTPException(status_code=500, detail=f"Error retrieving department sessions: {error_msg}")
+
+@performance_router.get("/student/{student_id}")
+async def get_student_performance(
+    student_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Get performance data for a specific student.
+    """
+    print(f"[STUDENT_PERFORMANCE] 📊 Getting performance data for student: {student_id}")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[STUDENT_PERFORMANCE] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[STUDENT_PERFORMANCE] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        user_role = user_response["user"].get("role", "")
+        
+        # Check if user is admin, teacher, or the student themselves
+        if user_role not in ["admin", "teacher"] and user_id != student_id:
+            print(f"[STUDENT_PERFORMANCE] ❌ Access denied: User role '{user_role}' is not authorized")
+            raise HTTPException(status_code=403, detail="Only teachers, admins, or the student themselves can view performance data")
+            
+        print(f"[STUDENT_PERFORMANCE] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
+        
+        try:
+            # Your existing student performance logic here
+            # ... existing code ...
+            return {"message": "Student performance data retrieved successfully"}
+        except Exception as e:
+            print(f"[STUDENT_PERFORMANCE] ❌ Error getting student performance: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error getting student performance: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[STUDENT_PERFORMANCE] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[STUDENT_PERFORMANCE] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed") 

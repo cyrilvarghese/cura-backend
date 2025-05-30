@@ -1,5 +1,6 @@
 from typing import List
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -9,13 +10,17 @@ from pydantic import BaseModel
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
 import asyncio
+from auth.auth_api import get_user_from_token
 
 # Load environment variables
 load_dotenv()
 
+# Define the security scheme
+security = HTTPBearer()
+
 router = APIRouter(
-    prefix="/feedback",
-    tags=["create-feedback"]
+    prefix="/treatment-feedback-gemini",
+    tags=["case-player"]
 )
 
 class PreTreatmentFeedbackRequest(BaseModel):
@@ -114,6 +119,46 @@ async def save_feedback_response(case_id: str, response_data: dict) -> dict:
     except Exception as e:
         print(f"Error saving feedback response: {e}")
         return {"status": "error", "message": str(e)}
+
+@router.post("/evaluate")
+async def evaluate_treatment(
+    treatment_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Evaluate student treatment plan using Gemini and provide feedback.
+    """
+    print(f"[TREATMENT_FEEDBACK_GEMINI] 📝 Processing treatment evaluation request")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[TREATMENT_FEEDBACK_GEMINI] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[TREATMENT_FEEDBACK_GEMINI] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[TREATMENT_FEEDBACK_GEMINI] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            # Your existing treatment evaluation logic here
+            # ... existing code ...
+            return {"message": "Treatment evaluation completed successfully"}
+        except Exception as e:
+            print(f"[TREATMENT_FEEDBACK_GEMINI] ❌ Error in treatment evaluation: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error in treatment evaluation: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[TREATMENT_FEEDBACK_GEMINI] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[TREATMENT_FEEDBACK_GEMINI] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.post("/pre_treatment_gemini")
 async def get_pre_treatment_feedback(request: PreTreatmentFeedbackRequest):

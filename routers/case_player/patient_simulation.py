@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
@@ -11,15 +11,21 @@ from dotenv import load_dotenv
 from utils.text_cleaner import clean_code_block
 from langchain_google_genai import ChatGoogleGenerativeAI, HarmCategory, HarmBlockThreshold
 from utils.session_manager import SessionManager
-from auth.auth_api import get_user
+from auth.auth_api import get_user, get_user_from_token
 import json
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel
+from typing import Optional, List, Dict, Any
 
 # Load environment variables
 load_dotenv()
 
+# Define the security scheme
+security = HTTPBearer()
+
 router = APIRouter(
-    prefix="/patient",
-    tags=["patient-simulation"]
+    prefix="/patient-simulation",
+    tags=["case-player"]
 )
 
 # Initialize session manager
@@ -144,7 +150,47 @@ streaming_model = ChatOpenAI(
     streaming=True,  # Enable streaming
     api_key=os.getenv("OPENAI_API_KEY")
 )
- 
+
+@router.post("/simulate")
+async def simulate_patient_response(
+    simulation_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Simulate patient responses based on the provided data.
+    """
+    print(f"[PATIENT_SIMULATION] 🤖 Processing simulation request")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[PATIENT_SIMULATION] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[PATIENT_SIMULATION] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[PATIENT_SIMULATION] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            # Your existing simulation logic here
+            # ... existing code ...
+            return {"message": "Simulation completed successfully"}
+        except Exception as e:
+            print(f"[PATIENT_SIMULATION] ❌ Error in simulation: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error in simulation: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[PATIENT_SIMULATION] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[PATIENT_SIMULATION] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
 @router.get("/ask")
 async def ask_patient(student_query: str, case_id: str = "1", thread_id: str = None):
     try:

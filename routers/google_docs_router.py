@@ -143,7 +143,7 @@ async def list_google_docs(
         print(f"[GOOGLE_DOCS] ❌ Unexpected error during authentication: {str(auth_error)}")
         raise HTTPException(status_code=401, detail="Authentication failed")
 
-@router.get("/google-docs", response_model=List[GoogleDocFile])
+@router.get("", response_model=List[GoogleDocFile])
 async def list_google_docs(department_id: Optional[str] = None):
     """List all Google Docs in the designated folder with their comment counts"""
     try:
@@ -170,7 +170,7 @@ async def list_google_docs(department_id: Optional[str] = None):
         traceback_str = traceback.format_exc()
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-@router.get("/google-docs/{doc_id}/comments/count", response_model=dict)
+@router.get("/{doc_id}/comments/count", response_model=dict)
 async def get_comment_count(doc_id: str):
     """Get the count of unresolved comments for a specific Google Doc"""
     try:
@@ -180,7 +180,7 @@ async def get_comment_count(doc_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/google-docs/{doc_id}/comments", response_model=List[CommentModel])
+@router.get("/{doc_id}/comments", response_model=List[CommentModel])
 async def get_document_comments(doc_id: str, include_deleted: bool = False):
     """
     Get all unresolved comments for a specific Google Doc
@@ -199,7 +199,7 @@ async def get_document_comments(doc_id: str, include_deleted: bool = False):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.delete("/google-docs/{doc_id}")
+@router.delete("/{doc_id}")
 async def delete_google_doc(doc_id: str):
     """Delete a Google Doc and its database record"""
     try:
@@ -215,7 +215,7 @@ async def delete_google_doc(doc_id: str):
         traceback_str = traceback.format_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/google-docs/{doc_id}/approve")
+@router.get("/{doc_id}/approve")
 async def approve_and_download_doc(doc_id: str):
     """Download a Google Doc and set its status to CASE_REVIEW_COMPLETE"""
     try:

@@ -24,7 +24,7 @@ load_dotenv()
 security = HTTPBearer()
 
 router = APIRouter(
-    prefix="/patient-simulation",
+    prefix="/patient",
     tags=["case-player"]
 )
 
@@ -192,61 +192,88 @@ async def simulate_patient_response(
         raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.get("/ask")
-async def ask_patient(student_query: str, case_id: str = "1", thread_id: str = None):
+async def ask_patient(
+    student_query: str,
+    case_id: str = "1",
+    thread_id: str = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Handle patient simulation questions from students.
+    """
+    print(f"[PATIENT_SIMULATION] 💬 Processing student query for case {case_id}")
+    
+    # Extract token and authenticate the user
     try:
-        if not thread_id:
-            thread_id = str(uuid.uuid4())   
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
         
-        # Get authenticated user
-        user_response = await get_user()
+        print(f"[PATIENT_SIMULATION] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
-            raise HTTPException(status_code=401, detail="Authentication required")
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[PATIENT_SIMULATION] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
         
         student_id = user_response["user"]["id"]
+        print(f"[PATIENT_SIMULATION] ✅ User authenticated successfully. Student ID: {student_id}")
         
-        # Create properly typed initial state
-        initial_state: PatientSimState = {
-            "messages": [HumanMessage(content=student_query)],
-            "case_id": case_id
-        }
-        
-        response = await app.ainvoke(
-            initial_state,  # Pass the complete state object
-            config={"configurable": {"thread_id": thread_id}}
-        )
-        
-       
-        
-        # Parse the JSON string and extract content
-        content = clean_code_block(response['messages'][-1].content)
         try:
-            response_obj = json.loads(content)
-            answer = response_obj.get('content', content)  # Fallback to original content if parsing fails
-        except json.JSONDecodeError:
-            # Keep the original content if JSON parsing fails
-            answer = content
-        
-        # Track the history-taking question in the session
-        session_manager.add_history_question(student_id, case_id, student_query, answer)
-        
-        # Print in specified format
-        print(f"Thread ID: {thread_id}")
-        print(f"Case ID: {case_id}")
-        print(f"Student ID: {student_id}")
-        print(f"Message: {answer}")
-        print("="*50)
-        
-        return {
-            "response": content,  # Return the full JSON structure as is
-            "thread_id": thread_id,
-            "case_id": case_id,
-            "student_id": student_id
-        }
-
-    except Exception as e:
-        error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[{error_timestamp}] ❌ Error in ask_patient: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+            # Generate thread ID if not provided
+            if not thread_id:
+                thread_id = str(uuid.uuid4())
+            
+            # Create properly typed initial state
+            initial_state: PatientSimState = {
+                "messages": [HumanMessage(content=student_query)],
+                "case_id": case_id
+            }
+            
+            # Get response from model
+            print(f"[PATIENT_SIMULATION] 🤖 Calling model for response...")
+            response = await app.ainvoke(
+                initial_state,
+                config={"configurable": {"thread_id": thread_id}}
+            )
+            
+            # Parse the response
+            print(f"[PATIENT_SIMULATION] 📝 Processing model response...")
+            content = clean_code_block(response['messages'][-1].content)
+            try:
+                response_obj = json.loads(content)
+                answer = response_obj.get('content', content)
+            except json.JSONDecodeError:
+                answer = content
+            
+            # Track the history-taking question in the session
+            session_manager.add_history_question(student_id, case_id, student_query, answer)
+            
+            # Log interaction details
+            print(f"[PATIENT_SIMULATION] ℹ️ Interaction Details:")
+            print(f"Thread ID: {thread_id}")
+            print(f"Case ID: {case_id}")
+            print(f"Student ID: {student_id}")
+            print(f"Message: {answer}")
+            print("="*50)
+            
+            print(f"[PATIENT_SIMULATION] ✅ Successfully processed student query")
+            return {
+                "response": content,
+                "thread_id": thread_id,
+                "case_id": case_id,
+                "student_id": student_id
+            }
+            
+        except Exception as e:
+            print(f"[PATIENT_SIMULATION] ❌ Error processing student query: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error processing student query: {str(e)}")
+            
+    except HTTPException as auth_error:
+        print(f"[PATIENT_SIMULATION] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[PATIENT_SIMULATION] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.get("/ask-gemini")
 async def ask_patient_gemini(student_query: str, case_id: str = "1", thread_id: str = None):

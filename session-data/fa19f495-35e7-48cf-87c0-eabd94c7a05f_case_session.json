@@ -1,10 +1,26 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
-  "case_id": "24",
-  "session_start": "2025-05-30T11:32:32.841772",
+  "case_id": "1",
+  "session_start": "2025-05-31T07:10:39.762085",
   "current_step": "History Taking",
   "interactions": {
-    "history_taking": [],
+    "history_taking": [
+      {
+        "question": "Any sensory changes or deformities?",
+        "response": "Yes, I've been feeling some mild numbness in my hands and feet, and sometimes it tingles as well. It's a bit concerning.",
+        "timestamp": "2025-05-31T07:10:55.578202"
+      },
+      {
+        "question": "When did the nodules first appear?",
+        "response": "The bumps started appearing about five months ago. They developed gradually over time.",
+        "timestamp": "2025-05-31T07:11:04.695062"
+      },
+      {
+        "question": "Did you complete previous leprosy treatment?",
+        "response": "No, I haven't had any previous treatment for leprosy. In fact, I don't think I've been diagnosed with it at all.",
+        "timestamp": "2025-05-31T07:11:10.097413"
+      }
+    ],
     "physical_examinations": [],
     "tests_ordered": [],
     "diagnosis_submission": null,

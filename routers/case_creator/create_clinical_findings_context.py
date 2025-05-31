@@ -25,7 +25,7 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 security = HTTPBearer()
 
 router = APIRouter(
-    prefix="/clinical_findings",
+    prefix="/clinical_findings_context",
     tags=["create-data"]
 )
 

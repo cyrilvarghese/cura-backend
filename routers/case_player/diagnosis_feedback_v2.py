@@ -9,6 +9,7 @@ from pathlib import Path
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
+from utils.auth_utils import get_authenticated_session_data
 from auth.auth_api import get_user, get_user_from_token
 import asyncio
 
@@ -24,7 +25,7 @@ HISTORY_CONTEXT_FILENAME = "history_context.json"
 security = HTTPBearer()
 
 router = APIRouter(
-    prefix="/diagnosis-feedback-v2",
+    prefix="/feedback/v2",
     tags=["case-player"]
 )
 
@@ -74,19 +75,6 @@ async def load_history_context(case_id: int) -> Dict[str, Any]:
             status_code=404, 
             detail=f"Failed to load history context for case {case_id}: {str(e)}"
         )
-
-async def get_session_data():
-    """Helper function to get authenticated user's session data."""
-    user_response = await get_user()
-    if not user_response["success"]:
-        raise HTTPException(status_code=401, detail="Authentication required")
-    
-    student_id = user_response["user"]["id"]
-    session_data = session_manager.get_session(student_id)
-    if not session_data:
-        raise HTTPException(status_code=404, detail="No active session found")
-    
-    return student_id, session_data
 
 def prepare_student_input(session_data: Dict[str, Any]) -> Dict[str, Any]:
     """Prepare student input data from session data for the diagnosis feedback prompt."""
@@ -186,13 +174,16 @@ async def evaluate_diagnosis(
         raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.get("/primary-diagnosis")
-async def get_primary_diagnosis_feedback():
+async def get_primary_diagnosis_feedback(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """Generate feedback on student's primary diagnosis."""
     try:
         print(f"\n[{datetime.now()}] 🔍 Starting primary diagnosis feedback generation")
         
-        # Get session data
-        student_id, session_data = await get_session_data()
+        # Extract token and get session data
+        token = credentials.credentials
+        student_id, session_data = await get_authenticated_session_data(token)
         case_id = session_data["case_id"]
         
         # Load context data
@@ -239,13 +230,16 @@ async def get_primary_diagnosis_feedback():
         raise HTTPException(status_code=500, detail=error_msg)
 
 @router.get("/differential-diagnosis")
-async def get_differential_diagnosis_feedback():
+async def get_differential_diagnosis_feedback(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """Generate feedback on student's differential diagnoses."""
     try:
         print(f"\n[{datetime.now()}] 🔍 Starting differential diagnosis feedback generation")
         
-        # Get session data
-        student_id, session_data = await get_session_data()
+        # Extract token and get session data
+        token = credentials.credentials
+        student_id, session_data = await get_authenticated_session_data(token)
         case_id = session_data["case_id"]
         
         # Load context data
@@ -293,13 +287,16 @@ async def get_differential_diagnosis_feedback():
         raise HTTPException(status_code=500, detail=error_msg)
 
 @router.get("/educational-resources")
-async def get_educational_resources():
+async def get_educational_resources(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """Generate educational resources for medical conditions."""
     try:
         print(f"\n[{datetime.now()}] 🔍 Starting educational resources generation")
         
-        # Get session data
-        student_id, session_data = await get_session_data()
+        # Extract token and get session data
+        token = credentials.credentials
+        student_id, session_data = await get_authenticated_session_data(token)
         case_id = session_data["case_id"]
         
         # Load diagnosis context

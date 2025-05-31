@@ -9,6 +9,7 @@ from pathlib import Path
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
+from utils.auth_utils import get_authenticated_session_data
 from auth.auth_api import get_user, get_user_from_token
 import asyncio
 
@@ -23,7 +24,7 @@ HISTORY_CONTEXT_FILENAME = "history_context.json"
 security = HTTPBearer()
 
 router = APIRouter(
-    prefix="/history-feedback",
+    prefix="/feedback",
     tags=["case-player"]
 )
 
@@ -96,27 +97,17 @@ async def load_expected_questions(case_id: int) -> List[str]:
             detail=f"Failed to load expected questions for case {case_id}: {str(e)}"
         )
 
-async def get_session_data():
-    """Helper function to get authenticated user's session data."""
-    user_response = await get_user()
-    if not user_response["success"]:
-        raise HTTPException(status_code=401, detail="Authentication required")
-    
-    student_id = user_response["user"]["id"]
-    session_data = session_manager.get_session(student_id)
-    if not session_data:
-        raise HTTPException(status_code=404, detail="No active session found")
-    
-    return student_id, session_data
- 
 @router.get("/history-taking/analysis")
-async def get_history_analysis():
+async def get_history_analysis(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """Step 1: Generate detailed analysis and overall score."""
     try:
         print(f"\n[{datetime.now()}] 🔍 Starting history analysis generation (Step 1)")
         
-        # Get session data
-        student_id, session_data = await get_session_data()
+        # Extract token and get session data
+        token = credentials.credentials
+        student_id, session_data = await get_authenticated_session_data(token)
         case_id = session_data["case_id"]
         
         # Load required data
@@ -185,14 +176,18 @@ async def get_history_analysis():
         raise HTTPException(status_code=500, detail=error_msg)
 
 @router.get("/history-taking/aetcom")
-async def get_history_aetcom_feedback():
+async def get_history_aetcom_feedback(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """Step 2: Generate domain scores and final feedback using analysis results."""
     try:
         print(f"\n[{datetime.now()}] 🔍 Starting AETCOM feedback generation (Step 2)")
         
         # Get session data
         try:
-            student_id, session_data = await get_session_data()
+            # Extract token and get session data
+            token = credentials.credentials
+            student_id, session_data = await get_authenticated_session_data(token)
             print(f"[{datetime.now()}] ✅ Retrieved session data for student ID: {student_id}")
             case_id = session_data["case_id"]
             print(f"[{datetime.now()}] ✅ Working with case ID: {case_id}")

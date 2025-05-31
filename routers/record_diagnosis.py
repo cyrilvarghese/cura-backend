@@ -54,7 +54,8 @@ async def record_diagnosis(
                 "reason": diagnosis_data["reason"],
                 "differentials": diagnosis_data["differentials"], 
                 "incorrect_differentials": diagnosis_data["incorrect_differentials"], # Now just an array of strings
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
+                "case_id": diagnosis_data["case_id"]
             }
             
             # Add to session

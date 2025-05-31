@@ -63,6 +63,11 @@ A student has submitted a **drug treatment plan** for a patient case. Your task 
         // }}
         // This array should be populated by iterating through keys in treatment_context.json -> treatment_plan.
     ],
+    "contraindicated_drug_reminders": [
+        // Example structure:
+        // {{ "drug_name": "<E.g., Live vaccines>", "rationale_brief": "<E.g., Immunosuppression risk>" }}
+        // This array should list objects with drug_name and rationale_brief from treatment_context.json contraindicated drugs.
+    ],
     "critical_adjunctive_therapy_notes": [ 
         // "<E.g., Continue MDT.>",
         // "<E.g., Counsel on recurrence.>"

@@ -49,7 +49,7 @@ async def record_final_diagnosis(
             session_data = session_manager.add_final_diagnosis(
                 student_id=user_id,
                 case_id=diagnosis_data["case_id"],
-                final_diagnosis=diagnosis_data["final_diagnosis"]
+                final_diagnosis_data=diagnosis_data
             )
             
             print(f"Recorded final diagnosis for student {user_id} in case {diagnosis_data['case_id']}")

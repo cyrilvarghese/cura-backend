@@ -1,11 +1,15 @@
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel
 from utils.session_manager import SessionManager
 from utils.supabase_session import submit_session_to_supabase
-from auth.auth_api import get_user
+from auth.auth_api import get_user_from_token
 from datetime import datetime
 import json
+
+# Define the security scheme
+security = HTTPBearer()
 
 router = APIRouter()
 
@@ -28,6 +32,7 @@ class OSCEScoreSubmission(BaseModel):
 @router.post("/record-osce-score")
 async def record_osce_score(
     request: OSCEScoreSubmission,
+    credentials: HTTPAuthorizationCredentials = Depends(security),
     session_manager: SessionManager = Depends(lambda: SessionManager())
 ):
     """
@@ -39,8 +44,11 @@ async def record_osce_score(
     
     # First handle authentication outside main try block
     try:
+        token = credentials.credentials
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
         print(f"[OSCE_SCORE] 🔐 Authenticating user...")
-        user_response = await get_user()
+        user_response = await get_user_from_token(token)
         if not user_response["success"]:
             error_message = user_response.get("error", "Authentication required")
             print(f"[OSCE_SCORE] ❌ Authentication failed: {error_message}")

@@ -17,7 +17,7 @@ security = HTTPBearer()
 
 # Initialize the router
 router = APIRouter(
-    prefix="/osce-generator",
+    prefix="/osce",
     tags=["osce-generator"]
 )
 

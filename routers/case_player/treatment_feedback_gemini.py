@@ -19,7 +19,7 @@ load_dotenv()
 security = HTTPBearer()
 
 router = APIRouter(
-    prefix="/treatment-feedback-gemini",
+    prefix="/feedback",
     tags=["case-player"]
 )
 

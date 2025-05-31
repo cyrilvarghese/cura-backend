@@ -9,6 +9,7 @@ from pathlib import Path
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
 from utils.session_manager import SessionManager
+from utils.auth_utils import get_authenticated_session_data
 from auth.auth_api import get_user, get_user_from_token
 import asyncio
 
@@ -24,7 +25,7 @@ HISTORY_CONTEXT_FILENAME = "history_context.json"
 security = HTTPBearer()
 
 router = APIRouter(
-    prefix="/treatment-final-feedback",
+    prefix="/treatment-protocol-feedback",
     tags=["case-player"]
 )
 
@@ -72,20 +73,6 @@ async def load_history_context(case_id: int) -> Dict[str, Any]:
             status_code=404, 
             detail=f"Failed to load history context for case {case_id}: {str(e)}"
         )
-
-async def get_session_data():
-    """Helper function to get authenticated user's session data."""
-    # Get session from authenticated user
-    user_response = await get_user()
-    if not user_response["success"]:
-        raise HTTPException(status_code=401, detail="Authentication required")
-    
-    student_id = user_response["user"]["id"]
-    session_data = session_manager.get_session(student_id)
-    if not session_data:
-        raise HTTPException(status_code=404, detail="No active session found")
-    
-    return student_id, session_data
 
 async def save_feedback_response(case_id: str, response_data: dict) -> dict:
     """Save the feedback response to a file."""
@@ -148,13 +135,16 @@ async def evaluate_final_treatment(
         raise HTTPException(status_code=401, detail="Authentication failed")
 
 @router.get("/final")
-async def get_treatment_final_feedback():
+async def get_treatment_final_feedback(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """Generate comprehensive feedback on student's drug treatment plan."""
     try:
         print(f"\n[{datetime.now()}] 🔍 Starting treatment final feedback generation")
         
-        # Get session data from authenticated user
-        student_id, session_data = await get_session_data()
+        # Extract token and get session data
+        token = credentials.credentials
+        student_id, session_data = await get_authenticated_session_data(token)
         case_id = session_data["case_id"]
         
         # Load context data

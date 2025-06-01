@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from routers.case_creator.helpers.image_downloader import download_image
 from utils.text_cleaner import extract_code_blocks  # Import the utility function
+import asyncio
 
 
 # create a cover image prompt and save it using the existing cases route
@@ -84,7 +85,10 @@ async def call_image_gen(case_id: str, image_prompt: str, hasPrompt: bool = Fals
     
     # Check if we need to generate a new image or if the image is not present
     if "image_url" not in case_cover_data or hasPrompt:
-        dalle_image_url = DallEAPIWrapper(model="dall-e-3").run(image_prompt)
+        dalle_image_url = await asyncio.to_thread(
+            DallEAPIWrapper(model="dall-e-3").run, 
+            image_prompt
+        )
         image_path = os.path.join(case_folder, "cover_image.png")
         await download_image(dalle_image_url, image_path)
         server_image_url = f"/case-images/case{case_id}/cover_image.png?v={timestamp}"

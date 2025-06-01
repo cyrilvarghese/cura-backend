@@ -216,11 +216,18 @@ async def delete_google_doc(doc_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{doc_id}/approve")
-async def approve_and_download_doc(doc_id: str):
+async def approve_and_download_doc(
+    doc_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     """Download a Google Doc and set its status to CASE_REVIEW_COMPLETE"""
     try:
+        # Extract token and authenticate the user
+        token = credentials.credentials
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
         # Update status using Supabase
-        doc_details = await SupabaseDocumentOps.approve_document(doc_id)
+        doc_details = await SupabaseDocumentOps.approve_document(doc_id, token)
         
         # Get updated document details and download
         docs_manager = GoogleDocsManager()

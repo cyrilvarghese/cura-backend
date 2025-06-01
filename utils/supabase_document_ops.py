@@ -1,5 +1,5 @@
 from typing import Dict, Any, List, Optional
-from auth.auth_api import get_supabase_client, get_user
+from auth.auth_api import get_supabase_client, get_user, get_user_from_token
 from fastapi import HTTPException
 import os
 from dotenv import load_dotenv
@@ -182,7 +182,7 @@ class SupabaseDocumentOps:
         return build('drive', 'v3', credentials=credentials)
 
     @staticmethod
-    async def approve_document(google_doc_id: str) -> Dict[str, Any]:
+    async def approve_document(google_doc_id: str, token: str) -> Dict[str, Any]:
         """
         Approve a document by:
         1. Setting status to CASE_REVIEW_COMPLETE
@@ -194,7 +194,7 @@ class SupabaseDocumentOps:
             supabase = SupabaseDocumentOps.get_client()
             
             # Get current user info for approval metadata
-            user_info = await SupabaseDocumentOps.check_user_permission()
+            user_info = await SupabaseDocumentOps.check_user_permission(token)
             print("Updating doc with ID:", repr(google_doc_id))
             
             # Update the document with approval info
@@ -265,23 +265,23 @@ class SupabaseDocumentOps:
             )
 
     @staticmethod
-    async def check_user_permission() -> Dict[str, Any]:
+    async def check_user_permission(token: str) -> Dict[str, Any]:
         """Check if user has admin or teacher role"""
-        user_info = await get_user()
-        if not user_info.get("success"):
+        user_response = await get_user_from_token(token)
+        if not user_response.get("success"):
             raise HTTPException(
                 status_code=401,
                 detail="Unable to get user information"
             )
         
-        user_role = user_info["user"].get("role")
+        user_role = user_response["user"].get("role")
         if user_role not in ["admin", "teacher"]:
             raise HTTPException(
                 status_code=403,
                 detail="Only admin and teacher roles can perform this action"
             )
             
-        return user_info["user"]
+        return user_response["user"]
 
     @staticmethod
     async def get_department_documents(department_name: str) -> List[Dict[str, Any]]:

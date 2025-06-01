@@ -28,4 +28,10 @@ RUN mkdir -p /app/case-data
 EXPOSE 8000
 
 # Command to create DB from schema, seed it, then run the app
-CMD sh -c "sqlite3 medical_assessment.db < schema.sql && python insert_data.py && gunicorn main:app -k uvicorn.workers.UvicornWorker --workers 2 --bind 0.0.0.0:8000"
+# Use RELOAD_MODE=true for development, default to production
+CMD sh -c "sqlite3 medical_assessment.db < schema.sql && python insert_data.py && \
+if [ \"$RELOAD_MODE\" = \"true\" ]; then \
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload; \
+else \
+gunicorn main:app -k uvicorn.workers.UvicornWorker --workers 2 --bind 0.0.0.0:8000; \
+fi"

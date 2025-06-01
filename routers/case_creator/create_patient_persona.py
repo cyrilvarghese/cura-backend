@@ -18,6 +18,7 @@ from auth.auth_api import get_user_from_token
 import asyncio
 import google.generativeai as genai
 from utils.text_cleaner import clean_code_block
+import gc  # For garbage collection
 
 # Load environment variables
 load_dotenv()
@@ -35,6 +36,13 @@ router = APIRouter(
 
 # Initialize the model
 model = ChatOpenAI(
+    model_name="gpt-4o-mini",
+    temperature=0.7,
+    api_key=os.getenv("OPENAI_API_KEY")
+)
+
+# Add async model for better timeout handling
+async_model = ChatOpenAI(
     model_name="gpt-4o-mini",
     temperature=0.7,
     api_key=os.getenv("OPENAI_API_KEY")
@@ -113,16 +121,40 @@ async def process_patient_persona(case_document: str, case_id: Any, filename: st
         save_case_document(case_id, case_document)
         save_case_cover(case_id, filename, department, google_doc_link)
 
-        # Create prompt and get response
+        # Create prompt and get response with timeout handling
         prompt_template = ChatPromptTemplate.from_messages([
             ("system", meta_prompt),
             ("human", "Example Persona:\n{example_persona}\n\nCase Details:\n{case_document}")
         ])
         
-        response = model.invoke(prompt_template.invoke({
-            "example_persona": example_persona,
-            "case_document": case_document
-        }))
+        # Use async API call with timeout (120 seconds)
+        try:
+            response = await asyncio.wait_for(
+                async_model.ainvoke(prompt_template.invoke({
+                    "example_persona": example_persona,
+                    "case_document": case_document
+                })),
+                timeout=90.0  # Reduced to 90 seconds to prevent hanging
+            )
+        except asyncio.TimeoutError:
+            print(f"[{datetime.now()}] ⏰ OpenAI API call timed out after 90 seconds, trying with shorter document...")
+            # Try again with truncated document
+            truncated_doc = case_document[:50000] + "\n[Document truncated due to timeout]"
+            try:
+                response = await asyncio.wait_for(
+                    async_model.ainvoke(prompt_template.invoke({
+                        "example_persona": example_persona,
+                        "case_document": truncated_doc
+                    })),
+                    timeout=60.0  # Even shorter timeout for retry
+                )
+                print(f"[{datetime.now()}] ✅ Retry with truncated document succeeded")
+            except asyncio.TimeoutError:
+                print(f"[{datetime.now()}] ❌ Retry also timed out")
+                raise HTTPException(status_code=504, detail="AI processing timed out. Document may be too complex. Please try with a shorter document.")
+        
+        # Clean up memory
+        gc.collect()
         
         escaped_content = response.content.replace("{", "{{").replace("}", "}}")
         
@@ -139,6 +171,9 @@ async def process_patient_persona(case_document: str, case_id: Any, filename: st
             "case_id": case_id
         }
 
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{error_timestamp}] ❌ Error in process_patient_persona: {str(e)}")
@@ -152,7 +187,8 @@ async def create_patient_persona(
     """
     Create patient persona data based on a case document.
     """
-    print(f"[{datetime.now()}] Starting patient persona creation for file: {request.file_name}, case_id: {request.case_id}")
+    start_time = datetime.now()
+    print(f"[{start_time}] 🚀 Starting patient persona creation for file: {request.file_name}, case_id: {request.case_id}")
     
     # Extract token and authenticate the user
     try:
@@ -174,7 +210,9 @@ async def create_patient_persona(
             print(f"[PATIENT_PERSONA] ❌ Access denied: User role '{user_role}' is not authorized")
             raise HTTPException(status_code=403, detail="Only teachers and admins can create patient personas")
             
-        print(f"[PATIENT_PERSONA] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
+        auth_time = datetime.now()
+        auth_duration = (auth_time - start_time).total_seconds()
+        print(f"[PATIENT_PERSONA] ✅ User authenticated successfully in {auth_duration:.2f}s. User ID: {user_id}, Role: {user_role}")
     except HTTPException as auth_error:
         print(f"[PATIENT_PERSONA] ❌ HTTP exception during authentication: {str(auth_error)}")
         raise auth_error
@@ -194,10 +232,20 @@ async def create_patient_persona(
         
         # Construct the full file path in the uploads directory
         file_path = uploads_dir / filename
+        
+        print(f"[PATIENT_PERSONA] 📁 Looking for file: {file_path}")
 
         # Check if the file exists, if not return a 404 error
         if not file_path.exists():
+            print(f"[PATIENT_PERSONA] ❌ File not found: {file_path}")
             raise HTTPException(status_code=404, detail=f"File not found in uploads directory: {filename}")
+
+        # Check file size to prevent memory issues
+        file_size = file_path.stat().st_size
+        max_file_size = 50 * 1024 * 1024  # 50MB limit
+        if file_size > max_file_size:
+            print(f"[PATIENT_PERSONA] ❌ File too large: {file_size / 1024 / 1024:.2f}MB")
+            raise HTTPException(status_code=413, detail=f"File too large. Maximum size is {max_file_size / 1024 / 1024:.0f}MB")
 
         class FileWrapper:
             def __init__(self, filepath):
@@ -205,18 +253,41 @@ async def create_patient_persona(
                 self.file = open(filepath, 'rb')
 
         try:
+            print(f"[PATIENT_PERSONA] 📄 Extracting text from document...")
             file_wrapper = FileWrapper(file_path)
             case_document = extract_text_from_document(file_wrapper)
             file_wrapper.file.close()
+            
+            # Check document length to prevent timeout
+            doc_length = len(case_document)
+            max_doc_length = 100000  # 100k characters
+            if doc_length > max_doc_length:
+                print(f"[PATIENT_PERSONA] ⚠️ Document is very long: {doc_length} characters, truncating...")
+                case_document = case_document[:max_doc_length] + "\n[Document truncated due to length]"
+            
+            extraction_time = datetime.now()
+            extraction_duration = (extraction_time - auth_time).total_seconds()
+            print(f"[PATIENT_PERSONA] ✅ Text extracted in {extraction_duration:.2f}s. Document length: {len(case_document)} characters")
+            
         except IOError as e:
+            print(f"[PATIENT_PERSONA] ❌ Failed to read file: {str(e)}")
             raise HTTPException(status_code=400, detail=f"Failed to read file: {str(e)}")
 
         case_id = request.case_id if request.case_id is not None else get_next_case_id()
         department = request.department
-        google_doc_link = request.google_doc_link   
-        return await process_patient_persona(case_document, case_id, filename, department, google_doc_link)
+        google_doc_link = request.google_doc_link
+        
+        print(f"[PATIENT_PERSONA] 🤖 Starting AI processing...")
+        result = await process_patient_persona(case_document, case_id, filename, department, google_doc_link)
+        
+        end_time = datetime.now()
+        total_duration = (end_time - start_time).total_seconds()
+        print(f"[PATIENT_PERSONA] ✅ Patient persona created successfully in {total_duration:.2f}s")
+        
+        return result
 
     except Exception as e:
         error_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[{error_timestamp}] ❌ Error in create_patient_persona_from_url: {str(e)}")
+        total_duration = (datetime.now() - start_time).total_seconds()
+        print(f"[{error_timestamp}] ❌ Error in create_patient_persona after {total_duration:.2f}s: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

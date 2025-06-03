@@ -47,6 +47,8 @@ from routers.case_player.diagnosis_feedback_v2 import router as diagnosis_feedba
 from routers.case_player.treatment_final_feedback import router as treatment_final_feedback_router
 from auth.router import router as auth_router
 from fastapi import HTTPException
+from routers.case_creator.edit_physical_exam import router as edit_physical_exam_router
+from routers.case_creator.edit_lab_test import router as edit_lab_test_router
 
 api_router = APIRouter()
 
@@ -112,5 +114,7 @@ api_router.include_router(performance_router)
 api_router.include_router(diagnosis_feedback_v2_router)
 api_router.include_router(treatment_final_feedback_router)
 api_router.include_router(auth_router)
+api_router.include_router(edit_physical_exam_router)
+api_router.include_router(edit_lab_test_router)
 
  

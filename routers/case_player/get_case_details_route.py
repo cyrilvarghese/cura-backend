@@ -22,6 +22,9 @@ router = APIRouter(
 class CaseDetailsResponse(BaseModel):
     content: Dict[str, Any]
 
+class TestDataResponse(BaseModel):
+    test_data: Dict[str, Any]
+
 def update_case_doc_from_uploads(case_id: str) -> bool:
     """
     Update the case_doc.txt file from the @uploads folder for the given case_id.
@@ -236,4 +239,74 @@ async def get_case_details(
         raise auth_error
     except Exception as auth_error:
         print(f"[CASE_DETAILS] ❌ Unexpected error during authentication: {str(auth_error)}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+@router.get("/test-data/{case_id}")
+async def get_test_data_only(
+    case_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Get only the test data for a specific case ID.
+    """
+    print(f"[TEST_DATA] 📝 Processing test data request for case {case_id}")
+    
+    # Extract token and authenticate the user
+    try:
+        token = credentials.credentials  # This is the raw JWT
+        print(f"[DEBUG] Extracted JWT: {token}")
+        
+        print(f"[TEST_DATA] 🔐 Authenticating user...")
+        user_response = await get_user_from_token(token)
+        if not user_response["success"]:
+            error_message = user_response.get("error", "Authentication required")
+            print(f"[TEST_DATA] ❌ Authentication failed: {error_message}")
+            raise HTTPException(status_code=401, detail=error_message)
+        
+        user_id = user_response["user"]["id"]
+        print(f"[TEST_DATA] ✅ User authenticated successfully. User ID: {user_id}")
+        
+        try:
+            case_base_path = os.path.join('case-data', f'case{case_id}')
+            print(f"\nAccessing case directory: {case_base_path}")
+            
+            # Define test data file path
+            data_file_path = os.path.join(case_base_path, 'test_exam_data.json')
+            
+            print(f"Looking for test data file: {data_file_path} (exists: {os.path.exists(data_file_path)})")
+            
+            # Check if test data file exists
+            if not os.path.exists(data_file_path):
+                print(f"ERROR: Test exam data not found at: {data_file_path}")
+                raise HTTPException(status_code=404, detail="Test exam data not found")
+            
+            # Load the test exam data
+            print("Loading test exam data...")
+            with open(data_file_path, 'r') as file:
+                exam_data = json.load(file)
+            
+            print(f"Test data loaded successfully for case {case_id}")
+            
+            return {
+                "test_data": exam_data
+            }
+
+        except json.JSONDecodeError as e:
+            print(f"ERROR: JSON decode error: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error decoding test data JSON: {str(e)}"
+            )
+        except Exception as e:
+            print(f"ERROR: Unexpected error: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error retrieving test data: {str(e)}"
+            )
+            
+    except HTTPException as auth_error:
+        print(f"[TEST_DATA] ❌ HTTP exception during authentication: {str(auth_error)}")
+        raise auth_error
+    except Exception as auth_error:
+        print(f"[TEST_DATA] ❌ Unexpected error during authentication: {str(auth_error)}")
         raise HTTPException(status_code=401, detail="Authentication failed") 

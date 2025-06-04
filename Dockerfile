@@ -33,5 +33,5 @@ CMD sh -c "sqlite3 medical_assessment.db < schema.sql && python insert_data.py &
 if [ \"$RELOAD_MODE\" = \"true\" ]; then \
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload; \
 else \
-gunicorn main:app -k uvicorn.workers.UvicornWorker --workers 1 --bind 0.0.0.0:8000 --timeout 600 --graceful-timeout 600 --max-requests 1000 --max-requests-jitter 100; \
+gunicorn main:app -k uvicorn.workers.UvicornWorker --workers 2 --bind 0.0.0.0:8000 --timeout 600 --graceful-timeout 600 --max-requests 1000 --max-requests-jitter 100; \
 fi"

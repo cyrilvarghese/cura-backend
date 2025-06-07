@@ -108,6 +108,7 @@ async def upload_document(
             upload_dir.mkdir(exist_ok=True)
             
             responses = []
+            uploaded_files = []
             
             # Process each file
             for file, title, description in zip(files, titles, descriptions or [None] * len(files)):
@@ -123,6 +124,7 @@ async def upload_document(
                     
                     # Save the file
                     file_path = upload_dir / file.filename
+                    uploaded_files.append(file_path)
                     with file_path.open("wb") as buffer:
                         shutil.copyfileobj(file.file, buffer)
                     
@@ -195,6 +197,109 @@ async def upload_document(
     except Exception as auth_error:
         print(f"[UPLOAD_RESOURCE] ❌ Unexpected error during authentication: {str(auth_error)}")
         raise HTTPException(status_code=401, detail="Authentication failed")
+
+@router.post("/upload-unauthenticated", response_model=List[DocumentResponse])
+async def upload_document_unauthenticated(
+    files: List[UploadFile] = File(...),
+    titles: List[str] = Form(...),
+    descriptions: List[str] = Form(None),
+    department_name: str = Form(...),
+    department_id: int = Form(...),
+):
+    """
+    Upload one or more documents and associate them with a department.
+    This endpoint does not require authentication for system-to-system communication.
+    """
+    print(f"[UPLOAD_RESOURCE] 📝 Uploading {len(files)} document(s) for department: {department_name} (unauthenticated)")
+    
+    try:
+        # Create uploads directory if it doesn't exist
+        upload_dir = Path(os.getenv("UPLOADS_DIR", "case-data/uploads"))
+        upload_dir.mkdir(exist_ok=True)
+        
+        responses = []
+        uploaded_files = []
+        
+        # Process each file
+        for file, title, description in zip(files, titles, descriptions or [None] * len(files)):
+            file_path = None
+            try:
+                # Check for duplicates
+                is_duplicate = await SupabaseDocumentOps.check_duplicate(title, department_id)
+                if is_duplicate:
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"A document with title '{title}' already exists in this department"
+                    )
+                
+                # Save the file
+                file_path = upload_dir / file.filename
+                uploaded_files.append(file_path)
+                with file_path.open("wb") as buffer:
+                    shutil.copyfileobj(file.file, buffer)
+                
+                if file_path:
+                    # Determine file type and handle accordingly
+                    file_type = "MARKDOWN" if file.filename.endswith('.md') else "PDF"
+                    google_doc_id = None
+                    google_doc_link = None
+                    
+                    if file_type == "MARKDOWN":
+                        # Convert to Google Doc
+                        docs_manager = GoogleDocsManager()
+                        with open(file_path, 'r') as f:
+                            content = f.read()
+                        google_doc_id, google_doc_link = docs_manager.create_doc(title, content)
+                    
+                    # Insert document into Supabase
+                    doc_data = await SupabaseDocumentOps.insert_document(
+                        title=title,
+                        file_type=file_type,
+                        url=str(file_path),
+                        description=description,
+                        google_doc_id=google_doc_id,
+                        google_doc_link=google_doc_link,
+                        department_id=department_id
+                    )
+                    
+                    # Format response
+                    response = {
+                        "id": doc_data["id"],
+                        "title": doc_data["title"],
+                        "type": doc_data["type"],
+                        "url": doc_data["url"],
+                        "description": doc_data["description"],
+                        "created_at": doc_data["created_at"],
+                        "department_name": department_name,
+                        "google_doc_id": doc_data.get("google_doc_id"),
+                        "google_doc_link": doc_data.get("google_doc_link")
+                    }
+                    
+                    responses.append(DocumentResponse(**response))
+                    
+            except Exception as e:
+                # Clean up this file if there was an error
+                if file_path and file_path.exists():
+                    try:
+                        os.remove(file_path)
+                    except:
+                        pass
+                raise
+        
+        return responses
+        
+    except Exception as e:
+        # Clean up any uploaded files
+        for file_path in uploaded_files:
+            try:
+                if file_path.exists():
+                    os.remove(file_path)
+            except:
+                pass
+        
+        if isinstance(e, HTTPException):
+            raise
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/topic/{topic_name}", response_model=List[DocumentResponse])
 async def get_topic_documents(

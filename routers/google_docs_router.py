@@ -215,6 +215,67 @@ async def delete_google_doc(doc_id: str):
         traceback_str = traceback.format_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.delete("/bulk/delete")
+async def delete_multiple_google_docs(doc_ids: List[str]):
+    """Delete multiple Google Docs and their database records"""
+    try:
+        docs_manager = GoogleDocsManager()
+        results = {
+            "successful_deletions": [],
+            "failed_deletions": [],
+            "total_requested": len(doc_ids),
+            "total_successful": 0,
+            "total_failed": 0
+        }
+        
+        for doc_id in doc_ids:
+            try:
+                # Delete from Google Drive
+                docs_manager.delete_doc(doc_id)
+                
+                # Delete from Supabase
+                await SupabaseDocumentOps.delete_document(doc_id)
+                
+                results["successful_deletions"].append({
+                    "doc_id": doc_id,
+                    "status": "deleted successfully"
+                })
+                results["total_successful"] += 1
+                
+            except Exception as e:
+                results["failed_deletions"].append({
+                    "doc_id": doc_id,
+                    "error": str(e),
+                    "status": "failed to delete"
+                })
+                results["total_failed"] += 1
+        
+        # Return results with appropriate status code
+        if results["total_failed"] == 0:
+            return {
+                "message": f"All {results['total_successful']} documents deleted successfully",
+                "results": results
+            }
+        elif results["total_successful"] == 0:
+            raise HTTPException(
+                status_code=500, 
+                detail={
+                    "message": "All document deletions failed",
+                    "results": results
+                }
+            )
+        else:
+            return {
+                "message": f"Partial success: {results['total_successful']} deleted, {results['total_failed']} failed",
+                "results": results
+            }
+            
+    except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
+        traceback_str = traceback.format_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/{doc_id}/approve")
 async def approve_and_download_doc(
     doc_id: str,

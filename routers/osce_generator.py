@@ -103,13 +103,7 @@ async def generate_osce(
         user_id = user_response["user"]["id"]
         user_role = user_response["user"].get("role", "")
         
-        # Check if user is admin or teacher
-        if user_role not in ["admin", "teacher"]:
-            print(f"[OSCE_GENERATOR] ❌ Access denied: User role '{user_role}' is not authorized")
-            raise HTTPException(status_code=403, detail="Only teachers and admins can generate OSCE content")
-            
-        print(f"[OSCE_GENERATOR] ✅ User authenticated successfully. User ID: {user_id}, Role: {user_role}")
-        
+          
         try:
             print(f"\n[{datetime.now()}] 🔍 Starting OSCE question generation for case {osce_data['case_id']}")
             

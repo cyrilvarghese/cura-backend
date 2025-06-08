@@ -46,6 +46,7 @@ class IntelligentImageSearchResponse(BaseModel):
     case_id: str
     test_name: str
     test_type: str
+    test_finding: str
     primary_diagnosis: str
     generated_query: str
     search_context: str
@@ -60,6 +61,7 @@ class IntelligentSearchRequest(BaseModel):
     case_id: str
     test_type: TestType
     test_name: str
+    test_finding: str  # Main parameter - the specific finding/observation to search for
     max_results: Optional[int] = 30
     search_depth: Optional[str] = "advanced"
     search_query: Optional[str] = None
@@ -67,56 +69,62 @@ class IntelligentSearchRequest(BaseModel):
 
 # Prompt for generating intelligent search queries
 INTELLIGENT_SEARCH_PROMPT = """
-You are a medical imaging search expert. Your task is to generate the most effective search query for finding relevant medical images based on a patient's diagnosis and the specific test being performed.
+You are a medical imaging search expert. Your task is to generate the most effective search query for finding relevant medical images based on a specific test finding, with additional context from the patient's diagnosis and test information.
 
-**Context:**
+**PRIMARY FOCUS:**
+- Test Finding: {test_finding}
+
+**Additional Context:**
 - Primary Diagnosis: {primary_diagnosis}
 - Test Type: {test_type}
 - Test Name: {test_name}
 
 **Instructions:**
-Generate a comprehensive and specific search query that will find the most relevant medical images. Consider:
+Generate a comprehensive and specific search query that will find the most relevant medical images for the **TEST FINDING** (this is the most important parameter). The test finding describes the specific observation or abnormality that needs visual references. Use the diagnosis and test information as supporting context.
 
-1. **For Physical Exams:** Look for clinical presentations, physical signs, skin manifestations, or anatomical findings
-2. **For Lab Tests:** Look for histopathology slides, microscopic findings, laboratory specimens, or diagnostic imaging
+**Search Strategy:**
+1. **PRIMARY FOCUS:** The test finding is the main subject - search for images that show this specific observation
+2. **For Physical Exams:** Look for clinical presentations, physical signs, visual manifestations of the finding
+3. **For Lab Tests:** Look for histopathology slides, microscopic findings, laboratory specimens showing the finding
+4. **Supporting Context:** Use diagnosis information to refine and contextualize the search
 
 **Guidelines:**
-- Use precise medical terminology
-- Include both the condition name and relevant visual characteristics
-- Consider synonyms and alternative terms for the condition
-- Focus on what would be visually observable in the specified test type
-- Avoid overly broad or generic terms
+- Prioritize the specific finding/observation described in test_finding
+- Use precise medical terminology related to the finding
+- Include visual characteristics mentioned in the test finding
+- Consider synonyms and alternative terms for the finding and associated condition
+- Focus on what would be visually observable that matches the test finding
 - Generate 2 diverse alternative queries with different medical terminology and perspectives
 
 **Output Format:**
 Provide a JSON response with the following structure:
 ```json
 {{
-  "search_query": "specific and targeted search query here",
-  "search_context": "explanation of what type of images this query is designed to find",
-  "medical_keywords": ["keyword1", "keyword2", "keyword3"],
+  "search_query": "specific and targeted search query focusing on the test finding",
+  "search_context": "explanation of what type of images this query is designed to find based on the test finding",
+  "medical_keywords": ["finding-related keyword1", "finding-related keyword2", "diagnosis keyword"],
   "alternative_contexts": [
-    "descriptive context 1 for finding similar images",
-    "descriptive context 2 with different medical terminology"
+    "descriptive context 1 for finding similar images of this specific finding",
+    "descriptive context 2 with different medical terminology for the same finding"
   ]
 }}
 ```
 
 **Example:**
-For diagnosis "Primary genital herpes simplex virus infection (HSV-2)" and test "Vulvar exam":
+For test finding "White plaques noted on the tongue and buccal mucosa, indicative of oral thrush", diagnosis "Oral candidiasis", test "Oral examination":
 ```json
 {{
-  "search_query": "genital herpes HSV-2 vulvar lesions vesicles ulcers clinical presentation",
-  "search_context": "Clinical images showing the characteristic vesicular and ulcerative lesions of genital herpes on vulvar tissue",
-  "medical_keywords": ["herpes simplex", "vulvar vesicles", "genital ulcers", "HSV-2 lesions"],
-      "alternative_contexts": [
-      "Medical photographs showing herpes genitalis with vulvar involvement and clinical findings",
-      "Dermatological images of HSV genital outbreak during vulvar examination"
-    ]
+  "search_query": "white plaques tongue buccal mucosa oral thrush candidiasis clinical presentation",
+  "search_context": "Clinical images showing white plaques and lesions on tongue and buccal mucosa characteristic of oral candidiasis",
+  "medical_keywords": ["white plaques", "oral thrush", "buccal mucosa", "tongue candidiasis"],
+  "alternative_contexts": [
+    "Medical photographs showing oral candida infection with white patches on tongue and inner cheek",
+    "Clinical images of pseudomembranous candidiasis with removable white plaques in oral cavity"
+  ]
 }}
 ```
 
-Now generate the search query for the given diagnosis and test:
+Now generate the search query focusing primarily on the test finding:
 """
 
 async def load_diagnosis_context(case_id: str) -> Dict[str, Any]:
@@ -134,7 +142,7 @@ async def load_diagnosis_context(case_id: str) -> Dict[str, Any]:
             detail=f"Failed to load diagnosis context for case {case_id}: {str(e)}"
         )
 
-async def generate_intelligent_query(primary_diagnosis: str, test_type: str, test_name: str) -> Dict[str, Any]:
+async def generate_intelligent_query(primary_diagnosis: str, test_type: str, test_name: str, test_finding: str) -> Dict[str, Any]:
     """Generate an intelligent search query using Gemini."""
     try:
         # Configure the model
@@ -147,6 +155,7 @@ async def generate_intelligent_query(primary_diagnosis: str, test_type: str, tes
         
         # Format the prompt
         formatted_prompt = INTELLIGENT_SEARCH_PROMPT.format(
+            test_finding=test_finding,
             primary_diagnosis=primary_diagnosis,
             test_type=test_type,
             test_name=test_name
@@ -174,10 +183,10 @@ async def generate_intelligent_query(primary_diagnosis: str, test_type: str, tes
         print(f"[ERROR] Failed to generate intelligent query: {str(e)}")
         # Fallback to basic query
         return {
-            "search_query": f"{primary_diagnosis} {test_name} medical images",
-            "search_context": f"Medical images related to {primary_diagnosis} and {test_name}",
-            "medical_keywords": [primary_diagnosis, test_name],
-            "alternative_contexts": [f"Clinical images showing {primary_diagnosis} medical presentation"]
+            "search_query": f"{test_finding} {primary_diagnosis} {test_name} medical images",
+            "search_context": f"Medical images showing {test_finding} related to {primary_diagnosis}",
+            "medical_keywords": [test_finding, primary_diagnosis, test_name],
+            "alternative_contexts": [f"Clinical images showing {test_finding} in {primary_diagnosis} cases"]
         }
 
 @router.post("/search", response_model=IntelligentImageSearchResponse)
@@ -232,7 +241,8 @@ async def intelligent_image_search(
                 query_data = await generate_intelligent_query(
                     primary_diagnosis=primary_diagnosis,
                     test_type=request.test_type.value,
-                    test_name=request.test_name
+                    test_name=request.test_name,
+                    test_finding=request.test_finding
                 )
                 query_data["query_source"] = "ai_generated"
                 
@@ -361,6 +371,7 @@ async def intelligent_image_search(
                 case_id=request.case_id,
                 test_name=request.test_name,
                 test_type=request.test_type.value,
+                test_finding=request.test_finding,
                 primary_diagnosis=primary_diagnosis,
                 generated_query=main_query,
                 search_context=search_context,
@@ -437,7 +448,8 @@ async def intelligent_image_search_stream(
                     query_data = await generate_intelligent_query(
                         primary_diagnosis=primary_diagnosis,
                         test_type=request.test_type.value,
-                        test_name=request.test_name
+                        test_name=request.test_name,
+                        test_finding=request.test_finding
                     )
                     main_query = query_data.get("search_context", query_data.get("search_query", ""))
                     search_context = query_data.get("search_context", "")
@@ -492,6 +504,7 @@ async def intelligent_image_search_stream(
                                 "is_final": i == len(all_queries) - 1,
                                 "case_id": request.case_id,
                                 "test_name": request.test_name,
+                                "test_finding": request.test_finding,
                                 "primary_diagnosis": primary_diagnosis,
                                 "timestamp": datetime.now().isoformat()
                             }
@@ -510,6 +523,7 @@ async def intelligent_image_search_stream(
                                 "is_final": i == len(all_queries) - 1,
                                 "case_id": request.case_id,
                                 "test_name": request.test_name,
+                                "test_finding": request.test_finding,
                                 "primary_diagnosis": primary_diagnosis,
                                 "timestamp": datetime.now().isoformat()
                             }
@@ -542,6 +556,7 @@ async def intelligent_image_search_stream(
                         "is_final": True,
                         "case_id": request.case_id,
                         "test_name": request.test_name,
+                        "test_finding": request.test_finding,
                         "primary_diagnosis": primary_diagnosis,
                         "timestamp": datetime.now().isoformat()
                     }
@@ -618,7 +633,8 @@ async def intelligent_image_search_serpapi(
                 query_data = await generate_intelligent_query(
                     primary_diagnosis=primary_diagnosis,
                     test_type=request.test_type.value,
-                    test_name=request.test_name
+                    test_name=request.test_name,
+                    test_finding=request.test_finding
                 )
                 query_data["query_source"] = "ai_generated"
                 
@@ -748,6 +764,7 @@ async def intelligent_image_search_serpapi(
                 case_id=request.case_id,
                 test_name=request.test_name,
                 test_type=request.test_type.value,
+                test_finding=request.test_finding,
                 primary_diagnosis=primary_diagnosis,
                 generated_query=main_query,
                 search_context=search_context,
@@ -825,7 +842,8 @@ async def intelligent_image_search_serpapi_stream(
                     query_data = await generate_intelligent_query(
                         primary_diagnosis=primary_diagnosis,
                         test_type=request.test_type.value,
-                        test_name=request.test_name
+                        test_name=request.test_name,
+                        test_finding=request.test_finding
                     )
                     main_query = query_data.get("search_context", query_data.get("search_query", ""))
                     search_context = query_data.get("search_context", "")

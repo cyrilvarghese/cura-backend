@@ -196,5 +196,6 @@ dependencies:
       - markdown
       - langchain-google-genai
       - gunicorn
+      - google-search-results
 
 prefix: /root/conda/envs/cura-env

@@ -316,10 +316,11 @@ async def edit_physical_exam(request: EditPhysicalExamRequest):
                 detail=f"Physical exam test {request.test_name} not found"
             )
         
-        # Determine what type to create based on whether URLs are provided
-        if request.url and len(request.url) > 0:
-            # Create mixed type test
+        # Determine what type to create based on whether URLs parameter exists
+        if request.url is not None:
+            # Create mixed type test - use provided URLs or default URL if empty
             test_type = "mixed"
+            url_list = request.url if len(request.url) > 0 else ["http://example.com/test-image"]
             physical_exam[request.test_name] = {
                 "purpose": request.purpose or "",
                 "findings": {
@@ -332,7 +333,7 @@ async def edit_physical_exam(request: EditPhysicalExamRequest):
                         {
                             "type": "image",
                             "content": {
-                                "url": request.url,
+                                "url": url_list,
                                 "altText": f"Images for {request.test_name}",
                                 "caption": f"Physical exam images for {request.test_name}"
                             }

@@ -1,18 +1,191 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
-  "case_id": "33",
-  "session_start": "2025-06-07T05:15:34.797251",
-  "current_step": "History Taking",
+  "case_id": "27",
+  "session_start": "2025-06-09T12:15:54.206052",
+  "current_step": "Final Diagnosis",
   "interactions": {
     "history_taking": [],
     "physical_examinations": [],
     "tests_ordered": [],
-    "diagnosis_submission": null,
-    "final_diagnosis": null,
+    "diagnosis_submission": {
+      "primary_diagnosis": "Urticarial Vasculitis",
+      "reason": "sad",
+      "differentials": [
+        "Drug-Induced Urticarial Rash",
+        "Chronic Idiopathic Urticaria",
+        "Hypersensitivity Vasculitis",
+        "Systemic Lupus Erythematosus (SLE)"
+      ],
+      "incorrect_differentials": [],
+      "timestamp": "2025-06-09T12:15:58.267520",
+      "case_id": "27"
+    },
+    "final_diagnosis": {
+      "case_id": "27",
+      "final_diagnosis": "asd",
+      "final_reason": "ads"
+    },
     "pre_treatment_checks": [],
     "treatment_plan": null,
     "post_treatment_monitoring": [],
     "clinical_findings": [],
-    "feedback": {}
+    "feedback": {
+      "history_taking": {
+        "analysis": {
+          "student_question_evaluation": [],
+          "critical_missed_areas": [
+            {
+              "domain": "chief_complaint",
+              "importance_reason": "Duration and specific characteristics of the rash are crucial to narrow differential diagnoses like urticarial vasculitis.",
+              "example_missed_question": "How long do the skin lesions typically last before fading?"
+            },
+            {
+              "domain": "red_flag_symptoms",
+              "importance_reason": "Ruling out systemic involvement is critical due to the rash and joint pain, potentially indicating a more serious condition.",
+              "example_missed_question": "Any systemic symptoms like fevers, weight changes, or night sweats?"
+            },
+            {
+              "domain": "associated_symptoms",
+              "importance_reason": "Characterizing the joint pain (timing, severity) is essential to assess for inflammatory arthritis.",
+              "example_missed_question": "Do you have joint pain or stiffness? If so, when is it most noticeable?"
+            }
+          ],
+          "summary_feedback": {
+            "key_strength": "No questions were asked, so there were no strengths.",
+            "key_weakness": "Failure to ask any questions prevented gathering crucial information for diagnosis and management.",
+            "cumulative_score": 0.5,
+            "score_reason": "No relevant questions asked and several critical areas missed, hindering diagnostic progress despite pre-existing case information."
+          }
+        },
+        "domain_feedback": {
+          "aetcom_evaluation": {
+            "communication": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student did not ask any questions. Action: The student should begin by establishing rapport and then ask open-ended questions to understand the patient's chief complaint."
+            },
+            "empathy_patient_centeredness": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student did not demonstrate any empathy or patient-centeredness as no questions were asked. Action: The student should acknowledge the patient's concerns and feelings to build trust."
+            },
+            "professionalism_ethics": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student did not demonstrate professionalism as no questions were asked. Action: The student should introduce themselves and explain the purpose of the interview."
+            },
+            "information_gathering": {
+              "performance_level": "Needs Improvement",
+              "feedback": "The student failed to gather any information relevant to the patient's condition. Action: The student needs to ask questions related to the chief complaint, associated symptoms, past medical history, family history, medications, and social history."
+            }
+          }
+        },
+        "timestamp": "2025-06-09T12:16:08.334780"
+      },
+      "diagnosis": {
+        "feedback": {
+          "educationalCapsules": {
+            "educationalCapsules": {
+              "primaryDxCapsule": {
+                "dx": "Urticarial Vasculitis",
+                "overview": "Urticarial vasculitis (UV) is a rare inflammatory condition characterized by persistent urticarial lesions (hives) with histological evidence of leukocytoclastic vasculitis. Unlike ordinary urticaria, UV lesions typically last longer than 24 hours and may leave residual bruising or hyperpigmentation. It can be idiopathic or associated with underlying systemic diseases.",
+                "pathoPoints": [
+                  "Leukocytoclastic vasculitis in dermal vessels, characterized by neutrophil infiltration and fibrinoid necrosis.",
+                  "Immune complex deposition in vessel walls, leading to complement activation and inflammation."
+                ],
+                "etiologyRiskFactors": [
+                  "Autoimmune diseases (e.g., SLE, Sjogren's syndrome)",
+                  "Infections (e.g., hepatitis B, hepatitis C)",
+                  "Medications (less common)",
+                  "Hypocomplementemia"
+                ],
+                "clinicalFeatures": [
+                  "Urticarial lesions that persist for >24 hours, often with burning or pain.",
+                  "Residual hyperpigmentation or bruising after lesion resolution.",
+                  "Angioedema (swelling of the face, lips, or tongue).",
+                  "Systemic symptoms such as fever, arthralgia, abdominal pain, and fatigue may be present."
+                ],
+                "complications": [
+                  "Renal involvement (glomerulonephritis)",
+                  "Pulmonary involvement (rare, but can cause dyspnea or hemoptysis)"
+                ],
+                "diagModalities": [
+                  "Skin biopsy showing leukocytoclastic vasculitis.",
+                  "Complement levels (C3, C4) may be decreased, especially in hypocomplementemic UV.",
+                  "Blood tests to evaluate for underlying systemic diseases (e.g., ANA, anti-dsDNA, hepatitis serologies)."
+                ]
+              },
+              "differentialDxCapsulesToEmbed": [
+                {
+                  "differentialDxName": "Systemic Lupus Erythematosus (SLE)",
+                  "overview": "Systemic Lupus Erythematosus (SLE) is a chronic autoimmune disease that can affect multiple organ systems. It is characterized by the production of autoantibodies and immune complexes, leading to inflammation and tissue damage.",
+                  "pathoPoints": [
+                    "Autoantibody production against nuclear antigens (e.g., dsDNA, Sm).",
+                    "Immune complex deposition in various tissues, causing inflammation.",
+                    "Activation of the complement system, contributing to tissue damage."
+                  ],
+                  "etiologyRiskFactors": [
+                    "Genetic predisposition (e.g., certain HLA alleles).",
+                    "Environmental factors (e.g., UV light exposure, infections).",
+                    "Female sex.",
+                    "Certain medications."
+                  ],
+                  "clinicalFeatures": [
+                    "Malar rash (butterfly rash) across the cheeks and nose.",
+                    "Arthritis (often non-erosive) affecting multiple joints.",
+                    "Renal involvement (lupus nephritis).",
+                    "Neurological symptoms (e.g., seizures, psychosis).",
+                    "Serositis (inflammation of the pleura or pericardium).",
+                    "Oral ulcers.",
+                    "Photosensitivity."
+                  ],
+                  "complications": [
+                    "Lupus nephritis leading to end-stage renal disease.",
+                    "Cardiovascular disease (e.g., accelerated atherosclerosis).",
+                    "Neuropsychiatric lupus.",
+                    "Increased risk of infections."
+                  ],
+                  "diagModalities": [
+                    "ANA (antinuclear antibody) test (highly sensitive but not specific).",
+                    "Anti-dsDNA and anti-Sm antibodies (more specific for SLE).",
+                    "Complement levels (C3, C4) may be decreased.",
+                    "Urinalysis and renal biopsy (if renal involvement is suspected)."
+                  ]
+                },
+                {
+                  "differentialDxName": "Hypersensitivity Vasculitis",
+                  "overview": "Hypersensitivity vasculitis, also known as leukocytoclastic vasculitis or cutaneous small-vessel vasculitis, is an inflammatory reaction of small blood vessels in the skin, often triggered by an identifiable antigen. It typically presents with palpable purpura, most commonly on the lower extremities.",
+                  "pathoPoints": [
+                    "Immune complex formation in response to an antigen (e.g., drug, infection).",
+                    "Deposition of immune complexes in small vessel walls.",
+                    "Activation of the complement system and recruitment of neutrophils, leading to inflammation and vessel damage."
+                  ],
+                  "etiologyRiskFactors": [
+                    "Medications (e.g., antibiotics, NSAIDs).",
+                    "Infections (e.g., streptococcal infections, hepatitis B and C).",
+                    "Autoimmune diseases (less common).",
+                    "Malignancy (rare)."
+                  ],
+                  "clinicalFeatures": [
+                    "Palpable purpura, typically on the lower extremities.",
+                    "Macules, papules, vesicles, bullae, or ulcers may also be present.",
+                    "Lesions may be painful or pruritic.",
+                    "Systemic symptoms are usually mild or absent."
+                  ],
+                  "complications": [
+                    "Skin ulceration.",
+                    "Rarely, systemic involvement (e.g., renal, gastrointestinal).",
+                    "Post-inflammatory hyperpigmentation."
+                  ],
+                  "diagModalities": [
+                    "Skin biopsy showing leukocytoclastic vasculitis.",
+                    "Evaluation for underlying triggers (e.g., medication review, infection screening).",
+                    "Complement levels are typically normal."
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "timestamp": "2025-06-09T12:21:23.771589"
+      }
+    }
   }
 }

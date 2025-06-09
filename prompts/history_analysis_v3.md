@@ -26,11 +26,11 @@
     *   Provide a brief (`~10-15 words`) `reason` explaining the relevance grade.
     *   Compile these evaluations into the `student_question_evaluation` array.
 
-2.  **Identify Top 3 Critical Missed Areas (Using Provided Domains):**
+2.  **Identify Top Critical Missed Areas (Using Provided Domains):**
     *   Compare the topics covered in `{{student_questions}}` against the `{{expected_questions_with_domains}}` and the `{{case_context}}`.
-    *   Identify the conceptual areas or specific questions that were **not adequately addressed** by the student and were **most critical** for *this specific case's* diagnosis or safety.
-    *   Select the **top 3 most important** missed areas.
-    *   For each of these 3 areas:
+    *   Identify the conceptual areas or specific questions that were **not adequately addressed** by the student or not found in the patient replies and were **most critical** for *this specific case's* diagnosis or safety.If the question was not asked but present in teh patient reply consider that as covered.
+    *   Select the **top most important** missed areas.
+    *   For each of these areas:
         *   `domain`: Retrieve the **pre-assigned `domain` tag** associated with the relevant missed question(s) from the `{expected_questions_with_domains}` input.
         *   `importance_reason`: (string) Explain *specifically* why exploring this was critical for *this case* (~15-20 words). Avoid generic reasons.
         *   `example_missed_question`: (string) Provide one concrete example question text from the `{expected_questions_with_domains}` list that represents the missed area.

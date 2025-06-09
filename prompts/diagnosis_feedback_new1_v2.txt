@@ -19,35 +19,67 @@
     {history_context_json}
     ```
 
-3.  `STUDENT_SESSION_JSON`: (The student's complete record of interactions, including their submitted `final_diagnosis` object.)
+3.  **Student Performance Data** (broken down by interaction type):
+
+    **Student History Taking:**
     ```json
-    {student_session_json}
+    {student_history_taking_json}
+    ```
+
+    **Student Physical Examinations:**
+    ```json
+    {student_physical_examinations_json}
+    ```
+
+    **Student Tests Ordered:**
+    ```json
+    {student_tests_ordered_json}
+    ```
+
+    **Student Clinical Findings:**
+    ```json
+    {student_clinical_findings_json}
+    ```
+
+    **Student Diagnosis Submission:**
+    ```json
+    {student_diagnosis_submission_json}
+    ```
+
+    **Student Final Diagnosis:**
+    ```json
+    {student_final_diagnosis_json}
     ```
 
 **Instructions:**
 As the AI Teaching Assistant, evaluate the student's approach to the final diagnosis and provide guidance as follows:
 
 1.  **Score Final Diagnosis Accuracy (1-5):**
-    *   Compare the student's `STUDENT_SESSION_JSON.interactions.final_diagnosis.final_diagnosis` with `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`.
+    *   Compare the student's final diagnosis from **Student Final Diagnosis** section with `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`.
     *   Assign a score: 5 = Perfect match. 3-4 = Close/Plausible but not exact. 1-2 = Significantly incorrect.
-    *   Provide a concise `explanation` for this score, comparing the student's `STUDENT_SESSION_JSON.interactions.final_diagnosis.final_reason` with the `keyEvidence` from `DIAGNOSIS_CONTEXT_JSON`.
+    *   Provide a concise `explanation` for this score, comparing the student's reasoning from **Student Final Diagnosis** section with the `keyEvidence` from `DIAGNOSIS_CONTEXT_JSON`.
 2.  **Score Evidence Gathering for Final Diagnosis (History, Exams, Labs) (1-5):**
+    *   **CRITICAL RULES:**
+        *   **History Taking**: If the student failed to ask ANY questions during history taking (i.e., **Student History Taking** section is empty or shows no questions asked), assign a score of 0 for ALL evidence gathering scores regardless of other performance.
+        *   **Physical Examinations**: If the student failed to perform ANY physical examinations (i.e., **Student Physical Examinations** section is empty or shows no exams performed), assign evidenceGatheringScoreExams = 0 regardless of other performance.
+        *   **Lab Tests**: If the student failed to order ANY lab tests (i.e., **Student Tests Ordered** section is empty or shows no tests ordered), assign evidenceGatheringScoreLabTests = 0 regardless of other performance.
     *   Review all `keyEvidence` points for the `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`.
-    *   Assess the student's coverage of this key evidence through their history taking, performed exams, and ordered labs (`STUDENT_SESSION_JSON`).
-    *   Note any irrelevant exams/tests performed by the student (i.e., those present in `STUDENT_SESSION_JSON` but not listed as essential/key in `DIAGNOSIS_CONTEXT_JSON` for *this* primary diagnosis workup, or not relevant for differentiating key plausible DDx).
+    *   Assess the student's coverage of this key evidence through their **Student History Taking**, **Student Physical Examinations**, and **Student Tests Ordered** sections.
+    *   Note any irrelevant exams/tests performed by the student (i.e., those present in student performance data but not listed as essential/key in `DIAGNOSIS_CONTEXT_JSON` for *this* primary diagnosis workup, or not relevant for differentiating key plausible DDx).
     *   Assign a score based on comprehensiveness and relevance: 5 = Gathered all/most key supporting evidence with minimal irrelevant actions. 1 = Missed most key evidence, or many irrelevant actions.
-    *   **For the `evidenceGatheringExplanation` (which is an object):** Keep each point brief and direct.
+    *   Assign two seperate scores one for physical exams(evidenceGatheringScoreExams)  and one for labtests (evidenceGatheringScoreLabTests)
+    *   **For the `evidenceGatheringExplanation` (which is an object):** Keep each point brief and direct. **Even if a CRITICAL RULE results in a score of 0, you must still populate the `areasForImprovement` fields with any missed items.**
         *   `overallSummary`: A very brief (1 sentence) overall comment.
-        *   `historyStrengths`: Briefly list 1-2 key history points successfully elicited that align with `DIAGNOSIS_CONTEXT_JSON.keyEvidence`.
-        *   `examStrengths`: Briefly list 1-2 essential exams performed (from `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams`) relevant to the final diagnosis.
-        *   `testStrengths`: Briefly list 1-2 key tests ordered (from `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`) relevant to the final diagnosis.
-        *   `areasForImprovement_Exams`: Briefly list 1-2 specific *essential* exams for the final diagnosis (from `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams`) that were missed.
-        *   `areasForImprovement_Tests`: Briefly list 1-2 specific *key* tests for the final diagnosis (from `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`) that were missed.
+        *   `historyStrengths`: Briefly list 1-2 key history points successfully elicited. If score is 0 due to no history taking, this should be an empty array.
+        *   `examStrengths`: Briefly list 1-2 essential exams performed. If score is 0 due to no exams, this should be an empty array.
+        *   `testStrengths`: Briefly list 1-2 key tests ordered. If score is 0 due to no tests, this should be an empty array.
+        *   `areasForImprovement_Exams`: Briefly list 1-2 specific *essential* exams for the final diagnosis (from `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams`) that were missed. If the student performed no exams, this list must still be populated with the most critical missed exams.
+        *   `areasForImprovement_Tests`: Briefly list 1-2 specific *key* tests for the final diagnosis (from `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`) that were missed. If the student ordered no tests, this list must still be populated with the most critical missed tests.
         *   `irrelevantActionsNoted`: Briefly mention 1-2 irrelevant exams/tests if performed. (Empty array if none).
 3.  **Detail ALL Supporting Evidence for the Correct Final Diagnosis:**
-    *   List the top 3-5 critical history points from `HISTORY_CONTEXT_JSON` that support the `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`, indicating if the student identified them.
-    *   List the top 3-5 critical essential exams from `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams`, their expected findings supporting the diagnosis (from `DIAGNOSIS_CONTEXT_JSON` or `HISTORY_CONTEXT_JSON`), and indicate if the student performed them and identified the findings.
-    *   List the top 3-5 critical key tests from `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`, their expected results supporting the diagnosis (from `DIAGNOSIS_CONTEXT_JSON`), and indicate if the student ordered them and identified the results.
+    *   List the top 3-5 critical history points from `HISTORY_CONTEXT_JSON` that support the `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`, indicating if the student identified them by looking at **Student History Taking** section.
+    *   List the top 3-5 critical essential exams from `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams`, their expected findings supporting the diagnosis (from `DIAGNOSIS_CONTEXT_JSON` or `HISTORY_CONTEXT_JSON`), and indicate if the student performed them and identified the findings by checking **Student Physical Examinations** section.
+    *   List the top 3-5 critical key tests from `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`, their expected results supporting the diagnosis (from `DIAGNOSIS_CONTEXT_JSON`), and indicate if the student ordered them and identified the results by checking **Student Tests Ordered** section.
 4.  **Detail Missed Crucial Evidence:**
     *   List ALL `essentialPhysicalExams` from `DIAGNOSIS_CONTEXT_JSON` that the student *did not* perform.
     *   List ALL `keyDiagnosticTests` from `DIAGNOSIS_CONTEXT_JSON` that the student *did not* order.
@@ -72,7 +104,8 @@ As the AI Teaching Assistant, evaluate the student's approach to the final diagn
     "scores": {{
       "accuracyScore": "number (1-5)",
       "accuracyExplanation": "string (Concise, comparing student's final_reason with DIAGNOSIS_CONTEXT_JSON.keyEvidence)",
-      "evidenceGatheringScore": "number (1-5)",
+      "evidenceGatheringScoreExams": "number (1-5)",//to indicate converage of physical exams
+      "evidenceGatheringScoreLabTests": "number (1-5)",//to indication converage of lab tests
       "evidenceGatheringExplanation": {{
         "overallSummary": "string (Brief: 1 sentence)",
         "historyStrengths": ["string (Brief point)"],
@@ -86,11 +119,11 @@ As the AI Teaching Assistant, evaluate the student's approach to the final diagn
     "correctPrimary": {{
       "dx": "<<correct_primary_diagnosis_name_placeholder>>",
       "allSupportingEvidence": {{
-        "history": [   //top 3 critical history points/ do not repeat and desc should be aroudn 5-10 words
+        "history": [   //top 5 critical history points/ do not repeat and desc should be aroudn 5-10 words
           {{
             "desc": "string (Critical history point)",//5-10 words
             "alignsWithKeyEvidence": "string (what is the relevance of this history point based history_context_json)",
-            "studentDidIdentify": "boolean"
+            "studentDidIdentify": "boolean (Requires comparing student's history taking in **Student History Taking** section with expected finding)"
           }}
         ],
         "exams": [ 

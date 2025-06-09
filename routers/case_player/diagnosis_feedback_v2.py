@@ -80,6 +80,7 @@ def prepare_student_input(session_data: Dict[str, Any]) -> Dict[str, Any]:
     """Prepare student input data from session data for the diagnosis feedback prompt."""
     student_input = {
         "interactions": {
+            "history_taking": session_data["interactions"]["history_taking"],
             "physical_examinations": session_data["interactions"]["physical_examinations"],
             "tests_ordered": session_data["interactions"]["tests_ordered"],
             "clinical_findings": session_data["interactions"]["clinical_findings"],
@@ -101,10 +102,15 @@ async def generate_feedback(prompt_template: str, diagnosis_context: Dict[str, A
         "top_k": 40
     }
     
-    # Format the prompt with the required data
+    # Format the prompt with the required data - breaking down student input into parts
     formatted_prompt_params = {
         "diagnosis_context_json": json.dumps(diagnosis_context, indent=2),
-        "student_session_json": json.dumps(student_input, indent=2)
+        "student_history_taking_json": json.dumps(student_input["interactions"]["history_taking"], indent=2),
+        "student_physical_examinations_json": json.dumps(student_input["interactions"]["physical_examinations"], indent=2),
+        "student_tests_ordered_json": json.dumps(student_input["interactions"]["tests_ordered"], indent=2),
+        "student_clinical_findings_json": json.dumps(student_input["interactions"]["clinical_findings"], indent=2),
+        "student_diagnosis_submission_json": json.dumps(student_input["interactions"]["diagnosis_submission"], indent=2),
+        "student_final_diagnosis_json": json.dumps(student_input["interactions"]["final_diagnosis"], indent=2)
     }
     
     # Add history context if provided
@@ -114,6 +120,43 @@ async def generate_feedback(prompt_template: str, diagnosis_context: Dict[str, A
     formatted_prompt = prompt_template.format(**formatted_prompt_params)
     
     # Generate the feedback
+    content = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": formatted_prompt}
+                ]
+            }
+        ],
+        "generation_config": generation_config
+    }
+    
+    response = await asyncio.to_thread(model.generate_content, **content)
+    
+    # Process the response
+    cleaned_content = clean_code_block(response.text)
+    feedback_result = json.loads(cleaned_content)
+    
+    return feedback_result
+
+async def generate_educational_capsules(diagnosis_context: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate educational capsules using the Gemini model - simplified version for educational content only."""
+    # Configure the model
+    model = genai.GenerativeModel('gemini-2.0-flash')
+    generation_config = {
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 40
+    }
+    
+    # Format the prompt with only diagnosis context (educational capsules don't need student data)
+    formatted_prompt_params = {
+        "diagnosis_context_json": json.dumps(diagnosis_context, indent=2)
+    }
+    
+    formatted_prompt = EDUCATIONAL_CAPSULES_PROMPT.format(**formatted_prompt_params)
+    
+    # Generate the educational capsules
     content = {
         "contents": [
             {
@@ -304,10 +347,8 @@ async def get_educational_resources(
         
         # Generate the educational capsules
         start_time = datetime.now() 
-        feedback_result = await generate_feedback(
-            prompt_template=EDUCATIONAL_CAPSULES_PROMPT,
-            diagnosis_context=diagnosis_context,
-            student_input={"case_id": case_id}  # Only minimal info needed for educational capsules
+        feedback_result = await generate_educational_capsules(
+            diagnosis_context=diagnosis_context
         )
         
         # Save feedback to session

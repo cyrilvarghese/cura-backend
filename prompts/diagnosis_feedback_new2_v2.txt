@@ -13,9 +13,36 @@
       {history_context_json}
     ```
 
-3.  `STUDENT_SESSION_JSON`: (The student's complete record of interactions.)
+3.  **Student Performance Data** (broken down by interaction type):
+
+    **Student History Taking:**
     ```json
-      {student_session_json}
+    {student_history_taking_json}
+    ```
+
+    **Student Physical Examinations:**
+    ```json
+    {student_physical_examinations_json}
+    ```
+
+    **Student Tests Ordered:**
+    ```json
+    {student_tests_ordered_json}
+    ```
+
+    **Student Clinical Findings:**
+    ```json
+    {student_clinical_findings_json}
+    ```
+
+    **Student Diagnosis Submission:**
+    ```json
+    {student_diagnosis_submission_json}
+    ```
+
+    **Student Final Diagnosis:**
+    ```json
+    {student_final_diagnosis_json}
     ```
 
 **Instructions:**

@@ -110,7 +110,11 @@ async def generate_feedback(prompt_template: str, diagnosis_context: Dict[str, A
         "student_tests_ordered_json": json.dumps(student_input["interactions"]["tests_ordered"], indent=2),
         "student_clinical_findings_json": json.dumps(student_input["interactions"]["clinical_findings"], indent=2),
         "student_diagnosis_submission_json": json.dumps(student_input["interactions"]["diagnosis_submission"], indent=2),
-        "student_final_diagnosis_json": json.dumps(student_input["interactions"]["final_diagnosis"], indent=2)
+        "student_final_diagnosis_json": json.dumps(student_input["interactions"]["final_diagnosis"], indent=2),
+        "student_reasoning_json": json.dumps({
+            "diagnosis_submission_reason": student_input["interactions"]["diagnosis_submission"].get("reason", ""),
+            "final_diagnosis_reason": student_input["interactions"]["final_diagnosis"].get("final_reason", "")
+        }, indent=2)
     }
     
     # Add history context if provided

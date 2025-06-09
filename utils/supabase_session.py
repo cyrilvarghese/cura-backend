@@ -21,16 +21,24 @@ def get_supabase_client() -> Client:
 def extract_rubric_scores(interactions: Dict[str, Any]) -> Dict[str, Any]:
     """Extract rubric scores from session interactions."""
     feedback = interactions.get("feedback", {})
-    diagnosis = feedback.get("diagnosis", {}).get("feedback", {}).get("evaluationSummary", {})
+    
+    # Extract history taking score (this path is correct)
     history_score = feedback.get("history_taking", {}).get("analysis", {}).get("summary_feedback", {}).get("cumulative_score", 0)
+    
+    # Extract diagnosis scores from the actual structure
+    diagnosis_feedback = feedback.get("diagnosis", {}).get("feedback", {}).get("primaryDiagnosis", {}).get("primaryDxFeedback", {})
+    diagnosis_scores = diagnosis_feedback.get("scores", {})
+    
+    # Extract differential score from the actual structure
+    differential_score = feedback.get("diagnosis", {}).get("feedback", {}).get("differentialDiagnosis", {}).get("differentialDxAnalysis", {}).get("differentialListScore", 0)
     
     scores = {
         "history_taking": history_score,
-        "physical_exams": diagnosis.get("physicalExamPerformance", 0),
-        "test_ordering": diagnosis.get("testOrderingPerformance", 0),
-        "diagnosis_accuracy": diagnosis.get("primaryDiagnosisAccuracy", 0),
-        "reasoning": diagnosis.get("reasoningQuality", 0),
-        "differentials": diagnosis.get("differentialListMatch", 0)
+        "physical_exams": diagnosis_scores.get("evidenceGatheringScoreExams", 0),
+        "test_ordering": diagnosis_scores.get("evidenceGatheringScoreLabTests", 0),
+        "diagnosis_accuracy": diagnosis_scores.get("accuracyScore", 0),
+        "reasoning": diagnosis_scores.get("accuracyScore", 0),  # Using accuracyScore as proxy for reasoning
+        "differentials": differential_score
     }
     
     print(f"[SUPABASE] Extracted rubric scores: {json.dumps(scores, indent=2)}")

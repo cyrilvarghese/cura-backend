@@ -51,13 +51,18 @@
     {student_final_diagnosis_json}
     ```
 
+    **Student Reasoning (Combined):**
+    ```json
+     {student_reasoning_json}
+    ```
+
 **Instructions:**
 As the AI Teaching Assistant, evaluate the student's approach to the final diagnosis and provide guidance as follows:
 
 1.  **Score Final Diagnosis Accuracy (1-5):**
     *   Compare the student's final diagnosis from **Student Final Diagnosis** section with `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`.
     *   Assign a score: 5 = Perfect match. 3-4 = Close/Plausible but not exact. 1-2 = Significantly incorrect.
-    *   Provide a concise `explanation` for this score, comparing the student's reasoning from **Student Final Diagnosis** section with the `keyEvidence` from `DIAGNOSIS_CONTEXT_JSON`.
+    *   Provide a concise, encouraging `explanation` for this score, addressing the student directly as "you" instead of "the student". Compare their reasoning from `student_reasoning_json` with the `keyEvidence` from `DIAGNOSIS_CONTEXT_JSON`. Keep it short, dense with information, and motivational. Examples: "Excellent work! You correctly identified Urticarial Vasculitis and your reasoning including rash duration >24h, family history, and biopsy findings perfectly aligns with the key diagnostic evidence." or "Good diagnostic thinking! You identified most key features, but consider..."
 2.  **Score Evidence Gathering for Final Diagnosis (History, Exams, Labs) (1-5):**
     *   **CRITICAL RULES:**
         *   **History Taking**: If the student failed to ask ANY questions during history taking (i.e., **Student History Taking** section is empty or shows no questions asked), assign a score of 0 for ALL evidence gathering scores regardless of other performance.
@@ -69,7 +74,7 @@ As the AI Teaching Assistant, evaluate the student's approach to the final diagn
     *   Assign a score based on comprehensiveness and relevance: 5 = Gathered all/most key supporting evidence with minimal irrelevant actions. 1 = Missed most key evidence, or many irrelevant actions.
     *   Assign two seperate scores one for physical exams(evidenceGatheringScoreExams)  and one for labtests (evidenceGatheringScoreLabTests)
     *   **For the `evidenceGatheringExplanation` (which is an object):** Keep each point brief and direct. **Even if a CRITICAL RULE results in a score of 0, you must still populate the `areasForImprovement` fields with any missed items.**
-        *   `overallSummary`: A very brief (1 sentence) overall comment.
+        *   `overallSummary`: A very brief (1 sentence) encouraging overall comment, addressing the student directly as "you". Examples: "You demonstrated strong evidence-gathering skills across all areas!" or "You gathered key evidence but missed some critical physical exams."
         *   `historyStrengths`: Briefly list 1-2 key history points successfully elicited. If score is 0 due to no history taking, this should be an empty array.
         *   `examStrengths`: Briefly list 1-2 essential exams performed. If score is 0 due to no exams, this should be an empty array.
         *   `testStrengths`: Briefly list 1-2 key tests ordered. If score is 0 due to no tests, this should be an empty array.
@@ -77,12 +82,12 @@ As the AI Teaching Assistant, evaluate the student's approach to the final diagn
         *   `areasForImprovement_Tests`: Briefly list 1-2 specific *key* tests for the final diagnosis (from `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`) that were missed. If the student ordered no tests, this list must still be populated with the most critical missed tests.
         *   `irrelevantActionsNoted`: Briefly mention 1-2 irrelevant exams/tests if performed. (Empty array if none).
 3.  **Detail ALL Supporting Evidence for the Correct Final Diagnosis:**
-    *   List the top 3-5 critical history points from `HISTORY_CONTEXT_JSON` that support the `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`, indicating if the student identified them by looking at **Student History Taking** section.
-    *   List the top 3-5 critical essential exams from `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams`, their expected findings supporting the diagnosis (from `DIAGNOSIS_CONTEXT_JSON` or `HISTORY_CONTEXT_JSON`), and indicate if the student performed them and identified the findings by checking **Student Physical Examinations** section.
-    *   List the top 3-5 critical key tests from `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`, their expected results supporting the diagnosis (from `DIAGNOSIS_CONTEXT_JSON`), and indicate if the student ordered them and identified the results by checking **Student Tests Ordered** section.
+    *   List the top 3-5 most critical history points from `HISTORY_CONTEXT_JSON` that support the `DIAGNOSIS_CONTEXT_JSON.primaryDiagnosis`, indicating if the student identified them by looking at **Student History Taking** section.
+    *   List the top 3-5 most critical essential exams from `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams`, their expected findings supporting the diagnosis (from `DIAGNOSIS_CONTEXT_JSON` or `HISTORY_CONTEXT_JSON`), and indicate if the student performed them and identified the findings by checking **Student Physical Examinations** section.
+    *   List the top 3-5 most critical key tests from `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`, their expected results supporting the diagnosis (from `DIAGNOSIS_CONTEXT_JSON`), and indicate if the student ordered them and identified the results by checking **Student Tests Ordered** section.
 4.  **Detail Missed Crucial Evidence:**
-    *   List ALL `essentialPhysicalExams` from `DIAGNOSIS_CONTEXT_JSON` that the student *did not* perform.
-    *   List ALL `keyDiagnosticTests` from `DIAGNOSIS_CONTEXT_JSON` that the student *did not* order.
+    *   List ALL `essentialPhysicalExams` from `DIAGNOSIS_CONTEXT_JSON` that the student *did not* perform compare using (compare with student_physical_examinations_json)
+    *   List ALL `keyDiagnosticTests` from `DIAGNOSIS_CONTEXT_JSON` that the student *did not* order.(compare with student_tests_ordered_json)
     *   Include their `relevance` and `educationalTip` (if available).
 5.  **Generate Ideal Diagnostic Timeline:**
     *   Based on `HISTORY_CONTEXT_JSON.expected_questions_with_domains`, `DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams`, `DIAGNOSIS_CONTEXT_JSON.keyDiagnosticTests`, and `DIAGNOSIS_CONTEXT_JSON.plausibleDifferentials` (including their `differentiatingHistoryClues`, `differentiatingExamFindings`, `differentiatingTestResults`), construct a logical sequence of 5-10 key steps a clinician might take.
@@ -103,7 +108,7 @@ As the AI Teaching Assistant, evaluate the student's approach to the final diagn
     }},
     "scores": {{
       "accuracyScore": "number (1-5)",
-      "accuracyExplanation": "string (Concise, comparing student's final_reason with DIAGNOSIS_CONTEXT_JSON.keyEvidence)",
+      "accuracyExplanation": "string (Concise, encouraging explanation comparing student's reasoning from 'student_reasoning_json' with DIAGNOSIS_CONTEXT_JSON.keyEvidence)",
       "evidenceGatheringScoreExams": "number (1-5)",//to indicate converage of physical exams
       "evidenceGatheringScoreLabTests": "number (1-5)",//to indication converage of lab tests
       "evidenceGatheringExplanation": {{
@@ -132,7 +137,7 @@ As the AI Teaching Assistant, evaluate the student's approach to the final diagn
             "expectedFindingSupportingDx": "string (e.g., from DIAGNOSIS_CONTEXT_JSON.essentialPhysicalExams.generalDescription if relevant)",
             "alignsWithKeyEvidence": "string",
             "studentDidPerform": "boolean",
-            "studentDidIdentifyFinding": "boolean (Requires comparing student's interpretation/notes with expected finding)"
+            "studentDidIdentifyFinding": "boolean (Check if the expected finding roughly mentioned in 'student_reasoning_json')"
           }}
         ],
         "tests": [ 
@@ -141,7 +146,7 @@ As the AI Teaching Assistant, evaluate the student's approach to the final diagn
             "expectedResultSupportingDx": "string (e.g., 'pH >4.5' or 'Positive Whiff test')",
             "alignsWithKeyEvidence": "string",
             "studentDidOrder": "boolean",
-            "studentDidIdentifyResult": "boolean (Requires comparing student's interpretation/notes with expected result)"
+            "studentDidIdentifyResult": "boolean (Check if the expected result rougly  mentioned in 'student_reasoning_json')"
           }}
         ]
       }}

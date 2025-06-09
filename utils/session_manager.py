@@ -303,8 +303,8 @@ class SessionManager:
         """Add diagnosis feedback results to the session.
         
         Args:
-            student_id (str): The ID of the student
-            feedback_result (Dict[str, Any]): The feedback results to store
+            student_id (str): The ID of the student  
+            feedback_result (Dict[str, Any]): The feedback results to store (should contain keys like 'primaryDiagnosis', 'differentialDiagnosis', 'educationalCapsules')
             
         Returns:
             Dict[str, Any]: The updated session data
@@ -319,11 +319,16 @@ class SessionManager:
         if "feedback" not in session_data["interactions"]:
             session_data["interactions"]["feedback"] = {}
             
-        # Store the feedback results
-        session_data["interactions"]["feedback"]["diagnosis"] = {
-            "feedback": feedback_result,
-            "timestamp": datetime.now().isoformat()
-        }
+        # Initialize diagnosis feedback if it doesn't exist
+        if "diagnosis" not in session_data["interactions"]["feedback"]:
+            session_data["interactions"]["feedback"]["diagnosis"] = {
+                "feedback": {},
+                "timestamp": datetime.now().isoformat()
+            }
+        
+        # Merge new feedback results with existing ones instead of overwriting
+        session_data["interactions"]["feedback"]["diagnosis"]["feedback"].update(feedback_result)
+        session_data["interactions"]["feedback"]["diagnosis"]["timestamp"] = datetime.now().isoformat()
         
         # Save the updated session
         self._save_session(file_path, session_data)

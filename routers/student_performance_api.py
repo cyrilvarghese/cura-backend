@@ -37,6 +37,11 @@ class StudentCaseComparison(BaseModel):
     max_reasoning: Optional[float] = None
     avg_differentials: Optional[float] = None
     max_differentials: Optional[float] = None
+    # Add OSCE score fields
+    osce_score_summary: Optional[Dict[str, Any]] = None
+    student_osce_percentage: Optional[float] = None
+    avg_osce_percentage: Optional[float] = None
+    max_osce_percentage: Optional[float] = None
 
 class StudentSessionSummary(BaseModel):
     id: str

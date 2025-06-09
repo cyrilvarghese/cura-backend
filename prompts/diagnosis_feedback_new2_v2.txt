@@ -45,12 +45,18 @@
     {student_final_diagnosis_json}
     ```
 
+    **Student Reasoning (Combined):**
+    ```json
+    {student_reasoning_json}
+    ```
+
 **Instructions:**
 As the AI Teaching Assistant, evaluate the student's differential diagnosis reasoning and prepare data for a comparative table as follows:
 
 1.  **Score Differential List Match (1-5):**
     *   (Instructions for scoring remain the same as previous version of Prompt 2)
     *   Provide an `explanation` for this score in `differentialListExplanation`.
+    *   **Note:** Use `student_reasoning_json` to understand the student's thinking about their differential considerations.
     
 
 2.  **Prepare `detailedAnalysis` Array for Comparative Table:**
@@ -64,6 +70,7 @@ As the AI Teaching Assistant, evaluate the student's differential diagnosis reas
         *   Iterate through `DIAGNOSIS_CONTEXT_JSON.plausibleDifferentials`.
         *   For each, create an object with `type: "PlausibleDifferential"`.
         *   Include `dxName`, `studentDidConsiderAsPlausible`, `studentDidMarkAsIncorrect`.
+        *   **To determine these boolean values:** Check if the differential diagnosis name appears in `student_diagnosis_submission_json` differentials list, `student_final_diagnosis_json`, or is mentioned in `student_reasoning_json`. For `studentDidMarkAsIncorrect`, check if the student explicitly ruled it out or marked it as incorrect.
         *   Populate `differentiatingFeatures_General` (history, exam, lab) using the *exact* concise clues from `differentiatingHistoryClues`, `differentiatingExamFindings`, `differentiatingTestResults` in `DIAGNOSIS_CONTEXT_JSON`. These are general tags for this DDx.
         *   For `caseSpecificDifferentiation`:
             *   Generate 2-3 `quickDifferentiatingTags_ThisCase`: These should be very short phrases (3-5 words) highlighting the *most critical findings from THIS specific case* (from `HISTORY_CONTEXT_JSON` or implied results for primary Dx) that make this DDx less likely than the primary.
@@ -72,6 +79,7 @@ As the AI Teaching Assistant, evaluate the student's differential diagnosis reas
         *   Iterate through `DIAGNOSIS_CONTEXT_JSON.ruledOutDifferentials`.
         *   For each, create an object with `type: "RuledOutDifferential"`.
         *   Include `dxName`, `studentDidConsiderAsPlausible`, `studentDidMarkAsIncorrect`.
+        *   **To determine these boolean values:** Check if the differential diagnosis name appears in `student_diagnosis_submission_json` differentials list, `student_final_diagnosis_json`, or is mentioned in `student_reasoning_json`. For `studentDidMarkAsIncorrect`, check if the student explicitly ruled it out or marked it as incorrect.
         *   The `differentiatingFeatures_General` can be empty.
         *   For `caseSpecificDifferentiation`:
             *   Generate `quickDifferentiatingTags_ThisCase` using 2-3 short phrases summarizing the core `reasonForExclusion` from `DIAGNOSIS_CONTEXT_JSON`.

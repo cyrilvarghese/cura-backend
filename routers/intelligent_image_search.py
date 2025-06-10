@@ -66,6 +66,7 @@ class IntelligentSearchRequest(BaseModel):
     search_depth: Optional[str] = "advanced"
     search_query: Optional[str] = None
     single_search: Optional[bool] = False  # Flag to use single search with more results instead of parallel searches
+    serp_key: Optional[str] = None  # Flag to use single search with more results instead of parallel searches
 
 # Prompt for generating intelligent search queries
 INTELLIGENT_SEARCH_PROMPT = """
@@ -649,7 +650,7 @@ async def intelligent_image_search_serpapi(
                 print(f"[SERPAPI_SEARCH] 💡 Using descriptive context as query: {main_query[:100]}...")
             
             # Step 3: Setup SerpApi search parameters for Google Images
-            serpapi_key = os.getenv("SERPAPI_API_KEY")
+            serpapi_key = request.serp_key or os.getenv("SERPAPI_API_KEY")
             if not serpapi_key:
                 raise HTTPException(status_code=500, detail="SERPAPI_API_KEY environment variable not set")
             

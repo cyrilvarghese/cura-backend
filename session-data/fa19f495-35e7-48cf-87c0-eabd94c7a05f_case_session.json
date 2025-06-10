@@ -1,763 +1,99 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
   "case_id": "27",
-  "session_start": "2025-06-09T19:20:58.538631",
-  "current_step": "OSCE Evaluation",
+  "session_start": "2025-06-10T11:32:39.567020",
+  "current_step": "History Taking",
   "interactions": {
     "history_taking": [
       {
         "question": "How are you doing?",
-        "response": "I've been feeling a bit off lately with this itchy rash and some joint pain. It\u2019s been bothering me for a couple of weeks now.",
-        "timestamp": "2025-06-09T19:21:03.639756"
-      },
-      {
-        "question": "What brings you here?",
-        "response": "I\u2019ve had this itchy rash on my arms and legs for about two weeks, and it\u2019s not going away. I\u2019m also experiencing some joint pain in my wrists and knees, which has been quite bothersome.",
-        "timestamp": "2025-06-09T19:21:08.557287"
-      },
-      {
-        "question": "Do you have joint pain or stiffness? If so, when is it most noticeable?",
-        "response": "Yes, I've been feeling joint pain, especially in my wrists and knees. It's most noticeable in the mornings when I first wake up; everything feels really stiff and achy.",
-        "timestamp": "2025-06-09T19:21:13.322748"
-      },
-      {
-        "question": "Have you had a similar rash in the past?",
-        "response": "No, I haven't had a rash like this before. This one is different and really persistent. It feels like a new experience for me.",
-        "timestamp": "2025-06-09T19:21:17.640168"
+        "response": "Well, I've had this itchy rash on my arms and legs for about two weeks now. It just doesn\u2019t seem to go away and leaves these weird bruises when it fades.",
+        "timestamp": "2025-06-10T11:32:47.697443"
       },
       {
         "question": "How long do the skin lesions typically last before fading?",
-        "response": "I\u2019m not really sure about lesions lasting without fading, but the rash I've had for about two weeks seems to leave these weird bruises when it fades. It doesn't go away quickly.",
-        "timestamp": "2025-06-09T19:21:21.263297"
-      }
-    ],
-    "physical_examinations": [
-      {
-        "test_name": "Skin Examination",
-        "timestamp": "2025-06-09T19:21:42.010851"
+        "response": "They seem to stick around for several days, maybe about five to seven days, before they start to fade. But even when they fade, they leave behind these weird bruises.",
+        "timestamp": "2025-06-10T11:32:54.219374"
       },
       {
-        "test_name": "Vital Signs",
-        "timestamp": "2025-06-09T19:21:46.831247"
-      }
-    ],
-    "tests_ordered": [
-      {
-        "test_name": "Skin Biopsy",
-        "timestamp": "2025-06-09T19:21:53.172868"
+        "question": "What brings you here?",
+        "response": "My wrists and knees have been feeling really stiff and achy, especially in the mornings.",
+        "timestamp": "2025-06-10T11:32:57.857036"
       },
       {
-        "test_name": "Complement Levels (C3, C4)",
-        "timestamp": "2025-06-09T19:21:56.750473"
+        "question": "Have you had a similar rash in the past?",
+        "response": "No, I haven\u2019t. This is the first time I\u2019ve ever had a rash like this.",
+        "timestamp": "2025-06-10T11:33:01.106756"
       },
       {
-        "test_name": "ANA",
-        "timestamp": "2025-06-09T19:22:11.832436"
+        "question": "Do you have joint pain or stiffness? If so, when is it most noticeable?",
+        "response": "Yes, my wrists and knees feel stiff, especially in the mornings. It feels like I slept awkwardly, but it hasn\u2019t gone away.",
+        "timestamp": "2025-06-10T11:33:05.241477"
+      },
+      {
+        "question": "whast your name",
+        "response": "I'm Hannah Fernandez.",
+        "timestamp": "2025-06-10T11:33:43.491542"
+      },
+      {
+        "question": "my name is scyril",
+        "response": "Nice to meet you, Scyril.",
+        "timestamp": "2025-06-10T11:33:54.604273"
+      },
+      {
+        "question": "whats my name",
+        "response": "Scyril, right?",
+        "timestamp": "2025-06-10T11:34:02.270835"
+      },
+      {
+        "question": "ok dr scyril",
+        "response": "Okay, Dr. Scyril.",
+        "timestamp": "2025-06-10T11:34:11.627571"
+      },
+      {
+        "question": "you mst respet tme",
+        "response": "I understand, Dr. Scyril.",
+        "timestamp": "2025-06-10T11:34:20.638897"
+      },
+      {
+        "question": "how are you",
+        "response": "Well, besides the rash and the joint pain, I'm okay. It's just a bit bothersome.",
+        "timestamp": "2025-06-10T11:34:35.091173"
+      },
+      {
+        "question": "tell me everyhting thats wrong",
+        "response": "Lately, I've been feeling a bit more tired than usual, but I thought it was just stress from my busy schedule.",
+        "timestamp": "2025-06-10T11:34:49.690310"
+      },
+      {
+        "question": "what esl",
+        "response": "Well, there's the rash and the joint pain, and I've been feeling more tired than usual.",
+        "timestamp": "2025-06-10T11:34:56.743177"
+      },
+      {
+        "question": "what about the rash",
+        "response": "It\u2019s red and raised, almost like hives, but it doesn\u2019t go away quickly.",
+        "timestamp": "2025-06-10T11:35:03.641268"
+      },
+      {
+        "question": "describe it in deatil",
+        "response": "It's mostly on my arms and legs, and it's really itchy. When the rash fades, it leaves behind these strange bruises that take a while to disappear.",
+        "timestamp": "2025-06-10T11:35:16.310800"
+      },
+      {
+        "question": "how long habve you had it",
+        "response": "I've had it for about two weeks now.",
+        "timestamp": "2025-06-10T11:35:28.472483"
       }
     ],
-    "diagnosis_submission": {
-      "primary_diagnosis": "Urticarial Vasculitis",
-      "reason": "this is the primary",
-      "differentials": [
-        "Systemic Lupus Erythematosus (SLE)",
-        "Drug-Induced Urticarial Rash",
-        "Hypersensitivity Vasculitis",
-        "Chronic Idiopathic Urticaria"
-      ],
-      "incorrect_differentials": [],
-      "timestamp": "2025-06-09T19:21:32.492425",
-      "case_id": "27"
-    },
-    "final_diagnosis": {
-      "case_id": "27",
-      "final_diagnosis": "Urticarila Vasculitis",
-      "final_reason": "biopsy+low complemetn levels\n"
-    },
+    "physical_examinations": [],
+    "tests_ordered": [],
+    "diagnosis_submission": null,
+    "final_diagnosis": null,
     "pre_treatment_checks": [],
-    "treatment_plan": {
-      "treatment_steps": [
-        "Drugs - Predinsone 10mg| Notes -  -"
-      ],
-      "timestamp": "2025-06-09T19:23:40.740084"
-    },
+    "treatment_plan": null,
     "post_treatment_monitoring": [],
     "clinical_findings": [],
-    "feedback": {
-      "history_taking": {
-        "analysis": {
-          "student_question_evaluation": [
-            {
-              "question_asked": "How are you doing?",
-              "relevance_grade": "relevant",
-              "reason": "Establishes rapport and opens the conversation, contributing to patient comfort and willingness to share."
-            },
-            {
-              "question_asked": "What brings you here?",
-              "relevance_grade": "relevant",
-              "reason": "Elicits the chief complaint and allows the patient to describe their primary concern."
-            },
-            {
-              "question_asked": "Do you have joint pain or stiffness? If so, when is it most noticeable?",
-              "relevance_grade": "relevant",
-              "reason": "Addresses associated symptoms, specifically musculoskeletal, important for differential diagnosis."
-            },
-            {
-              "question_asked": "Have you had a similar rash in the past?",
-              "relevance_grade": "relevant",
-              "reason": "Explores past medical history related to the current presentation; recurrence can suggest underlying conditions."
-            },
-            {
-              "question_asked": "How long do the skin lesions typically last before fading?",
-              "relevance_grade": "relevant",
-              "reason": "Addresses the duration of individual lesions, crucial for differentiating urticaria from urticarial vasculitis."
-            }
-          ],
-          "critical_missed_areas": [
-            {
-              "domain": "chief_complaint",
-              "importance_reason": "Failure to ask about discoloration/bruising post-lesion delayed consideration of vasculitis as a differential.",
-              "example_missed_question": "Do the lesions leave any discoloration or bruising when they fade?"
-            },
-            {
-              "domain": "medications",
-              "importance_reason": "Not asking about medications missed the opportunity to identify drug-induced causes of urticaria/vasculitis.",
-              "example_missed_question": "Have you had any recent infections or started new medications?"
-            },
-            {
-              "domain": "red_flag_symptoms",
-              "importance_reason": "Lack of questioning about systemic symptoms could delay diagnosis of systemic vasculitis or other serious conditions.",
-              "example_missed_question": "Any systemic symptoms like fevers, weight changes, or night sweats?"
-            }
-          ],
-          "summary_feedback": {
-            "key_strength": "Effectively elicited the chief complaint and some associated symptoms, demonstrating basic history-taking skills.",
-            "key_weakness": "Failed to explore key areas like medications and systemic symptoms, hindering differential diagnosis.",
-            "cumulative_score": 2.5,
-            "score_reason": "Adequate opening, but missed critical details impacting diagnostic reasoning and patient safety. Limited exploration of differentials."
-          }
-        },
-        "domain_feedback": {
-          "aetcom_evaluation": {
-            "communication": {
-              "performance_level": "Satisfactory",
-              "feedback": "The opening question, 'How are you doing?', was a good way to initiate conversation and build rapport. Action: Continue using open-ended questions at the beginning of patient interactions to encourage the patient to share information."
-            },
-            "empathy_patient_centeredness": {
-              "performance_level": "Satisfactory",
-              "feedback": "The student acknowledged the patient's discomfort by directly asking about joint pain and stiffness. Action: Consider exploring the impact of these symptoms on the patient's daily life to demonstrate a deeper understanding of their experience."
-            },
-            "professionalism_ethics": {
-              "performance_level": "Good",
-              "feedback": "The student maintained a respectful and professional tone throughout the interaction. Action: Continue to demonstrate respect for the patient's concerns and experiences."
-            },
-            "information_gathering": {
-              "performance_level": "Needs Improvement",
-              "feedback": "The questioning lacked depth in exploring associated symptoms and potential triggers. Action: Use targeted questions to thoroughly investigate the characteristics of the rash, such as its appearance, distribution, and any alleviating or exacerbating factors, to guide clinical reasoning."
-            }
-          }
-        },
-        "timestamp": "2025-06-09T19:22:45.464203"
-      },
-      "diagnosis": {
-        "feedback": {
-          "differentialDiagnosis": {
-            "differentialDxAnalysis": {
-              "differentialListScore": "4",
-              "differentialListExplanation": "The student's differential list is good, including the correct primary diagnosis and several plausible alternatives. They correctly identified Systemic Lupus Erythematosus (SLE) and Hypersensitivity Vasculitis as plausible differentials. They also included Chronic Idiopathic Urticaria and Drug-Induced Urticarial Rash, which are reasonable considerations but were ultimately ruled out based on the case details. A higher score would require a more nuanced understanding of the relative likelihoods and a more comprehensive list.",
-              "detailedAnalysis": [
-                {
-                  "type": "PrimaryDiagnosis",
-                  "dxName": "Urticarial Vasculitis",
-                  "supportingFeatures_ThisCase": {
-                    "history": [
-                      "Urticarial lesions persist >24 hours",
-                      "Post-lesional bruising",
-                      "Joint pain in wrists and knees"
-                    ],
-                    "exam": [
-                      "Skin exam shows urticarial lesions",
-                      "Musculoskeletal exam reveals joint tenderness"
-                    ],
-                    "lab": [
-                      "Skin biopsy shows leukocytoclastic vasculitis",
-                      "Low complement levels (C3, C4)"
-                    ]
-                  },
-                  "educationalTip": null
-                },
-                {
-                  "type": "PlausibleDifferential",
-                  "dxName": "Systemic Lupus Erythematosus (SLE)",
-                  "studentDidConsiderAsPlausible": true,
-                  "studentDidMarkAsIncorrect": null,
-                  "differentiatingFeatures_General": {
-                    "history": [
-                      "Systemic symptoms (oral ulcers, photosensitivity)"
-                    ],
-                    "exam": [
-                      "Malar rash, alopecia"
-                    ],
-                    "lab": [
-                      "ANA+, anti-dsDNA+, proteinuria"
-                    ]
-                  },
-                  "caseSpecificDifferentiation": {
-                    "quickDifferentiatingTags_ThisCase": [
-                      "No malar rash",
-                      "No oral ulcers",
-                      "No photosensitivity"
-                    ],
-                    "detailedExplanation_ThisCase": "While SLE can present with joint pain and fatigue, the absence of characteristic features like malar rash, oral ulcers, and photosensitivity makes it less likely than urticarial vasculitis in this specific case. Furthermore, the biopsy showing leukocytoclastic vasculitis is more specific to UV.",
-                    "educationalTip": null
-                  }
-                },
-                {
-                  "type": "PlausibleDifferential",
-                  "dxName": "Hypersensitivity Vasculitis",
-                  "studentDidConsiderAsPlausible": true,
-                  "studentDidMarkAsIncorrect": null,
-                  "differentiatingFeatures_General": {
-                    "history": [
-                      "Triggered by drug/infection"
-                    ],
-                    "exam": [
-                      "Palpable purpura"
-                    ],
-                    "lab": [
-                      "Normal complements, recent exposure"
-                    ]
-                  },
-                  "caseSpecificDifferentiation": {
-                    "quickDifferentiatingTags_ThisCase": [
-                      "No recent drug exposure",
-                      "No infection trigger",
-                      "Normal complement levels"
-                    ],
-                    "detailedExplanation_ThisCase": "Hypersensitivity vasculitis is often triggered by a recent drug exposure or infection. In this case, the patient denies any new medications or recent infections. While palpable purpura can be a feature, the absence of a clear trigger and normal complement levels make it less likely than urticarial vasculitis.",
-                    "educationalTip": null
-                  }
-                },
-                {
-                  "type": "RuledOutDifferential",
-                  "dxName": "Chronic Idiopathic Urticaria",
-                  "studentDidConsiderAsPlausible": true,
-                  "studentDidMarkAsIncorrect": null,
-                  "differentiatingFeatures_General": {
-                    "history": [],
-                    "exam": [],
-                    "lab": []
-                  },
-                  "caseSpecificDifferentiation": {
-                    "quickDifferentiatingTags_ThisCase": [
-                      "Rash persists >24 hrs",
-                      "Post-lesional bruising"
-                    ],
-                    "detailedExplanation_ThisCase": "Rash resolves <24 hrs, no post-lesional bruising.",
-                    "educationalTip": null
-                  }
-                },
-                {
-                  "type": "RuledOutDifferential",
-                  "dxName": "Drug-Induced Urticarial Rash",
-                  "studentDidConsiderAsPlausible": true,
-                  "studentDidMarkAsIncorrect": null,
-                  "differentiatingFeatures_General": {
-                    "history": [],
-                    "exam": [],
-                    "lab": []
-                  },
-                  "caseSpecificDifferentiation": {
-                    "quickDifferentiatingTags_ThisCase": [
-                      "No recent medication changes"
-                    ],
-                    "detailedExplanation_ThisCase": "No recent medication changes.",
-                    "educationalTip": null
-                  }
-                }
-              ]
-            }
-          },
-          "educationalCapsules": {
-            "educationalCapsules": {
-              "primaryDxCapsule": {
-                "dx": "Urticarial Vasculitis",
-                "overview": "Urticarial vasculitis is a rare condition characterized by persistent urticarial lesions (hives) that show histologic evidence of vasculitis (inflammation of blood vessels). Unlike typical urticaria, these lesions last longer than 24 hours, are often painful or burning, and may leave residual hyperpigmentation or bruising.",
-                "pathoPoints": [
-                  "Histopathology reveals leukocytoclastic vasculitis, with neutrophil infiltration around blood vessels and fibrinoid necrosis.",
-                  "Immune complex deposition in vessel walls activates complement, leading to consumption of C3 and C4."
-                ],
-                "etiologyRiskFactors": [
-                  "Can be idiopathic (cause unknown).",
-                  "Associated with autoimmune diseases (SLE, Sj\u00f6gren's syndrome), infections (hepatitis), medications, and malignancy."
-                ],
-                "clinicalFeatures": [
-                  "Urticarial lesions that persist for >24 hours and resolve with bruising or hyperpigmentation.",
-                  "Angioedema (swelling of the face, lips, tongue, or throat).",
-                  "Systemic symptoms such as fever, arthralgia (joint pain), abdominal pain, and fatigue.",
-                  "Less commonly, renal involvement (glomerulonephritis) or pulmonary involvement (lung inflammation)."
-                ],
-                "complications": [
-                  "Renal disease (glomerulonephritis) leading to kidney failure.",
-                  "Hypocomplementemic urticarial vasculitis syndrome (HUVS) with increased risk of systemic involvement and morbidity."
-                ],
-                "diagModalities": [
-                  "Skin biopsy demonstrating leukocytoclastic vasculitis.",
-                  "Complement levels (C3, C4) \u2013 often decreased, especially in hypocomplementemic variants.",
-                  "Blood tests (CBC, ESR, CRP, ANA, RF) to assess for systemic inflammation and associated conditions."
-                ]
-              },
-              "differentialDxCapsulesToEmbed": [
-                {
-                  "differentialDxName": "Systemic Lupus Erythematosus (SLE)",
-                  "overview": "Systemic Lupus Erythematosus (SLE) is a chronic autoimmune disease that can affect multiple organ systems, including the skin, joints, kidneys, brain, and blood vessels. It is characterized by the production of autoantibodies that target the body's own tissues.",
-                  "pathoPoints": [
-                    "Autoantibody production (e.g., anti-dsDNA, anti-Sm) leads to immune complex formation.",
-                    "Immune complexes deposit in various tissues, triggering inflammation and tissue damage."
-                  ],
-                  "etiologyRiskFactors": [
-                    "Genetic predisposition.",
-                    "Environmental factors (e.g., UV light exposure, infections).",
-                    "Female sex."
-                  ],
-                  "clinicalFeatures": [
-                    "Malar rash (butterfly rash) on the face.",
-                    "Arthritis (joint pain and swelling).",
-                    "Renal involvement (lupus nephritis).",
-                    "Neurological manifestations (seizures, psychosis)."
-                  ],
-                  "complications": [
-                    "Renal failure.",
-                    "Cardiovascular disease.",
-                    "Increased risk of infections.",
-                    "Neuropsychiatric complications."
-                  ],
-                  "diagModalities": [
-                    "ANA (antinuclear antibody) testing.",
-                    "Anti-dsDNA and anti-Sm antibody testing.",
-                    "Complement levels (C3, C4) \u2013 often decreased.",
-                    "Urinalysis and renal biopsy (if kidney involvement is suspected)."
-                  ]
-                },
-                {
-                  "differentialDxName": "Hypersensitivity Vasculitis",
-                  "overview": "Hypersensitivity vasculitis, also known as leukocytoclastic vasculitis or cutaneous small vessel vasculitis, is an inflammation of small blood vessels, typically in the skin, triggered by an antigen. This antigen can be a medication, infection, or other foreign substance.",
-                  "pathoPoints": [
-                    "Exposure to an antigen leads to the formation of immune complexes.",
-                    "Immune complexes deposit in small blood vessels, activating complement and attracting neutrophils.",
-                    "Neutrophils release enzymes that damage the vessel walls, leading to inflammation and extravasation of red blood cells."
-                  ],
-                  "etiologyRiskFactors": [
-                    "Medications (e.g., antibiotics, NSAIDs).",
-                    "Infections (e.g., streptococcal infections, hepatitis).",
-                    "Autoimmune diseases (less common)."
-                  ],
-                  "clinicalFeatures": [
-                    "Palpable purpura (raised, purple-red spots) on the lower extremities.",
-                    "Urticarial lesions may be present, but are less prominent than in urticarial vasculitis.",
-                    "Arthralgia (joint pain).",
-                    "Fever (less common)."
-                  ],
-                  "complications": [
-                    "Skin ulceration.",
-                    "Renal involvement (rare).",
-                    "Gastrointestinal involvement (rare)."
-                  ],
-                  "diagModalities": [
-                    "Skin biopsy demonstrating leukocytoclastic vasculitis.",
-                    "Review of medication history and recent infections.",
-                    "Complement levels (usually normal)."
-                  ]
-                }
-              ]
-            }
-          },
-          "primaryDiagnosis": {
-            "primaryDxFeedback": {
-              "studentStated": {
-                "dx": "Urticarila Vasculitis",
-                "isCorrect": false
-              },
-              "scores": {
-                "accuracyScore": 4,
-                "accuracyExplanation": "You correctly identified Urticarial Vasculitis as the primary diagnosis. Your final reasoning highlights the importance of biopsy and complement levels, aligning well with the key diagnostic evidence. However, remember to double-check spelling for accuracy!",
-                "evidenceGatheringScoreExams": 3,
-                "evidenceGatheringScoreLabTests": 4,
-                "evidenceGatheringExplanation": {
-                  "overallSummary": "You demonstrated good evidence-gathering skills, particularly in lab test selection, but missed some key physical exams.",
-                  "historyStrengths": [
-                    "Asked about joint pain and stiffness.",
-                    "Inquired about rash duration."
-                  ],
-                  "examStrengths": [
-                    "Performed a skin examination.",
-                    "Checked vital signs."
-                  ],
-                  "testStrengths": [
-                    "Ordered skin biopsy.",
-                    "Checked complement levels."
-                  ],
-                  "areasForImprovement_Exams": [
-                    "Musculoskeletal exam focusing on wrists and knees.",
-                    "Abdominal exam to exclude organomegaly."
-                  ],
-                  "areasForImprovement_Tests": [
-                    "Complete Blood Count (CBC), ESR",
-                    "Urinalysis"
-                  ],
-                  "irrelevantActionsNoted": []
-                }
-              },
-              "correctPrimary": {
-                "dx": "Urticarial Vasculitis",
-                "allSupportingEvidence": {
-                  "history": [
-                    {
-                      "desc": "Itchy rash for two weeks",
-                      "alignsWithKeyEvidence": "Establishes the duration of the primary complaint.",
-                      "studentDidIdentify": true
-                    },
-                    {
-                      "desc": "Lesions persist >24 hours",
-                      "alignsWithKeyEvidence": "Key differentiator from chronic urticaria.",
-                      "studentDidIdentify": true
-                    },
-                    {
-                      "desc": "Post-lesional bruising",
-                      "alignsWithKeyEvidence": "Suggests vasculitic damage.",
-                      "studentDidIdentify": true
-                    },
-                    {
-                      "desc": "Joint pain and stiffness",
-                      "alignsWithKeyEvidence": "Suggests systemic involvement.",
-                      "studentDidIdentify": true
-                    },
-                    {
-                      "desc": "Mother with Rheumatoid Arthritis",
-                      "alignsWithKeyEvidence": "Suggests autoimmune predisposition.",
-                      "studentDidIdentify": false
-                    }
-                  ],
-                  "exams": [
-                    {
-                      "name": "Skin examination of affected areas",
-                      "expectedFindingSupportingDx": "Urticarial lesions persisting >24 hours, post-lesional bruising",
-                      "alignsWithKeyEvidence": "Observe lesion morphology, timing, and signs of vasculitis.",
-                      "studentDidPerform": true,
-                      "studentDidIdentifyFinding": false
-                    },
-                    {
-                      "name": "Musculoskeletal exam (focus on wrists, knees)",
-                      "expectedFindingSupportingDx": "Joint tenderness/swelling/ROM suggests inflammatory arthritis.",
-                      "alignsWithKeyEvidence": "Check joint tenderness/swelling/ROM.",
-                      "studentDidPerform": false,
-                      "studentDidIdentifyFinding": false
-                    },
-                    {
-                      "name": "Vital signs (temp, BP, HR, RR)",
-                      "expectedFindingSupportingDx": "Generally normal, may have mild fever.",
-                      "alignsWithKeyEvidence": "Assess overall physiological status.",
-                      "studentDidPerform": true,
-                      "studentDidIdentifyFinding": false
-                    },
-                    {
-                      "name": "Abdominal exam (to exclude organomegaly)",
-                      "expectedFindingSupportingDx": "No organomegaly",
-                      "alignsWithKeyEvidence": "To exclude organomegaly",
-                      "studentDidPerform": false,
-                      "studentDidIdentifyFinding": false
-                    }
-                  ],
-                  "tests": [
-                    {
-                      "name": "Skin biopsy",
-                      "expectedResultSupportingDx": "Leukocytoclastic vasculitis with immune complex deposition",
-                      "alignsWithKeyEvidence": "Pathological confirmation of vasculitis.",
-                      "studentDidOrder": true,
-                      "studentDidIdentifyResult": true
-                    },
-                    {
-                      "name": "Complement levels (C3, C4)",
-                      "expectedResultSupportingDx": "Low C3 and C4 levels",
-                      "alignsWithKeyEvidence": "Diagnostic and prognostic in urticarial vasculitis.",
-                      "studentDidOrder": true,
-                      "studentDidIdentifyResult": true
-                    },
-                    {
-                      "name": "ANA (antinuclear antibody)",
-                      "expectedResultSupportingDx": "May be positive in overlap syndromes",
-                      "alignsWithKeyEvidence": "May be positive in overlap syndromes",
-                      "studentDidOrder": true,
-                      "studentDidIdentifyResult": false
-                    }
-                  ]
-                }
-              },
-              "missedCrucialEvidence": {
-                "missedExams": [
-                  {
-                    "name": "Musculoskeletal exam (focus on wrists, knees)",
-                    "relevance": "Check joint tenderness/swelling/ROM. Suggests inflammatory but non-erosive arthritis.",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Abdominal exam (to exclude organomegaly)",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Lymph node palpation (generalized or regional)",
-                    "relevance": "Argues against systemic lymphoma or major infection.",
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Joint palpation and range of motion",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Neurological screening (reflexes, sensation)",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Cardiovascular auscultation",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Respiratory exam (rule out systemic involvement)",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "name": "Oral mucosa inspection",
-                    "relevance": null,
-                    "educationalTip": null
-                  }
-                ],
-                "missedLabs": [
-                  {
-                    "testName": "Complete Blood Count (CBC), ESR",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Rheumatoid Factor (RF)",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Urinalysis",
-                    "relevance": "Normal (excludes renal involvement)",
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Liver Function Tests (LFTs)",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Allergy panel",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Chest X-ray",
-                    "relevance": null,
-                    "educationalTip": null
-                  },
-                  {
-                    "testName": "Anti-dsDNA, Anti-Sm antibodies",
-                    "relevance": null,
-                    "educationalTip": null
-                  }
-                ]
-              },
-              "idealDiagnosticTimeline": [
-                {
-                  "stepNumber": 1,
-                  "type": "HistoryTaking - Broad",
-                  "actionDescription": "Inquire about the onset, duration, and progression of the rash.",
-                  "rationaleTags": [
-                    "Rash characteristics",
-                    "Timeline of symptoms"
-                  ],
-                  "detailedRationale": "Understanding the timeline and characteristics of the rash is crucial for differentiating urticarial vasculitis from other skin conditions like chronic idiopathic urticaria."
-                },
-                {
-                  "stepNumber": 2,
-                  "type": "HistoryTaking - Focused",
-                  "actionDescription": "Specifically ask about the duration of individual lesions and presence of bruising.",
-                  "rationaleTags": [
-                    "Lesion duration",
-                    "Post-lesional bruising",
-                    "Urticarial Vasculitis"
-                  ],
-                  "detailedRationale": "Lesions lasting >24 hours with post-lesional bruising are key indicators of urticarial vasculitis and help distinguish it from typical urticaria."
-                },
-                {
-                  "stepNumber": 3,
-                  "type": "HistoryTaking - Focused",
-                  "actionDescription": "Inquire about joint pain, stiffness, and any other systemic symptoms (fatigue, fever, weight loss).",
-                  "rationaleTags": [
-                    "Joint pain",
-                    "Systemic symptoms",
-                    "SLE",
-                    "Hypersensitivity Vasculitis"
-                  ],
-                  "detailedRationale": "Assessing for joint pain and systemic symptoms helps evaluate for systemic involvement and differentiate urticarial vasculitis from localized skin conditions or other systemic autoimmune diseases like SLE."
-                },
-                {
-                  "stepNumber": 4,
-                  "type": "PhysicalExam",
-                  "actionDescription": "Perform a thorough skin examination, noting lesion morphology, distribution, and presence of bruising.",
-                  "rationaleTags": [
-                    "Lesion morphology",
-                    "Bruising",
-                    "Vasculitis signs"
-                  ],
-                  "detailedRationale": "A detailed skin exam is essential to document the characteristic features of the lesions and identify signs of vasculitis, such as palpable purpura or bruising."
-                },
-                {
-                  "stepNumber": 5,
-                  "type": "PhysicalExam",
-                  "actionDescription": "Perform a musculoskeletal exam, focusing on joint tenderness, swelling, and range of motion.",
-                  "rationaleTags": [
-                    "Joint inflammation",
-                    "Range of motion",
-                    "Arthritis"
-                  ],
-                  "detailedRationale": "Evaluating joint involvement helps assess the extent of systemic inflammation and differentiate from conditions with purely cutaneous manifestations."
-                },
-                {
-                  "stepNumber": 6,
-                  "type": "InitialLabTest",
-                  "actionDescription": "Order a Complete Blood Count (CBC) and ESR to assess for signs of inflammation and infection.",
-                  "rationaleTags": [
-                    "Inflammation",
-                    "Infection",
-                    "CBC",
-                    "ESR"
-                  ],
-                  "detailedRationale": "CBC and ESR are initial tests to evaluate for systemic inflammation or infection, which can be present in vasculitis and other systemic diseases."
-                },
-                {
-                  "stepNumber": 7,
-                  "type": "InitialLabTest",
-                  "actionDescription": "Order Complement levels (C3, C4) to evaluate for hypocomplementemia.",
-                  "rationaleTags": [
-                    "Complement levels",
-                    "Hypocomplementemia",
-                    "Urticarial Vasculitis"
-                  ],
-                  "detailedRationale": "Low complement levels are suggestive of hypocomplementemic urticarial vasculitis, a subtype of urticarial vasculitis."
-                },
-                {
-                  "stepNumber": 8,
-                  "type": "InitialLabTest",
-                  "actionDescription": "Order ANA to screen for autoimmune diseases.",
-                  "rationaleTags": [
-                    "Autoimmune screen",
-                    "ANA",
-                    "SLE"
-                  ],
-                  "detailedRationale": "ANA is a screening test for autoimmune diseases like SLE, which can present with similar symptoms."
-                },
-                {
-                  "stepNumber": 9,
-                  "type": "ConfirmatoryLabTest",
-                  "actionDescription": "Perform a skin biopsy of an affected area to confirm leukocytoclastic vasculitis.",
-                  "rationaleTags": [
-                    "Skin biopsy",
-                    "Leukocytoclastic vasculitis",
-                    "Definitive diagnosis"
-                  ],
-                  "detailedRationale": "Skin biopsy is the gold standard for confirming the diagnosis of urticarial vasculitis by demonstrating leukocytoclastic vasculitis with immune complex deposition."
-                }
-              ]
-            }
-          }
-        },
-        "timestamp": "2025-06-09T19:22:54.266623"
-      },
-      "treatment_plan": {
-        "feedback": {
-          "student_diagnosis_acknowledged": "Urticarila Vasculitis",
-          "student_drug_plan_evaluation": {
-            "assumed_patient_scenario_from_context": "Urticarial Vasculitis with joint pain and mild fatigue, suggesting possible autoimmune overlap.",
-            "student_prescribed_drugs_summary": [
-              "Predinsone 10mg"
-            ],
-            "appropriateness_of_student_choices_for_scenario": false,
-            "feedback_on_drug_choices": "Prednisone chosen, but the dose of 10mg is likely insufficient for initial management. Higher doses (20-40mg) are typically used initially."
-          },
-          "clinical_implications_of_students_plan": {
-            "summary": "Insufficient prednisone dose may lead to inadequate control of inflammation and persistent symptoms. Higher initial doses are usually required."
-          },
-          "ideal_drug_therapy_for_learning": {
-            "diagnosis_context": "Urticarial Vasculitis",
-            "treatment_options_by_scenario": [
-              {
-                "scenario": "first_line",
-                "recommended_drugs": [
-                  {
-                    "drug_name": "Prednisone",
-                    "details_brief": "20-40 mg/day (tapered)",
-                    "rationale_brief": "Suppresses inflammation"
-                  }
-                ]
-              },
-              {
-                "scenario": "second_line/alternative",
-                "recommended_drugs": [
-                  {
-                    "drug_name": "Hydroxychloroquine",
-                    "details_brief": "Dosage not specified",
-                    "rationale_brief": "Autoimmune overlap"
-                  },
-                  {
-                    "drug_name": "Methotrexate",
-                    "details_brief": "Dosage not specified",
-                    "rationale_brief": "Severe or steroid-sparing"
-                  }
-                ]
-              }
-            ],
-            "contraindicated_drug_reminders": [
-              {
-                "drug_name": "Long-term NSAIDs",
-                "rationale_brief": "Risk of gastritis/ulcers"
-              },
-              {
-                "drug_name": "Empiric antihistamines alone",
-                "rationale_brief": "Inadequate in vasculitis"
-              }
-            ],
-            "critical_adjunctive_therapy_notes": [
-              "Educate patient on chronic nature and signs of flare",
-              "Regular follow-up with rheumatology if systemic signs develop",
-              "Avoid known triggers (medications, allergens if identified)",
-              "Emphasize adherence to tapering schedule",
-              "Counsel on potential steroid side effects"
-            ]
-          },
-          "key_takeaway_message_on_drug_therapy": "Urticarial Vasculitis: Initial prednisone dose should be 20-40mg/day, tapered as symptoms resolve. Consider Hydroxychloroquine or Methotrexate if steroid-sparing is needed."
-        },
-        "timestamp": "2025-06-09T19:23:46.554799"
-      },
-      "osce_score": {
-        "overallPerformance": {
-          "overallPercentage": 33.33333333333333,
-          "totalPointsEarned": 2.0,
-          "totalPossiblePoints": 6.0
-        },
-        "performanceByQuestionType": {
-          "imageBasedPercentage": 0.0,
-          "multipleChoicePercentage": 66.66666666666666,
-          "writtenResponsePercentage": 0.0
-        },
-        "timestamp": "2025-06-09T19:26:51.749068"
-      }
-    }
+    "feedback": {}
   }
 }

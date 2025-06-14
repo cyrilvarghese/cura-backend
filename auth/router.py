@@ -17,6 +17,7 @@ class UserCreate(BaseModel):
     password: str
     username: str
     role: Optional[str] = "user"
+    invite_code: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: str
@@ -28,7 +29,7 @@ async def signup(user: UserCreate):
     """
     Register a new user with email, password, username and role.
     """
-    result = await auth_api.signup(user.email, user.password, user.username, user.role)
+    result = await auth_api.signup(user.email, user.password, user.username, user.role, user.invite_code)
     if not result.get("success"):
         raise HTTPException(status_code=400, detail=result.get("error", "Signup failed"))
     return result

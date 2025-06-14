@@ -34,7 +34,7 @@ def get_supabase_client(use_service_role: bool = False) -> Client:
 # Initialize default client
 supabase: Client = get_supabase_client()
 
-async def signup(email: str, password: str, username: str, role: str = "user", timeout: int = 15) -> Dict[str, Any]:
+async def signup(email: str, password: str, username: str, role: str = "user", invite_code: Optional[str] = None, timeout: int = 15) -> Dict[str, Any]:
     """
     Register a new user with email, password, username and role.
     
@@ -49,7 +49,7 @@ async def signup(email: str, password: str, username: str, role: str = "user", t
     """
     try:
         return await asyncio.wait_for(
-            _signup_internal(email, password, username, role),
+            _signup_internal(email, password, username, role, invite_code),
             timeout=timeout
         )
     except asyncio.TimeoutError:
@@ -59,14 +59,14 @@ async def signup(email: str, password: str, username: str, role: str = "user", t
             "error": "Operation timed out"
         }
 
-async def _signup_internal(email: str, password: str, username: str, role: str):
+async def _signup_internal(email: str, password: str, username: str, role: str, invite_code: Optional[str] = None):
     """Internal signup function wrapped with timeout"""
     try:
         print("\n=== Starting Signup Process ===")
         print(f"Email: {email}")
         print(f"Username: {username}")
         print(f"Role: {role}")
-        
+        print(f"Invite code: {invite_code}")
         # Create service client for bypassing RLS
         service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
         if not service_role_key:
@@ -95,7 +95,8 @@ async def _signup_internal(email: str, password: str, username: str, role: str):
                     "id": user_id,
                     "username": username,
                     "role": role,
-                    "email": email
+                    "email": email,
+                    "invite_code": invite_code if invite_code else None
                 }
                 print(f"Inserting profile data: {profile_data}")
                 
@@ -113,7 +114,8 @@ async def _signup_internal(email: str, password: str, username: str, role: str):
                         "id": user_id,
                         "email": email,
                         "username": username,
-                        "role": role
+                        "role": role,
+                        "invite_code": invite_code if invite_code else None
                     }
                 }
             except Exception as profile_error:

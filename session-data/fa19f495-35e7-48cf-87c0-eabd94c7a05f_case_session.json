@@ -1,91 +1,10 @@
 {
   "student_id": "fa19f495-35e7-48cf-87c0-eabd94c7a05f",
-  "case_id": "27",
-  "session_start": "2025-06-10T11:32:39.567020",
+  "case_id": "1",
+  "session_start": "2025-06-14T06:59:57.032030",
   "current_step": "History Taking",
   "interactions": {
-    "history_taking": [
-      {
-        "question": "How are you doing?",
-        "response": "Well, I've had this itchy rash on my arms and legs for about two weeks now. It just doesn\u2019t seem to go away and leaves these weird bruises when it fades.",
-        "timestamp": "2025-06-10T11:32:47.697443"
-      },
-      {
-        "question": "How long do the skin lesions typically last before fading?",
-        "response": "They seem to stick around for several days, maybe about five to seven days, before they start to fade. But even when they fade, they leave behind these weird bruises.",
-        "timestamp": "2025-06-10T11:32:54.219374"
-      },
-      {
-        "question": "What brings you here?",
-        "response": "My wrists and knees have been feeling really stiff and achy, especially in the mornings.",
-        "timestamp": "2025-06-10T11:32:57.857036"
-      },
-      {
-        "question": "Have you had a similar rash in the past?",
-        "response": "No, I haven\u2019t. This is the first time I\u2019ve ever had a rash like this.",
-        "timestamp": "2025-06-10T11:33:01.106756"
-      },
-      {
-        "question": "Do you have joint pain or stiffness? If so, when is it most noticeable?",
-        "response": "Yes, my wrists and knees feel stiff, especially in the mornings. It feels like I slept awkwardly, but it hasn\u2019t gone away.",
-        "timestamp": "2025-06-10T11:33:05.241477"
-      },
-      {
-        "question": "whast your name",
-        "response": "I'm Hannah Fernandez.",
-        "timestamp": "2025-06-10T11:33:43.491542"
-      },
-      {
-        "question": "my name is scyril",
-        "response": "Nice to meet you, Scyril.",
-        "timestamp": "2025-06-10T11:33:54.604273"
-      },
-      {
-        "question": "whats my name",
-        "response": "Scyril, right?",
-        "timestamp": "2025-06-10T11:34:02.270835"
-      },
-      {
-        "question": "ok dr scyril",
-        "response": "Okay, Dr. Scyril.",
-        "timestamp": "2025-06-10T11:34:11.627571"
-      },
-      {
-        "question": "you mst respet tme",
-        "response": "I understand, Dr. Scyril.",
-        "timestamp": "2025-06-10T11:34:20.638897"
-      },
-      {
-        "question": "how are you",
-        "response": "Well, besides the rash and the joint pain, I'm okay. It's just a bit bothersome.",
-        "timestamp": "2025-06-10T11:34:35.091173"
-      },
-      {
-        "question": "tell me everyhting thats wrong",
-        "response": "Lately, I've been feeling a bit more tired than usual, but I thought it was just stress from my busy schedule.",
-        "timestamp": "2025-06-10T11:34:49.690310"
-      },
-      {
-        "question": "what esl",
-        "response": "Well, there's the rash and the joint pain, and I've been feeling more tired than usual.",
-        "timestamp": "2025-06-10T11:34:56.743177"
-      },
-      {
-        "question": "what about the rash",
-        "response": "It\u2019s red and raised, almost like hives, but it doesn\u2019t go away quickly.",
-        "timestamp": "2025-06-10T11:35:03.641268"
-      },
-      {
-        "question": "describe it in deatil",
-        "response": "It's mostly on my arms and legs, and it's really itchy. When the rash fades, it leaves behind these strange bruises that take a while to disappear.",
-        "timestamp": "2025-06-10T11:35:16.310800"
-      },
-      {
-        "question": "how long habve you had it",
-        "response": "I've had it for about two weeks now.",
-        "timestamp": "2025-06-10T11:35:28.472483"
-      }
-    ],
+    "history_taking": [],
     "physical_examinations": [],
     "tests_ordered": [],
     "diagnosis_submission": null,
